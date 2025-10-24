@@ -32,10 +32,10 @@
   <div class="menu">
     <a href="#home">Home</a>
     <a href="#manifesto">Manifesto</a>
-    <a href="#calendario">Calendario</a>
-    <a href="#eventi">Eventi</a>
+    <a href="#calendario">Next up</a>
+    <a href="#eventi">Eventi Passati</a>
     <a href="#artist3">Artist3</a>
-    <a href="#partnership">Partnership</a>
+    <a href="#partnership">Collab e Altro</a>
     <a href="#galleria">Galleria</a>
     <a href="#contatti">Contatti</a>
     <a href="#sostienici">Sostienici</a>
@@ -44,12 +44,28 @@
 <!-- Manifesto -->
 <section id="manifesto" class="scroll-section">
   <h2>Manifesto</h2>
-  <p>L'arte è resistenza, bellezza e voce collettiva.</p>
+  
+  <p><strong>Non siamo qui per decorare. Siamo qui per disturbare.</strong><br>
+  Il QUEER MARKET SHOW è un atto di sabotaggio culturale. Nato da Distro-Venganza con Billie Kill e Alister Victoria, è una creatura collettiva che rifiuta gerarchie e si nutre di caos creativo. È una barricata fatta di stoffa, suono, sudore e glitter.</p>
+
+  <p><strong>QUEER è la nostra arma.</strong><br>
+  Non è una moda, non è una bandiera da sventolare per convenienza. È il nostro grido, il nostro corpo che si prende spazio, la nostra fluidità che manda in frantumi le etichette. È il linguaggio sporco e sacro dell’inclusività radicale. Se ti dà fastidio, è perché funziona.</p>
+
+  <p><strong>MARKET è il nostro campo di battaglia.</strong><br>
+  Qui non si vende, si espone. Si espone la pelle, la rabbia, la bellezza. Gli artigianə salentinə portano le loro visioni, le loro mani, le loro storie. Ogni oggetto è una mina emotiva. Ogni banco è una dichiarazione di guerra contro l’omologazione.</p>
+
+  <p><strong>SHOW è il nostro rituale di disobbedienza.</strong><br>
+  Performance che non chiedono il permesso. Arti che non si piegano. Corpi che si muovono come vogliono, dove vogliono. È una sinfonia di contrasti: antico e contemporaneo, protesta e festa, urlo e carezza. Non intratteniamo: incendiamo.</p>
+
+  <p><strong>Siamo orizzontali, siamo sporchi, siamo vivi.</strong><br>
+  Siamo la terra che brucia sotto i piedi, siamo il Salento che non si fa folklore. Siamo la crasi tra ciò che è stato e ciò che sarà. Siamo la voce che non si spegne, anche quando ci vogliono zittire.</p>
+
+  <p><strong>Il QUEER MARKET SHOW non si spiega. Si urla. Si vive. Si lotta.</strong></p>
 </section>
 
 <!-- Calendario -->
 <section id="calendario" class="scroll-section">
-  <h2>Prossimi Eventi</h2>
+  <h2>Next up</h2>
   <p>Scopri dove trovarci nei prossimi mesi.</p>
   <div class="event-gallery">
     <!-- Eventi visuali -->
@@ -79,10 +95,16 @@
 
 <!-- Eventi -->
 <section id="eventi" class="scroll-section">
-  <h2>Eventi</h2>
-  <div class="event-card">
-    <h3>Voci Ribelli</h3>
-    <p>Teatro sociale, 28 ottobre, Lecce</p>
+  <h2>Eventi Passati</h2>
+  <div class="instagram-grid">
+    <iframe 
+      src="https://www.instagram.com/_qms_/embed" 
+      width="100%" 
+      height="600" 
+      frameborder="0" 
+      scrolling="no" 
+      allowtransparency="true">
+    </iframe>
   </div>
 </section>
 
@@ -93,69 +115,219 @@
   <div class="artist-subsection">
     <h3>Artisti Residenti</h3>
     <div class="artist-gallery">
-      <div class="artist-card" onclick="openArtistModal('artista2')">
-        <img src="images/maninerofuxia.jpg" alt="Artista 2">
-        <div class="overlay">
-          <h4>Artista 2</h4>
-          <p>Visual artist con esperienze internazionali in arte pubblica.</p>
+  <!-- Altri artisti -->
+</div>
+
+    
+    <div class="artist-gallery">
+      <!-- Diskovenganza -->
+      <div class="artist-card" onclick="openArtistModal('Diskovenganza')">
+        <img src="images/artist3/franz/franz1.jpg" alt="Diskovenganza">
+        <div class="artista-info">
+          <h3>Diskovenganza</h3>
+          <p>DJ (TA/Salento)</p>
+          <p>La sua musica è resistenza spontanea, vendetta sonora e ritmo fluido.</p>
         </div>
       </div>
-    </div>
-  </div>
+      <!-- Billie Kill -->
+      <div class="artist-card" onclick="openArtistModal('Billie-Kill')">
+        <img src="images/artist3/billie/billie1.jpg" alt="Billie Kill">
+        <div class="artista-info">
+          <h3>Billie Kill</h3>
+          <p>Artista Multimediale (LE/Salento)</p>
+          <p>Attraverso performance, installazioni e video, esplora identità queer, corpi non conformi e spazi di resistenza.</p>
+        </div>
+      </div>
+
+      <!-- Alister Victoria -->
+      <div class="artist-card" onclick="openArtistModal('Alister-Victoria')">
+        <img src="images/artist3/alister/alister1.jpg" alt="Alister Victoria">
+        <div class="artista-info">
+          <h3>Alister Victoria</h3>
+          <p>Artista Visiva (LE/Salento)</p>
+          <p>Le sue opere sfidano le norme di genere e sessualità, creando spazi visivi di liberazione e auto-espressione.</p>
+        </div>
+      </div>
+      <!-- Lela Rox -->
+      <div class="artist-card" onclick="openArtistModal('Lela-Rox')"> <!--copiare da qui per duplicare schede artist3 -->
+        <img src="images/artist3/lela/lela1.jpg" alt="Lela-Rox">
+        <div class="artista-info">
+          <h3>Lela Rox</h3>
+          <p>Drag Performer</p>
+          <p>Nata dal vuoto e dalle cicatrici, trasforma il dolore in bellezza, arte e verità.</p>
+        </div>
+      </div>
+      
+      <!-- Rebellmouse -->
+            <div class="artist-card" onclick="openArtistModal('RebellMouse')"> <!--copiare da qui per duplicare schede artist3 -->
+        <img src="images\artist3\rebel\rebel1.jpg" alt="RebellMouse">
+        <div class="artista-info">
+          <h4>RebellMouse</h4>
+          <p>Drag Performer</p>
+          <p>Un ibrido in continua evoluzione. Non un corpo ma un concetto, un incubo, senza un solo genere o una sola forma. Tutto e niente. </p>
+        </div>
+      </div>
+      <!-- Wilma Etheria -->
+            <div class="artist-card" onclick="openArtistModal('Wilma')"> <!--copiare da qui per duplicare schede artist3 -->
+        <img src="images\artist3\rebel\wilma1.jpg" alt="Wilma Etheria">
+        <div class="artista-info">
+          <h4>Wilma Etheria</h4>
+          <p>Drag Performer</p>
+          <p>Un ibrido in continua evoluzione. Non un corpo ma un concetto, un incubo, senza un solo genere o una sola forma. Tutto e niente. </p>
+        </div>
+      </div>
+    </div> <!-- Fine artist-gallery -->
+
+  </div> <!-- Fine artist-subsection -->
 </section>
 
+
 <!-- Modale artista -->
-<div id="artista2" class="artist-modal hidden" onclick="closeArtistModal('artista2')">
+<div id="Diskovenganza" class="artist-modal hidden" onclick="closeArtistModal('Diskovenganza')">
   <div class="modal-content" onclick="event.stopPropagation()">
-    <button class="close-button" onclick="closeArtistModal('artista2')">×</button>
+    <button class="close-button" onclick="closeArtistModal('Diskovenganza')">×</button>
     <div class="artist-header">
-      <h3>Artista 2</h3>
-      <a href="https://www.instagram.com/artista2" target="_blank"><i class="fab fa-instagram"></i></a>
+      <h3>Diskovenganza</h3>
+      <a href="https://www.instagram.com/disko_venganza_djset_/" target="_blank"><i class="fab fa-instagram"></i></a>
     </div>
-    <p>Visual artist con esperienze internazionali in arte pubblica.</p>
+    <p>DJ salentina (di Taranto), è l'anima ribelle che anima le piste con un sound senza compromessi. La sua selezione è un manifesto sonoro che spazia da EBM e Darkwave, fino alle frequenze più crude della Techno Dark e dell'Italo Disko Dark. Attiva nel collettivo Queer Market, usa la console come arma politica e luogo di liberazione spontanea. Dai club underground ai festival autogestiti in tutta Italia, Diskovenganza non mette musica: scatena una vendetta ritmica e implacabile.</p>
     <div class="modal-gallery">
-      <img src="images/artist3/lela2.jpg" alt="Foto 1" onclick="openLightbox(this.src)">
-      <img src="images/artist3/lela3.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz2.jpg" alt="Foto 1" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz3.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz4.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz5.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz6.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</div>
+<div id="Alister-Victoria" class="artist-modal hidden" onclick="closeArtistModal('Alister-Victoria')">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close-button" onclick="closeArtistModal('Alister-Victoria')">×</button>
+    <div class="artist-header">
+      <h3>Alister Victoria</h3>
+      <a href="https://www.instagram.com/alister.victoria/" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>DJ salentina (di Taranto), è l'anima ribelle che anima le piste con un sound senza compromessi. La sua selezione è un manifesto sonoro che spazia da EBM e Darkwave, fino alle frequenze più crude della Techno Dark e dell'Italo Disko Dark. Attiva nel collettivo Queer Market, usa la console come arma politica e luogo di liberazione spontanea. Dai club underground ai festival autogestiti in tutta Italia, Diskovenganza non mette musica: scatena una vendetta ritmica e implacabile.</p>
+    <div class="modal-gallery">
+      <img src="images\artist3\franz\franz2.jpg" alt="Foto 1" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz3.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz4.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz5.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz6.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</div>
+<div id="Billie-Kill" class="artist-modal hidden" onclick="closeArtistModal('Billie-Kill')">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close-button" onclick="closeArtistModal('Billie-Kill')">×</button>
+    <div class="artist-header">
+      <h3>Billie Kill</h3>
+      <a href="https://www.instagram.com/billie.kill/" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>DJ salentina (di Taranto), è l'anima ribelle che anima le piste con un sound senza compromessi. La sua selezione è un manifesto sonoro che spazia da EBM e Darkwave, fino alle frequenze più crude della Techno Dark e dell'Italo Disko Dark. Attiva nel collettivo Queer Market, usa la console come arma politica e luogo di liberazione spontanea. Dai club underground ai festival autogestiti in tutta Italia, Diskovenganza non mette musica: scatena una vendetta ritmica e implacabile.</p>
+    <div class="modal-gallery">
+      <img src="images\artist3\franz\franz2.jpg" alt="Foto 1" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz3.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz4.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz5.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz6.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</div>
+<div id="Wilma" class="artist-modal hidden" onclick="closeArtistModal('Wilma')">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close-button" onclick="closeArtistModal('Wilma')">×</button>
+    <div class="artist-header">
+      <h3>Wilma Etheria</h3>
+      <a href="https://www.instagram.com/wilma.etheria/" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>DJ salentina (di Taranto), è l'anima ribelle che anima le piste con un sound senza compromessi. La sua selezione è un manifesto sonoro che spazia da EBM e Darkwave, fino alle frequenze più crude della Techno Dark e dell'Italo Disko Dark. Attiva nel collettivo Queer Market, usa la console come arma politica e luogo di liberazione spontanea. Dai club underground ai festival autogestiti in tutta Italia, Diskovenganza non mette musica: scatena una vendetta ritmica e implacabile.</p>
+    <div class="modal-gallery">
+      <img src="images\artist3\franz\franz2.jpg" alt="Foto 1" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz3.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz4.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz5.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\franz\franz6.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
     </div>
   </div>
 </div>
 
+<div id="Lela-Rox" class="artist-modal hidden" onclick="closeArtistModal('Lela-Rox')">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close-button" onclick="closeArtistModal('Lela-Rox')">×</button>
+    <div class="artist-header">
+      <h3>Lela Rox</h3>
+      <a href="https://www.instagram.com/lela.rox/" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>nasce da un bisogno profondo di dare voce al vuoto, forma alle cicatrici. È sempre esistita, prima come sussurro nel cuore, poi come verità in chi impara ad abbracciarsi. È sensuale e disturbante, un contrasto continuo tra fascino e ferita, che sussurra a chi la incontra che non è solə.</p>
+    <div class="modal-gallery">
+      <img src="images\artist3\lela\lela2.jpg" alt="Foto 1" onclick="openLightbox(this.src)">
+      <img src="images\artist3\lela\lela3.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\lela\lela4.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</div>
+<div id="RebellMouse" class="artist-modal hidden" onclick="closeArtistModal('RebellMouse')">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close-button" onclick="closeArtistModal('RebellMouse')">×</button>
+    <div class="artist-header">
+      <h3>Rebellmouse</h3>
+      <a href="https://www.instagram.com/rebellmouse/" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>un concetto che si rende concreto ma rimanendo nell’oscurità, non importa piacere agli occhi degli umani. Tutto può essere terrificante ma incantevole, ciò verrà capito, ascoltato, visto, esiste ed esisterà per sempre. Impara a vedere con la mente, con il cuore e non solo con gli occhio che, una volta morti, saranno cenere.</p>
+    <div class="modal-gallery">
+      <img src="images\artist3\rebel\rebel2.jpg" alt="Foto 1" onclick="openLightbox(this.src)">
+      <img src="images\artist3\rebel\rebel3.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+      <img src="images\artist3\rebel\rebel4.jpg" alt="Foto 2" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</div>
+
+
 <!-- Partnership -->
 <section id="partnership" class="scroll-section">
-  <h2>Partnership</h2>
+  <h2>Collab e Altro</h2>
   <p>Collaborazioni con enti, artisti e realtà culturali.</p>
+  <div class="qms-masonry">
+    <!-- Video -->
+    <div class="qms-item video">
+      <iframe src="https://www.youtube.com/embed/MCub2R6jOZE" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <!-- Video non disponibile-->
+    <div class="qms-item video">
+  <a href="https://www.youtube.com/watch?v=MCub2R6jOZE" target="_blank">
+    <div class="video-preview" style="background-image: url('img/uomo-di-vetro-preview.jpg');">
+      <span class="play-icon">▶</span>
+    </div>
+  </a>
+  <p class="caption">
+    <strong>Uomo di vetro</strong> – dimaggio<br>
+</div>
+
+    <!-- Immagine -->
+    <div class="qms-item image">
+      <img src="img/collab1.jpg" alt="Collab 1">
+    </div>
+
+    <!-- Profilo Instagram -->
+    <div class="qms-item ig">
+      <a href="https://www.instagram.com/officinemaipiu/" target="_blank">
+        <img src="images\omlogo.jpg" alt="Profilo IG">
+        <span>@officinemaipiu</span>
+      </a>
+    </div>
+
+    <!-- Testo manifesto -->
+    <div class="qms-item manifesto">
+      <p>Non intratteniamo: <strong>incendiamo</strong>. Collaborazione con RebellMouse.</p>
+    </div>
+  </div>
 </section>
 
 <!-- Galleria -->
-<section id="galleria" class="scroll-section">
+<section id="galleria">
   <h2>Galleria</h2>
-  <p>Immagini, video e opere che raccontano il nostro percorso.</p>
-  <div class="gallery-preview">
-    <div class="preview-card" onclick="toggleFolder('folder1')">
-      <img src="img/preview1.jpg" alt="Preview 1">
-      <h3>Teatro Sociale</h3>
-    </div>
-    <div class="preview-card" onclick="toggleFolder('folder2')">
-      <img src="img/preview2.jpg" alt="Preview 2">
-      <h3>Street Art</h3>
-    </div>
-  </div>
-  <div id="folder1" class="gallery-folder hidden">
-    <h4>Teatro Sociale</h4>
-    <div class="photo-grid">
-      <img src="img/teatro1.jpg" alt="Scena 1" onclick="openLightbox(this.src)">
-      <img src="img/teatro2.jpg" alt="Scena 2" onclick="openLightbox(this.src)">
-      <img src="img/teatro3.jpg" alt="Scena 3" onclick="openLightbox(this.src)">
-    </div>
-  </div>
-  <div id="folder2" class="gallery-folder hidden">
-    <h4>Street Art</h4>
-    <div class="photo-grid">
-      <img src="img/street1.jpg" alt="Murales 1" onclick="openLightbox(this.src)">
-      <img src="img/street2.jpg" alt="Murales 2" onclick="openLightbox(this.src)">
-      <img src="img/street3.jpg" alt="Murales 3" onclick="openLightbox(this.src)">
-    </div>
-  </div>
+  <div class="gallery"></div>
 </section>
 
 <!-- Lightbox -->
@@ -287,6 +459,71 @@
     const popup = document.getElementById('thankyou-popup');
     if (popup) popup.classList.add('hidden');
   }
+  </script>
+
+<script>
+  // Carica le immagini dalla cartella usando fetch
+  fetch('gallery.json')
+    .then(res => res.json())
+    .then(images => {
+      const gallery = document.querySelector('.gallery');
+      images.forEach(file => {
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.innerHTML = `
+          <img src="images/gallery/${file}" alt="${file}">
+          <div class="overlay">${file.split('.')[0].toUpperCase()}</div>
+        `;
+        gallery.appendChild(item);
+      });
+      window.addEventListener('load', () => {
+  document.querySelectorAll('.item img').forEach(img => {
+    const item = img.closest('.item');
+    if (img.naturalWidth > img.naturalHeight) {
+      item.classList.add('horizontal');
+    } else {
+      item.classList.add('vertical');
+    }
+  });
+});
+
+
+      // Avvia il riordino solo dopo che le immagini sono state caricate
+      setInterval(shuffleLikeCards, 5000);
+    });
+
+function swapItems(itemA, itemB) {
+  itemA.style.transition = 'transform 0.5s ease';
+  itemB.style.transition = 'transform 0.5s ease';
+
+  itemA.style.transform = 'translateX(10px) scale(0.95)';
+  itemB.style.transform = 'translateX(-10px) scale(0.95)';
+
+  // Aspetta che la transizione sia finita
+  const onTransitionEnd = () => {
+    const cloneA = itemA.cloneNode(true);
+    const cloneB = itemB.cloneNode(true);
+
+    itemA.replaceWith(cloneB);
+    itemB.replaceWith(cloneA);
+  };
+
+  itemA.addEventListener('transitionend', onTransitionEnd, { once: true });
+}
+
+  function shuffleLikeCards() {
+    const gallery = document.querySelector('.gallery');
+    const items = Array.from(gallery.children);
+
+    if (items.length < 2) return;
+
+    const i = Math.floor(Math.random() * items.length);
+    let j = Math.floor(Math.random() * items.length);
+    while (j === i) j = Math.floor(Math.random() * items.length);
+
+    swapItems(items[i], items[j]);
+  }
 </script>
+
 </body>
 </html>

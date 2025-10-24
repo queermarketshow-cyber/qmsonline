@@ -1,0 +1,12 @@
+[
+{
+  "host": "ftpwin.queermarketshow.com",
+  "username": "17353434@aruba.it",
+  "password": "7eZj3x95Kx7NSp)",
+  "protocol": "ftp",
+  "port": 21,
+  "secure": false,
+  "passive": true,
+  "remotePath": "/www/"
+}
+]
