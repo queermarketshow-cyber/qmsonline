@@ -459,49 +459,93 @@
   }
   </script>
 
+<style>
+  .item {
+    opacity: 0;
+    transform: scale(0.8) rotate(-5deg);
+    transition: all 0.8s ease;
+  }
+
+  .item.visible {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+
+  .item.exit {
+    opacity: 0;
+    transform: scale(0.6) rotate(15deg);
+  }
+</style>
+
 <script>
+let allImages = [];
+
 fetch('gallery.json')
   .then(res => {
     if (!res.ok) throw new Error('gallery.json non trovato');
     return res.json();
   })
   .then(images => {
-    const gallery = document.querySelector('.gallery');
-    const imageElements = [];
-
-    images.forEach(file => {
-      const item = document.createElement('div');
-      item.className = 'item';
-
-      const img = document.createElement('img');
-      img.src = `images/gallery/${file}`;
-      img.alt = file;
-
-      const overlay = document.createElement('div');
-      overlay.className = 'overlay';
-      overlay.textContent = file.split('.')[0].toUpperCase();
-
-      item.appendChild(img);
-      item.appendChild(overlay);
-      gallery.appendChild(item);
-      imageElements.push(img);
-    });
-
-    // Attendi caricamento immagini
-    let loaded = 0;
-    imageElements.forEach(img => {
-      img.addEventListener('load', () => {
-        loaded++;
-        if (loaded === imageElements.length) {
-          assignOrientation();
-          setInterval(shuffleLikeCards, 3000);
-        }
-      });
-    });
+    allImages = images;
+    renderGallerySubset();
+    setInterval(() => {
+      animateExit(() => renderGallerySubset());
+    }, 15000);
   })
   .catch(err => {
     console.error('Errore:', err.message);
   });
+
+function renderGallerySubset() {
+  const gallery = document.querySelector('.gallery');
+  gallery.innerHTML = ''; // svuota galleria
+
+  const selected = allImages.sort(() => Math.random() - 0.5).slice(0, 12);
+  const imageElements = [];
+
+  selected.forEach(file => {
+    const item = document.createElement('div');
+    item.className = 'item';
+
+    const img = document.createElement('img');
+    img.src = `images/gallery/${file}`;
+    img.alt = file;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.textContent = file.split('.')[0].toUpperCase();
+
+    item.appendChild(img);
+    item.appendChild(overlay);
+    gallery.appendChild(item);
+    imageElements.push(img);
+  });
+
+  let loaded = 0;
+  imageElements.forEach(img => {
+    img.addEventListener('load', () => {
+      loaded++;
+      if (loaded === imageElements.length) {
+        assignOrientation();
+        setTimeout(() => {
+          document.querySelectorAll('.item').forEach(item => {
+            item.classList.add('visible');
+          });
+        }, 100); // attiva animazione dopo inserimento
+        setInterval(shuffleLikeCards, 3000);
+      }
+    });
+  });
+}
+
+function animateExit(callback) {
+  const items = document.querySelectorAll('.item');
+  items.forEach(item => {
+    item.classList.remove('visible');
+    item.classList.add('exit');
+  });
+  setTimeout(callback, 800); // attende fine animazione prima di ricaricare
+}
 
 function assignOrientation() {
   document.querySelectorAll('.item img').forEach(img => {
