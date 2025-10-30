@@ -323,9 +323,9 @@
 </section>
 
 <!-- Galleria -->
-<section id="galleria">
+<section id="galleria" class="scroll-section">
   <h2>Galleria</h2>
-  <div class="gallery"></div>
+  <div class="gallery" id="gallery"></div>
 </section>
 
 <!-- Lightbox -->
@@ -460,21 +460,50 @@
   </script>
 
 <script>
-  // Carica le immagini dalla cartella usando fetch
-  fetch('gallery.php')
-    .then(res => res.json())
-    .then(images => {
-      const gallery = document.querySelector('.gallery');
-      images.forEach(file => {
-        const item = document.createElement('div');
-        item.className = 'item';
-        item.innerHTML = `
-          <img src="images/gallery/${file}" alt="${file}">
-          <div class="overlay">${file.split('.')[0].toUpperCase()}</div>
-        `;
-        gallery.appendChild(item);
+fetch('gallery.json')
+  .then(res => {
+    if (!res.ok) throw new Error('gallery.json non trovato');
+    return res.json();
+  })
+  .then(images => {
+    const gallery = document.querySelector('.gallery');
+    const imageElements = [];
+
+    images.forEach(file => {
+      const item = document.createElement('div');
+      item.className = 'item';
+
+      const img = document.createElement('img');
+      img.src = `images/gallery/${file}`;
+      img.alt = file;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
+      overlay.textContent = file.split('.')[0].toUpperCase();
+
+      item.appendChild(img);
+      item.appendChild(overlay);
+      gallery.appendChild(item);
+      imageElements.push(img);
+    });
+
+    // Attendi caricamento immagini
+    let loaded = 0;
+    imageElements.forEach(img => {
+      img.addEventListener('load', () => {
+        loaded++;
+        if (loaded === imageElements.length) {
+          assignOrientation();
+          setInterval(shuffleLikeCards, 3000);
+        }
       });
-      window.addEventListener('load', () => {
+    });
+  })
+  .catch(err => {
+    console.error('Errore:', err.message);
+  });
+
+function assignOrientation() {
   document.querySelectorAll('.item img').forEach(img => {
     const item = img.closest('.item');
     if (img.naturalWidth > img.naturalHeight) {
@@ -483,44 +512,26 @@
       item.classList.add('vertical');
     }
   });
-});
-
-
-      // Avvia il riordino solo dopo che le immagini sono state caricate
-      setInterval(shuffleLikeCards, 3000);
-    });
-
-function swapItems(itemA, itemB)
-  itemA.style.transition = 'transform 0.5s ease';
-  itemB.style.transition = 'transform 0.5s ease';
-
-  itemA.style.transform = 'translateX(10px) scale(0.95)';
-  itemB.style.transform = 'translateX(-10px) scale(0.95)';
-
-  // Aspetta che la transizione sia finita
-  const onTransitionEnd = () => {
-    const cloneA = itemA.cloneNode(true);
-    const cloneB = itemB.cloneNode(true);
-
-    itemA.replaceWith(cloneB);
-    itemB.replaceWith(cloneA);
-  };
-
-  itemA.addEventListener('transitionend', onTransitionEnd, { once: true });
 }
 
-  function shuffleLikeCards() {
-    const gallery = document.querySelector('.gallery');
-    const items = Array.from(gallery.children);
+function swapItems(itemA, itemB) {
+  const cloneA = itemA.cloneNode(true);
+  const cloneB = itemB.cloneNode(true);
+  itemA.replaceWith(cloneB);
+  itemB.replaceWith(cloneA);
+}
 
-    if (items.length < 2) return;
+function shuffleLikeCards() {
+  const gallery = document.querySelector('.gallery');
+  const items = Array.from(gallery.children);
+  if (items.length < 2) return;
 
-    const i = Math.floor(Math.random() * items.length);
-    let j = Math.floor(Math.random() * items.length);
-    while (j === i) j = Math.floor(Math.random() * items.length);
+  const i = Math.floor(Math.random() * items.length);
+  let j = Math.floor(Math.random() * items.length);
+  while (j === i) j = Math.floor(Math.random() * items.length);
 
-    swapItems(items[i], items[j]);
-  }
+  swapItems(items[i], items[j]);
+}
 </script>
 
 </body>
