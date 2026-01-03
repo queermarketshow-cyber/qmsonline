@@ -813,13 +813,44 @@ function openEventModal(card) {
     </div>
   `;
 
+  // ————————————————————————————————
+  //   EFFETTO PIEGA: ORIENTAMENTO IMMAGINE
+  // ————————————————————————————————
+  const modalContent = modal.querySelector(".event-modal-content");
+  modalContent.removeAttribute("data-orientation"); // reset
+
+  const modalImg = modal.querySelector(".modal-img");
+
+  if (modalImg) {
+    // Se l'immagine non è ancora caricata, aspetta
+    if (!modalImg.complete) {
+      modalImg.onload = () => applyOrientation(modalImg, modalContent);
+    } else {
+      applyOrientation(modalImg, modalContent);
+    }
+  }
+
   modal.style.display = "flex";
 }
 
-  modalClose.onclick = () => (modal.style.display = "none");
-  modal.onclick = e => {
-    if (e.target === modal) modal.style.display = "none";
-  };
+// Funzione che assegna l'orientamento
+function applyOrientation(img, modalContent) {
+  const ratio = img.naturalWidth / img.naturalHeight;
+
+  if (ratio > 1.2) {
+    modalContent.dataset.orientation = "landscape";
+  } else if (ratio < 0.8) {
+    modalContent.dataset.orientation = "portrait";
+  } else {
+    modalContent.dataset.orientation = "square";
+  }
+}
+
+// Close handlers
+modalClose.onclick = () => (modal.style.display = "none");
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
 
   // ------------------ FUTURI ------------------
 

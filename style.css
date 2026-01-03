@@ -1089,20 +1089,40 @@ footer {
   align-items: center;
   justify-content: center;
   z-index: 999;
+  padding: 2vw; /* evita che la modale tocchi i bordi su laptop */
 }
 
 .event-modal-content {
   background: #111;
   border: 3px solid #000;
   box-shadow: 8px 8px 0 #000;
-  padding: 2rem;
-  max-width: 700px;
-  width: 90%;
+  padding: clamp(1.2rem, 2vw, 2rem);
+  width: min(90vw, 650px);
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
+  transition: transform 0.25s ease-out;
 }
 
+/* ————————————————————————————————
+   MODALE CHE SI PIEGA
+   (si inclina leggermente in base alla proporzione dell’immagine)
+—————————————————————————————————— */
+.event-modal-content[data-orientation="portrait"] {
+  transform: rotate(-1.5deg) skew(-1deg);
+}
+
+.event-modal-content[data-orientation="landscape"] {
+  transform: rotate(1.5deg) skew(1deg);
+}
+
+.event-modal-content[data-orientation="square"] {
+  transform: rotate(0.5deg);
+}
+
+/* ————————————————————————————————
+   CLOSE BUTTON
+—————————————————————————————————— */
 .event-modal-close {
   position: absolute;
   top: 10px;
@@ -1115,7 +1135,7 @@ footer {
 }
 
 /* ————————————————————————————————
-   META INFO (DATA + TAG)
+   META INFO
 —————————————————————————————————— */
 .event-modal-meta {
   margin-bottom: 1.5rem;
@@ -1123,7 +1143,7 @@ footer {
 
 .event-modal-date {
   font-weight: 900;
-  font-size: 1.2rem;
+  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
   color: #ff2fa8;
 }
 
@@ -1149,7 +1169,7 @@ footer {
 —————————————————————————————————— */
 .modal-two-columns {
   display: flex;
-  gap: 2rem;
+  gap: clamp(1rem, 2vw, 2rem);
   align-items: flex-start;
 }
 
@@ -1175,7 +1195,7 @@ footer {
 }
 
 /* ————————————————————————————————
-   RESPONSIVE
+   RESPONSIVE — MOBILE
 —————————————————————————————————— */
 @media (max-width: 700px) {
   .modal-two-columns {
@@ -1185,5 +1205,19 @@ footer {
   .modal-left,
   .modal-right {
     max-width: 100%;
+  }
+}
+
+/* ————————————————————————————————
+   RESPONSIVE — LAPTOP (1024–1440px)
+—————————————————————————————————— */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .event-modal-content {
+    width: min(70vw, 600px);
+    padding: clamp(1rem, 1.5vw, 1.8rem);
+  }
+
+  .modal-two-columns {
+    gap: 1.5rem;
   }
 }
