@@ -851,7 +851,7 @@ footer {
 
 .overlay {
   margin-top: 8px;
-  color: white;
+  color: #;
   font-weight: bold;
   font-size: 1rem;
   background: rgba(0, 0, 0, 0.6);
@@ -867,4 +867,249 @@ footer {
   .gallery {
     column-count: 1;
   }
+}
+/* ————————————————————————————————
+   FILTRI
+—————————————————————————————————— */
+.calendar-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.calendar-filters button {
+  padding: 6px 14px;
+  border: 1px solid #000;
+  background: #ff00aa;
+  cursor: pointer;
+  color: #000;
+  font-weight: 600;
+}
+
+.calendar-filters button.active {
+  background: #000;
+  color: #ff00aa;
+}
+
+/* ————————————————————————————————
+   CONTROLLI FUTURO / PASSATO
+—————————————————————————————————— */
+.calendar-controls {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.calendar-controls button {
+  padding: 6px 14px;
+  border: 1px solid #000;
+  background: #ff00aa;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.calendar-controls button.active {
+  background: #000;
+  color: #ff00aa;
+}
+
+/* ————————————————————————————————
+   CALENDARIO FUTURI (GRANDE + RESPONSIVE)
+—————————————————————————————————— */
+#future-calendar {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+#future-month-container {
+  width: min(100%, 900px);
+}
+
+/* Titolo mese futuri */
+#future-calendar .calendar-month {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: #eee;
+}
+
+/* Griglia futuri */
+#future-calendar .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.6rem;
+}
+
+/* Giorno futuri */
+#future-calendar .calendar-day {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #333;
+  background: #1a1a1a;
+  padding: 0.4rem;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  color: #aaa;
+}
+
+/* Numero giorno futuri */
+#future-calendar .calendar-day-number {
+  font-weight: 700;
+  color: #eee;
+}
+
+/* Cerchio fuxia futuri */
+#future-calendar .calendar-day.has-event::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 28px;
+  height: 28px;
+  border: 3px solid #ff2fa8;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Post-it futuri */
+#future-calendar .event-postit {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: clamp(55px, 10vw, 90px);
+  height: clamp(55px, 10vw, 90px);
+  background: #ff2fa8;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0 #000;
+  transform: rotate(-4deg);
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 3;
+}
+
+#future-calendar .event-postit img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ————————————————————————————————
+   CALENDARIO PASSATI (ARCHIVIO)
+—————————————————————————————————— */
+#past-events {
+  display: none;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+/* Titolo mese passati */
+#past-events .calendar-month {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  color: #ccc;
+  opacity: 0.8;
+}
+
+/* Griglia passati */
+#past-events .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(32px, 1fr));
+  gap: 0.4rem;
+}
+
+/* Giorno passati */
+#past-events .calendar-day {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #333;
+  background: #151515;
+  padding: 0.3rem;
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  color: #777;
+}
+
+/* Numero giorno passati */
+#past-events .calendar-day-number {
+  font-weight: 600;
+  color: #bbb;
+}
+
+/* Cerchio fuxia passati */
+#past-events .calendar-day.has-event::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ff2fa8;
+  border-radius: 50%;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+/* Post-it passati */
+#past-events .event-postit {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: clamp(40px, 7vw, 65px);
+  height: clamp(40px, 7vw, 65px);
+  background: #222;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0 #000;
+  transform: rotate(-2deg);
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 3;
+}
+
+#past-events .event-postit img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ————————————————————————————————
+   MODALE EVENTO
+—————————————————————————————————— */
+.event-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.event-modal-content {
+  background: #111;
+  border: 3px solid #000;
+  box-shadow: 8px 8px 0 #000;
+  padding: 2rem;
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.event-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff2fa8;
+  border: 2px solid #000;
+  padding: 0.3rem 0.6rem;
+  font-weight: 900;
+  cursor: pointer;
 }

@@ -32,8 +32,7 @@
   <div class="menu">
     <a href="#home">Home</a>
     <a href="#manifesto">Manifesto</a>
-    <a href="#calendario">Next up</a>
-    <a href="#eventi">Eventi Passati</a>
+    <a href="#calendario">Eventi</a>
     <a href="#artist3">Artist3</a>
     <a href="#partnership">Collab e Altro</a>
     <a href="#galleria">Galleria</a>
@@ -63,50 +62,159 @@
   <p><strong>Il QUEER MARKET SHOW non si spiega. Si urla. Si vive. Si lotta.</strong></p>
 </section>
 
-<!-- Calendario -->
 <section id="calendario" class="scroll-section">
-  <h2>Next up</h2>
+  <h2>Eventi</h2>
   <p>Scopri dove trovarci nei prossimi mesi.</p>
-  <div class="event-gallery">
-    <!-- Eventi visuali -->
-    <div class="event-card-visual">
-      <img src="images/evento1.jpg" alt="Evento 1">
+
+  <!-- FILTRI -->
+  <div class="calendar-filters">
+    <button data-filter="all" class="active">Tutti</button>
+    <button data-filter="workshop">Workshop</button>
+    <button data-filter="mostra">Mostre</button>
+    <button data-filter="performance">Performance</button>
+    <button data-filter="giochi">Serata Giochi</button>
+    <button data-filter="talk">Talk</button>
+  </div>
+
+  <!-- CALENDARIO FUTURO -->
+  <div id="future-calendar" style="display:none; align-items:center; gap:2rem;">
+    <button id="prev-month">◀</button>
+    <div id="future-month-container"></div>
+    <button id="next-month">▶</button>
+  </div>
+
+  <!-- CONTROLLI -->
+  <div class="calendar-controls">
+    <button id="show-future" class="active">Eventi futuri</button>
+    <button id="show-past">Eventi passati</button>
+  </div>
+
+  <!-- CALENDARIO PASSATO -->
+  <div id="past-events" style="display:none;"></div>
+
+  <!-- DATABASE EVENTI (NASCOSTO) -->
+  <div id="event-data" style="display:none;">
+
+    <div class="event-card-visual"
+         data-start="2026-01-04"
+         data-category="giochi performance">
+      <img src="images/eventi/20260104 tombola.jpg" alt="Tombolet Cabaret">
       <div class="event-overlay">
-        <h4>10 Novembre 2025</h4>
-        <p>Laboratorio di Teatro Sociale<br>Spazio Q, Lecce</p>
+        <p>Tombolet Cabaret<br>Too Much, Lecce</p>
       </div>
     </div>
-    <div class="event-card-visual">
+
+    <div class="event-card-visual"
+         data-start="2026-01-09"
+         data-category="performance">
       <img src="images/evento2.jpg" alt="Evento 2">
       <div class="event-overlay">
-        <h4>22 Novembre 2025</h4>
-        <p>Mostra Fotografica "Riflessi"<br>Ex Convento dei Teatini</p>
+        <p>Queer Market Show<br>Spazio Sociale Zei, Lecce</p>
       </div>
     </div>
-    <div class="event-card-visual">
-      <img src="images/evento3.jpg" alt="Evento 3">
+
+    <div class="event-card-visual"
+         data-start="2025-12-13"
+         data-category="performance talk">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Dissensi Festival">
       <div class="event-overlay">
-        <h4>5 Dicembre 2025</h4>
-        <p>Jam Session Urbana<br>Manifatture Knos</p>
+        <p>Dissensi Festival<br>Masseria Tagliatelle, Lecce</p>
       </div>
     </div>
-  </div>
+
+    <div class="event-card-visual"
+         data-start="2025-12-09"
+         data-category="performance">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Capriola Festival">
+      <div class="event-overlay">
+        <p>Capriola Festival<br>Ex Convento degli Agostiniani, Lecce</p>
+      </div>
+    </div>
+
+    <div class="event-card-visual"
+         data-start="2025-12-28"
+         data-category="giochi performance">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Tombolet Cabaret">
+      <div class="event-overlay">
+        <p>Tombolet Cabaret<br>Too Much, Lecce</p>
+      </div>
+    </div>
+
+    <div class="event-card-visual"
+         data-start="2025-12-07"
+         data-category="giochi performance">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Tombolet Cabaret">
+      <div class="event-overlay">
+        <p>Tombolet Cabaret<br>Too Much, Lecce</p>
+      </div>
+    </div>
+
+    <div class="event-card-visual"
+         data-start="2025-09-28"
+         data-category="performance">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Luna Nera Festival">
+      <div class="event-overlay">
+        <p>Luna Nera Festival<br>Fuori Binaria, Bari Palese</p>
+      </div>
+    </div>
+
+    <div class="event-card-visual"
+         data-start="2025-09-21"
+         data-category="workshop">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Drag it up">
+      <div class="event-overlay">
+        <p>Drag it up<br>Piazzetta Dante, Lecce</p>
+      </div>
+    </div>
+
+    <div class="event-card-visual"
+         data-start="2025-08-09"
+         data-category="performance">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Orda Fest">
+      <div class="event-overlay">
+        <p>Orda Fest<br>Villa Paciugo, Lecce</p>
+      </div>
+    </div>
+
+    <div class="event-card-visual"
+         data-start="2025-06-26"
+         data-category="performance">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Inaugurazione CAD L'Amara">
+      <div class="event-overlay">
+        <p>Inaugurazione CAD L'Amara<br>Zei Spazio Sociale, Lecce</p>
+      </div>
+    </div>
+
+    <div class="event-card-visual"
+         data-start="2025-06-20"
+         data-category="performance talk">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Fuori Frequenza">
+      <div class="event-overlay">
+        <p>Fuori Frequenza<br>Minima Fucina di Quartiere, Lecce</p>
+      </div>
+    </div>
+
+    <div class="event-card-visual"
+         data-start="2025-04-26"
+         data-end="2025-05-09"
+         data-category="performance">
+      <img src="images/eventi/20251213 dissensi.jpg" alt="Takeover">
+      <div class="event-overlay">
+        <p>Takeover<br>Progetto, Lecce</p>
+      </div>
+    </div>
+
+  </div><!-- /event-data -->
+
 </section>
 
-<!-- Eventi -->
-<section id="eventi" class="scroll-section">
-  <h2>Eventi Passati</h2>
-  <div class="instagram-grid">
-    <iframe 
-      src="https://www.instagram.com/_qms_/embed" 
-      width="100%" 
-      height="600" 
-      frameborder="0" 
-      scrolling="no" 
-      allowtransparency="true">
-    </iframe>
+<!-- MODALE EVENTO -->
+<div id="event-modal" class="event-modal">
+  <div class="event-modal-content">
+    <button class="event-modal-close">✕</button>
+    <div id="event-modal-body"></div>
   </div>
-</section>
+</div>
 
 <!-- Artist3 -->
 <section id="artist3" class="scroll-section">
@@ -577,6 +685,268 @@ function shuffleLikeCards() {
   swapItems(items[i], items[j]);
 }
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const today = new Date();
+  const cards = Array.from(document.querySelectorAll(".event-card-visual"));
+
+  const futureContainer = document.getElementById("future-calendar");
+  const futureMonthContainer = document.getElementById("future-month-container");
+  const timeline = document.getElementById("past-events");
+
+  const btnFuture = document.getElementById("show-future");
+  const btnPast = document.getElementById("show-past");
+  const filterButtons = document.querySelectorAll(".calendar-filters button");
+
+  const modal = document.getElementById("event-modal");
+  const modalBody = document.getElementById("event-modal-body");
+  const modalClose = document.querySelector(".event-modal-close");
+
+  let futureMonths = [];
+  let currentFutureMonthIndex = 0;
+  let currentFilter = "all";
+  let currentView = "future";
+
+  // ------------------ UTILITIES ------------------
+
+  function getEventDates(card) {
+    const start = new Date(card.dataset.start || card.dataset.date);
+    const end = new Date(card.dataset.end || card.dataset.start);
+    return { start, end };
+  }
+
+  function cardMatchesFilter(card) {
+    if (currentFilter === "all") return true;
+    const cats = (card.dataset.category || "").split(/\s+/);
+    return cats.includes(currentFilter);
+  }
+
+  function buildCalendarMonth(year, month, events) {
+    const monthName = new Date(year, month).toLocaleDateString("it-IT", {
+      month: "long",
+      year: "numeric"
+    }).toUpperCase();
+
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = `
+      <div class="calendar-month">${monthName}</div>
+      <div class="calendar-grid"></div>
+    `;
+
+    const grid = wrapper.querySelector(".calendar-grid");
+
+    const firstDay = new Date(year, month, 1).getDay() || 7;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let i = 1; i < firstDay; i++) grid.appendChild(document.createElement("div"));
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cell = document.createElement("div");
+      cell.classList.add("calendar-day");
+      cell.innerHTML = `<div class="calendar-day-number">${day}</div>`;
+
+      events.forEach(card => {
+        const { start } = getEventDates(card);
+        if (start.getDate() === day) {
+          cell.classList.add("has-event");
+
+          const postit = document.createElement("div");
+          postit.classList.add("event-postit");
+
+          const img = card.querySelector("img");
+          if (img) postit.innerHTML = `<img src="${img.src}" alt="">`;
+
+          postit.onclick = () => openEventModal(card);
+
+          cell.appendChild(postit);
+        }
+      });
+
+      grid.appendChild(cell);
+    }
+
+    return wrapper;
+  }
+
+  // ------------------ MODALE (VERSIONE CORRETTA) ------------------
+
+  function openEventModal(card) {
+    const { start, end } = getEventDates(card);
+
+    // Format date
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    const startStr = start.toLocaleDateString("it-IT", options);
+    const endStr = end.toLocaleDateString("it-IT", options);
+    const dateLabel = startStr === endStr ? startStr : `${startStr} → ${endStr}`;
+
+    // Categories
+    const categories = (card.dataset.category || "")
+      .split(/\s+/)
+      .filter(Boolean)
+      .map(cat => `<span class="event-tag">${cat}</span>`)
+      .join(" ");
+
+    // Clone overlay
+    const overlay = card.querySelector(".event-overlay").cloneNode(true);
+    overlay.querySelectorAll(".event-date, .date, .data").forEach(el => el.remove());
+
+    // Build modal content
+    modalBody.innerHTML = `
+      <div class="event-modal-meta">
+        <div class="event-modal-date">${dateLabel}</div>
+        <div class="event-modal-categories">${categories}</div>
+      </div>
+      <div class="event-modal-description">
+        ${overlay.innerHTML}
+      </div>
+    `;
+
+    modal.style.display = "flex";
+  }
+
+  modalClose.onclick = () => (modal.style.display = "none");
+  modal.onclick = e => {
+    if (e.target === modal) modal.style.display = "none";
+  };
+
+  // ------------------ FUTURI ------------------
+
+  function showFuture() {
+    currentView = "future";
+    futureContainer.style.display = "flex";
+    timeline.style.display = "none";
+    futureMonthContainer.innerHTML = "";
+
+    const futureEvents = cards.filter(card => {
+      const { end } = getEventDates(card);
+      return end >= today && cardMatchesFilter(card);
+    });
+
+    const months = {};
+    futureEvents.forEach(card => {
+      const { start } = getEventDates(card);
+      const key = `${start.getFullYear()}-${start.getMonth() + 1}`;
+      if (!months[key]) months[key] = [];
+      months[key].push(card);
+    });
+
+    futureMonths = Object.keys(months).sort((a, b) => {
+      const [yA, mA] = a.split("-").map(Number);
+      const [yB, mB] = b.split("-").map(Number);
+      return new Date(yA, mA - 1) - new Date(yB, mB - 1);
+    });
+
+    if (futureMonths.length === 0) {
+      futureMonthContainer.innerHTML = "<p>Nessun evento futuro per questo filtro.</p>";
+      document.getElementById("prev-month").style.opacity = "0.3";
+      document.getElementById("next-month").style.opacity = "0.3";
+      return;
+    }
+
+    currentFutureMonthIndex = 0;
+
+    function render() {
+      futureMonthContainer.innerHTML = "";
+      const key = futureMonths[currentFutureMonthIndex];
+      const [year, month] = key.split("-").map(Number);
+      futureMonthContainer.appendChild(buildCalendarMonth(year, month - 1, months[key]));
+
+      document.getElementById("prev-month").style.opacity =
+        currentFutureMonthIndex > 0 ? "1" : "0.3";
+
+      document.getElementById("next-month").style.opacity =
+        currentFutureMonthIndex < futureMonths.length - 1 ? "1" : "0.3";
+    }
+
+    render();
+
+    document.getElementById("prev-month").onclick = () => {
+      if (currentFutureMonthIndex > 0) {
+        currentFutureMonthIndex--;
+        render();
+      }
+    };
+
+    document.getElementById("next-month").onclick = () => {
+      if (currentFutureMonthIndex < futureMonths.length - 1) {
+        currentFutureMonthIndex++;
+        render();
+      }
+    };
+  }
+
+  // ------------------ PASSATI ------------------
+
+  function showPast() {
+    currentView = "past";
+    futureContainer.style.display = "none";
+    timeline.style.display = "block";
+    timeline.innerHTML = "";
+
+    const pastEvents = cards
+      .filter(card => {
+        const { end } = getEventDates(card);
+        return end < today && cardMatchesFilter(card);
+      })
+      .sort((a, b) => getEventDates(b).end - getEventDates(a).end);
+
+    const months = {};
+    pastEvents.forEach(card => {
+      const { start } = getEventDates(card);
+      const key = `${start.getFullYear()}-${start.getMonth() + 1}`;
+      if (!months[key]) months[key] = [];
+      months[key].push(card);
+    });
+
+    const sortedMonths = Object.keys(months).sort((a, b) => {
+      const [yA, mA] = a.split("-").map(Number);
+      const [yB, mB] = b.split("-").map(Number);
+      return new Date(yB, mB - 1) - new Date(yA, mA - 1);
+    });
+
+    if (sortedMonths.length === 0) {
+      timeline.innerHTML = "<p>Nessun evento passato per questo filtro.</p>";
+      return;
+    }
+
+    sortedMonths.forEach(key => {
+      const [year, month] = key.split("-").map(Number);
+      timeline.appendChild(buildCalendarMonth(year, month - 1, months[key]));
+    });
+  }
+
+  // ------------------ BOTTONI FUTURO/PASSATO ------------------
+
+  btnFuture.onclick = () => {
+    btnFuture.classList.add("active");
+    btnPast.classList.remove("active");
+    showFuture();
+  };
+
+  btnPast.onclick = () => {
+    btnPast.classList.add("active");
+    btnFuture.classList.remove("active");
+    showPast();
+  };
+
+  // ------------------ FILTRI CATEGORIA ------------------
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentFilter = btn.dataset.filter || "all";
+
+      if (currentView === "future") showFuture();
+      else showPast();
+    });
+  });
+
+  // Vista di default
+  showFuture();
+});
+</script>
+
 
 </body>
 </html>
