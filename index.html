@@ -770,39 +770,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ------------------ MODALE (VERSIONE CORRETTA) ------------------
 
-  function openEventModal(card) {
-    const { start, end } = getEventDates(card);
+function openEventModal(card) {
+  const { start, end } = getEventDates(card);
 
-    // Format date
-    const options = { day: "numeric", month: "long", year: "numeric" };
-    const startStr = start.toLocaleDateString("it-IT", options);
-    const endStr = end.toLocaleDateString("it-IT", options);
-    const dateLabel = startStr === endStr ? startStr : `${startStr} → ${endStr}`;
+  // Format date
+  const options = { day: "numeric", month: "long", year: "numeric" };
+  const startStr = start.toLocaleDateString("it-IT", options);
+  const endStr = end.toLocaleDateString("it-IT", options);
+  const dateLabel = startStr === endStr ? startStr : `${startStr} → ${endStr}`;
 
-    // Categories
-    const categories = (card.dataset.category || "")
-      .split(/\s+/)
-      .filter(Boolean)
-      .map(cat => `<span class="event-tag">${cat}</span>`)
-      .join(" ");
+  // Categories
+  const categories = (card.dataset.category || "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(cat => `<span class="event-tag">${cat}</span>`)
+    .join(" ");
 
-    // Clone overlay
-    const overlay = card.querySelector(".event-overlay").cloneNode(true);
-    overlay.querySelectorAll(".event-date, .date, .data").forEach(el => el.remove());
+  // Image
+  const img = card.querySelector("img");
+  const imgHTML = img ? `<img src="${img.src}" alt="" class="modal-img">` : "";
 
-    // Build modal content
-    modalBody.innerHTML = `
-      <div class="event-modal-meta">
+  // Overlay content
+  const overlay = card.querySelector(".event-overlay").cloneNode(true);
+  overlay.querySelectorAll(".event-date, .date, .data").forEach(el => el.remove());
+
+  // Build modal content (two columns)
+  modalBody.innerHTML = `
+    <div class="modal-two-columns">
+      
+      <div class="modal-left">
+        ${imgHTML}
+      </div>
+
+      <div class="modal-right">
         <div class="event-modal-date">${dateLabel}</div>
         <div class="event-modal-categories">${categories}</div>
+        <div class="event-modal-description">
+          ${overlay.innerHTML}
+        </div>
       </div>
-      <div class="event-modal-description">
-        ${overlay.innerHTML}
-      </div>
-    `;
 
-    modal.style.display = "flex";
-  }
+    </div>
+  `;
+
+  modal.style.display = "flex";
+}
 
   modalClose.onclick = () => (modal.style.display = "none");
   modal.onclick = e => {
