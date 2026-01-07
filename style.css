@@ -70,7 +70,9 @@ footer {
   padding: 2rem;
   border-top: 1px solid var(--primary-color);
 }
-/* NAVBAR BASE */
+/* ————————————————————————————————
+   NAVBAR BASE
+—————————————————————————————————— */
 .navbar {
   position: fixed;
   top: 0;
@@ -80,79 +82,29 @@ footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  padding: 0.8rem 1rem;
   z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* LOGO */
 .logo {
   font-weight: bold;
   color: var(--bg-color);
+  font-size: 1rem;
+  max-width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* HAMBURGER */
+/* ————————————————————————————————
+   HAMBURGER
+—————————————————————————————————— */
 .menu-toggle {
   display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 24px;
-  height: 18px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.menu-toggle .bar {
-  height: 3px;
-  width: 100%;
-  background-color: #000;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
-
-/* MENU DESKTOP */
-.menu {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.menu a {
-  color: #000;
-  font-weight: bold;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: flex;
-  }
-
-  .menu {
-    position: absolute;
-    top: 60px;
-    right: 1rem;
-    background: var(--primary-color);
-    padding: 1rem;
-    border-radius: 8px;
-    display: none;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .menu.show {
-    display: flex;
-  }
-}
-
-/* OFFSET PER ANCHOR LINK (navbar fixed) */
-section[id] {
-  scroll-margin-top: 90px;
-}
-
-.menu-toggle {
-  display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 24px;
@@ -166,34 +118,11 @@ section[id] {
 .menu-toggle .bar {
   height: 3px;
   width: 100%;
-  background-color: #333;
+  background-color: #000;
   border-radius: 2px;
   transition: all 0.3s ease;
 }
 
-/* Animazione di comparsa */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Stile delle voci */
-.menu a {
-  position: relative;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #333;
-  text-decoration: none;
-}
-
-.menu a:hover {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  transform: scale(1.1) rotate(-2deg);
-  text-decoration: line-through wavy var(--secondary-color);
-  text-decoration-thickness: 2px;
-}
 /* Animazione hamburger in X */
 .menu-toggle.open .bar:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
@@ -205,23 +134,69 @@ section[id] {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Responsive */
-@media (min-width: 30000px) {
-  .menu {
-    position: static;
-    height: auto;
-    flex-direction: row;
-    background: none;
-    box-shadow: none;
-    padding: 0;
-    gap: 2rem;
-    right: 0;
-  }
+/* ————————————————————————————————
+   MENU DESKTOP
+—————————————————————————————————— */
+.menu {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.menu a {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #333;
+  text-decoration: none;
+}
+
+/* ————————————————————————————————
+   MOBILE
+—————————————————————————————————— */
+@media (max-width: 768px) {
 
   .menu-toggle {
+    display: flex;
+  }
+
+  .menu {
     display: none;
+    position: absolute;
+    top: 60px;
+    right: 1rem;
+    background: var(--primary-color);
+    padding: 1rem;
+    border-radius: 8px;
+    flex-direction: column;
+    gap: 1rem;
+    width: calc(100% - 2rem);
+    max-width: 300px;
+    animation: fadeIn 0.3s ease forwards;
+    box-sizing: border-box;
+  }
+
+  .menu.show {
+    display: flex;
+  }
+
+  .logo {
+    font-size: 0.9rem;
+    max-width: 70%;
   }
 }
+
+/* OFFSET PER ANCHOR LINK */
+section[id] {
+  scroll-margin-top: 90px;
+}
+
+/* ANIMAZIONE */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
 .artist-gallery {
   column-count: 3; /* Numero di colonne */
   column-gap: 20px;

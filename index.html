@@ -489,23 +489,28 @@
   </div>
 </section>
 <script>
-  // MENU TOGGLE
+// MENU TOGGLE
+document.addEventListener('DOMContentLoaded', () => {
   const toggleButton = document.querySelector('.menu-toggle');
   const menu = document.querySelector('.menu');
 
-  if (toggleButton && menu) {
-    toggleButton.addEventListener('click', () => {
-      toggleButton.classList.toggle('open');
-      menu.classList.toggle('show');
-    });
+  if (!toggleButton || !menu) return;
 
-    document.querySelectorAll('.menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        toggleButton.classList.remove('open');
-        menu.classList.remove('show');
-      });
+  // Apri/chiudi menu
+  toggleButton.addEventListener('click', () => {
+    toggleButton.classList.toggle('open');
+    menu.classList.toggle('show');
+  });
+
+  // Chiudi menu quando clicchi un link
+  const links = menu.querySelectorAll('a');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      toggleButton.classList.remove('open');
+      menu.classList.remove('show');
     });
-  }
+  });
+});
 
   // SCROLL TO MANIFESTO
   const enterBtn = document.getElementById('enterBtn');
