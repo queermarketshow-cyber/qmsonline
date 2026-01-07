@@ -35,7 +35,7 @@
     <a href="#calendario">Eventi</a>
     <a href="#artist3">Artist3</a>
     <a href="#partnership">Collab e Altro</a>
-    <a href="#galleria">Galleria</a>
+    <a href="#gallery">Galleria</a>
     <a href="#contatti">Contatti</a>
     <a href="#sostienici">Sostienici</a>
   </div>
@@ -605,7 +605,7 @@ let currentFolder = null;
 let currentIndex = 0;
 
 // Carica JSON
-fetch('gallery.json')
+fetch('/gallery.json')
   .then(res => res.json())
   .then(data => {
     galleryData = data.folders;
