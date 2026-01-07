@@ -1451,3 +1451,169 @@ section[id] {
     height: auto;
   }
 }
+/* ————————————————————————————————
+   FIX DEFINITIVO MENU MOBILE
+   (Navbar sempre cliccabile, overlay non bloccanti)
+—————————————————————————————————— */
+
+/* Navbar sempre sopra tutto */
+.navbar {
+  z-index: 10000 !important;
+}
+
+/* Overlay nascosti NON devono bloccare i click */
+.artist-modal.hidden,
+.lightbox.hidden,
+#galleryModal:not(.open),
+.event-modal:not(.open) {
+  pointer-events: none !important;
+}
+
+/* Assicura che gli overlay chiusi siano invisibili e non cliccabili */
+.artist-modal.hidden,
+.lightbox.hidden,
+#galleryModal:not(.open),
+.event-modal {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Quando sono aperti, tornano visibili e cliccabili */
+.artist-modal:not(.hidden),
+.lightbox:not(.hidden),
+#galleryModal.open,
+.event-modal.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Fix extra: evita che elementi invisibili coprano la navbar */
+.artist-modal,
+.lightbox,
+#galleryModal,
+.event-modal {
+  transition: opacity 0.2s ease;
+}
+/* ————————————————————————————————
+   LIVELLI GLOBALI (Z-INDEX HIERARCHY)
+   Navbar > Modali > Lightbox > Gallery > Contenuto
+—————————————————————————————————— */
+:root {
+  --z-navbar: 10000;
+  --z-overlay: 9990;
+  --z-modal: 9995;
+  --z-lightbox: 9998;
+  --z-gallery: 9992;
+}
+
+/* Navbar sempre sopra tutto */
+.navbar {
+  z-index: var(--z-navbar) !important;
+}
+
+/* ————————————————————————————————
+   OVERLAY E MODALI — FIX DEFINITIVO
+—————————————————————————————————— */
+
+/* Tutti gli overlay chiusi NON devono bloccare i click */
+.artist-modal.hidden,
+.lightbox.hidden,
+#galleryModal:not(.open),
+.event-modal:not(.open) {
+  pointer-events: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Quando sono aperti, tornano visibili e cliccabili */
+.artist-modal:not(.hidden),
+.lightbox:not(.hidden),
+#galleryModal.open,
+.event-modal.open {
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Assicura che gli overlay siano sempre sopra il contenuto ma sotto la navbar */
+.artist-modal {
+  z-index: var(--z-modal) !important;
+}
+
+.lightbox {
+  z-index: var(--z-lightbox) !important;
+}
+
+#galleryModal {
+  z-index: var(--z-gallery) !important;
+}
+
+.event-modal {
+  z-index: var(--z-overlay) !important;
+}
+
+/* Transizioni morbide */
+.artist-modal,
+.lightbox,
+#galleryModal,
+.event-modal {
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* ————————————————————————————————
+   MENU MOBILE — STABILIZZAZIONE
+—————————————————————————————————— */
+
+/* Evita che il menu venga coperto da elementi assoluti */
+.menu {
+  position: relative;
+  z-index: var(--z-navbar);
+}
+
+/* Migliora la leggibilità del menu mobile */
+@media (max-width: 768px) {
+  .menu {
+    background: var(--primary-color);
+    border: 2px solid #000;
+    box-shadow: 4px 4px 0 #000;
+  }
+}
+
+/* ————————————————————————————————
+   PULIZIA E CONSISTENZA
+—————————————————————————————————— */
+
+/* Rimuove duplicati di .hidden */
+.hidden {
+  display: none !important;
+}
+
+/* Rimuove overlay duplicati */
+.overlay {
+  pointer-events: none;
+}
+
+/* ————————————————————————————————
+   EFFETTI GLITCH / PUNK CONSISTENTI
+—————————————————————————————————— */
+
+/* Effetto glitch leggero per hover */
+.glitch-hover:hover {
+  animation: glitchFlash 0.12s linear;
+}
+
+/* Effetto glitch universale */
+@keyframes glitchFlash {
+  0% { filter: hue-rotate(45deg) saturate(3); transform: scale(1.02); }
+  50% { filter: hue-rotate(-45deg) saturate(5); transform: scale(0.98); }
+  100% { filter: none; transform: scale(1); }
+}
+
+/* Applica glitch a elementi chiave */
+.menu a:hover,
+.artist-card:hover img,
+.folder-preview:hover,
+.qms-item:hover {
+  animation: glitchFlash 0.12s linear;
+}
