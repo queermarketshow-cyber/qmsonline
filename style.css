@@ -1364,70 +1364,53 @@ section[id] {
   box-shadow: 0 0 25px rgba(255,0,255,0.5);
 }
 
-/* ————————————————————————————————
-   CAROSELLO FULLSCREEN
-—————————————————————————————————— */
-.carousel.fullscreen {
+/* MODAL FULLSCREEN */
+.gallery-modal-content {
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 0;
   position: relative;
-  width: 100%;
-  height: calc(100vh - 80px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
 }
 
-.carousel.fullscreen .carousel-img {
-  max-width: 95%;
-  max-height: 95%;
-  object-fit: contain;
-}
-
-/* Frecce in modalità fullscreen */
-.carousel.fullscreen .prev,
-.carousel.fullscreen .next {
-  font-size: 3rem;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0 15px;
-}
-
-.carousel.fullscreen .prev {
-  left: 10px;
-}
-
-.carousel.fullscreen .next {
-  right: 10px;
-}
-
-/* ————————————————————————————————
-   FRECCE CAROSELLO
-—————————————————————————————————— */
-.prev, .next {
+/* CLOSE BUTTON */
+.gallery-close {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 3rem;
-  color: var(--primary-color);
-  cursor: pointer;
-  font-weight: bold;
-  user-select: none;
-  padding: 0 10px;
+  top: 20px;
+  right: 20px;
+  filter: invert(1);
+  z-index: 2000;
 }
 
-.prev { left: -40px; }
-.next { right: -40px; }
-
-.prev:hover, .next:hover {
-  color: var(--secondary-color);
+/* IMMAGINI */
+#galleryCarousel .carousel-item img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  max-height: 100vh;
 }
 
-/* Mobile */
-@media (max-width: 600px) {
-  .prev, .next {
-    font-size: 2.2rem;
-    left: -25px;
-    right: -25px;
+/* CONTROLLI */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 15%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1);
+}
+
+/* RESPONSIVE FIX */
+@media (max-width: 768px) {
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 20%;
+  }
+
+  .gallery-close {
+    top: 10px;
+    right: 10px;
   }
 }
 
@@ -1454,4 +1437,17 @@ section[id] {
   0% { filter: hue-rotate(45deg) saturate(3); transform: scale(1.02); }
   50% { filter: hue-rotate(-45deg) saturate(5); transform: scale(0.98); }
   100% { filter: none; transform: scale(1); }
+}
+@media (max-width: 768px) {
+  .carousel-control-prev,
+  .carousel-control-next {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15%;
+  }
+
+  .carousel-item img {
+    width: 100%;
+    height: auto;
+  }
 }
