@@ -1221,3 +1221,248 @@ footer {
     gap: 1.5rem;
   }
 }
+/* ————————————————————————————————
+   GALLERIA A CARTELLE — PREVIEW
+—————————————————————————————————— */
+.gallery-folders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.folder-preview {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--primary-color);
+  background: #000;
+  cursor: pointer;
+  border-radius: 6px;
+  transform: rotate(-1deg);
+  transition: transform 0.2s ease;
+}
+
+.folder-preview:hover {
+  transform: rotate(1deg) scale(1.02);
+}
+
+.folder-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.9);
+}
+
+.folder-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 12px;
+  background: rgba(0,0,0,0.7);
+  color: var(--primary-color);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-align: center;
+  mix-blend-mode: difference;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .gallery-folders {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ————————————————————————————————
+   MODALE GALLERIA
+—————————————————————————————————— */
+#galleryModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 2rem;
+}
+
+#galleryModal.open {
+  display: flex !important;
+}
+
+#galleryModal .modal-content {
+  background: #000;
+  border: 3px solid var(--primary-color);
+  padding: 1.5rem;
+  border-radius: 10px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 20px rgba(255,0,255,0.4);
+  animation: modalPop 0.25s ease-out;
+}
+
+/* FIX: quando la modale è chiusa, nessun elemento interno deve occupare spazio */
+#galleryModal:not(.open) .modal-grid,
+#galleryModal:not(.open) .carousel,
+#galleryModal:not(.open) .carousel.fullscreen {
+  display: none !important;
+}
+
+/* Pulsante chiusura */
+#galleryModal .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: bold;
+  background: none;
+  border: none;
+}
+
+/* ————————————————————————————————
+   MOSAICO IMMAGINI
+—————————————————————————————————— */
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.modal-grid img {
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid var(--primary-color);
+  transition: transform 0.2s ease;
+}
+
+.modal-grid img:hover {
+  transform: scale(1.03);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .modal-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+/* ————————————————————————————————
+   CAROSELLO
+—————————————————————————————————— */
+.carousel {
+  position: relative;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.carousel.hidden {
+  display: none;
+}
+
+.carousel-img {
+  max-width: 85vw;
+  max-height: 75vh;
+  border: 3px solid var(--primary-color);
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(255,0,255,0.5);
+}
+
+/* ————————————————————————————————
+   CAROSELLO FULLSCREEN
+—————————————————————————————————— */
+.carousel.fullscreen {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.carousel.fullscreen .carousel-img {
+  max-width: 95%;
+  max-height: 95%;
+  object-fit: contain;
+}
+
+/* Frecce in modalità fullscreen */
+.carousel.fullscreen .prev,
+.carousel.fullscreen .next {
+  font-size: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 15px;
+}
+
+.carousel.fullscreen .prev {
+  left: 10px;
+}
+
+.carousel.fullscreen .next {
+  right: 10px;
+}
+
+/* ————————————————————————————————
+   FRECCE CAROSELLO
+—————————————————————————————————— */
+.prev, .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+  padding: 0 10px;
+}
+
+.prev { left: -40px; }
+.next { right: -40px; }
+
+.prev:hover, .next:hover {
+  color: var(--secondary-color);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .prev, .next {
+    font-size: 2.2rem;
+    left: -25px;
+    right: -25px;
+  }
+}
+
+/* ————————————————————————————————
+   TRANSIZIONI E DETTAGLI PUNK
+—————————————————————————————————— */
+@keyframes modalPop {
+  from { transform: scale(0.9) rotate(-1deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+/* Overlay leggibile */
+.folder-overlay {
+  background: #000 !important;
+  color: var(--primary-color) !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Effetto glitch fucsia */
+.glitch-flash {
+  animation: glitchFlash 0.12s linear;
+}
+
+@keyframes glitchFlash {
+  0% { filter: hue-rotate(45deg) saturate(3); transform: scale(1.02); }
+  50% { filter: hue-rotate(-45deg) saturate(5); transform: scale(0.98); }
+  100% { filter: none; transform: scale(1); }
+}

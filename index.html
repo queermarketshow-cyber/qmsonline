@@ -431,10 +431,21 @@
 </section>
 
 <!-- Galleria -->
-<section id="galleria" class="scroll-section">
-  <h2>Galleria</h2>
-  <div class="gallery" id="gallery"></div>
+<section id="gallery">
+  <div class="gallery-folders"></div>
 </section>
+
+<div class="modal" id="galleryModal">
+  <div class="modal-content">
+    <button class="close">&times;</button>
+    <div class="modal-grid"></div>
+    <div class="carousel hidden">
+      <span class="prev">&#10094;</span>
+      <img class="carousel-img" src="" alt="">
+      <span class="next">&#10095;</span>
+    </div>
+  </div>
+</div>
 
 <!-- Lightbox -->
 <div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
@@ -584,106 +595,201 @@
     transform: scale(0.6) rotate(15deg);
   }
 </style>
-
 <script>
-let allImages = [];
+// ===============================
+//   GALLERIA A CARTELLE — QMS
+// ===============================
 
+let galleryData = null;
+let currentFolder = null;
+let currentIndex = 0;
+
+// Carica JSON
 fetch('gallery.json')
-  .then(res => {
-    if (!res.ok) throw new Error('gallery.json non trovato');
-    return res.json();
+  .then(res => res.json())
+  .then(data => {
+    galleryData = data.folders;
+    renderFolderPreviews();
+    setupVisibilityObserver();
+    startRandomSlideshow();
   })
-  .then(images => {
-    allImages = images;
-    renderGallerySubset();
-    setInterval(() => {
-      animateExit(() => renderGallerySubset());
-    }, 15000);
-  })
-  .catch(err => {
-    console.error('Errore:', err.message);
-  });
+  .catch(err => console.error(err));
 
-function renderGallerySubset() {
-  const gallery = document.querySelector('.gallery');
-  gallery.innerHTML = ''; // svuota galleria
 
-  const selected = allImages.sort(() => Math.random() - 0.5).slice(0, 12);
-  const imageElements = [];
+// ===============================
+//   PREVIEW CARTELLE
+// ===============================
 
-  selected.forEach(file => {
-    const item = document.createElement('div');
-    item.className = 'item';
+function renderFolderPreviews() {
+  const container = document.querySelector('.gallery-folders');
+  container.innerHTML = '';
+
+  galleryData.forEach((folder, folderIndex) => {
+    const preview = document.createElement('div');
+    preview.className = 'folder-preview';
+    preview.dataset.folderIndex = folderIndex;
 
     const img = document.createElement('img');
-    img.src = `images/gallery/${file}`;
-    img.alt = file;
+    img.src = `${folder.path}/${folder.images[0]}`;
+    img.alt = folder.name;
 
     const overlay = document.createElement('div');
-    overlay.className = 'overlay';
-    overlay.textContent = file.split('.')[0].toUpperCase();
+    overlay.className = 'folder-overlay';
+    overlay.textContent = folder.name;
 
-    item.appendChild(img);
-    item.appendChild(overlay);
-    gallery.appendChild(item);
-    imageElements.push(img);
+    preview.appendChild(img);
+    preview.appendChild(overlay);
+
+    preview.addEventListener('click', () => openFolderModal(folder));
+
+    container.appendChild(preview);
   });
+}
 
-  let loaded = 0;
-  imageElements.forEach(img => {
-    img.addEventListener('load', () => {
-      loaded++;
-      if (loaded === imageElements.length) {
-        assignOrientation();
-        setTimeout(() => {
-          document.querySelectorAll('.item').forEach(item => {
-            item.classList.add('visible');
-          });
-        }, 100); // attiva animazione dopo inserimento
-        setInterval(shuffleLikeCards, 3000);
+
+// ===============================
+//   VISIBILITY OBSERVER
+//   (priorità alle cartelle visibili)
+// ===============================
+
+let visibleFolders = new Set();
+
+function setupVisibilityObserver() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const index = entry.target.dataset.folderIndex;
+      if (entry.isIntersecting) {
+        visibleFolders.add(index);
+      } else {
+        visibleFolders.delete(index);
       }
     });
-  });
+  }, { threshold: 0.4 });
+
+  document.querySelectorAll('.folder-preview').forEach(el => observer.observe(el));
 }
 
-function animateExit(callback) {
-  const items = document.querySelectorAll('.item');
-  items.forEach(item => {
-    item.classList.remove('visible');
-    item.classList.add('exit');
-  });
-  setTimeout(callback, 800); // attende fine animazione prima di ricaricare
-}
 
-function assignOrientation() {
-  document.querySelectorAll('.item img').forEach(img => {
-    const item = img.closest('.item');
-    if (img.naturalWidth > img.naturalHeight) {
-      item.classList.add('horizontal');
-    } else {
-      item.classList.add('vertical');
+// ===============================
+//   ROTAZIONE RANDOM + GLITCH
+// ===============================
+
+function startRandomSlideshow() {
+  setInterval(() => {
+    const previews = Array.from(document.querySelectorAll('.folder-preview'));
+
+    if (visibleFolders.size === 0) return;
+
+    // scegli una cartella visibile a caso
+    const visibleArray = Array.from(visibleFolders);
+    const randomFolderIndex = visibleArray[Math.floor(Math.random() * visibleArray.length)];
+
+    const preview = previews[randomFolderIndex];
+    const folder = galleryData[randomFolderIndex];
+    const img = preview.querySelector('img');
+
+    // scegli immagine random diversa da quella attuale
+    const currentSrc = img.src.split('/').pop();
+    let nextImg = currentSrc;
+    while (nextImg === currentSrc) {
+      nextImg = folder.images[Math.floor(Math.random() * folder.images.length)];
     }
+
+    // glitch fucsia
+    preview.classList.add('glitch-flash');
+    setTimeout(() => preview.classList.remove('glitch-flash'), 120);
+
+    // cambia immagine
+    img.src = `${folder.path}/${nextImg}`;
+
+  }, 4000);
+}
+
+
+// ===============================
+//   MODALE + MOSAICO
+// ===============================
+
+function openFolderModal(folder) {
+  currentFolder = folder;
+
+  const modal = document.getElementById('galleryModal');
+  const grid = modal.querySelector('.modal-grid');
+  const carousel = modal.querySelector('.carousel');
+
+  grid.innerHTML = '';
+  carousel.classList.add('hidden');
+  carousel.classList.remove('fullscreen');
+
+  folder.images.forEach((imgName, index) => {
+    const img = document.createElement('img');
+    img.src = `${folder.path}/${imgName}`;
+    img.className = 'grid-img';
+    img.alt = `${folder.name} ${index + 1}`;
+
+    img.addEventListener('click', () => openCarousel(index));
+
+    grid.appendChild(img);
   });
+
+  modal.classList.add('open');
 }
 
-function swapItems(itemA, itemB) {
-  const cloneA = itemA.cloneNode(true);
-  const cloneB = itemB.cloneNode(true);
-  itemA.replaceWith(cloneB);
-  itemB.replaceWith(cloneA);
+
+// ===============================
+//   CAROSELLO FULLSCREEN
+// ===============================
+
+function openCarousel(index) {
+  currentIndex = index;
+
+  const modal = document.getElementById('galleryModal');
+  const carousel = modal.querySelector('.carousel');
+  const img = modal.querySelector('.carousel-img');
+
+  img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
+
+  carousel.classList.remove('hidden');
+  carousel.classList.add('fullscreen');
+
+  modal.querySelector('.modal-grid').classList.add('hidden');
 }
 
-function shuffleLikeCards() {
-  const gallery = document.querySelector('.gallery');
-  const items = Array.from(gallery.children);
-  if (items.length < 2) return;
-
-  const i = Math.floor(Math.random() * items.length);
-  let j = Math.floor(Math.random() * items.length);
-  while (j === i) j = Math.floor(Math.random() * items.length);
-
-  swapItems(items[i], items[j]);
+function updateCarousel() {
+  const img = document.querySelector('.carousel-img');
+  img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
+
+
+// ===============================
+//   NAVIGAZIONE CAROSELLO
+// ===============================
+
+document.querySelector('.prev')?.addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
+  updateCarousel();
+});
+
+document.querySelector('.next')?.addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % currentFolder.images.length;
+  updateCarousel();
+});
+
+
+// ===============================
+//   CHIUSURA MODALE
+// ===============================
+
+document.querySelector('.close')?.addEventListener('click', () => {
+  const modal = document.getElementById('galleryModal');
+  modal.classList.remove('open');
+
+  modal.querySelector('.modal-grid').classList.remove('hidden');
+
+  const carousel = modal.querySelector('.carousel');
+  carousel.classList.add('hidden');
+  carousel.classList.remove('fullscreen');
+});
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
