@@ -1991,3 +1991,34 @@ html, body {
 #lightbox.hidden ~ #galleryModal .modal-content {
   pointer-events: auto;
 }
+/* FRECCE LIGHTBOX */
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  padding: 0 0.5rem;
+  z-index: 100000;
+}
+
+.lightbox-prev {
+  left: -40px;
+}
+
+.lightbox-next {
+  right: -40px;
+}
+
+/* Mobile: frecce più vicine all’immagine */
+@media (max-width: 768px) {
+  .lightbox-prev {
+    left: 10px;
+  }
+  .lightbox-next {
+    right: 10px;
+  }
+}
