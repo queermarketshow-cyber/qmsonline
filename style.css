@@ -1702,3 +1702,117 @@ section[id] {
 .event-modal-qms .modal-right {
   flex: 1 1 50%;
 }
+/* FRECCE LIGHTBOX CENTRATE VERTICALMENTE */
+.lightbox .prev,
+.lightbox .next {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+
+  /* visibilità */
+  color: #b0256b !important;
+  text-shadow: 0 0 8px black !important;
+  font-size: 3rem !important;
+  opacity: 1 !important;
+  z-index: 999999 !important;
+
+  /* evita che scendano sotto l'immagine */
+  bottom: auto !important;
+}
+
+/* posizioni laterali */
+.lightbox .prev {
+  left: 20px !important;
+}
+
+.lightbox .next {
+  right: 20px !important;
+}
+/* ————————————————————————————————
+   FRECCE LIGHTBOX — CENTRATE FORZATE
+—————————————————————————————————— */
+
+.lightbox .prev,
+.lightbox .next {
+  position: absolute !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+
+  /* visibilità */
+  color: white !important;
+  text-shadow: 0 0 8px black !important;
+  font-size: 3rem !important;
+  opacity: 1 !important;
+  z-index: 999999 !important;
+
+  /* reset di qualsiasi regola ereditata */
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  height: auto !important;
+}
+
+/* posizioni laterali */
+.lightbox .prev {
+  left: 20px !important;
+}
+
+.lightbox .next {
+  right: 20px !important;
+}
+/* ————————————————————————————————
+   FRECCE CAROSELLO — CENTRATE SEMPRE
+—————————————————————————————————— */
+
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  bottom: auto !important;
+
+  /* visibilità */
+  opacity: 1 !important;
+  z-index: 50000 !important;
+}
+
+/* Icone più visibili */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1) drop-shadow(0 0 6px black) !important;
+  width: 3rem !important;
+  height: 3rem !important;
+}
+/* ————————————————————————————————
+   FRECCE CAROSELLO CUSTOM (.prev / .next)
+—————————————————————————————————— */
+
+/* Assumo che .prev e .next siano dentro .carousel */
+.carousel .prev,
+.carousel .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
+
+  /* posizionamento laterale */
+  left: auto;
+  right: auto;
+
+  /* stile/visibilità */
+  color: white;
+  font-size: 3rem;
+  text-shadow: 0 0 8px black;
+  z-index: 50000;
+  cursor: pointer;
+}
+
+/* sinistra e destra */
+.carousel .prev {
+  left: 20px;
+}
+
+.carousel .next {
+  right: 20px;
+}
