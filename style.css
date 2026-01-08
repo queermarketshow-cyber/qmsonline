@@ -1790,3 +1790,52 @@ section[id] {
 .carousel .next {
   right: 20px;
 }
+/* ————————————————————————————————
+   OVERFLOW‑KILLER — Queer Market Show
+   Blocca ogni sbordamento orizzontale
+—————————————————————————————————— */
+
+/* 1. Nessun elemento deve superare il viewport */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+/* 2. Tutti i container principali rispettano il viewport */
+.gallery,
+.artist-gallery,
+.qms-masonry,
+.modal-gallery,
+.gallery-folders,
+.event-gallery {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box;
+}
+
+/* 3. Tutti gli item interni non possono allargarsi oltre il contenitore */
+.item,
+.artist-card,
+.qms-item,
+.folder-preview,
+.event-card-visual {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* 4. Fix per elementi che tentano di “span 2” su mobile */
+@media (max-width: 768px) {
+  .item.horizontal,
+  .item.vertical {
+    grid-column: span 1 !important;
+  }
+}
+
+/* 5. Fix per modali che possono sbordare su device piccoli */
+.event-modal-content,
+#galleryModal .modal-content,
+.artist-modal {
+  max-width: 100% !important;
+  box-sizing: border-box;
+  overflow-x: hidden !important;
+}
