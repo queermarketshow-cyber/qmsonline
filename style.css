@@ -70,9 +70,7 @@ footer {
   padding: 2rem;
   border-top: 1px solid var(--primary-color);
 }
-/* ————————————————————————————————
-   NAVBAR BASE
-—————————————————————————————————— */
+/* NAVBAR */
 .navbar {
   position: fixed;
   top: 0;
@@ -103,89 +101,7 @@ footer {
   white-space: nowrap;
 }
 
-.logo::before,
-.logo::after {
-  content: "Queer Market Show";
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  pointer-events: none;
-  opacity: 0.6;
-  mix-blend-mode: difference;
-}
-
-.logo::before {
-  color: #ff00aa;
-  transform: translate(2px, -1px);
-}
-
-.logo::after {
-  color: #00eaff;
-  transform: translate(-2px, 1px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo::before,
-  .logo::after {
-    display: none;
-  }
-}
-
-/* ————————————————————————————————
-   MENU DESKTOP
-—————————————————————————————————— */
-.menu-desktop {
-  display: none;
-}
-
-@media (min-width: 769px) {
-  .menu-desktop {
-    display: flex;
-    gap: 1.2rem;
-    align-items: center;
-  }
-
-  .menu-desktop a {
-    position: relative;
-    display: inline-block;
-    padding-bottom: 4px;
-    line-height: 1.2;
-    will-change: transform;
-    transform-origin: left center;
-    transition: transform 0.05s linear;
-    white-space: nowrap;
-    color: #000;
-    text-decoration: none;
-    font-weight: 900;
-  }
-
-  .menu-desktop a:hover {
-    transform: translateX(2px) rotate(-1deg);
-  }
-
-  .menu-desktop a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 2px;
-    background: #000;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.08s steps(2, end);
-    pointer-events: none;
-  }
-
-  .menu-desktop a:hover::after {
-    transform: scaleX(1);
-  }
-}
-
-/* ————————————————————————————————
-   HAMBURGER
-—————————————————————————————————— */
+/* HAMBURGER */
 .menu-toggle {
   background: none;
   border: none;
@@ -195,7 +111,6 @@ footer {
   justify-content: space-between;
   width: 26px;
   height: 20px;
-  flex-shrink: 0;
 }
 
 .menu-toggle .bar {
@@ -204,24 +119,27 @@ footer {
   background: #000;
 }
 
-.menu-toggle:focus-visible {
-  outline: 3px solid #000;
-  outline-offset: 4px;
+/* MENU DESKTOP */
+.menu-desktop {
+  display: none;
 }
 
-.menu-toggle.open .bar:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.menu-toggle.open .bar:nth-child(2) {
-  opacity: 0;
-}
-.menu-toggle.open .bar:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
+@media (min-width: 769px) {
+  .menu-desktop {
+    display: flex;
+    gap: 1.2rem;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
 }
 
-/* ————————————————————————————————
-   MENU MOBILE
-—————————————————————————————————— */
+/* MENU MOBILE */
+.menu-mobile {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .menu-mobile {
     display: none;
@@ -234,27 +152,10 @@ footer {
     flex-direction: column;
     gap: 1.2rem;
     z-index: 999;
-    animation: glitchIn 0.25s steps(2, end);
   }
 
   .menu-mobile.show {
     display: flex;
-  }
-
-  .menu-mobile a {
-    font-weight: 900;
-    text-transform: uppercase;
-    color: #000;
-    letter-spacing: 1px;
-    text-decoration: none;
-    padding: 6px 0;
-    position: relative;
-  }
-
-  @keyframes glitchIn {
-    0% { transform: translateX(-10px) skewX(10deg); opacity: 0; }
-    50% { transform: translateX(5px) skewX(-5deg); opacity: 0.7; }
-    100% { transform: translateX(0) skewX(0); opacity: 1; }
   }
 }
 
