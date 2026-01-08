@@ -1,34 +1,6 @@
 {
   "folders": [
     {
-      "name": "ARTIST3",
-      "path": "images/gallery/ARTIST3",
-      "images": [
-        "alister1.jpg",
-        "alister2.jpg",
-        "alister3.jpg",
-        "alister4.jpg",
-        "franz1.jpg",
-        "franz2.jpg",
-        "franz3.jpg",
-        "franz4.jpg",
-        "franz5.jpg",
-        "franz6.jpg",
-        "lela1.jpg",
-        "lela2.jpg",
-        "lela3.jpg",
-        "lela4.jpg",
-        "rebel1.jpg",
-        "rebel2.jpg",
-        "rebel3.jpg",
-        "rebel4.jpg",
-        "wilma1.jpg",
-        "wilma2.jpg",
-        "wilma3.jpg",
-        "wilma4.jpg"
-      ]
-    },
-    {
       "name": "Body on Sale",
       "path": "images/gallery/Body on Sale",
       "images": [
