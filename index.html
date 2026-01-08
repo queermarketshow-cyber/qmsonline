@@ -22,19 +22,31 @@
   </div>
 </section>
 
-<!-- NAVBAR FISSA -->
 <nav class="navbar">
   <div class="logo">Queer Market Show</div>
 
-  <button class="menu-toggle" aria-label="Apri menu">
+  <!-- HAMBURGER SOLO MOBILE -->
+  <button class="menu-toggle" aria-label="Apri menu" aria-expanded="false">
     <span class="bar"></span>
     <span class="bar"></span>
     <span class="bar"></span>
   </button>
+
+  <!-- MENU DESKTOP SEPARATO -->
+  <div class="menu-desktop">
+    <a href="#home">Home</a>
+    <a href="#manifesto">Manifesto</a>
+    <a href="#calendario">Eventi</a>
+    <a href="#artist3">Artist3</a>
+    <a href="#partnership">Collab e Altro</a>
+    <a href="#gallery">Galleria</a>
+    <a href="#contatti">Contatti</a>
+    <a href="#sostienici">Sostienici</a>
+  </div>
 </nav>
 
 <!-- MENU MOBILE FUORI DALLA NAVBAR -->
-<div class="menu">
+<div class="menu-mobile">
   <a href="#home">Home</a>
   <a href="#manifesto">Manifesto</a>
   <a href="#calendario">Eventi</a>
@@ -1145,6 +1157,18 @@ modal.onclick = e => {
     <div id="eventModalQMSBody"></div>
   </div>
 </div>
+<script>
+toggle = document.querySelector('.menu-toggle');
+const menuMobile = document.querySelector('.menu-mobile');
+
+toggle.addEventListener('click', () => {
+  const isOpen = menuMobile.classList.toggle('show');
+  toggle.classList.toggle('open', isOpen);
+  toggle.setAttribute('aria-expanded', isOpen);
+
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+</script> 
 
 </body>
 </html>
