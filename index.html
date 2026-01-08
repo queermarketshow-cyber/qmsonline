@@ -769,6 +769,34 @@ function renderFolderPreviews() {
 /* ===============================
    VISIBILITY OBSERVER (GALLERIA)
 =============================== */
+function renderFolderPreviews() {
+  const container = document.querySelector('.gallery-folders');
+  if (!container || !galleryData) return;
+
+  container.innerHTML = '';
+
+  galleryData.forEach((folder, folderIndex) => {
+    const preview = document.createElement('div');
+    preview.className = 'folder-preview';
+    preview.dataset.folderIndex = folderIndex;
+
+    const img = document.createElement('img');
+    img.src = `${folder.path}/${folder.images[0]}`;
+    img.alt = folder.name;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'folder-overlay';
+    overlay.textContent = folder.name;
+
+    preview.appendChild(img);
+    preview.appendChild(overlay);
+
+    preview.addEventListener('click', () => openFolderModal(folder));
+
+    container.appendChild(preview);
+  });
+}
+
 function setupVisibilityObserver() {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -780,6 +808,7 @@ function setupVisibilityObserver() {
       }
     });
   }, { threshold: 0.4 });
+  
 
   document.querySelectorAll('.folder-preview').forEach(el => observer.observe(el));
 }
@@ -877,39 +906,71 @@ function openCarousel(index) {
 }
 
 function updateCarousel() {
-  const img = document.querySelector('.carousel-img');
+  const modal = document.getElementById('galleryModal');
+  const img = modal?.querySelector('.carousel-img');
   if (!img || !currentFolder) return;
+
   img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
-document.querySelector('.prev')?.addEventListener('click', () => {
-  if (!currentFolder) return;
-  currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
-  updateCarousel();
-});
+/* Prev */
+document.getElementById('galleryModal')
+  ?.querySelector('.prev')
+  ?.addEventListener('click', () => {
+    if (!currentFolder) return;
+    currentIndex =
+      (currentIndex - 1 + currentFolder.images.length) %
+      currentFolder.images.length;
+    updateCarousel();
+  });
 
-document.querySelector('.next')?.addEventListener('click', () => {
-  if (!currentFolder) return;
-  currentIndex = (currentIndex + 1) % currentFolder.images.length;
-  updateCarousel();
-});
+/* Next */
+document.getElementById('galleryModal')
+  ?.querySelector('.next')
+  ?.addEventListener('click', () => {
+    if (!currentFolder) return;
+    currentIndex = (currentIndex + 1) % currentFolder.images.length;
+    updateCarousel();
+  });
 
-document.querySelector('.close')?.addEventListener('click', () => {
+/* Close fullscreen carousel (torna alla griglia) */
+document.getElementById('galleryModal')
+  ?.querySelector('.close')
+  ?.addEventListener('click', () => {
+    const modal = document.getElementById('galleryModal');
+    if (!modal) return;
+
+    const grid = modal.querySelector('.modal-grid');
+    const carousel = modal.querySelector('.carousel');
+
+    if (grid) grid.classList.remove('hidden');
+
+    if (carousel) {
+      carousel.classList.add('hidden');
+      carousel.classList.remove('fullscreen');
+    }
+  });
+
+/* Chiudi l'intera modale galleria */
+function closeGalleryModal() {
   const modal = document.getElementById('galleryModal');
   if (!modal) return;
 
-  modal.classList.remove('open');
-  modal.classList.add('hidden');
-
   const grid = modal.querySelector('.modal-grid');
+  const carousel = modal.querySelector('.carousel');
+
   if (grid) grid.classList.remove('hidden');
 
-  const carousel = modal.querySelector('.carousel');
   if (carousel) {
     carousel.classList.add('hidden');
     carousel.classList.remove('fullscreen');
   }
-});
+
+  modal.classList.add('hidden');
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 
 
 /* ===============================
@@ -917,8 +978,9 @@ document.querySelector('.close')?.addEventListener('click', () => {
 =============================== */
 document.addEventListener('DOMContentLoaded', () => {
   const today = new Date();
-  const cards = Array.from(document.querySelectorAll('.event-card-visual'));
 
+  /* ELEMENTI BASE */
+  const cards = Array.from(document.querySelectorAll('.event-card-visual'));
   const futureContainer = document.getElementById('future-calendar');
   const futureMonthContainer = document.getElementById('future-month-container');
   const timeline = document.getElementById('past-events');
@@ -931,11 +993,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalBody = document.getElementById('event-modal-body');
   const modalClose = document.querySelector('.event-modal-close');
 
+  /* STATO */
   let futureMonths = [];
   let currentFutureMonthIndex = 0;
   let currentFilter = 'all';
   let currentView = 'future';
 
+  /* ===============================
+     UTILS DATE + FILTRI
+  =============================== */
   function getEventDates(card) {
     const start = new Date(card.dataset.start || card.dataset.date);
     const end = new Date(card.dataset.end || card.dataset.start);
@@ -948,59 +1014,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return cats.includes(currentFilter);
   }
 
-  function buildCalendarMonth(year, month, events) {
-    const monthName = new Date(year, month).toLocaleDateString('it-IT', {
-      month: 'long',
-      year: 'numeric'
-    }).toUpperCase();
-
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = `
-      <div class="calendar-month">${monthName}</div>
-      <div class="calendar-grid"></div>
-    `;
-
-    const grid = wrapper.querySelector('.calendar-grid');
-
-    const firstDay = new Date(year, month, 1).getDay() || 7;
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    for (let i = 1; i < firstDay; i++) {
-      grid.appendChild(document.createElement('div'));
-    }
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const cell = document.createElement('div');
-      cell.classList.add('calendar-day');
-      cell.innerHTML = `<div class="calendar-day-number">${day}</div>`;
-
-      events.forEach(card => {
-        const { start } = getEventDates(card);
-        if (start.getDate() === day) {
-          cell.classList.add('has-event');
-
-          const postit = document.createElement('div');
-          postit.classList.add('event-postit');
-
-          const img = card.querySelector('img');
-          if (img) postit.innerHTML = `<img src="${img.src}" alt="">`;
-
-          postit.onclick = () => openEventModal(card);
-
-          cell.appendChild(postit);
-        }
-      });
-
-      grid.appendChild(cell);
-    }
-
-    return wrapper;
-  }
-
+  /* ===============================
+     MODALE EVENTO
+  =============================== */
   function openEventModal(card) {
-    const { start, end } = getEventDates(card);
+    if (!modal || !modalBody) return;
 
+    const { start, end } = getEventDates(card);
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
+
     const startStr = start.toLocaleDateString('it-IT', options);
     const endStr = end.toLocaleDateString('it-IT', options);
     const dateLabel = startStr === endStr ? startStr : `${startStr} → ${endStr}`;
@@ -1012,9 +1034,11 @@ document.addEventListener('DOMContentLoaded', () => {
       .join(' ');
 
     const img = card.querySelector('img');
-    const imgHTML = img ? `<img src="${img.src}" alt="" class="modal-img">` : '';
+    const imgHTML = img
+      ? `<img src="${img.src}" alt="" class="modal-img">`
+      : '';
 
-    const overlay = card.querySelector('.event-overlay').cloneNode(true);
+    const overlay = card.querySelector('.event-overlay')?.cloneNode(true) || document.createElement('div');
     overlay.querySelectorAll('.event-date, .date, .data').forEach(el => el.remove());
 
     modalBody.innerHTML = `
@@ -1029,37 +1053,119 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
 
     const modalImg = modal.querySelector('.modal-img');
     const modalContent = modal.querySelector('.event-modal-content');
+
     if (modalImg && modalContent) {
       modalImg.onload = () => {
         const ratio = modalImg.naturalWidth / modalImg.naturalHeight;
-        if (ratio > 1.2) modalContent.dataset.orientation = 'landscape';
-        else if (ratio < 0.8) modalContent.dataset.orientation = 'portrait';
-        else modalContent.dataset.orientation = 'square';
+        if (ratio > 1.2) {
+          modalContent.dataset.orientation = 'landscape';
+        } else if (ratio < 0.8) {
+          modalContent.dataset.orientation = 'portrait';
+        } else {
+          modalContent.dataset.orientation = 'square';
+        }
       };
     }
   }
 
-  if (modalClose) {
-    modalClose.onclick = () => {
-      modal.style.display = 'none';
-    };
+  function closeEventModal() {
+    if (!modal) return;
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
   }
 
-  modal.onclick = e => {
-    if (e.target === modal) modal.style.display = 'none';
-  };
+  /* Chiudi modale: bottone, click fuori, ESC */
+  if (modalClose) {
+    modalClose.onclick = () => closeEventModal();
+  }
 
-  cards.forEach(card => {
-    card.addEventListener('click', () => {
-      openEventModal(card);
+  if (modal) {
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeEventModal();
     });
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeEventModal();
   });
 
+  /* Click su card */
+  cards.forEach(card => {
+    card.addEventListener('click', () => openEventModal(card));
+  });
+
+  /* ===============================
+     COSTRUZIONE GRIGLIA MENSILE
+  =============================== */
+  function buildCalendarMonth(year, month, events) {
+    const monthName = new Date(year, month).toLocaleDateString('it-IT', {
+      month: 'long',
+      year: 'numeric'
+    }).toUpperCase();
+
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('calendar-month-wrapper');
+    wrapper.innerHTML = `
+      <div class="calendar-month">${monthName}</div>
+      <div class="calendar-grid"></div>
+    `;
+
+    const grid = wrapper.querySelector('.calendar-grid');
+
+    const firstDay = new Date(year, month, 1).getDay() || 7;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    /* Celle vuote prima del primo giorno */
+    for (let i = 1; i < firstDay; i++) {
+      grid.appendChild(document.createElement('div'));
+    }
+
+    /* Giorni del mese */
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cell = document.createElement('div');
+      cell.classList.add('calendar-day');
+      cell.innerHTML = `<div class="calendar-day-number">${day}</div>`;
+
+      events.forEach(card => {
+        const { start } = getEventDates(card);
+        if (
+          start.getFullYear() === year &&
+          start.getMonth() === month &&
+          start.getDate() === day
+        ) {
+          cell.classList.add('has-event');
+
+          const postit = document.createElement('div');
+          postit.classList.add('event-postit');
+
+          const img = card.querySelector('img');
+          if (img) {
+            postit.innerHTML = `<img src="${img.src}" alt="">`;
+          }
+
+          postit.onclick = () => openEventModal(card);
+          cell.appendChild(postit);
+        }
+      });
+
+      grid.appendChild(cell);
+    }
+
+    return wrapper;
+  }
+
+  /* ===============================
+     VISTA EVENTI FUTURI
+  =============================== */
   function showFuture() {
     currentView = 'future';
+
     if (futureContainer) futureContainer.style.display = 'flex';
     if (timeline) {
       timeline.style.display = 'none';
@@ -1072,6 +1178,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return end >= today && cardMatchesFilter(card);
     });
 
+    /* Raggruppa eventi per mese */
     const months = {};
     futureEvents.forEach(card => {
       const { start } = getEventDates(card);
@@ -1086,12 +1193,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return new Date(yA, mA - 1) - new Date(yB, mB - 1);
     });
 
+    const prevBtn = document.getElementById('prev-month');
+    const nextBtn = document.getElementById('next-month');
+
     if (futureMonths.length === 0) {
       if (futureMonthContainer) {
-        futureMonthContainer.innerHTML = '<p>Nessun evento futuro per questo filtro.</p>';
+        futureMonthContainer.innerHTML =
+          '<p>Nessun evento futuro per questo filtro.</p>';
       }
-      const prevBtn = document.getElementById('prev-month');
-      const nextBtn = document.getElementById('next-month');
       if (prevBtn) prevBtn.style.opacity = '0.3';
       if (nextBtn) nextBtn.style.opacity = '0.3';
       return;
@@ -1099,33 +1208,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     currentFutureMonthIndex = 0;
 
-    function render() {
+    function renderFutureMonth() {
       if (!futureMonthContainer) return;
+
       futureMonthContainer.innerHTML = '';
       const key = futureMonths[currentFutureMonthIndex];
       const [year, month] = key.split('-').map(Number);
-      futureMonthContainer.appendChild(buildCalendarMonth(year, month - 1, months[key]));
 
-      const prevBtn = document.getElementById('prev-month');
-      const nextBtn = document.getElementById('next-month');
+      futureMonthContainer.appendChild(
+        buildCalendarMonth(year, month - 1, months[key])
+      );
+
       if (prevBtn) {
         prevBtn.style.opacity = currentFutureMonthIndex > 0 ? '1' : '0.3';
       }
       if (nextBtn) {
-        nextBtn.style.opacity = currentFutureMonthIndex < futureMonths.length - 1 ? '1' : '0.3';
+        nextBtn.style.opacity =
+          currentFutureMonthIndex < futureMonths.length - 1 ? '1' : '0.3';
       }
     }
 
-    render();
-
-    const prevBtn = document.getElementById('prev-month');
-    const nextBtn = document.getElementById('next-month');
+    renderFutureMonth();
 
     if (prevBtn) {
       prevBtn.onclick = () => {
         if (currentFutureMonthIndex > 0) {
           currentFutureMonthIndex--;
-          render();
+          renderFutureMonth();
         }
       };
     }
@@ -1134,14 +1243,18 @@ document.addEventListener('DOMContentLoaded', () => {
       nextBtn.onclick = () => {
         if (currentFutureMonthIndex < futureMonths.length - 1) {
           currentFutureMonthIndex++;
-          render();
+          renderFutureMonth();
         }
       };
     }
   }
 
+  /* ===============================
+     VISTA EVENTI PASSATI
+  =============================== */
   function showPast() {
     currentView = 'past';
+
     if (futureContainer) futureContainer.style.display = 'none';
     if (!timeline) return;
 
@@ -1176,10 +1289,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sortedMonths.forEach(key => {
       const [year, month] = key.split('-').map(Number);
-      timeline.appendChild(buildCalendarMonth(year, month - 1, months[key]));
+      timeline.appendChild(
+        buildCalendarMonth(year, month - 1, months[key])
+      );
     });
   }
 
+  /* ===============================
+     BOTTONI VISTA FUTURO/PASSATO
+  =============================== */
   if (btnFuture) {
     btnFuture.onclick = () => {
       btnFuture.classList.add('active');
@@ -1196,25 +1314,35 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
+  /* ===============================
+     FILTRI PER CATEGORIA
+  =============================== */
   filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       filterButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentFilter = btn.dataset.filter || 'all';
-      if (currentView === 'future') showFuture();
-      else showPast();
+
+      if (currentView === 'future') {
+        showFuture();
+      } else {
+        showPast();
+      }
     });
   });
 
-  // Vista di default
+  /* ===============================
+     VISTA DI DEFAULT
+  =============================== */
   showFuture();
 });
-
 
 /* ===============================
    NAVBAR — ACTIVE LINK + MENU MOBILE
 =============================== */
 document.addEventListener('DOMContentLoaded', () => {
+
+  /* ELEMENTI */
   const sections = document.querySelectorAll('section[id]');
   const desktopLinks = document.querySelectorAll('.navbar a');
   const mobileLinks = document.querySelectorAll('.menu-mobile a');
@@ -1223,6 +1351,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuToggle = document.querySelector('.menu-toggle');
   const menuMobile = document.querySelector('.menu-mobile');
 
+  /* ===============================
+     ACTIVE LINK SU SCROLL
+  =============================== */
   function updateActiveLink() {
     let current = '';
 
@@ -1234,24 +1365,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     allLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === '#' + current) {
-        link.classList.add('active');
-      }
+      link.classList.toggle(
+        'active',
+        link.getAttribute('href') === '#' + current
+      );
     });
   }
 
   window.addEventListener('scroll', updateActiveLink);
   updateActiveLink();
 
+  /* ===============================
+     MENU MOBILE
+  =============================== */
   if (menuToggle && menuMobile) {
     menuToggle.addEventListener('click', () => {
       const isOpen = menuMobile.classList.toggle('show');
+
       menuToggle.classList.toggle('open', isOpen);
       menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
 
+    /* Chiudi menu al click su un link */
     mobileLinks.forEach(link => {
       link.addEventListener('click', () => {
         menuMobile.classList.remove('show');
@@ -1262,16 +1399,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Carica gallery.json dopo che il DOM è pronto
+  /* ===============================
+     CARICAMENTO GALLERIA
+  =============================== */
   fetch('/gallery.json')
     .then(res => res.json())
     .then(data => {
-      galleryData = data.folders;
+      galleryData = data.folders || [];
       renderFolderPreviews();
       setupVisibilityObserver();
       startRandomSlideshow();
     })
-    .catch(err => console.error(err));
+    .catch(err => console.error('Errore caricamento gallery.json:', err));
 });
 </script>
 </body>
