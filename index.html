@@ -507,7 +507,7 @@
   </div>
 </div>
 
-<!-- Lightbox -->
+<!-- LIGHTBOX -->
 <div id="lightbox" class="lightbox hidden">
   <div class="lightbox-inner" onclick="event.stopPropagation()">
     <img id="lightbox-img" src="" alt="Immagine ingrandita">
@@ -589,7 +589,7 @@ function openLightbox(src) {
 }
 
 /* ————————————————————————————————
-   LIGHTBOX — CLOSE (solo lightbox, non modale)
+   LIGHTBOX — CLOSE (solo lightbox)
 —————————————————————————————————— */
 function closeLightbox() {
   const lightbox = document.getElementById('lightbox');
@@ -597,7 +597,7 @@ function closeLightbox() {
     lightbox.style.animation = 'zoomOut 0.3s ease forwards';
     setTimeout(() => {
       lightbox.classList.add('hidden');
-      lightbox.style.animation = ''; // reset animazione
+      lightbox.style.animation = '';
       document.body.style.overflow = '';
     }, 300);
   }
@@ -628,15 +628,12 @@ lightbox.addEventListener('touchend', e => {
 function handleSwipe() {
   const delta = touchEndX - touchStartX;
 
-  if (Math.abs(delta) < 50) return; // swipe troppo corto
-
+  if (Math.abs(delta) < 50) return;
   if (!currentFolder) return;
 
   if (delta > 0) {
-    // swipe right → immagine precedente
     currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
   } else {
-    // swipe left → immagine successiva
     currentIndex = (currentIndex + 1) % currentFolder.images.length;
   }
 
@@ -667,7 +664,7 @@ lightboxImg.addEventListener('touchmove', e => {
 
     const scale = newDistance / initialDistance;
 
-    currentScale = Math.min(Math.max(scale, 1), 4); // da 1x a 4x
+    currentScale = Math.min(Math.max(scale, 1), 4);
 
     lightboxImg.style.transform = `scale(${currentScale})`;
   }
@@ -842,7 +839,11 @@ function openFolderModal(folder) {
     img.className = 'grid-img';
     img.alt = `${folder.name} ${index + 1}`;
 
-    img.addEventListener('click', () => openCarousel(index));
+    // APRI LIGHTBOX, NON CAROSELLO
+    img.addEventListener('click', () => {
+      openLightbox(`${folder.path}/${imgName}`);
+      currentIndex = index; // serve per swipe
+    });
 
     grid.appendChild(img);
   });
