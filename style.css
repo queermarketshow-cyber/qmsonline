@@ -80,6 +80,7 @@ footer {
   right: 0;
   background-color: var(--primary-color);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   padding: 0.8rem 1rem;
@@ -98,6 +99,9 @@ footer {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 /* ————————————————————————————————
@@ -106,6 +110,7 @@ footer {
 .menu-toggle {
   display: none;
   flex-direction: column;
+  flex-shrink: 0;
   justify-content: space-between;
   width: 24px;
   height: 18px;
