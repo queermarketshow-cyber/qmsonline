@@ -45,19 +45,7 @@
   </div>
 </nav>
 
-<!-- MENU MOBILE FUORI DALLA NAVBAR -->
-<div class="menu-mobile">
-  <a href="#home">Home</a>
-  <a href="#manifesto">Manifesto</a>
-  <a href="#calendario">Eventi</a>
-  <a href="#artist3">Artist3</a>
-  <a href="#partnership">Collab e Altro</a>
-  <a href="#gallery">Galleria</a>
-  <a href="#contatti">Contatti</a>
-  <a href="#sostienici">Sostienici</a>
-</div>
-
-<!-- MENU MOBILE FUORI DALLA NAVBAR -->
+<!-- MENU MOBILE FUORI DALLA NAVBAR (UNO SOLO!) -->
 <div class="menu-mobile">
   <a href="#home">Home</a>
   <a href="#manifesto">Manifesto</a>
@@ -547,30 +535,6 @@
   </div>
 </section>
 <script>
-// MENU TOGGLE
-document.addEventListener('DOMContentLoaded', () => {
-  const toggleButton = document.querySelector('.menu-toggle');
-  const menu = document.querySelector('.menu');
-
-  if (!toggleButton || !menu) return;
-  
-
-  // Apri/chiudi menu
-  toggleButton.addEventListener('click', () => {
-    toggleButton.classList.toggle('open');
-    menu.classList.toggle('show');
-  });
-
-  // Chiudi menu quando clicchi un link
-  const links = menu.querySelectorAll('a');
-  links.forEach(link => {
-    link.addEventListener('click', () => {
-      toggleButton.classList.remove('open');
-      menu.classList.remove('show');
-    });
-  });
-});
-
   // SCROLL TO MANIFESTO
   const enterBtn = document.getElementById('enterBtn');
   if (enterBtn) {
@@ -1170,17 +1134,66 @@ modal.onclick = e => {
   </div>
 </div>
 <script>
-toggle = document.querySelector('.menu-toggle');
-const menuMobile = document.querySelector('.menu-mobile');
+document.addEventListener("DOMContentLoaded", () => {
 
-toggle.addEventListener('click', () => {
-  const isOpen = menuMobile.classList.toggle('show');
-  toggle.classList.toggle('open', isOpen);
-  toggle.setAttribute('aria-expanded', isOpen);
+  /* ————————————————————————————————
+     ELEMENTI
+  ———————————————————————————————— */
+  const sections = document.querySelectorAll("section[id]");
+  const desktopLinks = document.querySelectorAll(".navbar a");
+  const mobileLinks = document.querySelectorAll(".menu-mobile a");
+  const allLinks = [...desktopLinks, ... mobileLinks];
 
-  document.body.style.overflow = isOpen ? 'hidden' : '';
+  const menuToggle = document.querySelector(".menu-toggle");
+  const menuMobile = document.querySelector(".menu-mobile");
+
+  /* ————————————————————————————————
+     ACTIVE LINK SU SCROLL
+  ———————————————————————————————— */
+  function updateActiveLink() {
+    let current = "";
+
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= 120 && rect.bottom >= 120) {
+        current = section.id;
+      }
+    });
+
+    allLinks.forEach(link => {
+      link.classList.remove("active");
+      if (link.getAttribute("href") === "#" + current) {
+        link.classList.add("active");
+      }
+    });
+  }
+
+  window.addEventListener("scroll", updateActiveLink);
+  updateActiveLink();
+
+  /* ————————————————————————————————
+     MENU MOBILE: TOGGLE + BODY LOCK
+  ———————————————————————————————— */
+  if (menuToggle && menuMobile) {
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuMobile.classList.toggle("show");
+      menuToggle.classList.toggle("open", isOpen);
+      menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      document.body.style.overflow = isOpen ? "hidden" : "";
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        menuMobile.classList.remove("show");
+        menuToggle.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+      });
+    });
+  }
+
 });
-</script> 
+</script>
 
 </body>
 </html>

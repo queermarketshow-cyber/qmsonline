@@ -140,9 +140,9 @@ footer {
   display: none;
 }
 
+/* Mobile */
 @media (max-width: 768px) {
   .menu-mobile {
-    display: none;
     position: fixed;
     top: 60px;
     left: 0;
@@ -151,11 +151,14 @@ footer {
     padding: 1.5rem;
     flex-direction: column;
     gap: 1.2rem;
-    z-index: 999;
+    z-index: 9999;
+    transform: translateY(-100%);
+    transition: transform 0.25s ease;
   }
 
   .menu-mobile.show {
     display: flex;
+    transform: translateY(0);
   }
 }
 
@@ -1790,6 +1793,80 @@ section[id] {
 .carousel .next {
   right: 20px;
 }
+/* ————————————————————————————————
+   MENU STYLE — Queer Market Show
+—————————————————————————————————— */
+
+.navbar a {
+  font-family: 'Lexend', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #000;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* Hover: glitch + bianco */
+.navbar a:hover {
+  color: #fff;
+  animation: glitchFlash 0.12s linear;
+}
+
+/* Stato attivo (sezione corrente) */
+.navbar a.active {
+  color: #fff;
+  text-decoration: line-through 3px solid #fff;
+}
+/* ————————————————————————————————
+   HAMBURGER STYLE — Queer Market Show
+—————————————————————————————————— */
+
+.menu-toggle {
+  width: 28px;
+  height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0;
+}
+
+.menu-toggle .bar {
+  width: 100%;
+  height: 3px;
+  background: #000;
+  transition: all 0.2s ease;
+}
+/* ————————————————————————————————
+   MENU MOBILE — Stile coerente con desktop
+—————————————————————————————————— */
+
+.menu-mobile a {
+  font-family: 'Lexend', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #000;
+  text-decoration: none;
+  font-size: 1.2rem;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* Hover: bianco + glitch */
+.menu-mobile a:hover {
+  color: #fff;
+  animation: glitchFlash 0.12s linear;
+}
+
+/* Stato attivo (sezione corrente) */
+.menu-mobile a.active {
+  color: #fff;
+  text-decoration: line-through 3px solid #fff;
+}
+
 /* ————————————————————————————————
    OVERFLOW‑KILLER — Queer Market Show
    Blocca ogni sbordamento orizzontale
