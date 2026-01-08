@@ -4,17 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Queer Market Show APS</title>
-  <link rel="icon" href="images\logo-qms.ico" type="image/svg+xml" />
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="icon" href="images/logo-qms.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-<!-- Logo sfondo -->
+<!-- SFONDO LOGO -->
 <div class="logo-background"></div>
 
-<!-- Sezione Home -->
+<!-- HOME -->
 <section id="home" class="home-section">
   <div class="home-content">
     <h1>Queer Market Show</h1>
@@ -22,17 +26,18 @@
   </div>
 </section>
 
+<!-- NAVBAR -->
 <nav class="navbar">
   <div class="logo">Queer Market Show</div>
 
-  <!-- HAMBURGER SOLO MOBILE -->
+  <!-- HAMBURGER MOBILE -->
   <button class="menu-toggle" aria-label="Apri menu" aria-expanded="false">
     <span class="bar"></span>
     <span class="bar"></span>
     <span class="bar"></span>
   </button>
 
-  <!-- MENU DESKTOP SEPARATO -->
+  <!-- MENU DESKTOP -->
   <div class="menu-desktop">
     <a href="#home">Home</a>
     <a href="#manifesto">Manifesto</a>
@@ -45,7 +50,7 @@
   </div>
 </nav>
 
-<!-- MENU MOBILE FUORI DALLA NAVBAR (UNO SOLO!) -->
+<!-- MENU MOBILE -->
 <div class="menu-mobile">
   <a href="#home">Home</a>
   <a href="#manifesto">Manifesto</a>
@@ -57,10 +62,10 @@
   <a href="#sostienici">Sostienici</a>
 </div>
 
-<!-- Manifesto -->
+<!-- MANIFESTO -->
 <section id="manifesto" class="scroll-section">
   <h2>Manifesto</h2>
-  
+
   <p><strong>Non siamo qui per decorare. Siamo qui per disturbare.</strong><br>
   Il QUEER MARKET SHOW è un atto di sabotaggio culturale. Nato da Distro-Venganza con Billie Kill e Alister Victoria, è una creatura collettiva che rifiuta gerarchie e si nutre di caos creativo. È una barricata fatta di stoffa, suono, sudore e glitter.</p>
 
@@ -79,6 +84,7 @@
   <p><strong>Il QUEER MARKET SHOW non si spiega. Si urla. Si vive. Si lotta.</strong></p>
 </section>
 
+<!-- EVENTI -->
 <section id="calendario" class="scroll-section">
   <h2>Eventi</h2>
   <p>Scopri dove trovarci nei prossimi mesi.</p>
@@ -95,7 +101,7 @@
   </div>
 
   <!-- CALENDARIO FUTURO -->
-  <div id="future-calendar" style="display:none; align-items:center; gap:2rem;">
+  <div id="future-calendar">
     <button id="prev-month">◀</button>
     <div id="future-month-container"></div>
     <button id="next-month">▶</button>
@@ -108,10 +114,12 @@
   </div>
 
   <!-- CALENDARIO PASSATO -->
-  <div id="past-events" style="display:none;"></div>
+  <div id="past-events"></div>
 
   <!-- DATABASE EVENTI (NASCOSTO) -->
   <div id="event-data" style="display:none;">
+
+    <!-- (eventi identici ai tuoi, solo corretti negli slash) -->
 
     <div class="event-card-visual"
          data-start="2026-01-04"
@@ -125,7 +133,7 @@
     <div class="event-card-visual"
          data-start="2026-01-09"
          data-category="performance djset">
-      <img src="images\eventi\20260109 zei.jpeg" alt="Evento 2">
+      <img src="images/eventi/20260109 zei.jpeg" alt="Queer Market Show Zei">
       <div class="event-overlay">
         <p>Queer Market Show<br>Spazio Sociale Zei, Lecce</p>
       </div>
@@ -143,7 +151,7 @@
     <div class="event-card-visual"
          data-start="2025-12-09"
          data-category="performance">
-      <img src="images\eventi\20251209 capriola.jpg" alt="Capriola Festival">
+      <img src="images/eventi/20251209 capriola.jpg" alt="Capriola Festival">
       <div class="event-overlay">
         <p>Capriola Festival<br>Ex Convento degli Agostiniani, Lecce</p>
       </div>
@@ -152,7 +160,7 @@
     <div class="event-card-visual"
          data-start="2025-12-28"
          data-category="giochi performance">
-      <img src="images\eventi\20251207 tombolet.jpg" alt="Tombolet Cabaret">
+      <img src="images/eventi/20251207 tombolet.jpg" alt="Tombolet Cabaret">
       <div class="event-overlay">
         <p>Tombolet Cabaret<br>Too Much, Lecce</p>
       </div>
@@ -161,7 +169,7 @@
     <div class="event-card-visual"
          data-start="2025-12-07"
          data-category="giochi performance">
-      <img src="images\eventi\20251228 tombolet.jpg" alt="Tombolet Cabaret">
+      <img src="images/eventi/20251228 tombolet.jpg" alt="Tombolet Cabaret">
       <div class="event-overlay">
         <p>Tombolet Cabaret<br>Too Much, Lecce</p>
       </div>
@@ -170,7 +178,7 @@
     <div class="event-card-visual"
          data-start="2025-09-28"
          data-category="performance">
-      <img src="images\eventi\20250928 fuoribinaria.jpg" alt="Luna Nera Festival">
+      <img src="images/eventi/20250928 fuoribinaria.jpg" alt="Luna Nera Festival">
       <div class="event-overlay">
         <p>Luna Nera Festival<br>Fuori Binaria, Bari Palese</p>
       </div>
@@ -188,7 +196,7 @@
     <div class="event-card-visual"
          data-start="2025-08-09"
          data-category="performance">
-      <img src="images\eventi\20250809 orda.jpg" alt="Orda Fest">
+      <img src="images/eventi/20250809 orda.jpg" alt="Orda Fest">
       <div class="event-overlay">
         <p>Orda Fest<br>Villa Paciugo, Lecce</p>
       </div>
@@ -206,7 +214,7 @@
     <div class="event-card-visual"
          data-start="2025-06-20"
          data-category="performance talk">
-      <img src="images\eventi\20250620 aperipio.heic" alt="Fuori Frequenza">
+      <img src="images/eventi/20250620 aperipio.heic" alt="Fuori Frequenza">
       <div class="event-overlay">
         <p>Fuori Frequenza<br>Minima Fucina di Quartiere, Lecce</p>
       </div>
@@ -216,7 +224,7 @@
          data-start="2025-04-26"
          data-end="2025-05-09"
          data-category="performance">
-      <img src="images\eventi\20250427 20250426 progetto.webp" alt="Takeover">
+      <img src="images/eventi/20250427 20250426 progetto.webp" alt="Takeover">
       <div class="event-overlay">
         <p>Takeover<br>Progetto, Lecce</p>
       </div>
@@ -233,18 +241,17 @@
     <div id="event-modal-body"></div>
   </div>
 </div>
-<!-- Artist3 -->
+
+<!-- ARTIST3 -->
 <section id="artist3" class="scroll-section">
   <h2>Artist3</h2>
   <p>Scopri chi sono le menti creative dietro i nostri progetti.</p>
+
   <div class="artist-subsection">
     <h3>Artist3 Residenti</h3>
-    <div class="artist-gallery">
-  <!-- Altri artisti -->
-</div>
 
-    
     <div class="artist-gallery">
+
       <!-- Diskovenganza -->
       <div class="artist-card" onclick="openArtistModal('Diskovenganza')">
         <img src="images/artist3/franz/franz1.jpg" alt="Diskovenganza">
@@ -254,13 +261,14 @@
           <p>La sua musica è resistenza spontanea, vendetta sonora e ritmo fluido.</p>
         </div>
       </div>
+
       <!-- Billie Kill -->
       <div class="artist-card" onclick="openArtistModal('Billie-Kill')">
         <img src="images/artist3/billie/Billie2.jpg" alt="Billie Kill">
         <div class="artista-info">
           <h3>Billie Kill</h3>
           <p>Drag Performer</p>
-          <p>trasforma le ferite in rito, la comicità in ombra, il corpo in resistenza. Metamorfosi viva, bellezza che trafigge, mistero che resta.</p>
+          <p>Trasforma le ferite in rito, la comicità in ombra, il corpo in resistenza. Metamorfosi viva, bellezza che trafigge, mistero che resta.</p>
         </div>
       </div>
 
@@ -273,51 +281,55 @@
           <p>Sensuale, sfuggente, annoiata. Piega il tempo, confonde il senso, si lascia guardare solo per dimenticarti meglio.</p>
         </div>
       </div>
+
       <!-- Lela Rox -->
-      <div class="artist-card" onclick="openArtistModal('Lela-Rox')"> <!--copiare da qui per duplicare schede artist3 -->
-        <img src="images/artist3/lela/lela1.jpg" alt="Lela-Rox">
+      <div class="artist-card" onclick="openArtistModal('Lela-Rox')">
+        <img src="images/artist3/lela/lela1.jpg" alt="Lela Rox">
         <div class="artista-info">
           <h3>Lela Rox</h3>
           <p>Drag Performer</p>
           <p>Nata dal vuoto e dalle cicatrici, trasforma il dolore in bellezza, arte e verità.</p>
         </div>
       </div>
-      
-      <!-- Rebellmouse -->
-            <div class="artist-card" onclick="openArtistModal('RebellMouse')"> <!--copiare da qui per duplicare schede artist3 -->
-        <img src="images\artist3\rebel\rebel1.jpg" alt="RebellMouse">
-        <div class="artista-info">
-          <h4>RebellMouse</h4>
-          <p>Drag Performer</p>
-          <p>Un ibrido in continua evoluzione. Non un corpo ma un concetto, un incubo, senza un solo genere o una sola forma. Tutto e niente. </p>
-        </div>
-      </div>
-      <!-- Wilma Etheria -->
-            <div class="artist-card" onclick="openArtistModal('LanfearX')"> <!--copiare da qui per duplicare schede artist3 -->
-        <img src="images\artist3\wilma\wilma1.jpg" alt="Lanfear X">
-        <div class="artista-info">
-          <h4>Lanfear X</h4>
-          <p>Drag Performer</p>
-          <p>Lanfear X nasce dal silenzio e dal fuoco. E arte celeste che trasforma le cicatrici in luce, la ferita in potere. </p>
-        </div>
-      </div>
-    </div> <!-- Fine artist-gallery -->
 
-  </div> <!-- Fine artist-subsection -->
+      <!-- RebellMouse -->
+      <div class="artist-card" onclick="openArtistModal('RebellMouse')">
+        <img src="images/artist3/rebel/rebel1.jpg" alt="RebellMouse">
+        <div class="artista-info">
+          <h3>RebellMouse</h3>
+          <p>Drag Performer</p>
+          <p>Un ibrido in continua evoluzione. Non un corpo ma un concetto, un incubo, senza un solo genere o una sola forma. Tutto e niente.</p>
+        </div>
+      </div>
+
+      <!-- Lanfear X -->
+      <div class="artist-card" onclick="openArtistModal('LanfearX')">
+        <img src="images/artist3/wilma/wilma1.jpg" alt="Lanfear X">
+        <div class="artista-info">
+          <h3>Lanfear X</h3>
+          <p>Drag Performer</p>
+          <p>Lanfear X nasce dal silenzio e dal fuoco. È arte celeste che trasforma le cicatrici in luce, la ferita in potere.</p>
+        </div>
+      </div>
+
+    </div><!-- /artist-gallery -->
+  </div><!-- /artist-subsection -->
 </section>
 
+<!-- MODALI ARTISTI -->
 
-<!-- Modale artista -->
+<!-- Diskovenganza -->
 <div id="Diskovenganza" class="artist-modal hidden" onclick="closeArtistModal('Diskovenganza')">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
     <button class="close-button" onclick="closeArtistModal('Diskovenganza')">×</button>
 
     <div class="artist-modal-layout">
-
       <div class="artist-modal-text">
         <div class="artist-header">
           <h3>Diskovenganza</h3>
-          <a href="https://www.instagram.com/disko_venganza_djset_/" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.instagram.com/disko_venganza_djset_/" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
         </div>
 
         <p>DJ salentina (di Taranto), è l'anima ribelle che anima le piste con un sound senza compromessi. La sua selezione è un manifesto sonoro che spazia da EBM e Darkwave, fino alle frequenze più crude della Techno Dark e dell'Italo Disko Dark. Attiva nel collettivo Queer Market, usa la console come arma politica e luogo di liberazione spontanea. Dai club underground ai festival autogestiti in tutta Italia, Diskovenganza non mette musica: scatena una vendetta ritmica e implacabile.</p>
@@ -330,23 +342,25 @@
         <img src="images/artist3/franz/franz5.jpg" onclick="openLightbox(this.src)">
         <img src="images/artist3/franz/franz6.jpg" onclick="openLightbox(this.src)">
       </div>
-
     </div>
   </div>
 </div>
+
+<!-- Alister Victoria -->
 <div id="Alister-Victoria" class="artist-modal hidden" onclick="closeArtistModal('Alister-Victoria')">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
     <button class="close-button" onclick="closeArtistModal('Alister-Victoria')">×</button>
 
     <div class="artist-modal-layout">
-
       <div class="artist-modal-text">
         <div class="artist-header">
           <h3>Alister Victoria</h3>
-          <a href="https://www.instagram.com/alister.victoria/" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.instagram.com/alister.victoria/" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
         </div>
 
-        <p>Una domanda scomoda al risveglio. È già lì, distesa tra le pieghe del pensiero, e quando la noti, è perché ti ha già guardato. Il corpo non chiede attenzione: la raccoglie, la mastica, la restituisce con un sorriso che non promette nulla. Le dita ricordano cose che non sono mai accadute, le spalle sanno come farsi rimpiangere. Ama essere guardata, ma solo se può dimenticarti mentre lo fai. È sensuale come una minaccia che non si compie, come un desiderio che cambia idea a metà strada. Spesso annoiata, ma mai abbastanza da smettere di giocare. Si muove con la grazia di chi non ha fretta, ma sa esattamente dove colpire. Si lascia fraintendere con malizioso intento, come se il fraintendimento fosse la sua lingua madre. Vive tra il gesto che non si ripete e lo sguardo che non si restituisce. Abita gli angoli dove il buio è più morbido, dove il corpo può dire cose che la voce non osa. Porta in scena metafore, certo, ma anche fianchi che sanno come far crollare ogni certezza. Se la incontri, non cercare di capirla. Lei ha già deciso se valga la pena ricordarti.</p>
+        <p>Una domanda scomoda al risveglio. È già lì, distesa tra le pieghe del pensiero, e quando la noti, è perché ti ha già guardato. Il corpo non chiede attenzione: la raccoglie, la mastica, la restituisce con un sorriso che non promette nulla. Le dita ricordano cose che non sono mai accadute, le spalle sanno come farsi rimpiangere...</p>
       </div>
 
       <div class="artist-modal-gallery">
@@ -355,23 +369,25 @@
         <img src="images/artist3/alister/alister4.jpg" onclick="openLightbox(this.src)">
         <img src="images/artist3/alister/alister3.jpg" onclick="openLightbox(this.src)">
       </div>
-
     </div>
   </div>
 </div>
+
+<!-- Billie Kill -->
 <div id="Billie-Kill" class="artist-modal hidden" onclick="closeArtistModal('Billie-Kill')">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
     <button class="close-button" onclick="closeArtistModal('Billie-Kill')">×</button>
 
     <div class="artist-modal-layout">
-
       <div class="artist-modal-text">
         <div class="artist-header">
           <h3>Billie Kill</h3>
-          <a href="https://www.instagram.com/billie.kill/" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.instagram.com/billie.kill/" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
         </div>
 
-        <p>Billie Kill danza sul filo sottile tra il riso e l’abisso. La sua arte nasce dove la comicità diventa ombra e l’ombra rivelazione. Ogni performance è un rito: un esorcismo del dolore, un modo per trasformare la ferita in linguaggio, il trauma in gesto, la rabbia in bellezza. Non intrattiene: sovverte. Attraverso il metalinguaggio scenico, Billie diventa corpo di resistenza contro strutture sociali opprimenti, incarnando e trasformandosi. Il suo vocabolario è indisciplinato: physical comedy, lipsync teatrale, voce dal vivo, recitazione viscerale, numeri aerei sospesi nel vuoto. Ma Billie non è ciò che fa: è metamorfosi continua. Diva e demone, oracolo e creatura, una bellezza pungente che non consola ma trafigge. Custode di un segreto che forse è lei stessa, è maschera e verità insieme. Per comprenderla bisogna vederla dal vivo, dove la magia accade e il mistero si dissolve lasciando un’eco: Billie Kill.</p>
+        <p>Billie Kill danza sul filo sottile tra il riso e l’abisso. La sua arte nasce dove la comicità diventa ombra e l’ombra rivelazione. Ogni performance è un rito: un esorcismo del dolore...</p>
       </div>
 
       <div class="artist-modal-gallery">
@@ -381,23 +397,25 @@
         <img src="images/artist3/billie/Billie5.jpg" onclick="openLightbox(this.src)">
         <img src="images/artist3/billie/Billie1.jpg" onclick="openLightbox(this.src)">
       </div>
-
     </div>
   </div>
 </div>
+
+<!-- Lanfear X -->
 <div id="LanfearX" class="artist-modal hidden" onclick="closeArtistModal('LanfearX')">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
     <button class="close-button" onclick="closeArtistModal('LanfearX')">×</button>
 
     <div class="artist-modal-layout">
-
       <div class="artist-modal-text">
         <div class="artist-header">
           <h3>Lanfear X</h3>
-          <a href="https://www.instagram.com/wilma.etheria/" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.instagram.com/wilma.etheria/" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
         </div>
 
-        <p>Nata dal caos e dalla luce, Wilma Etheria è una creatura forgiata dal dolore, plasmata dal silenzio e alimentata dalla sua stessa fiamma. È arte astrale che muta il dolore in energia e la vulnerabilità in potere. Ogni suo gesto è un atto di ribellione, di forza e di libertà. Porta con sé cicatrici che l’hanno resa più determinata, e oggi ogni suo movimento diventa un grido potente contro chi tenta di zittire chi è diverso.</p>
+        <p>Nata dal caos e dalla luce, Wilma Etheria è una creatura forgiata dal dolore, plasmata dal silenzio e alimentata dalla sua stessa fiamma...</p>
       </div>
 
       <div class="artist-modal-gallery">
@@ -406,24 +424,25 @@
         <img src="images/artist3/wilma/wilma3.jpg" onclick="openLightbox(this.src)">
         <img src="images/artist3/wilma/wilma4.jpg" onclick="openLightbox(this.src)">
       </div>
-
     </div>
   </div>
 </div>
 
+<!-- Lela Rox -->
 <div id="Lela-Rox" class="artist-modal hidden" onclick="closeArtistModal('Lela-Rox')">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
     <button class="close-button" onclick="closeArtistModal('Lela-Rox')">×</button>
 
     <div class="artist-modal-layout">
-
       <div class="artist-modal-text">
         <div class="artist-header">
           <h3>Lela Rox</h3>
-          <a href="https://www.instagram.com/lela.rox/" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.instagram.com/lela.rox/" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
         </div>
 
-        <p>Nasce da un bisogno profondo di dare voce al vuoto, forma alle cicatrici. È sempre esistita, prima come sussurro nel cuore, poi come verità in chi impara ad abbracciarsi. Sensuale e disturbante, è un contrasto continuo tra fascino e ferita, un richiamo che sussurra a chi la incontra che non è solə.</p>
+        <p>Nasce da un bisogno profondo di dare voce al vuoto, forma alle cicatrici. È sempre esistita, prima come sussurro nel cuore...</p>
       </div>
 
       <div class="artist-modal-gallery">
@@ -431,23 +450,25 @@
         <img src="images/artist3/lela/lela3.jpg" onclick="openLightbox(this.src)">
         <img src="images/artist3/lela/lela4.jpg" onclick="openLightbox(this.src)">
       </div>
-
     </div>
   </div>
 </div>
+
+<!-- RebellMouse -->
 <div id="RebellMouse" class="artist-modal hidden" onclick="closeArtistModal('RebellMouse')">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
     <button class="close-button" onclick="closeArtistModal('RebellMouse')">×</button>
 
     <div class="artist-modal-layout">
-
       <div class="artist-modal-text">
         <div class="artist-header">
-          <h3>Rebellmouse</h3>
-          <a href="https://www.instagram.com/rebellmouse/" target="_blank"><i class="fab fa-instagram"></i></a>
+          <h3>RebellMouse</h3>
+          <a href="https://www.instagram.com/rebellmouse/" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
         </div>
 
-        <p>Un concetto che si rende concreto restando nell’oscurità. Non cerca di piacere agli occhi degli umani: esiste, inquieta, incanta. Tutto può essere terrificante e meraviglioso allo stesso tempo. Rebellmouse invita a vedere con la mente e con il cuore, oltre gli occhi che un giorno saranno cenere.</p>
+        <p>Un concetto che si rende concreto restando nell’oscurità. Non cerca di piacere agli occhi degli umani: esiste, inquieta, incanta...</p>
       </div>
 
       <div class="artist-modal-gallery">
@@ -455,21 +476,23 @@
         <img src="images/artist3/rebel/rebel3.jpg" onclick="openLightbox(this.src)">
         <img src="images/artist3/rebel/rebel4.jpg" onclick="openLightbox(this.src)">
       </div>
-
     </div>
   </div>
 </div>
-
-
 <!-- Partnership -->
 <section id="partnership" class="scroll-section">
   <h2>Collab e Altro</h2>
   <p>Collaborazioni con artist3 e realtà politiche e culturali.</p>
+
   <div class="qms-masonry">
+
     <!-- Video -->
     <div class="qms-item video">
-      <iframe src="https://www.youtube.com/embed/MCub2R6jOZE" frameborder="0" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/MCub2R6jOZE"
+              frameborder="0"
+              allowfullscreen></iframe>
     </div>
+
     <!-- Immagine -->
     <div class="qms-item image">
       <img src="img/collab1.jpg" alt="Collab 1">
@@ -478,7 +501,7 @@
     <!-- Profilo Instagram -->
     <div class="qms-item ig">
       <a href="https://www.instagram.com/officinemaipiu/" target="_blank">
-        <img src="images\omlogo.jpg" alt="Profilo IG">
+        <img src="images/omlogo.jpg" alt="Officine Mai Più">
         <span>@officinemaipiu</span>
       </a>
     </div>
@@ -487,18 +510,23 @@
     <div class="qms-item manifesto">
       <p>Non intratteniamo: <strong>incendiamo</strong>. Collaborazione con RebellMouse.</p>
     </div>
+
   </div>
 </section>
 
 <!-- Galleria -->
-<section id="gallery">
+<section id="gallery" class="scroll-section">
+  <h2>Galleria</h2>
   <div class="gallery-folders"></div>
 </section>
 
-<div class="modal" id="galleryModal">
+<!-- Modale Galleria -->
+<div id="galleryModal" class="modal hidden">
   <div class="modal-content">
     <button class="close">&times;</button>
+
     <div class="modal-grid"></div>
+
     <div class="carousel hidden">
       <span class="prev">&#10094;</span>
       <img class="carousel-img" src="" alt="">
@@ -508,7 +536,7 @@
 </div>
 
 <!-- LIGHTBOX -->
-<div id="lightbox" class="lightbox hidden">
+<div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
   <div class="lightbox-inner" onclick="event.stopPropagation()">
 
     <span class="lightbox-prev" onclick="prevLightbox()">&#10094;</span>
@@ -526,7 +554,6 @@
   <h2>Contatti</h2>
   <p>Scrivici, collaboriamo, costruiamo insieme.</p>
 
-  <!-- Social Icons -->
   <div class="social-links">
     <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
       <i class="fab fa-instagram"></i>
@@ -542,26 +569,19 @@
     </a>
   </div>
 </section>
+
 <script>
-  // SCROLL TO MANIFESTO
+  /* SCROLL TO MANIFESTO */
   const enterBtn = document.getElementById('enterBtn');
   if (enterBtn) {
-    enterBtn.addEventListener('click', function(e) {
+    enterBtn.addEventListener('click', e => {
       e.preventDefault();
       const manifesto = document.querySelector('#manifesto');
-      if (manifesto) {
-        manifesto.scrollIntoView({ behavior: 'smooth' });
-      }
+      if (manifesto) manifesto.scrollIntoView({ behavior: 'smooth' });
     });
   }
 
-  // FOLDER TOGGLE
-  function toggleFolder(id) {
-    const folder = document.getElementById(id);
-    if (folder) folder.classList.toggle('hidden');
-  }
-
-  // ARTIST MODAL
+  /* ARTIST MODAL */
   function openArtistModal(id) {
     const modal = document.getElementById(id);
     if (modal) {
@@ -577,203 +597,150 @@
       document.body.style.overflow = '';
     }
   }
-
-  // LIGHTBOX CON ANIMAZIONE
+</script>
+<script>
 /* ===============================
-   VARIABILI GLOBALI
+   VARIABILI GLOBALI (GALLERIA / LIGHTBOX)
 =============================== */
+let galleryData = null;
 let currentFolder = null;
 let currentIndex = 0;
 let initialDistance = 0;
 let currentScale = 1;
+let visibleFolders = new Set();
 
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 
 
 /* ===============================
-   APRI LIGHTBOX
+   SCROLL "ENTRA" → MANIFESTO
+=============================== */
+const enterBtn = document.getElementById('enterBtn');
+if (enterBtn) {
+  enterBtn.addEventListener('click', e => {
+    e.preventDefault();
+    const manifesto = document.querySelector('#manifesto');
+    if (manifesto) manifesto.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+
+/* ===============================
+   MODALI ARTISTI
+=============================== */
+function openArtistModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeArtistModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+
+/* ===============================
+   LIGHTBOX
 =============================== */
 function openLightbox(src) {
+  if (!lightbox || !lightboxImg) return;
   lightboxImg.src = src;
   lightbox.classList.remove('hidden');
+  lightbox.classList.add('open');
   currentScale = 1;
   lightboxImg.style.transform = 'scale(1)';
+  document.body.style.overflow = 'hidden';
 }
 
-
-/* ===============================
-   CHIUDI LIGHTBOX
-=============================== */
 function closeLightbox() {
-  lightbox.style.animation = 'zoomOut 0.3s ease forwards';
-  setTimeout(() => {
-    lightbox.classList.add('hidden');
-    lightbox.style.animation = '';
-    document.body.style.overflow = '';
-  }, 300);
+  if (!lightbox) return;
+  lightbox.classList.remove('open');
+  lightbox.classList.add('hidden');
+  document.body.style.overflow = '';
 }
 
-
-/* ===============================
-   FRECCE LIGHTBOX
-=============================== */
 function prevLightbox() {
-  if (!currentFolder) return;
+  if (!currentFolder || !lightboxImg) return;
   currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
   lightboxImg.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
 function nextLightbox() {
-  if (!currentFolder) return;
+  if (!currentFolder || !lightboxImg) return;
   currentIndex = (currentIndex + 1) % currentFolder.images.length;
   lightboxImg.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
 
 /* ===============================
-   SWIPE
+   LIGHTBOX — SWIPE
 =============================== */
 let touchStartX = 0;
 let touchEndX = 0;
 
-lightbox.addEventListener('touchstart', e => {
-  if (e.touches.length === 1) touchStartX = e.touches[0].screenX;
-}, { passive: true });
+if (lightbox) {
+  lightbox.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) touchStartX = e.touches[0].screenX;
+  }, { passive: true });
 
-lightbox.addEventListener('touchend', e => {
-  if (e.changedTouches.length === 1) {
-    touchEndX = e.changedTouches[0].screenX;
-    const delta = touchEndX - touchStartX;
-    if (Math.abs(delta) >= 50) delta > 0 ? prevLightbox() : nextLightbox();
-  }
-}, { passive: true });
-
-
-/* ===============================
-   PINCH‑TO‑ZOOM
-=============================== */
-lightboxImg.addEventListener('touchstart', e => {
-  if (e.touches.length === 2) {
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    initialDistance = Math.sqrt(dx*dx + dy*dy);
-  }
-}, { passive: false });
-
-lightboxImg.addEventListener('touchmove', e => {
-  if (e.touches.length === 2) {
-    e.preventDefault();
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    const newDistance = Math.sqrt(dx*dx + dy*dy);
-    currentScale = Math.min(Math.max(newDistance / initialDistance, 1), 4);
-    lightboxImg.style.transform = `scale(${currentScale})`;
-  }
-}, { passive: false });
-
-lightboxImg.addEventListener('touchend', () => {
-  if (currentScale <= 1.05) {
-    currentScale = 1;
-    lightboxImg.style.transform = 'scale(1)';
-  }
-});
-
-
-/* ===============================
-   MODALE GALLERIA → APRI LIGHTBOX
-=============================== */
-function openFolderModal(folder) {
-  currentFolder = folder;
-
-  const modal = document.getElementById('galleryModal');
-  const grid = modal.querySelector('.modal-grid');
-
-  grid.innerHTML = '';
-
-  folder.images.forEach((imgName, index) => {
-    const img = document.createElement('img');
-    img.src = `${folder.path}/${imgName}`;
-    img.className = 'grid-img';
-    img.alt = `${folder.name} ${index + 1}`;
-
-    img.addEventListener('click', () => {
-      currentIndex = index;
-      openLightbox(`${folder.path}/${imgName}`);
-    });
-
-    grid.appendChild(img);
-  });
-
-  modal.classList.add('open');
+  lightbox.addEventListener('touchend', e => {
+    if (e.changedTouches.length === 1) {
+      touchEndX = e.changedTouches[0].screenX;
+      const delta = touchEndX - touchStartX;
+      if (Math.abs(delta) >= 50) delta > 0 ? prevLightbox() : nextLightbox();
+    }
+  }, { passive: true });
 }
 
 
 /* ===============================
-   CHIUSURA MODALE GALLERIA
+   LIGHTBOX — PINCH‑TO‑ZOOM
 =============================== */
-document.querySelector('.close')?.addEventListener('click', () => {
-  const modal = document.getElementById('galleryModal');
-  modal.classList.remove('open');
-});
+if (lightboxImg) {
+  lightboxImg.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      initialDistance = Math.sqrt(dx * dx + dy * dy);
+    }
+  }, { passive: false });
 
-  // POPUP
-  function showPopup() {
-    const popup = document.getElementById('thankyou-popup');
-    if (popup) popup.classList.remove('hidden');
-    return false;
-  }
+  lightboxImg.addEventListener('touchmove', e => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const newDistance = Math.sqrt(dx * dx + dy * dy);
+      currentScale = Math.min(Math.max(newDistance / initialDistance, 1), 4);
+      lightboxImg.style.transform = `scale(${currentScale})`;
+    }
+  }, { passive: false });
 
-  function closePopup() {
-    const popup = document.getElementById('thankyou-popup');
-    if (popup) popup.classList.add('hidden');
-  }
-  </script>
-
-<style>
-  .item {
-    opacity: 0;
-    transform: scale(0.8) rotate(-5deg);
-    transition: all 0.8s ease;
-  }
-
-  .item.visible {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-
-  .item.exit {
-    opacity: 0;
-    transform: scale(0.6) rotate(15deg);
-  }
-</style>
-<script>
-// ===============================
-//   GALLERIA A CARTELLE — QMS
-// ===============================
-
-let galleryData = null;
-let currentFolder = null;
-let currentIndex = 0;
-
-// Carica JSON
-fetch('/gallery.json')
-  .then(res => res.json())
-  .then(data => {
-    galleryData = data.folders;
-    renderFolderPreviews();
-    setupVisibilityObserver();
-    startRandomSlideshow();
-  })
-  .catch(err => console.error(err));
+  lightboxImg.addEventListener('touchend', () => {
+    if (currentScale <= 1.05) {
+      currentScale = 1;
+      lightboxImg.style.transform = 'scale(1)';
+    }
+  });
+}
 
 
-// ===============================
-//   PREVIEW CARTELLE
-// ===============================
-
+/* ===============================
+   GALLERIA A CARTELLE — PREVIEW
+=============================== */
 function renderFolderPreviews() {
   const container = document.querySelector('.gallery-folders');
+  if (!container || !galleryData) return;
+
   container.innerHTML = '';
 
   galleryData.forEach((folder, folderIndex) => {
@@ -799,13 +766,9 @@ function renderFolderPreviews() {
 }
 
 
-// ===============================
-//   VISIBILITY OBSERVER
-//   (priorità alle cartelle visibili)
-// ===============================
-
-let visibleFolders = new Set();
-
+/* ===============================
+   VISIBILITY OBSERVER (GALLERIA)
+=============================== */
 function setupVisibilityObserver() {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -822,56 +785,55 @@ function setupVisibilityObserver() {
 }
 
 
-// ===============================
-//   ROTAZIONE RANDOM + GLITCH
-// ===============================
-
+/* ===============================
+   SLIDESHOW RANDOM + GLITCH
+=============================== */
 function startRandomSlideshow() {
   setInterval(() => {
     const previews = Array.from(document.querySelectorAll('.folder-preview'));
+    if (!galleryData || visibleFolders.size === 0 || previews.length === 0) return;
 
-    if (visibleFolders.size === 0) return;
-
-    // scegli una cartella visibile a caso
     const visibleArray = Array.from(visibleFolders);
     const randomFolderIndex = visibleArray[Math.floor(Math.random() * visibleArray.length)];
 
     const preview = previews[randomFolderIndex];
     const folder = galleryData[randomFolderIndex];
     const img = preview.querySelector('img');
+    if (!img) return;
 
-    // scegli immagine random diversa da quella attuale
     const currentSrc = img.src.split('/').pop();
     let nextImg = currentSrc;
-    while (nextImg === currentSrc) {
+    if (!folder.images || folder.images.length === 0) return;
+
+    while (nextImg === currentSrc && folder.images.length > 1) {
       nextImg = folder.images[Math.floor(Math.random() * folder.images.length)];
     }
 
-    // glitch fucsia
     preview.classList.add('glitch-flash');
     setTimeout(() => preview.classList.remove('glitch-flash'), 120);
 
-    // cambia immagine
     img.src = `${folder.path}/${nextImg}`;
-
   }, 4000);
 }
 
 
-// ===============================
-//   MODALE + MOSAICO
-// ===============================
-
+/* ===============================
+   MODALE GALLERIA + MOSAICO
+=============================== */
 function openFolderModal(folder) {
   currentFolder = folder;
 
   const modal = document.getElementById('galleryModal');
+  if (!modal) return;
+
   const grid = modal.querySelector('.modal-grid');
   const carousel = modal.querySelector('.carousel');
 
   grid.innerHTML = '';
-  carousel.classList.add('hidden');
-  carousel.classList.remove('fullscreen');
+  if (carousel) {
+    carousel.classList.add('hidden');
+    carousel.classList.remove('fullscreen');
+  }
 
   folder.images.forEach((imgName, index) => {
     const img = document.createElement('img');
@@ -879,104 +841,100 @@ function openFolderModal(folder) {
     img.className = 'grid-img';
     img.alt = `${folder.name} ${index + 1}`;
 
-    // APRI LIGHTBOX, NON CAROSELLO
     img.addEventListener('click', () => {
+      currentIndex = index; // per swipe
       openLightbox(`${folder.path}/${imgName}`);
-      currentIndex = index; // serve per swipe
     });
 
     grid.appendChild(img);
   });
 
   modal.classList.add('open');
+  modal.classList.remove('hidden');
 }
 
 
-// ===============================
-//   CAROSELLO FULLSCREEN
-// ===============================
-
+/* ===============================
+   CAROSELLO FULLSCREEN (OPZIONALE)
+=============================== */
 function openCarousel(index) {
   currentIndex = index;
 
   const modal = document.getElementById('galleryModal');
+  if (!modal || !currentFolder) return;
+
   const carousel = modal.querySelector('.carousel');
   const img = modal.querySelector('.carousel-img');
+  if (!carousel || !img) return;
 
   img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 
   carousel.classList.remove('hidden');
   carousel.classList.add('fullscreen');
 
-  modal.querySelector('.modal-grid').classList.add('hidden');
+  const grid = modal.querySelector('.modal-grid');
+  if (grid) grid.classList.add('hidden');
 }
 
 function updateCarousel() {
   const img = document.querySelector('.carousel-img');
+  if (!img || !currentFolder) return;
   img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
-
-// ===============================
-//   NAVIGAZIONE CAROSELLO
-// ===============================
-
 document.querySelector('.prev')?.addEventListener('click', () => {
+  if (!currentFolder) return;
   currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
   updateCarousel();
 });
 
 document.querySelector('.next')?.addEventListener('click', () => {
+  if (!currentFolder) return;
   currentIndex = (currentIndex + 1) % currentFolder.images.length;
   updateCarousel();
 });
 
-
-// ===============================
-//   CHIUSURA MODALE
-// ===============================
-
 document.querySelector('.close')?.addEventListener('click', () => {
   const modal = document.getElementById('galleryModal');
-  modal.classList.remove('open');
+  if (!modal) return;
 
-  modal.querySelector('.modal-grid').classList.remove('hidden');
+  modal.classList.remove('open');
+  modal.classList.add('hidden');
+
+  const grid = modal.querySelector('.modal-grid');
+  if (grid) grid.classList.remove('hidden');
 
   const carousel = modal.querySelector('.carousel');
-  carousel.classList.add('hidden');
-  carousel.classList.remove('fullscreen');
+  if (carousel) {
+    carousel.classList.add('hidden');
+    carousel.classList.remove('fullscreen');
+  }
 });
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-  console.log("🎯 DOMContentLoaded: script eventi partito");
 
+/* ===============================
+   EVENTI — CALENDARIO + MODALE
+=============================== */
+document.addEventListener('DOMContentLoaded', () => {
   const today = new Date();
-  const cards = Array.from(document.querySelectorAll(".event-card-visual"));
-  console.log("📌 Trovate card eventi:", cards.length);
+  const cards = Array.from(document.querySelectorAll('.event-card-visual'));
 
-  const futureContainer = document.getElementById("future-calendar");
-  const futureMonthContainer = document.getElementById("future-month-container");
-  const timeline = document.getElementById("past-events");
+  const futureContainer = document.getElementById('future-calendar');
+  const futureMonthContainer = document.getElementById('future-month-container');
+  const timeline = document.getElementById('past-events');
 
-  const btnFuture = document.getElementById("show-future");
-  const btnPast = document.getElementById("show-past");
-  const filterButtons = document.querySelectorAll(".calendar-filters button");
+  const btnFuture = document.getElementById('show-future');
+  const btnPast = document.getElementById('show-past');
+  const filterButtons = document.querySelectorAll('.calendar-filters button');
 
-  const modal = document.getElementById("eventModalQMS");
-  const modalBody = document.getElementById("eventModalQMSBody");
-  const modalClose = document.querySelector(".event-modal-qms-close");
-
-
-  console.log("📌 Modale trovata?", !!modal, "body?", !!modalBody, "close?", !!modalClose);
+  const modal = document.getElementById('event-modal');
+  const modalBody = document.getElementById('event-modal-body');
+  const modalClose = document.querySelector('.event-modal-close');
 
   let futureMonths = [];
   let currentFutureMonthIndex = 0;
-  let currentFilter = "all";
-  let currentView = "future";
-
-  // ------------------ UTILITIES ------------------
+  let currentFilter = 'all';
+  let currentView = 'future';
 
   function getEventDates(card) {
     const start = new Date(card.dataset.start || card.dataset.date);
@@ -985,52 +943,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function cardMatchesFilter(card) {
-    if (currentFilter === "all") return true;
-    const cats = (card.dataset.category || "").split(/\s+/);
+    if (currentFilter === 'all') return true;
+    const cats = (card.dataset.category || '').split(/\s+/);
     return cats.includes(currentFilter);
   }
 
   function buildCalendarMonth(year, month, events) {
-    const monthName = new Date(year, month).toLocaleDateString("it-IT", {
-      month: "long",
-      year: "numeric"
+    const monthName = new Date(year, month).toLocaleDateString('it-IT', {
+      month: 'long',
+      year: 'numeric'
     }).toUpperCase();
 
-    const wrapper = document.createElement("div");
+    const wrapper = document.createElement('div');
     wrapper.innerHTML = `
       <div class="calendar-month">${monthName}</div>
       <div class="calendar-grid"></div>
     `;
 
-    const grid = wrapper.querySelector(".calendar-grid");
+    const grid = wrapper.querySelector('.calendar-grid');
 
     const firstDay = new Date(year, month, 1).getDay() || 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     for (let i = 1; i < firstDay; i++) {
-      grid.appendChild(document.createElement("div"));
+      grid.appendChild(document.createElement('div'));
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      const cell = document.createElement("div");
-      cell.classList.add("calendar-day");
+      const cell = document.createElement('div');
+      cell.classList.add('calendar-day');
       cell.innerHTML = `<div class="calendar-day-number">${day}</div>`;
 
       events.forEach(card => {
         const { start } = getEventDates(card);
         if (start.getDate() === day) {
-          cell.classList.add("has-event");
+          cell.classList.add('has-event');
 
-          const postit = document.createElement("div");
-          postit.classList.add("event-postit");
+          const postit = document.createElement('div');
+          postit.classList.add('event-postit');
 
-          const img = card.querySelector("img");
+          const img = card.querySelector('img');
           if (img) postit.innerHTML = `<img src="${img.src}" alt="">`;
 
-          postit.onclick = () => {
-            console.log("📝 Click su post-it calendario per card:", card);
-            openEventModal(card);
-          };
+          postit.onclick = () => openEventModal(card);
 
           cell.appendChild(postit);
         }
@@ -1042,86 +997,80 @@ document.addEventListener("DOMContentLoaded", () => {
     return wrapper;
   }
 
-  // ------------------ MODALE EVENTO ------------------
+  function openEventModal(card) {
+    const { start, end } = getEventDates(card);
 
-function openEventModal(card) {
-  const { start, end } = getEventDates(card);
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const startStr = start.toLocaleDateString('it-IT', options);
+    const endStr = end.toLocaleDateString('it-IT', options);
+    const dateLabel = startStr === endStr ? startStr : `${startStr} → ${endStr}`;
 
-  const options = { day: "numeric", month: "long", year: "numeric" };
-  const startStr = start.toLocaleDateString("it-IT", options);
-  const endStr = end.toLocaleDateString("it-IT", options);
-  const dateLabel = startStr === endStr ? startStr : `${startStr} → ${endStr}`;
+    const categories = (card.dataset.category || '')
+      .split(/\s+/)
+      .filter(Boolean)
+      .map(cat => `<span class="event-tag">${cat}</span>`)
+      .join(' ');
 
-  const categories = (card.dataset.category || "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .map(cat => `<span class="event-tag">${cat}</span>`)
-    .join(" ");
+    const img = card.querySelector('img');
+    const imgHTML = img ? `<img src="${img.src}" alt="" class="modal-img">` : '';
 
-  const img = card.querySelector("img");
-  const imgHTML = img ? `<img src="${img.src}" alt="" class="modal-img">` : "";
+    const overlay = card.querySelector('.event-overlay').cloneNode(true);
+    overlay.querySelectorAll('.event-date, .date, .data').forEach(el => el.remove());
 
-  const overlay = card.querySelector(".event-overlay").cloneNode(true);
-  overlay.querySelectorAll(".event-date, .date, .data").forEach(el => el.remove());
-
-  modalBody.innerHTML = `
-    <div class="modal-two-columns">
-      <div class="modal-left">${imgHTML}</div>
-      <div class="modal-right">
-        <div class="event-modal-date">${dateLabel}</div>
-        <div class="event-modal-categories">${categories}</div>
-        <div class="event-modal-description">${overlay.innerHTML}</div>
+    modalBody.innerHTML = `
+      <div class="modal-two-columns">
+        <div class="modal-left">${imgHTML}</div>
+        <div class="modal-right">
+          <div class="event-modal-date">${dateLabel}</div>
+          <div class="event-modal-categories">${categories}</div>
+          <div class="event-modal-description">${overlay.innerHTML}</div>
+        </div>
       </div>
-    </div>
-  `;
+    `;
 
-  modal.style.display = "flex";
-}
+    modal.style.display = 'flex';
 
-  function applyOrientation(img, modalContent) {
-    const ratio = img.naturalWidth / img.naturalHeight;
-
-    if (ratio > 1.2) modalContent.dataset.orientation = "landscape";
-    else if (ratio < 0.8) modalContent.dataset.orientation = "portrait";
-    else modalContent.dataset.orientation = "square";
+    const modalImg = modal.querySelector('.modal-img');
+    const modalContent = modal.querySelector('.event-modal-content');
+    if (modalImg && modalContent) {
+      modalImg.onload = () => {
+        const ratio = modalImg.naturalWidth / modalImg.naturalHeight;
+        if (ratio > 1.2) modalContent.dataset.orientation = 'landscape';
+        else if (ratio < 0.8) modalContent.dataset.orientation = 'portrait';
+        else modalContent.dataset.orientation = 'square';
+      };
+    }
   }
 
-  // ------------------ CHIUSURA MODALE ------------------
-
-modalClose.onclick = () => {
-  modal.style.display = "none";
-};
-
-modal.onclick = e => {
-  if (e.target === modal) {
-    modal.style.display = "none";
+  if (modalClose) {
+    modalClose.onclick = () => {
+      modal.style.display = 'none';
+    };
   }
-};
 
-  // ------------------ CLICK SU CARD ORIGINALI ------------------
+  modal.onclick = e => {
+    if (e.target === modal) modal.style.display = 'none';
+  };
 
   cards.forEach(card => {
-    card.addEventListener("click", () => {
-      console.log("🧷 Click su card originale:", card);
+    card.addEventListener('click', () => {
       openEventModal(card);
     });
   });
 
-  // ------------------ FUTURI ------------------
-
   function showFuture() {
-    console.log("🔮 showFuture()");
-    currentView = "future";
-    futureContainer.style.display = "flex";
-    timeline.style.display = "none";
-    futureMonthContainer.innerHTML = "";
+    currentView = 'future';
+    if (futureContainer) futureContainer.style.display = 'flex';
+    if (timeline) {
+      timeline.style.display = 'none';
+      timeline.innerHTML = '';
+    }
+    if (futureMonthContainer) futureMonthContainer.innerHTML = '';
 
     const futureEvents = cards.filter(card => {
       const { end } = getEventDates(card);
       return end >= today && cardMatchesFilter(card);
     });
-
-    console.log("📅 Eventi futuri filtrati:", futureEvents.length);
 
     const months = {};
     futureEvents.forEach(card => {
@@ -1132,58 +1081,72 @@ modal.onclick = e => {
     });
 
     futureMonths = Object.keys(months).sort((a, b) => {
-      const [yA, mA] = a.split("-").map(Number);
-      const [yB, mB] = b.split("-").map(Number);
+      const [yA, mA] = a.split('-').map(Number);
+      const [yB, mB] = b.split('-').map(Number);
       return new Date(yA, mA - 1) - new Date(yB, mB - 1);
     });
 
     if (futureMonths.length === 0) {
-      futureMonthContainer.innerHTML = "<p>Nessun evento futuro per questo filtro.</p>";
-      document.getElementById("prev-month").style.opacity = "0.3";
-      document.getElementById("next-month").style.opacity = "0.3";
+      if (futureMonthContainer) {
+        futureMonthContainer.innerHTML = '<p>Nessun evento futuro per questo filtro.</p>';
+      }
+      const prevBtn = document.getElementById('prev-month');
+      const nextBtn = document.getElementById('next-month');
+      if (prevBtn) prevBtn.style.opacity = '0.3';
+      if (nextBtn) nextBtn.style.opacity = '0.3';
       return;
     }
 
     currentFutureMonthIndex = 0;
 
     function render() {
-      futureMonthContainer.innerHTML = "";
+      if (!futureMonthContainer) return;
+      futureMonthContainer.innerHTML = '';
       const key = futureMonths[currentFutureMonthIndex];
-      const [year, month] = key.split("-").map(Number);
+      const [year, month] = key.split('-').map(Number);
       futureMonthContainer.appendChild(buildCalendarMonth(year, month - 1, months[key]));
 
-      document.getElementById("prev-month").style.opacity =
-        currentFutureMonthIndex > 0 ? "1" : "0.3";
-
-      document.getElementById("next-month").style.opacity =
-        currentFutureMonthIndex < futureMonths.length - 1 ? "1" : "0.3";
+      const prevBtn = document.getElementById('prev-month');
+      const nextBtn = document.getElementById('next-month');
+      if (prevBtn) {
+        prevBtn.style.opacity = currentFutureMonthIndex > 0 ? '1' : '0.3';
+      }
+      if (nextBtn) {
+        nextBtn.style.opacity = currentFutureMonthIndex < futureMonths.length - 1 ? '1' : '0.3';
+      }
     }
 
     render();
 
-    document.getElementById("prev-month").onclick = () => {
-      if (currentFutureMonthIndex > 0) {
-        currentFutureMonthIndex--;
-        render();
-      }
-    };
+    const prevBtn = document.getElementById('prev-month');
+    const nextBtn = document.getElementById('next-month');
 
-    document.getElementById("next-month").onclick = () => {
-      if (currentFutureMonthIndex < futureMonths.length - 1) {
-        currentFutureMonthIndex++;
-        render();
-      }
-    };
+    if (prevBtn) {
+      prevBtn.onclick = () => {
+        if (currentFutureMonthIndex > 0) {
+          currentFutureMonthIndex--;
+          render();
+        }
+      };
+    }
+
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        if (currentFutureMonthIndex < futureMonths.length - 1) {
+          currentFutureMonthIndex++;
+          render();
+        }
+      };
+    }
   }
 
-  // ------------------ PASSATI ------------------
-
   function showPast() {
-    console.log("⏳ showPast()");
-    currentView = "past";
-    futureContainer.style.display = "none";
-    timeline.style.display = "block";
-    timeline.innerHTML = "";
+    currentView = 'past';
+    if (futureContainer) futureContainer.style.display = 'none';
+    if (!timeline) return;
+
+    timeline.style.display = 'block';
+    timeline.innerHTML = '';
 
     const pastEvents = cards
       .filter(card => {
@@ -1191,8 +1154,6 @@ modal.onclick = e => {
         return end < today && cardMatchesFilter(card);
       })
       .sort((a, b) => getEventDates(b).end - getEventDates(a).end);
-
-    console.log("📅 Eventi passati filtrati:", pastEvents.length);
 
     const months = {};
     pastEvents.forEach(card => {
@@ -1203,83 +1164,67 @@ modal.onclick = e => {
     });
 
     const sortedMonths = Object.keys(months).sort((a, b) => {
-      const [yA, mA] = a.split("-").map(Number);
-      const [yB, mB] = b.split("-").map(Number);
+      const [yA, mA] = a.split('-').map(Number);
+      const [yB, mB] = b.split('-').map(Number);
       return new Date(yB, mB - 1) - new Date(yA, mA - 1);
     });
 
     if (sortedMonths.length === 0) {
-      timeline.innerHTML = "<p>Nessun evento passato per questo filtro.</p>";
+      timeline.innerHTML = '<p>Nessun evento passato per questo filtro.</p>';
       return;
     }
 
     sortedMonths.forEach(key => {
-      const [year, month] = key.split("-").map(Number);
+      const [year, month] = key.split('-').map(Number);
       timeline.appendChild(buildCalendarMonth(year, month - 1, months[key]));
     });
   }
 
-  // ------------------ BOTTONI FUTURO/PASSATO ------------------
+  if (btnFuture) {
+    btnFuture.onclick = () => {
+      btnFuture.classList.add('active');
+      if (btnPast) btnPast.classList.remove('active');
+      showFuture();
+    };
+  }
 
-  btnFuture.onclick = () => {
-    console.log("▶ Click su 'Eventi futuri'");
-    btnFuture.classList.add("active");
-    btnPast.classList.remove("active");
-    showFuture();
-  };
-
-  btnPast.onclick = () => {
-    console.log("▶ Click su 'Eventi passati'");
-    btnPast.classList.add("active");
-    btnFuture.classList.remove("active");
-    showPast();
-  };
-
-  // ------------------ FILTRI CATEGORIA ------------------
+  if (btnPast) {
+    btnPast.onclick = () => {
+      btnPast.classList.add('active');
+      if (btnFuture) btnFuture.classList.remove('active');
+      showPast();
+    };
+  }
 
   filterButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      console.log("🎛 Filtro cliccato:", btn.dataset.filter);
-      filterButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentFilter = btn.dataset.filter || "all";
-
-      if (currentView === "future") showFuture();
+    btn.addEventListener('click', () => {
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter || 'all';
+      if (currentView === 'future') showFuture();
       else showPast();
     });
   });
 
   // Vista di default
   showFuture();
-
 });
-</script>
-<!-- MODALE EVENTO NUOVA -->
-<div id="eventModalQMS" class="event-modal-qms">
-  <div class="event-modal-qms-content">
-    <button class="event-modal-qms-close">✕</button>
-    <div id="eventModalQMSBody"></div>
-  </div>
-</div>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-  /* ————————————————————————————————
-     ELEMENTI
-  ———————————————————————————————— */
-  const sections = document.querySelectorAll("section[id]");
-  const desktopLinks = document.querySelectorAll(".navbar a");
-  const mobileLinks = document.querySelectorAll(".menu-mobile a");
-  const allLinks = [...desktopLinks, ... mobileLinks];
 
-  const menuToggle = document.querySelector(".menu-toggle");
-  const menuMobile = document.querySelector(".menu-mobile");
+/* ===============================
+   NAVBAR — ACTIVE LINK + MENU MOBILE
+=============================== */
+document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('section[id]');
+  const desktopLinks = document.querySelectorAll('.navbar a');
+  const mobileLinks = document.querySelectorAll('.menu-mobile a');
+  const allLinks = [...desktopLinks, ...mobileLinks];
 
-  /* ————————————————————————————————
-     ACTIVE LINK SU SCROLL
-  ———————————————————————————————— */
+  const menuToggle = document.querySelector('.menu-toggle');
+  const menuMobile = document.querySelector('.menu-mobile');
+
   function updateActiveLink() {
-    let current = "";
+    let current = '';
 
     sections.forEach(section => {
       const rect = section.getBoundingClientRect();
@@ -1289,39 +1234,45 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     allLinks.forEach(link => {
-      link.classList.remove("active");
-      if (link.getAttribute("href") === "#" + current) {
-        link.classList.add("active");
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
       }
     });
   }
 
-  window.addEventListener("scroll", updateActiveLink);
+  window.addEventListener('scroll', updateActiveLink);
   updateActiveLink();
 
-  /* ————————————————————————————————
-     MENU MOBILE: TOGGLE + BODY LOCK
-  ———————————————————————————————— */
   if (menuToggle && menuMobile) {
-    menuToggle.addEventListener("click", () => {
-      const isOpen = menuMobile.classList.toggle("show");
-      menuToggle.classList.toggle("open", isOpen);
-      menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      document.body.style.overflow = isOpen ? "hidden" : "";
+    menuToggle.addEventListener('click', () => {
+      const isOpen = menuMobile.classList.toggle('show');
+      menuToggle.classList.toggle('open', isOpen);
+      menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      document.body.style.overflow = isOpen ? 'hidden' : '';
     });
 
     mobileLinks.forEach(link => {
-      link.addEventListener("click", () => {
-        menuMobile.classList.remove("show");
-        menuToggle.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        document.body.style.overflow = "";
+      link.addEventListener('click', () => {
+        menuMobile.classList.remove('show');
+        menuToggle.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
       });
     });
   }
 
+  // Carica gallery.json dopo che il DOM è pronto
+  fetch('/gallery.json')
+    .then(res => res.json())
+    .then(data => {
+      galleryData = data.folders;
+      renderFolderPreviews();
+      setupVisibilityObserver();
+      startRandomSlideshow();
+    })
+    .catch(err => console.error(err));
 });
 </script>
-
 </body>
 </html>
