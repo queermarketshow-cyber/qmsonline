@@ -571,34 +571,6 @@
 </section>
 
 <script>
-  /* SCROLL TO MANIFESTO */
-  const enterBtn = document.getElementById('enterBtn');
-  if (enterBtn) {
-    enterBtn.addEventListener('click', e => {
-      e.preventDefault();
-      const manifesto = document.querySelector('#manifesto');
-      if (manifesto) manifesto.scrollIntoView({ behavior: 'smooth' });
-    });
-  }
-
-  /* ARTIST MODAL */
-  function openArtistModal(id) {
-    const modal = document.getElementById(id);
-    if (modal) {
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-  }
-
-  function closeArtistModal(id) {
-    const modal = document.getElementById(id);
-    if (modal) {
-      modal.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
-  }
-</script>
-<script>
 /* ===============================
    VARIABILI GLOBALI (GALLERIA / LIGHTBOX)
 =============================== */
