@@ -74,6 +74,7 @@
     <button data-filter="performance">Performance</button>
     <button data-filter="giochi">Serata Giochi</button>
     <button data-filter="talk">Talk</button>
+    <button data-filter="djset">Dj Set</button>
   </div>
 
   <!-- CALENDARIO FUTURO -->
@@ -106,8 +107,8 @@
 
     <div class="event-card-visual"
          data-start="2026-01-09"
-         data-category="performance">
-      <img src="images/evento2.jpg" alt="Evento 2">
+         data-category="performance djset">
+      <img src="images\eventi\20260109 zei.jpeg" alt="Evento 2">
       <div class="event-overlay">
         <p>Queer Market Show<br>Spazio Sociale Zei, Lecce</p>
       </div>
@@ -209,13 +210,12 @@
 </section>
 
 <!-- MODALE EVENTO -->
-<div id="event-modal" class="event-modal">
+<div id="event-modal" class="event-modal hidden">
   <div class="event-modal-content">
     <button class="event-modal-close">✕</button>
     <div id="event-modal-body"></div>
   </div>
 </div>
-
 <!-- Artist3 -->
 <section id="artist3" class="scroll-section">
   <h2>Artist3</h2>
@@ -243,7 +243,7 @@
         <div class="artista-info">
           <h3>Billie Kill</h3>
           <p>Drag Performer</p>
-          <p>Attraverso performance, installazioni e video, esplora identità queer, corpi non conformi e spazi di resistenza.</p>
+          <p>trasforma le ferite in rito, la comicità in ombra, il corpo in resistenza. Metamorfosi viva, bellezza che trafigge, mistero che resta.</p>
         </div>
       </div>
 
@@ -354,7 +354,7 @@
           <a href="https://www.instagram.com/billie.kill/" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
 
-        <p>Billie Kill danza sul filo sottile tra il riso e l’abisso. La sua arte nasce dove la comicità si fa ombra e l’ombra rivelazione. Ogni performance è un rito: un esorcismo del dolore, un modo per trasfigurare la ferita in linguaggio, il trauma in gesto, la rabbia in bellezza. La sua missione non è intrattenere, ma sovvertire. Attraverso il metalinguaggio scenico, Billie diventa corpo di resistenza contro strutture sociali opprimenti, incarnando e trasformandosi. Il suo vocabolario è indisciplinato: physical comedy, lipsync teatrale, voce dal vivo, recitazione viscerale, numeri aerei sospesi nel vuoto. Ma Billie non è ciò che fa: è metamorfosi continua. Diva e demone, oracolo e creatura, una bellezza pungente che non consola ma trafigge. Custode di un segreto che forse è lei stessa. Maschera e verità insieme. Per comprenderla bisogna vederla dal vivo, dove la magia accade e il mistero si dissolve lasciando un’eco: Billie Kill.</p>
+        <p>Billie Kill danza sul filo sottile tra il riso e l’abisso. La sua arte nasce dove la comicità diventa ombra e l’ombra rivelazione. Ogni performance è un rito: un esorcismo del dolore, un modo per trasformare la ferita in linguaggio, il trauma in gesto, la rabbia in bellezza. Non intrattiene: sovverte. Attraverso il metalinguaggio scenico, Billie diventa corpo di resistenza contro strutture sociali opprimenti, incarnando e trasformandosi. Il suo vocabolario è indisciplinato: physical comedy, lipsync teatrale, voce dal vivo, recitazione viscerale, numeri aerei sospesi nel vuoto. Ma Billie non è ciò che fa: è metamorfosi continua. Diva e demone, oracolo e creatura, una bellezza pungente che non consola ma trafigge. Custode di un segreto che forse è lei stessa, è maschera e verità insieme. Per comprenderla bisogna vederla dal vivo, dove la magia accade e il mistero si dissolve lasciando un’eco: Billie Kill.</p>
       </div>
 
       <div class="artist-modal-gallery">
@@ -827,8 +827,12 @@ document.querySelector('.close')?.addEventListener('click', () => {
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+
+  console.log("🎯 DOMContentLoaded: script eventi partito");
+
   const today = new Date();
   const cards = Array.from(document.querySelectorAll(".event-card-visual"));
+  console.log("📌 Trovate card eventi:", cards.length);
 
   const futureContainer = document.getElementById("future-calendar");
   const futureMonthContainer = document.getElementById("future-month-container");
@@ -838,9 +842,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnPast = document.getElementById("show-past");
   const filterButtons = document.querySelectorAll(".calendar-filters button");
 
-  const modal = document.getElementById("event-modal");
-  const modalBody = document.getElementById("event-modal-body");
-  const modalClose = document.querySelector(".event-modal-close");
+  const modal = document.getElementById("eventModalQMS");
+  const modalBody = document.getElementById("eventModalQMSBody");
+  const modalClose = document.querySelector(".event-modal-qms-close");
+
+
+  console.log("📌 Modale trovata?", !!modal, "body?", !!modalBody, "close?", !!modalClose);
 
   let futureMonths = [];
   let currentFutureMonthIndex = 0;
@@ -878,7 +885,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const firstDay = new Date(year, month, 1).getDay() || 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    for (let i = 1; i < firstDay; i++) grid.appendChild(document.createElement("div"));
+    for (let i = 1; i < firstDay; i++) {
+      grid.appendChild(document.createElement("div"));
+    }
 
     for (let day = 1; day <= daysInMonth; day++) {
       const cell = document.createElement("div");
@@ -896,7 +905,10 @@ document.addEventListener("DOMContentLoaded", () => {
           const img = card.querySelector("img");
           if (img) postit.innerHTML = `<img src="${img.src}" alt="">`;
 
-          postit.onclick = () => openEventModal(card);
+          postit.onclick = () => {
+            console.log("📝 Click su post-it calendario per card:", card);
+            openEventModal(card);
+          };
 
           cell.appendChild(postit);
         }
@@ -908,93 +920,75 @@ document.addEventListener("DOMContentLoaded", () => {
     return wrapper;
   }
 
-  // ------------------ MODALE (VERSIONE CORRETTA) ------------------
+  // ------------------ MODALE EVENTO ------------------
 
 function openEventModal(card) {
   const { start, end } = getEventDates(card);
 
-  // Format date
   const options = { day: "numeric", month: "long", year: "numeric" };
   const startStr = start.toLocaleDateString("it-IT", options);
   const endStr = end.toLocaleDateString("it-IT", options);
   const dateLabel = startStr === endStr ? startStr : `${startStr} → ${endStr}`;
 
-  // Categories
   const categories = (card.dataset.category || "")
     .split(/\s+/)
     .filter(Boolean)
     .map(cat => `<span class="event-tag">${cat}</span>`)
     .join(" ");
 
-  // Image
   const img = card.querySelector("img");
   const imgHTML = img ? `<img src="${img.src}" alt="" class="modal-img">` : "";
 
-  // Overlay content
   const overlay = card.querySelector(".event-overlay").cloneNode(true);
   overlay.querySelectorAll(".event-date, .date, .data").forEach(el => el.remove());
 
-  // Build modal content (two columns)
   modalBody.innerHTML = `
     <div class="modal-two-columns">
-      
-      <div class="modal-left">
-        ${imgHTML}
-      </div>
-
+      <div class="modal-left">${imgHTML}</div>
       <div class="modal-right">
         <div class="event-modal-date">${dateLabel}</div>
         <div class="event-modal-categories">${categories}</div>
-        <div class="event-modal-description">
-          ${overlay.innerHTML}
-        </div>
+        <div class="event-modal-description">${overlay.innerHTML}</div>
       </div>
-
     </div>
   `;
-
-  // ————————————————————————————————
-  //   EFFETTO PIEGA: ORIENTAMENTO IMMAGINE
-  // ————————————————————————————————
-  const modalContent = modal.querySelector(".event-modal-content");
-  modalContent.removeAttribute("data-orientation"); // reset
-
-  const modalImg = modal.querySelector(".modal-img");
-
-  if (modalImg) {
-    // Se l'immagine non è ancora caricata, aspetta
-    if (!modalImg.complete) {
-      modalImg.onload = () => applyOrientation(modalImg, modalContent);
-    } else {
-      applyOrientation(modalImg, modalContent);
-    }
-  }
 
   modal.style.display = "flex";
 }
 
-// Funzione che assegna l'orientamento
-function applyOrientation(img, modalContent) {
-  const ratio = img.naturalWidth / img.naturalHeight;
+  function applyOrientation(img, modalContent) {
+    const ratio = img.naturalWidth / img.naturalHeight;
 
-  if (ratio > 1.2) {
-    modalContent.dataset.orientation = "landscape";
-  } else if (ratio < 0.8) {
-    modalContent.dataset.orientation = "portrait";
-  } else {
-    modalContent.dataset.orientation = "square";
+    if (ratio > 1.2) modalContent.dataset.orientation = "landscape";
+    else if (ratio < 0.8) modalContent.dataset.orientation = "portrait";
+    else modalContent.dataset.orientation = "square";
   }
-}
 
-// Close handlers
-modalClose.onclick = () => (modal.style.display = "none");
-modal.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
+  // ------------------ CHIUSURA MODALE ------------------
+
+modalClose.onclick = () => {
+  modal.style.display = "none";
 };
+
+modal.onclick = e => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+};
+
+  // ------------------ CLICK SU CARD ORIGINALI ------------------
+
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+      console.log("🧷 Click su card originale:", card);
+      openEventModal(card);
+    });
+  });
 
   // ------------------ FUTURI ------------------
 
   function showFuture() {
+    console.log("🔮 showFuture()");
     currentView = "future";
     futureContainer.style.display = "flex";
     timeline.style.display = "none";
@@ -1004,6 +998,8 @@ modal.onclick = e => {
       const { end } = getEventDates(card);
       return end >= today && cardMatchesFilter(card);
     });
+
+    console.log("📅 Eventi futuri filtrati:", futureEvents.length);
 
     const months = {};
     futureEvents.forEach(card => {
@@ -1061,6 +1057,7 @@ modal.onclick = e => {
   // ------------------ PASSATI ------------------
 
   function showPast() {
+    console.log("⏳ showPast()");
     currentView = "past";
     futureContainer.style.display = "none";
     timeline.style.display = "block";
@@ -1072,6 +1069,8 @@ modal.onclick = e => {
         return end < today && cardMatchesFilter(card);
       })
       .sort((a, b) => getEventDates(b).end - getEventDates(a).end);
+
+    console.log("📅 Eventi passati filtrati:", pastEvents.length);
 
     const months = {};
     pastEvents.forEach(card => {
@@ -1101,12 +1100,14 @@ modal.onclick = e => {
   // ------------------ BOTTONI FUTURO/PASSATO ------------------
 
   btnFuture.onclick = () => {
+    console.log("▶ Click su 'Eventi futuri'");
     btnFuture.classList.add("active");
     btnPast.classList.remove("active");
     showFuture();
   };
 
   btnPast.onclick = () => {
+    console.log("▶ Click su 'Eventi passati'");
     btnPast.classList.add("active");
     btnFuture.classList.remove("active");
     showPast();
@@ -1116,6 +1117,7 @@ modal.onclick = e => {
 
   filterButtons.forEach(btn => {
     btn.addEventListener("click", () => {
+      console.log("🎛 Filtro cliccato:", btn.dataset.filter);
       filterButtons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       currentFilter = btn.dataset.filter || "all";
@@ -1127,10 +1129,16 @@ modal.onclick = e => {
 
   // Vista di default
   showFuture();
+
 });
 </script>
-
-
+<!-- MODALE EVENTO NUOVA -->
+<div id="eventModalQMS" class="event-modal-qms">
+  <div class="event-modal-qms-content">
+    <button class="event-modal-qms-close">✕</button>
+    <div id="eventModalQMSBody"></div>
+  </div>
+</div>
 
 </body>
 </html>

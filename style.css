@@ -1440,59 +1440,14 @@ section[id] {
   }
 }
 /* ————————————————————————————————
-   FIX DEFINITIVO MENU MOBILE
-   (Navbar sempre cliccabile, overlay non bloccanti)
-—————————————————————————————————— */
-
-/* Navbar sempre sopra tutto */
-.navbar {
-  z-index: 10000 !important;
-}
-
-/* Overlay nascosti NON devono bloccare i click */
-.artist-modal.hidden,
-.lightbox.hidden,
-#galleryModal:not(.open),
-.event-modal:not(.open) {
-  pointer-events: none !important;
-}
-
-/* Assicura che gli overlay chiusi siano invisibili e non cliccabili */
-.artist-modal.hidden,
-.lightbox.hidden,
-#galleryModal:not(.open),
-.event-modal {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* Quando sono aperti, tornano visibili e cliccabili */
-.artist-modal:not(.hidden),
-.lightbox:not(.hidden),
-#galleryModal.open,
-.event-modal.open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-/* Fix extra: evita che elementi invisibili coprano la navbar */
-.artist-modal,
-.lightbox,
-#galleryModal,
-.event-modal {
-  transition: opacity 0.2s ease;
-}
-/* ————————————————————————————————
    LIVELLI GLOBALI (Z-INDEX HIERARCHY)
-   Navbar > Modali > Lightbox > Gallery > Contenuto
 —————————————————————————————————— */
 :root {
   --z-navbar: 10000;
-  --z-overlay: 9990;
   --z-modal: 20000;
   --z-lightbox: 20000;
   --z-gallery: 20000;
+  --z-overlay: 15000;
 }
 
 /* Navbar sempre sopra tutto */
@@ -1501,30 +1456,29 @@ section[id] {
 }
 
 /* ————————————————————————————————
-   OVERLAY E MODALI — FIX DEFINITIVO
+   OVERLAY ARTISTA / LIGHTBOX / GALLERY
+   (usano .open / .hidden)
 —————————————————————————————————— */
 
-/* Tutti gli overlay chiusi NON devono bloccare i click */
+/* Overlay chiusi */
 .artist-modal.hidden,
 .lightbox.hidden,
-#galleryModal:not(.open),
-.event-modal:not(.open) {
+#galleryModal.hidden {
   pointer-events: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
 }
 
-/* Quando sono aperti, tornano visibili e cliccabili */
-.artist-modal:not(.hidden),
-.lightbox:not(.hidden),
-#galleryModal.open,
-.event-modal.open {
+/* Overlay aperti */
+.artist-modal.open,
+.lightbox.open,
+#galleryModal.open {
   pointer-events: auto !important;
   opacity: 1 !important;
   visibility: visible !important;
 }
 
-/* Assicura che gli overlay siano sempre sopra il contenuto ma sotto la navbar */
+/* Z-index overlay */
 .artist-modal {
   z-index: var(--z-modal) !important;
 }
@@ -1537,76 +1491,22 @@ section[id] {
   z-index: var(--z-gallery) !important;
 }
 
-.event-modal {
-  z-index: var(--z-overlay) !important;
-}
-
-/* Transizioni morbide */
+/* Transizioni */
 .artist-modal,
 .lightbox,
-#galleryModal,
-.event-modal {
+#galleryModal {
   transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 /* ————————————————————————————————
-   MENU MOBILE — STABILIZZAZIONE
+   CLASSE .hidden (solo per overlay artista)
 —————————————————————————————————— */
-
-/* Evita che il menu venga coperto da elementi assoluti */
-.menu {
-  position: relative;
-  z-index: var(--z-navbar);
-}
-
-/* Migliora la leggibilità del menu mobile */
-@media (max-width: 768px) {
-  .menu {
-    background: var(--primary-color);
-    border: 2px solid #000;
-    box-shadow: 4px 4px 0 #000;
-  }
-}
-
-/* ————————————————————————————————
-   PULIZIA E CONSISTENZA
-—————————————————————————————————— */
-
-/* Rimuove duplicati di .hidden */
 .hidden {
   display: none !important;
 }
 
-/* Rimuove overlay duplicati */
-.overlay {
-  pointer-events: none;
-}
-
 /* ————————————————————————————————
-   EFFETTI GLITCH / PUNK CONSISTENTI
-—————————————————————————————————— */
-
-/* Effetto glitch leggero per hover */
-.glitch-hover:hover {
-  animation: glitchFlash 0.12s linear;
-}
-
-/* Effetto glitch universale */
-@keyframes glitchFlash {
-  0% { filter: hue-rotate(45deg) saturate(3); transform: scale(1.02); }
-  50% { filter: hue-rotate(-45deg) saturate(5); transform: scale(0.98); }
-  100% { filter: none; transform: scale(1); }
-}
-
-/* Applica glitch a elementi chiave */
-.menu a:hover,
-.artist-card:hover img,
-.folder-preview:hover,
-.qms-item:hover {
-  animation: glitchFlash 0.12s linear;
-}
-/* ————————————————————————————————
-   MODALE ARTISTA — NUOVO LAYOUT
+   MODALE ARTISTA — LAYOUT
 —————————————————————————————————— */
 
 .artist-modal-content {
@@ -1621,20 +1521,17 @@ section[id] {
   box-shadow: 0 0 20px rgba(255,0,255,0.3);
 }
 
-/* Layout a due colonne */
 .artist-modal-layout {
   display: flex;
   gap: 2rem;
   align-items: flex-start;
 }
 
-/* Colonna testo */
 .artist-modal-text {
   flex: 1;
   min-width: 40%;
 }
 
-/* Colonna immagini */
 .artist-modal-gallery {
   flex: 1;
   min-width: 40%;
@@ -1654,12 +1551,10 @@ section[id] {
   transform: scale(1.03);
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .artist-modal-layout {
     flex-direction: column;
   }
-
   .artist-modal-gallery {
     column-count: 2;
   }
@@ -1669,4 +1564,141 @@ section[id] {
   .artist-modal-gallery {
     column-count: 1;
   }
+}
+
+/* ————————————————————————————————
+   MODALE EVENTO — VERSIONE FINALE
+   (NON usa .open / .hidden)
+   (gestita SOLO dal JS con display:flex)
+—————————————————————————————————— */
+
+#event-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+
+  display: none; /* il JS lo cambia in flex */
+  justify-content: center !important;
+  align-items: center !important;
+
+  background: rgba(0, 0, 0, 0.75) !important;
+  z-index: 30000 !important;
+
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Contenuto interno */
+#event-modal .event-modal-content {
+  background: var(--bg-color, #000) !important;
+  color: var(--secondary-color, #fff) !important;
+  padding: 2rem !important;
+  border-radius: 12px !important;
+
+  max-width: 900px !important;
+  width: 90% !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+
+  position: relative !important;
+  z-index: 31000 !important;
+}
+
+/* X chiusura */
+#event-modal .event-modal-close {
+  position: absolute !important;
+  top: 0.5rem !important;
+  right: 0.5rem !important;
+  background: transparent !important;
+  border: none !important;
+  color: inherit !important;
+  font-size: 1.5rem !important;
+  cursor: pointer !important;
+}
+
+/* Layout due colonne */
+#event-modal .modal-two-columns {
+  display: flex !important;
+  gap: 1.5rem !important;
+  flex-wrap: wrap;
+}
+
+#event-modal .modal-left {
+  flex: 1 1 40%;
+}
+
+#event-modal .modal-right {
+  flex: 1 1 50%;
+}
+
+/* ————————————————————————————————
+   EFFETTI GLITCH / PUNK
+—————————————————————————————————— */
+
+.glitch-hover:hover {
+  animation: glitchFlash 0.12s linear;
+}
+
+@keyframes glitchFlash {
+  0% { filter: hue-rotate(45deg) saturate(3); transform: scale(1.02); }
+  50% { filter: hue-rotate(-45deg) saturate(5); transform: scale(0.98); }
+  100% { filter: none; transform: scale(1); }
+}
+
+.menu a:hover,
+.artist-card:hover img,
+.folder-preview:hover,
+.qms-item:hover {
+  animation: glitchFlash 0.12s linear;
+}
+/* MODALE EVENTO QMS — ISOLATA E SICURA */
+
+.event-modal-qms {
+  position: fixed;
+  inset: 0;
+  display: none; /* il JS la accende */
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.75);
+  z-index: 50000; /* sopra tutto */
+}
+
+.event-modal-qms-content {
+  background: var(--bg-color, #000);
+  color: var(--secondary-color, #fff);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.event-modal-qms-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.event-modal-qms .modal-two-columns {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.event-modal-qms .modal-left {
+  flex: 1 1 40%;
+}
+
+.event-modal-qms .modal-right {
+  flex: 1 1 50%;
 }
