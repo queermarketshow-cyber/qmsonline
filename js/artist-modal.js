@@ -1,101 +1,64 @@
 /* ============================================================
-   ARTIST MODAL — SISTEMA COMPLETO
-   Ricostruito per integrarsi con:
-   - .open / .hidden
-   - lightbox
-   - mosaic-gallery
-   - galleryModal
+   ARTIST MODAL — SISTEMA COMPLETO E CORRETTO
 ============================================================ */
 
-let currentArtist = null;
-
 /* APRI MODALE ARTISTA */
-function openArtistModal(artist) {
-  currentArtist = artist;
+function openArtistModal(artistId) {
+  // Chiudi eventuale modale artista già aperta
+  const alreadyOpen = document.querySelector('.artist-modal.open');
+  if (alreadyOpen) {
+    alreadyOpen.classList.remove('open');
+    alreadyOpen.classList.add('hidden');
+  }
 
-  const modal = document.querySelector('.artist-modal');
+  const modal = document.getElementById(artistId);
   if (!modal) return;
 
-  const nameEl = modal.querySelector('.artist-header h3');
-  const linkEl = modal.querySelector('.artist-header a');
-  const textEl = modal.querySelector('.artist-modal-text');
-  const galleryEl = modal.querySelector('.artist-modal-gallery');
-
-  if (!nameEl || !textEl || !galleryEl) return;
-
-  /* POPOLA CONTENUTI */
-  nameEl.textContent = artist.name || '';
-  if (linkEl) {
-    if (artist.link) {
-      linkEl.href = artist.link;
-      linkEl.style.display = 'inline-block';
-    } else {
-      linkEl.style.display = 'none';
-    }
-  }
-
-  textEl.innerHTML = artist.bio || '';
-
-  /* GALLERIA IMMAGINI */
-  galleryEl.innerHTML = '';
-  if (artist.images && artist.images.length > 0) {
-    artist.images.forEach(imgName => {
-      const img = document.createElement('img');
-      img.src = `${artist.path}/${imgName}`;
-      img.alt = artist.name;
-      img.addEventListener('click', () => openLightbox(`${artist.path}/${imgName}`));
-      galleryEl.appendChild(img);
-    });
-  }
-
-  /* MOSTRA MODALE */
   modal.classList.remove('hidden');
   modal.classList.add('open');
 
-  /* BLOCCA SCROLL */
   document.body.style.overflow = 'hidden';
 }
 
 /* CHIUDI MODALE ARTISTA */
 function closeArtistModal() {
-  const modal = document.querySelector('.artist-modal');
+  const modal = document.querySelector('.artist-modal.open');
   if (!modal) return;
 
   modal.classList.remove('open');
   modal.classList.add('hidden');
 
-  /* RIPRISTINA SCROLL */
   document.body.style.overflow = '';
 }
 
-/* EVENTO: CLICK SU X */
-document.querySelector('.artist-modal .close-button')
-  ?.addEventListener('click', closeArtistModal);
+/* CLICK SULLA X */
+document.querySelectorAll('.artist-modal .close-button').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    closeArtistModal();
+  });
+});
 
-/* EVENTO: CLICK FUORI DALLA MODALE */
-document.querySelector('.artist-modal')
-  ?.addEventListener('click', e => {
+/* CLICK FUORI DALLA MODALE */
+document.querySelectorAll('.artist-modal').forEach(modal => {
+  modal.addEventListener('click', e => {
     if (e.target.classList.contains('artist-modal')) {
       closeArtistModal();
     }
   });
+});
 
 /* ESC PER CHIUDERE */
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeArtistModal();
+  if (e.key === 'Escape') {
+    closeArtistModal();
+  }
 });
 
-/* COLLEGA LE CARD ARTISTA */
-document.querySelectorAll('.artist-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const artist = {
-      name: card.dataset.name || '',
-      bio: card.dataset.bio || '',
-      link: card.dataset.link || '',
-      path: card.dataset.path || '',
-      images: card.dataset.images ? card.dataset.images.split(',') : []
-    };
-
-    openArtistModal(artist);
+/* CLICK SULLE IMMAGINI → LIGHTBOX */
+document.querySelectorAll('.artist-modal-gallery img').forEach(img => {
+  img.addEventListener('click', e => {
+    e.stopPropagation();
+    openLightbox(img.src);
   });
 });
