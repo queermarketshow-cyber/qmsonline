@@ -1086,25 +1086,34 @@ footer {
 —————————————————————————————————— */
 
 /* wrapper nascosto di default */
+.mosaic-gallery {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;              /* nascosta di default */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: calc(var(--z-gallery) - 1);
+  overflow-y: auto;
+  padding: 2rem;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* stato aperto */
+.mosaic-gallery.open {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* stato chiuso */
 .mosaic-gallery.hidden {
   display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
-}
-
-/* stato aperto */
-.mosaic-gallery {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: block; /* non flex, non interferisce con modale */
-  z-index: calc(var(--z-gallery) - 1); /* sotto la modale */
-  overflow-y: auto;
-  padding: 2rem;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
 }
 
 /* griglia interna */

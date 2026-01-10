@@ -1,18 +1,50 @@
 /* ===============================
-   GALLERIA A MOSAICO
+   GALLERIA A MOSAICO (JS FINALE)
 =============================== */
 
 const mosaicGallery = document.querySelector('.mosaic-gallery');
 const mosaicGrid = document.querySelector('.mosaic-grid');
 const mosaicClose = document.querySelector('.mosaic-close');
 
-/* CHIUDI */
-mosaicClose?.addEventListener('click', () => {
+/* CHIUSURA GENERALE */
+function closeMosaic() {
+  if (!mosaicGallery) return;
+
+  mosaicGallery.classList.remove('open');
   mosaicGallery.classList.add('hidden');
+
+  document.body.style.overflow = ''; // riattiva scroll
+}
+
+window.closeMosaic = closeMosaic;
+
+/* CHIUDI CON LA X */
+if (mosaicClose) {
+  mosaicClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeMosaic();
+  });
+}
+
+/* CHIUDI CLICCANDO FUORI DAL MOSAICO */
+if (mosaicGallery) {
+  mosaicGallery.addEventListener('click', (e) => {
+    // se clicchi sul backdrop (non sulla griglia)
+    if (e.target === mosaicGallery) {
+      closeMosaic();
+    }
+  });
+}
+
+/* CHIUDI CON ESC */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeMosaic();
+  }
 });
 
 /* APRI MOSAICO */
-function openMosaic(folder) {
+window.openMosaic = function (folder) {
   if (!mosaicGallery || !mosaicGrid) return;
 
   mosaicGrid.innerHTML = '';
@@ -26,4 +58,7 @@ function openMosaic(folder) {
   });
 
   mosaicGallery.classList.remove('hidden');
-}
+  mosaicGallery.classList.add('open');
+
+  document.body.style.overflow = 'hidden'; // blocca scroll
+};
