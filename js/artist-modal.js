@@ -62,3 +62,10 @@ document.querySelectorAll('.artist-modal-gallery img').forEach(img => {
     openLightbox(img.src);
   });
 });
+/* COLLEGA LE CARD ARTISTA ALLE MODALI */
+document.querySelectorAll('.artist-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const artistId = card.dataset.id;
+    if (artistId) openArtistModal(artistId);
+  });
+});
