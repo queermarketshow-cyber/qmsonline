@@ -249,7 +249,12 @@
     <div class="artist-gallery">
 
       <!-- Diskovenganza -->
-      <div class="artist-card" onclick="openArtistModal('Diskovenganza')">
+      <div class="artist-card"
+           data-name="Diskovenganza"
+           data-bio="La sua musica è resistenza spontanea, vendetta sonora e ritmo fluido."
+           data-link=""
+           data-path="images/artist3/franz"
+           data-images="franz1.jpg,franz2.jpg,franz3.jpg">
         <img src="images/artist3/franz/franz1.jpg" alt="Diskovenganza">
         <div class="artista-info">
           <h3>Diskovenganza</h3>
@@ -259,7 +264,12 @@
       </div>
 
       <!-- Billie Kill -->
-      <div class="artist-card" onclick="openArtistModal('Billie-Kill')">
+      <div class="artist-card"
+           data-name="Billie Kill"
+           data-bio="Trasforma le ferite in rito, la comicità in ombra, il corpo in resistenza."
+           data-link=""
+           data-path="images/artist3/billie"
+           data-images="Billie1.jpg,Billie2.jpg,Billie3.jpg,Billie4.jpg,Billie5.jpg">
         <img src="images/artist3/billie/Billie2.jpg" alt="Billie Kill">
         <div class="artista-info">
           <h3>Billie Kill</h3>
@@ -269,7 +279,12 @@
       </div>
 
       <!-- Alister Victoria -->
-      <div class="artist-card" onclick="openArtistModal('Alister-Victoria')">
+      <div class="artist-card"
+           data-name="Alister Victoria"
+           data-bio="Sensuale, sfuggente, annoiata. Piega il tempo, confonde il senso."
+           data-link=""
+           data-path="images/artist3/alister"
+           data-images="alister1.jpg,alister2.jpg,alister3.jpg">
         <img src="images/artist3/alister/alister2.jpg" alt="Alister Victoria">
         <div class="artista-info">
           <h3>Alister Victoria</h3>
@@ -279,7 +294,12 @@
       </div>
 
       <!-- Lela Rox -->
-      <div class="artist-card" onclick="openArtistModal('Lela-Rox')">
+      <div class="artist-card"
+           data-name="Lela Rox"
+           data-bio="Nata dal vuoto e dalle cicatrici, trasforma il dolore in bellezza."
+           data-link=""
+           data-path="images/artist3/lela"
+           data-images="lela1.jpg,lela2.jpg,lela3.jpg">
         <img src="images/artist3/lela/lela1.jpg" alt="Lela Rox">
         <div class="artista-info">
           <h3>Lela Rox</h3>
@@ -289,7 +309,12 @@
       </div>
 
       <!-- RebellMouse -->
-      <div class="artist-card" onclick="openArtistModal('RebellMouse')">
+      <div class="artist-card"
+           data-name="RebellMouse"
+           data-bio="Un ibrido in continua evoluzione. Tutto e niente."
+           data-link=""
+           data-path="images/artist3/rebel"
+           data-images="rebel1.jpg,rebel2.jpg,rebel3.jpg">
         <img src="images/artist3/rebel/rebel1.jpg" alt="RebellMouse">
         <div class="artista-info">
           <h3>RebellMouse</h3>
@@ -299,7 +324,12 @@
       </div>
 
       <!-- Lanfear X -->
-      <div class="artist-card" onclick="openArtistModal('LanfearX')">
+      <div class="artist-card"
+           data-name="Lanfear X"
+           data-bio="Lanfear X nasce dal silenzio e dal fuoco."
+           data-link=""
+           data-path="images/artist3/wilma"
+           data-images="wilma1.jpg,wilma2.jpg,wilma3.jpg">
         <img src="images/artist3/wilma/wilma1.jpg" alt="Lanfear X">
         <div class="artista-info">
           <h3>Lanfear X</h3>
@@ -313,11 +343,11 @@
 </section>
 
 <!-- MODALI ARTISTI -->
-<!-- (tutte le modali artisti identiche) -->
+
 <!-- Diskovenganza -->
-<div id="Diskovenganza" class="artist-modal hidden" onclick="closeArtistModal('Diskovenganza')">
+<div id="Diskovenganza" class="artist-modal hidden">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
-    <button class="close-button" onclick="closeArtistModal('Diskovenganza')">×</button>
+    <button class="close-button">×</button>
 
     <div class="artist-modal-layout">
       <div class="artist-modal-text">
@@ -328,24 +358,26 @@
           </a>
         </div>
 
-        <p>DJ salentina (di Taranto), è l'anima ribelle che anima le piste con un sound senza compromessi. La sua selezione è un manifesto sonoro che spazia da EBM e Darkwave, fino alle frequenze più crude della Techno Dark e dell'Italo Disko Dark.</p>
+        <p>DJ salentina (di Taranto), è l'anima ribelle che anima le piste con un sound senza compromessi. 
+        La sua selezione è un manifesto sonoro che spazia da EBM e Darkwave, fino alle frequenze più crude 
+        della Techno Dark e dell'Italo Disko Dark.</p>
       </div>
 
       <div class="artist-modal-gallery">
-        <img src="images/artist3/franz/franz2.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/franz/franz3.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/franz/franz4.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/franz/franz5.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/franz/franz6.jpg" onclick="openLightbox(this.src)">
+        <img src="images/artist3/franz/franz2.jpg">
+        <img src="images/artist3/franz/franz3.jpg">
+        <img src="images/artist3/franz/franz4.jpg">
+        <img src="images/artist3/franz/franz5.jpg">
+        <img src="images/artist3/franz/franz6.jpg">
       </div>
     </div>
   </div>
 </div>
 
 <!-- Billie Kill -->
-<div id="Billie-Kill" class="artist-modal hidden" onclick="closeArtistModal('Billie-Kill')">
+<div id="Billie-Kill" class="artist-modal hidden">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
-    <button class="close-button" onclick="closeArtistModal('Billie-Kill')">×</button>
+    <button class="close-button">×</button>
 
     <div class="artist-modal-layout">
       <div class="artist-modal-text">
@@ -356,24 +388,22 @@
           </a>
         </div>
 
-        <p>Billie Kill danza sul filo sottile tra il riso e l’abisso. La sua arte nasce dove la comicità diventa ombra e l’ombra rivelazione. Ogni performance è un rito: un esorcismo del dolore.</p>
+        <p>Billie Kill danza sul filo sottile tra il riso e l’abisso. La sua arte nasce dove la comicità 
+        diventa ombra e l’ombra rivelazione. Ogni performance è un rito: un esorcismo del dolore.</p>
       </div>
 
       <div class="artist-modal-gallery">
-        <img src="images/artist3/billie/Billie2.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/billie/Billie3.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/billie/Billie4.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/billie/Billie5.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/billie/Billie1.jpg" onclick="openLightbox(this.src)">
+        <img src="images/artist3/billie/Billie2.jpg">
+        <img src="images/artist3/billie/Billie1.jpg">
       </div>
     </div>
   </div>
 </div>
 
 <!-- Alister Victoria -->
-<div id="Alister-Victoria" class="artist-modal hidden" onclick="closeArtistModal('Alister-Victoria')">
+<div id="Alister-Victoria" class="artist-modal hidden">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
-    <button class="close-button" onclick="closeArtistModal('Alister-Victoria')">×</button>
+    <button class="close-button">×</button>
 
     <div class="artist-modal-layout">
       <div class="artist-modal-text">
@@ -384,23 +414,24 @@
           </a>
         </div>
 
-        <p>Una domanda scomoda al risveglio. È già lì, distesa tra le pieghe del pensiero, e quando la noti, è perché ti ha già guardato. Il corpo non chiede attenzione: la raccoglie, la mastica, la restituisce.</p>
+        <p>Una domanda scomoda al risveglio. È già lì, distesa tra le pieghe del pensiero, e quando la noti, 
+        è perché ti ha già guardato. Il corpo non chiede attenzione: la raccoglie, la mastica, la restituisce.</p>
       </div>
 
       <div class="artist-modal-gallery">
-        <img src="images/artist3/alister/alister2.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/alister/alister1.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/alister/alister4.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/alister/alister3.jpg" onclick="openLightbox(this.src)">
+        <img src="images/artist3/alister/alister2.jpg">
+        <img src="images/artist3/alister/alister1.jpg">
+        <img src="images/artist3/alister/alister4.jpg">
+        <img src="images/artist3/alister/alister3.jpg">
       </div>
     </div>
   </div>
 </div>
 
 <!-- Lela Rox -->
-<div id="Lela-Rox" class="artist-modal hidden" onclick="closeArtistModal('Lela-Rox')">
+<div id="Lela-Rox" class="artist-modal hidden">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
-    <button class="close-button" onclick="closeArtistModal('Lela-Rox')">×</button>
+    <button class="close-button">×</button>
 
     <div class="artist-modal-layout">
       <div class="artist-modal-text">
@@ -411,22 +442,23 @@
           </a>
         </div>
 
-        <p>Nasce da un bisogno profondo di dare voce al vuoto, forma alle cicatrici. È sempre esistita, prima come sussurro nel cuore.</p>
+        <p>Nasce da un bisogno profondo di dare voce al vuoto, forma alle cicatrici. 
+        È sempre esistita, prima come sussurro nel cuore.</p>
       </div>
 
       <div class="artist-modal-gallery">
-        <img src="images/artist3/lela/lela2.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/lela/lela3.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/lela/lela4.jpg" onclick="openLightbox(this.src)">
+        <img src="images/artist3/lela/lela2.jpg">
+        <img src="images/artist3/lela/lela3.jpg">
+        <img src="images/artist3/lela/lela4.jpg">
       </div>
     </div>
   </div>
 </div>
 
 <!-- RebellMouse -->
-<div id="RebellMouse" class="artist-modal hidden" onclick="closeArtistModal('RebellMouse')">
+<div id="RebellMouse" class="artist-modal hidden">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
-    <button class="close-button" onclick="closeArtistModal('RebellMouse')">×</button>
+    <button class="close-button">×</button>
 
     <div class="artist-modal-layout">
       <div class="artist-modal-text">
@@ -437,22 +469,23 @@
           </a>
         </div>
 
-        <p>Un concetto che si rende concreto restando nell’oscurità. Non cerca di piacere agli occhi degli umani: esiste, inquieta, incanta.</p>
+        <p>Un concetto che si rende concreto restando nell’oscurità. 
+        Non cerca di piacere agli occhi degli umani: esiste, inquieta, incanta.</p>
       </div>
 
       <div class="artist-modal-gallery">
-        <img src="images/artist3/rebel/rebel2.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/rebel/rebel3.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/rebel/rebel4.jpg" onclick="openLightbox(this.src)">
+        <img src="images/artist3/rebel/rebel2.jpg">
+        <img src="images/artist3/rebel/rebel3.jpg">
+        <img src="images/artist3/rebel/rebel4.jpg">
       </div>
     </div>
   </div>
 </div>
 
 <!-- Lanfear X -->
-<div id="LanfearX" class="artist-modal hidden" onclick="closeArtistModal('LanfearX')">
+<div id="LanfearX" class="artist-modal hidden">
   <div class="artist-modal-content" onclick="event.stopPropagation()">
-    <button class="close-button" onclick="closeArtistModal('LanfearX')">×</button>
+    <button class="close-button">×</button>
 
     <div class="artist-modal-layout">
       <div class="artist-modal-text">
@@ -463,14 +496,15 @@
           </a>
         </div>
 
-        <p>Nata dal caos e dalla luce, Wilma Etheria è una creatura forgiata dal dolore, plasmata dal silenzio e alimentata dalla sua stessa fiamma.</p>
+        <p>Nata dal caos e dalla luce, Wilma Etheria è una creatura forgiata dal dolore, 
+        plasmata dal silenzio e alimentata dalla sua stessa fiamma.</p>
       </div>
 
       <div class="artist-modal-gallery">
-        <img src="images/artist3/wilma/wilma1.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/wilma/wilma2.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/wilma/wilma3.jpg" onclick="openLightbox(this.src)">
-        <img src="images/artist3/wilma/wilma4.jpg" onclick="openLightbox(this.src)">
+        <img src="images/artist3/wilma/wilma1.jpg">
+        <img src="images/artist3/wilma/wilma2.jpg">
+        <img src="images/artist3/wilma/wilma3.jpg">
+        <img src="images/artist3/wilma/wilma4.jpg">
       </div>
     </div>
   </div>
@@ -556,6 +590,8 @@
 <script src="/js/gallery-modal.js"></script>
 <script src="/js/events.js"></script>
 <script src="/js/navbar.js"></script>
+<script src="/js/artist-modal.js"></script>
+
 
 </body>
 </html>

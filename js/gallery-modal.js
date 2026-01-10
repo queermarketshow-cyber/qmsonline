@@ -27,8 +27,10 @@ function openFolderModal(folder) {
     grid.appendChild(img);
   });
 
-  modal.classList.add('open');
   modal.classList.remove('hidden');
+  modal.classList.add('open');
+
+  document.body.style.overflow = 'hidden';
 }
 
 function closeGalleryModal() {
@@ -45,8 +47,9 @@ function closeGalleryModal() {
     carousel.classList.remove('fullscreen');
   }
 
-  modal.classList.add('hidden');
   modal.classList.remove('open');
+  modal.classList.add('hidden');
+
   document.body.style.overflow = '';
 }
 
@@ -97,16 +100,5 @@ document.getElementById('galleryModal')
 document.getElementById('galleryModal')
   ?.querySelector('.close')
   ?.addEventListener('click', () => {
-    const modal = document.getElementById('galleryModal');
-    if (!modal) return;
-
-    const grid = modal.querySelector('.modal-grid');
-    const carousel = modal.querySelector('.carousel');
-
-    if (grid) grid.classList.remove('hidden');
-
-    if (carousel) {
-      carousel.classList.add('hidden');
-      carousel.classList.remove('fullscreen');
-    }
+    closeGalleryModal();
   });

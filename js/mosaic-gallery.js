@@ -1,5 +1,5 @@
 /* ===============================
-   GALLERIA A MOSAICO (JS FINALE)
+   GALLERIA A MOSAICO
 =============================== */
 
 const mosaicGallery = document.querySelector('.mosaic-gallery');
@@ -13,7 +13,7 @@ function closeMosaic() {
   mosaicGallery.classList.remove('open');
   mosaicGallery.classList.add('hidden');
 
-  document.body.style.overflow = ''; // riattiva scroll
+  document.body.style.overflow = '';
 }
 
 window.closeMosaic = closeMosaic;
@@ -26,10 +26,9 @@ if (mosaicClose) {
   });
 }
 
-/* CHIUDI CLICCANDO FUORI DAL MOSAICO */
+/* CHIUDI CLICCANDO FUORI */
 if (mosaicGallery) {
   mosaicGallery.addEventListener('click', (e) => {
-    // se clicchi sul backdrop (non sulla griglia)
     if (e.target === mosaicGallery) {
       closeMosaic();
     }
@@ -60,5 +59,5 @@ window.openMosaic = function (folder) {
   mosaicGallery.classList.remove('hidden');
   mosaicGallery.classList.add('open');
 
-  document.body.style.overflow = 'hidden'; // blocca scroll
+  document.body.style.overflow = 'hidden';
 };
