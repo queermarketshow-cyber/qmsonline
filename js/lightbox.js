@@ -2,7 +2,6 @@ const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 const lb = document.getElementById('lightbox');
 if (lb) lb.classList.remove('lightbox-artist');
-openLightbox(img.src);
 
 /* OPEN */
 function openLightbox(src) {

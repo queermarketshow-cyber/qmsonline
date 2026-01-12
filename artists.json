@@ -1,0 +1,74 @@
+[
+  {
+    "id": "Diskovenganza",
+    "name": "Diskovenganza",
+    "role": "DJ",
+    "bio_short": "La sua musica è resistenza spontanea, vendetta sonora e ritmo fluido.",
+    "bio_long": "DJ salentina (di Taranto), è l'anima ribelle che anima le piste con un sound senza compromessi. La sua selezione è un manifesto sonoro che spazia da EBM e Darkwave, fino alle frequenze più crude della Techno Dark e dell'Italo Disko Dark.",
+    "instagram": "https://www.instagram.com/disko_venganza_djset_/",
+    "type": "resident",
+    "path": "images/artist3/franz",
+    "images": ["franz2.jpg","franz3.jpg","franz4.jpg","franz5.jpg","franz6.jpg"],
+    "cover": "franz1.jpg"
+  },
+  {
+    "id": "Billie-Kill",
+    "name": "Billie Kill",
+    "role": "Drag Performer",
+    "bio_short": "Trasforma le ferite in rito, la comicità in ombra, il corpo in resistenza.",
+    "bio_long": "Billie Kill danza sul filo sottile tra il riso e l’abisso. La sua arte nasce dove la comicità diventa ombra e l’ombra rivelazione. Ogni performance è un rito: un esorcismo del dolore.",
+    "instagram": "https://www.instagram.com/billie.kill/",
+    "type": "resident",
+    "path": "images/artist3/billie",
+    "images": ["Billie2.jpg","Billie1.jpg"],
+    "cover": "Billie2.jpg"
+  },
+  {
+    "id": "Alister-Victoria",
+    "name": "Alister Victoria",
+    "role": "Drag Performer",
+    "bio_short": "Sensuale, sfuggente, annoiata. Piega il tempo, confonde il senso.",
+    "bio_long": "Una domanda scomoda al risveglio. È già lì, distesa tra le pieghe del pensiero, e quando la noti, è perché ti ha già guardato. Il corpo non chiede attenzione: la raccoglie, la mastica, la restituisce.",
+    "instagram": "https://www.instagram.com/alister.victoria/",
+    "type": "resident",
+    "path": "images/artist3/alister",
+    "images": ["alister2.jpg","alister1.jpg","alister4.jpg","alister3.jpg"],
+    "cover": "alister2.jpg"
+  },
+  {
+    "id": "Lela-Rox",
+    "name": "Lela Rox",
+    "role": "Drag Performer",
+    "bio_short": "Nata dal vuoto e dalle cicatrici, trasforma il dolore in bellezza.",
+    "bio_long": "Nasce da un bisogno profondo di dare voce al vuoto, forma alle cicatrici. È sempre esistita, prima come sussurro nel cuore.",
+    "instagram": "https://www.instagram.com/lela.rox/",
+    "type": "resident",
+    "path": "images/artist3/lela",
+    "images": ["lela2.jpg","lela3.jpg","lela4.jpg"],
+    "cover": "lela1.jpg"
+  },
+  {
+    "id": "RebellMouse",
+    "name": "RebellMouse",
+    "role": "Drag Performer",
+    "bio_short": "Un ibrido in continua evoluzione. Tutto e niente.",
+    "bio_long": "Un concetto che si rende concreto restando nell’oscurità. Non cerca di piacere agli occhi degli umani: esiste, inquieta, incanta.",
+    "instagram": "https://www.instagram.com/rebellmouse/",
+    "type": "resident",
+    "path": "images/artist3/rebel",
+    "images": ["rebel2.jpg","rebel3.jpg","rebel4.jpg"],
+    "cover": "rebel1.jpg"
+  },
+  {
+    "id": "LanfearX",
+    "name": "Lanfear X",
+    "role": "Drag Performer",
+    "bio_short": "Lanfear X nasce dal silenzio e dal fuoco.",
+    "bio_long": "Nata dal caos e dalla luce, Wilma Etheria è una creatura forgiata dal dolore, plasmata dal silenzio e alimentata dalla sua stessa fiamma.",
+    "instagram": "https://www.instagram.com/wilma.etheria/",
+    "type": "resident",
+    "path": "images/artist3/wilma",
+    "images": ["wilma1.jpg","wilma2.jpg","wilma3.jpg","wilma4.jpg"],
+    "cover": "wilma1.jpg"
+  }
+]
