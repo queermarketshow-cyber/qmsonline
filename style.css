@@ -647,12 +647,62 @@ footer {
    ARTIST GALLERY → COERENTE CON CARTELLE
 —————————————————————————————————— */
 
-/* Contenitore tipo cartelle */
+/* ————————————————————————————————
+   SWITCH ARTIST3 (stile come Eventi Passati/Futuri)
+—————————————————————————————————— */
+
+.artist-controls {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.artist-controls button {
+  padding: 0.6rem 1.2rem;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.25s ease;
+}
+
+.artist-controls button:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.artist-controls button.active {
+  background: var(--primary-color);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(255,0,255,0.3);
+}
+
+/* ————————————————————————————————
+   GALLERY RESPONSIVE (fix leggibilità)
+—————————————————————————————————— */
+
+/* Forza la griglia a comportarsi correttamente */
 .artist-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
   gap: 20px;
-  padding: 20px 0;
+  width: 100%;
+}
+
+/* Impedisce ai genitori di rompere la griglia */
+.artist-gallery * {
+  white-space: normal !important;
+}
+
+/* Le card non devono avere larghezze imposte */
+.artist-card {
+  width: 100% !important;
+  max-width: none !important;
 }
 
 /* Ogni artista come “cartella” */
@@ -680,23 +730,28 @@ footer {
   display: block;
 }
 
-/* overlay info artista */
+/* ————————————————————————————————
+   OVERLAY LEGGIBILE E ADATTIVO
+—————————————————————————————————— */
+
 .artista-info {
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.8);
+  background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.4));
   color: var(--primary-color);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 1.8vw, 1rem);
   letter-spacing: 1px;
   text-align: center;
-  padding: 0.7rem;
+  padding: 0.8rem;
   opacity: 0;
   transform: translateY(100%);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
+  line-height: 1.25;
+  word-break: break-word;
 }
 
 .artist-card:hover .artista-info {
@@ -704,24 +759,24 @@ footer {
   transform: translateY(0);
 }
 
-@media (max-width: 768px) {
-  .artist-gallery {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ————————————————————————————————
-   MODALE ARTISTA
+   MODALE ARTISTA — VERSIONE CORRETTA
 —————————————————————————————————— */
+
 .artist-modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.85);
-  display: none; /* gestita da .open */
+  display: flex;              /* PRIMA ERA display:none */
   justify-content: center;
   align-items: center;
   z-index: var(--z-modal);
   font-family: var(--font-sans);
+}
+
+/* Stato nascosto gestito dal JS */
+.artist-modal.hidden {
+  display: none;
 }
 
 .artist-modal-content {

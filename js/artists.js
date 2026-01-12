@@ -1,23 +1,39 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const residentContainer = document.getElementById("artists-resident");
-  const guestContainer = document.getElementById("artists-guest");
-  const modalContainer = document.getElementById("artist-modals");
+// artists.js
+// Inizializzatore della sezione ARTIST3
+// Da chiamare DOPO che l'HTML di #artist3 è stato inserito nel DOM
 
-  const btnResident = document.getElementById("btn-resident");
-  const btnGuest = document.getElementById("btn-guest");
+function initArtist3() {
+  const section = document.getElementById("artist3");
+  if (!section) {
+    console.warn("initArtist3: sezione #artist3 non trovata nel DOM.");
+    return;
+  }
+
+  const residentContainer = section.querySelector("#artists-resident");
+  const guestContainer = section.querySelector("#artists-guest");
+  const modalContainer = section.querySelector("#artist-modals");
+
+  const btnResident = section.querySelector("#btn-resident");
+  const btnGuest = section.querySelector("#btn-guest");
+
+  if (!residentContainer || !guestContainer || !modalContainer || !btnResident || !btnGuest) {
+    console.warn("initArtist3: elementi interni mancanti nella sezione #artist3.");
+    return;
+  }
 
   let artists = [];
 
+  // FETCH DATI ARTISTI
   fetch("artists.json")
     .then(res => res.json())
     .then(data => {
-      artists = data;
+      artists = Array.isArray(data) ? data : [];
       renderArtists();
       renderModals();
     })
     .catch(err => console.error("Errore caricamento artisti:", err));
 
-  /* CREA CARD */
+  // CREA CARD
   function createArtistCard(a) {
     const card = document.createElement("div");
     card.className = "artist-card";
@@ -27,8 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <img src="${a.path}/${a.cover}" alt="${a.name}">
       <div class="artista-info">
         <h3>${a.name}</h3>
-        <p>${a.role}</p>
-        <p>${a.bio_short}</p>
+        <p>${a.role || ""}</p>
+        <p>${a.bio_short || ""}</p>
       </div>
     `;
 
@@ -36,30 +52,34 @@ document.addEventListener("DOMContentLoaded", () => {
     return card;
   }
 
-  /* CREA MODALE */
+  // CREA MODALE
   function createArtistModal(a) {
     const modal = document.createElement("div");
     modal.id = a.id;
     modal.className = "artist-modal hidden";
 
-    const galleryImgs = a.images
-      .map(img => `<img src="${a.path}/${img}">`)
+    const galleryImgs = (a.images || [])
+      .map(img => `<img src="${a.path}/${img}" alt="${a.name}">`)
       .join("");
 
     modal.innerHTML = `
-      <div class="artist-modal-content" onclick="event.stopPropagation()">
+      <div class="artist-modal-content">
         <button class="close-button">×</button>
 
         <div class="artist-modal-layout">
           <div class="artist-modal-text">
             <div class="artist-header">
               <h3>${a.name}</h3>
-              <a href="${a.instagram}" target="_blank">
-                <i class="fab fa-instagram"></i>
-              </a>
+              ${
+                a.instagram
+                  ? `<a href="${a.instagram}" target="_blank" rel="noopener">
+                      <i class="fab fa-instagram"></i>
+                    </a>`
+                  : ""
+              }
             </div>
 
-            <p>${a.bio_long}</p>
+            <p>${a.bio_long || ""}</p>
           </div>
 
           <div class="artist-modal-gallery">
@@ -69,36 +89,64 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
+    // Chiudi cliccando fuori dal contenuto
     modal.addEventListener("click", () => closeArtistModal(a.id));
 
-    modal.querySelector(".close-button")
-      .addEventListener("click", () => closeArtistModal(a.id));
+    // Non chiudere se clicchi dentro il contenuto
+    const content = modal.querySelector(".artist-modal-content");
+    if (content) {
+      content.addEventListener("click", (e) => e.stopPropagation());
+    }
 
-    modal.querySelectorAll(".artist-modal-gallery img")
-      .forEach(img => img.addEventListener("click", () => openLightbox(img.src)));
+    // Pulsante di chiusura
+    const closeBtn = modal.querySelector(".close-button");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => closeArtistModal(a.id));
+    }
+
+    // Lightbox sulle immagini (se esiste funzione globale openLightbox)
+    const imgs = modal.querySelectorAll(".artist-modal-gallery img");
+    imgs.forEach(img => {
+      img.addEventListener("click", () => {
+        if (typeof window.openLightbox === "function") {
+          window.openLightbox(img.src);
+        }
+      });
+    });
 
     return modal;
   }
 
-  /* RENDER CARD */
+  // RENDER CARD
   function renderArtists() {
     residentContainer.innerHTML = "";
     guestContainer.innerHTML = "";
 
     artists.forEach(a => {
       const card = createArtistCard(a);
-      if (a.type === "resident") residentContainer.appendChild(card);
-      else guestContainer.appendChild(card);
+      if (a.type === "resident") {
+        residentContainer.appendChild(card);
+      } else {
+        guestContainer.appendChild(card);
+      }
+    });
+
+    // Stato iniziale: resident visibili, guest nascosti
+    residentContainer.style.display = "flex";
+    guestContainer.style.display = "none";
+    btnResident.classList.add("active");
+    btnGuest.classList.remove("active");
+  }
+
+  // RENDER MODALI
+  function renderModals() {
+    modalContainer.innerHTML = "";
+    artists.forEach(a => {
+      modalContainer.appendChild(createArtistModal(a));
     });
   }
 
-  /* RENDER MODALI */
-  function renderModals() {
-    modalContainer.innerHTML = "";
-    artists.forEach(a => modalContainer.appendChild(createArtistModal(a)));
-  }
-
-  /* SWITCH */
+  // SWITCH RESIDENT / GUEST
   btnResident.addEventListener("click", () => {
     btnResident.classList.add("active");
     btnGuest.classList.remove("active");
@@ -113,14 +161,21 @@ document.addEventListener("DOMContentLoaded", () => {
     guestContainer.style.display = "flex";
   });
 
-  /* OPEN/CLOSE MODALE */
+  // OPEN/CLOSE MODALE
   function openArtistModal(id) {
-    document.getElementById(id).classList.remove("hidden");
+    const modal = section.querySelector(`#${CSS.escape(id)}`);
+    if (!modal) return;
+    modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
   }
 
   function closeArtistModal(id) {
-    document.getElementById(id).classList.add("hidden");
+    const modal = section.querySelector(`#${CSS.escape(id)}`);
+    if (!modal) return;
+    modal.classList.add("hidden");
     document.body.style.overflow = "";
   }
-});
+}
+
+// Se vuoi avere la funzione disponibile globalmente:
+window.initArtist3 = initArtist3;
