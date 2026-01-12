@@ -312,140 +312,66 @@ footer {
   background-color: #b0256b;
 }
 
-/* ————————————————————————————————
-   EVENTI — CARD + GALLERY
-—————————————————————————————————— */
-.event-card {
-  background-color: rgba(255, 0, 255, 0.15);
-  border: 2px solid var(--primary-color);
-  border-radius: 0;
-  transform: rotate(-1deg);
-  box-shadow: 4px 4px 0 var(--secondary-color);
-  font-family: var(--font-sans);
-  padding: 1rem;
-  margin: 1rem 0;
-}
-
-.event-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.event-card-visual {
-  position: relative;
-  width: 300px;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  cursor: pointer;
-}
-
-.event-card-visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.event-card-visual:hover img {
-  transform: scale(1.05);
-}
-
-.event-overlay {
-  position: absolute;
-  bottom: 0;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  font-family: var(--font-sans);
-}
-
-.event-overlay h4 {
-  margin: 0;
-  font-size: 1.1em;
-  color: var(--primary-color);
-}
-
-.event-overlay p {
-  margin: 5px 0 0;
-  font-size: 0.9em;
-}
-
-/* ————————————————————————————————
-   CALENDARIO EVENTI
-—————————————————————————————————— */
-.event-calendar {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  font-family: var(--font-sans);
-}
-
-.event-calendar th,
-.event-calendar td {
-  border: 1px solid var(--primary-color);
-  padding: 12px;
-  text-align: left;
-}
-
-.event-calendar th {
-  background-color: var(--primary-color);
-  color: var(--bg-color);
-}
-
-.event-calendar tr:nth-child(even) {
-  background-color: rgba(255, 0, 255, 0.05);
-}
-
-/* FILTRI */
+/* ============================================================
+   EVENTI — FILTRI
+============================================================ */
 .calendar-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 20px;
+  margin: 1.5rem 0;
 }
 
 .calendar-filters button {
   padding: 6px 14px;
-  border: 1px solid #000;
-  background: #ff00aa;
+  border: 2px solid #000;
+  background: #ff2fa8;
   cursor: pointer;
   color: #000;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 #000;
+  transition: 0.15s;
+}
+
+.calendar-filters button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 #000;
 }
 
 .calendar-filters button.active {
   background: #000;
-  color: #ff00aa;
+  color: #ff2fa8;
 }
 
-/* CONTROLLI FUTURO / PASSATO */
+/* ============================================================
+   CONTROLLI FUTURO / PASSATO
+============================================================ */
 .calendar-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 20px 0;
+  margin: 2rem 0 1rem;
 }
 
 .calendar-controls button {
   padding: 6px 14px;
-  border: 1px solid #000;
-  background: #ff00aa;
+  border: 2px solid #000;
+  background: #ff2fa8;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 #000;
 }
 
 .calendar-controls button.active {
   background: #000;
-  color: #ff00aa;
+  color: #ff2fa8;
 }
 
-/* CALENDARIO FUTURO */
+/* ============================================================
+   CALENDARIO FUTURO
+============================================================ */
 #future-calendar {
   display: none;
   align-items: center;
@@ -459,21 +385,25 @@ footer {
   width: min(100%, 900px);
 }
 
-#future-calendar .calendar-month {
+/* mese */
+.calendar-month {
   font-size: clamp(1.6rem, 4vw, 2.4rem);
   font-weight: 900;
   text-transform: uppercase;
   margin-bottom: 1rem;
   color: #eee;
+  letter-spacing: 1px;
 }
 
-#future-calendar .calendar-grid {
+/* griglia */
+.calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.6rem;
 }
 
-#future-calendar .calendar-day {
+/* giorno */
+.calendar-day {
   position: relative;
   aspect-ratio: 1 / 1;
   border: 2px solid #333;
@@ -481,14 +411,16 @@ footer {
   padding: 0.4rem;
   font-size: clamp(0.8rem, 1.4vw, 1rem);
   color: #aaa;
+  overflow: visible;
 }
 
-#future-calendar .calendar-day-number {
+.calendar-day-number {
   font-weight: 700;
   color: #eee;
 }
 
-#future-calendar .calendar-day.has-event::before {
+/* highlight evento */
+.calendar-day.has-event::before {
   content: "";
   position: absolute;
   top: 6px;
@@ -500,7 +432,8 @@ footer {
   z-index: 1;
 }
 
-#future-calendar .event-postit {
+/* post-it */
+.event-postit {
   position: absolute;
   bottom: 6px;
   right: 6px;
@@ -513,15 +446,23 @@ footer {
   overflow: hidden;
   cursor: pointer;
   z-index: 3;
+  transition: 0.15s;
 }
 
-#future-calendar .event-postit img {
+.event-postit:hover {
+  transform: rotate(-4deg) translate(-3px, -3px);
+  box-shadow: 6px 6px 0 #000;
+}
+
+.event-postit img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* CALENDARIO PASSATO */
+/* ============================================================
+   CALENDARIO PASSATO
+============================================================ */
 #past-events {
   display: none;
   flex-direction: column;
@@ -594,9 +535,9 @@ footer {
   object-fit: cover;
 }
 
-/* ————————————————————————————————
-   MODALE EVENTO (QMS)
-—————————————————————————————————— */
+/* ============================================================
+   MODALE EVENTO
+============================================================ */
 #event-modal {
   position: fixed;
   inset: 0;
@@ -607,7 +548,7 @@ footer {
   z-index: 30000;
 }
 
-#event-modal .event-modal-content {
+.event-modal-content {
   background: var(--bg-color);
   color: var(--secondary-color);
   padding: 2rem;
@@ -618,42 +559,10 @@ footer {
   overflow-y: auto;
   position: relative;
   box-shadow: 8px 8px 0 #000;
+  transform-origin: center;
 }
 
-#event-modal .event-modal-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: transparent;
-  border: none;
-  color: inherit;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-#event-modal .modal-two-columns {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-#event-modal .modal-left {
-  flex: 1 1 40%;
-}
-
-#event-modal .modal-right {
-  flex: 1 1 50%;
-}
-
-.modal-img {
-  width: 100%;
-  height: auto;
-  border: 2px solid #000;
-  box-shadow: 6px 6px 0 #000;
-  display: block;
-}
-
-/* orientation tilt */
+/* rotazioni dinamiche */
 .event-modal-content[data-orientation="portrait"] {
   transform: rotate(-1.5deg) skew(-1deg);
 }
@@ -666,21 +575,55 @@ footer {
   transform: rotate(0.5deg);
 }
 
-/* meta info */
-.event-modal-meta {
-  margin-bottom: 1.5rem;
+/* chiusura */
+.event-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
+/* layout */
+.modal-two-columns {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.modal-left {
+  flex: 1 1 40%;
+}
+
+.modal-right {
+  flex: 1 1 50%;
+}
+
+/* immagine */
+.modal-img {
+  width: 100%;
+  height: auto;
+  border: 2px solid #000;
+  box-shadow: 6px 6px 0 #000;
+  display: block;
+}
+
+/* meta */
 .event-modal-date {
   font-weight: 900;
   font-size: clamp(1.1rem, 1.5vw, 1.4rem);
   color: #ff2fa8;
+  margin-bottom: 0.5rem;
 }
 
 .event-modal-categories {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin-bottom: 1rem;
 }
 
 .event-tag {
@@ -694,13 +637,12 @@ footer {
   box-shadow: 2px 2px 0 #000;
 }
 
-/* responsive modale evento */
+/* responsive */
 @media (max-width: 700px) {
-  #event-modal .modal-two-columns {
+  .modal-two-columns {
     flex-direction: column;
   }
 }
-
 /* ————————————————————————————————
    ARTIST GALLERY → COERENTE CON CARTELLE
 —————————————————————————————————— */
@@ -1072,6 +1014,11 @@ footer {
 
 #lightbox.open ~ #galleryModal {
   pointer-events: none;
+}
+/* Frecce nascoste quando il lightbox è aperto da una modale artista */
+#lightbox.lightbox-artist .lightbox-prev,
+#lightbox.lightbox-artist .lightbox-next {
+  display: none !important;
 }
 
 /* ————————————————————————————————

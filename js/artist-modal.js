@@ -59,6 +59,12 @@ document.addEventListener('keydown', e => {
 document.querySelectorAll('.artist-modal-gallery img').forEach(img => {
   img.addEventListener('click', e => {
     e.stopPropagation();
+
+    // aggiunge la classe che disattiva le frecce
+    const lb = document.getElementById('lightbox');
+    if (lb) lb.classList.add('lightbox-artist');
+
+    // qui continui a usare il tuo lightbox unificato
     openLightbox(img.src);
   });
 });

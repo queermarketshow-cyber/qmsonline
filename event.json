@@ -1,0 +1,110 @@
+[
+  {
+    "id": "event-2026-01-04-tombolet-cabaret",
+    "title": "Tombolet Cabaret",
+    "start": "2026-01-04",
+    "end": null,
+    "location": "Too Much, Lecce",
+    "image": "images/eventi/20260104 tombola.jpg",
+    "categories": ["giochi", "performance"]
+  },
+  {
+    "id": "event-2026-01-09-queer-market-show-zei",
+    "title": "Queer Market Show",
+    "start": "2026-01-09",
+    "end": null,
+    "location": "Spazio Sociale Zei, Lecce",
+    "image": "images/eventi/20260109 zei.jpeg",
+    "categories": ["performance", "djset"]
+  },
+  {
+    "id": "event-2025-12-13-dissensi-festival",
+    "title": "Dissensi Festival",
+    "start": "2025-12-13",
+    "end": null,
+    "location": "Masseria Tagliatelle, Lecce",
+    "image": "images/eventi/20251213 dissensi.jpg",
+    "categories": ["performance", "talk"]
+  },
+  {
+    "id": "event-2025-12-09-capriola-festival",
+    "title": "Capriola Festival",
+    "start": "2025-12-09",
+    "end": null,
+    "location": "Ex Convento degli Agostiniani, Lecce",
+    "image": "images/eventi/20251209 capriola.jpg",
+    "categories": ["performance"]
+  },
+  {
+    "id": "event-2025-12-28-tombolet-cabaret",
+    "title": "Tombolet Cabaret",
+    "start": "2025-12-28",
+    "end": null,
+    "location": "Too Much, Lecce",
+    "image": "images/eventi/20251207 tombolet.jpg",
+    "categories": ["giochi", "performance"]
+  },
+  {
+    "id": "event-2025-12-07-tombolet-cabaret",
+    "title": "Tombolet Cabaret",
+    "start": "2025-12-07",
+    "end": null,
+    "location": "Too Much, Lecce",
+    "image": "images/eventi/20251228 tombolet.jpg",
+    "categories": ["giochi", "performance"]
+  },
+  {
+    "id": "event-2025-09-28-luna-nera-festival",
+    "title": "Luna Nera Festival",
+    "start": "2025-09-28",
+    "end": null,
+    "location": "Fuori Binaria, Bari Palese",
+    "image": "images/eventi/20250928 fuoribinaria.jpg",
+    "categories": ["performance"]
+  },
+  {
+    "id": "event-2025-09-21-drag-it-up",
+    "title": "Drag it up",
+    "start": "2025-09-21",
+    "end": null,
+    "location": "Piazzetta Dante, Lecce",
+    "image": "images/eventi/20250921 dragitup.webp",
+    "categories": ["workshop"]
+  },
+  {
+    "id": "event-2025-08-09-orda-fest",
+    "title": "Orda Fest",
+    "start": "2025-08-09",
+    "end": null,
+    "location": "Villa Paciugo, Lecce",
+    "image": "images/eventi/20250809 orda.jpg",
+    "categories": ["performance"]
+  },
+  {
+    "id": "event-2025-06-26-inaugurazione-cad-lamara",
+    "title": "Inaugurazione CAD L'Amara",
+    "start": "2025-06-26",
+    "end": null,
+    "location": "Zei Spazio Sociale, Lecce",
+    "image": "images/eventi/20250626 cad.webp",
+    "categories": ["performance"]
+  },
+  {
+    "id": "event-2025-06-20-fuori-frequenza",
+    "title": "Fuori Frequenza",
+    "start": "2025-06-20",
+    "end": null,
+    "location": "Minima Fucina di Quartiere, Lecce",
+    "image": "images/eventi/20250620 aperipio.heic",
+    "categories": ["performance", "talk"]
+  },
+  {
+    "id": "event-2025-04-26-takeover",
+    "title": "Takeover",
+    "start": "2025-04-26",
+    "end": "2025-05-09",
+    "location": "Progetto, Lecce",
+    "image": "images/eventi/20250427 20250426 progetto.webp",
+    "categories": ["performance"]
+  }
+]
