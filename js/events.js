@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ============================================================
      CARICA EVENTS.JSON
   ============================================================ */
-  fetch("events.json")
+  fetch("event.json")
     .then((res) => res.json())
     .then((data) => {
       events = data;
