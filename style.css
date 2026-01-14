@@ -760,6 +760,17 @@ footer {
 }
 
 /* ————————————————————————————————
+   MOBILE / TOUCH: OVERLAY SEMPRE VISIBILE
+—————————————————————————————————— */
+
+@media (hover: none) and (pointer: coarse) {
+  .artist-card .artista-info {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
+}
+/* ————————————————————————————————
    MODALE ARTISTA — VERSIONE CORRETTA
 —————————————————————————————————— */
 
