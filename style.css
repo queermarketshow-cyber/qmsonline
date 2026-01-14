@@ -704,8 +704,11 @@ footer {
   transition: transform 0.2s ease;
   box-shadow: 0 0 12px rgba(255,0,255,0.2);
 
-  /* BLOCCO DELLE DIMENSIONI */
+  /* DIMENSIONI STABILI */
   aspect-ratio: 4 / 5;
+  min-width: 260px;
+  min-height: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }

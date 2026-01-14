@@ -4,10 +4,7 @@
 
 function initArtist3() {
   const section = document.getElementById("artist3");
-  if (!section) {
-    console.warn("initArtist3: sezione #artist3 non trovata nel DOM.");
-    return;
-  }
+  if (!section) return;
 
   const residentContainer = section.querySelector("#artists-resident");
   const guestContainer = section.querySelector("#artists-guest");
@@ -16,10 +13,7 @@ function initArtist3() {
   const btnResident = section.querySelector("#btn-resident");
   const btnGuest = section.querySelector("#btn-guest");
 
-  if (!residentContainer || !guestContainer || !modalContainer || !btnResident || !btnGuest) {
-    console.warn("initArtist3: elementi interni mancanti nella sezione #artist3.");
-    return;
-  }
+  if (!residentContainer || !guestContainer || !modalContainer || !btnResident || !btnGuest) return;
 
   let artists = [];
 
@@ -92,14 +86,10 @@ function initArtist3() {
     modal.addEventListener("click", () => closeArtistModal(a.id));
 
     const content = modal.querySelector(".artist-modal-content");
-    if (content) {
-      content.addEventListener("click", (e) => e.stopPropagation());
-    }
+    content.addEventListener("click", (e) => e.stopPropagation());
 
     const closeBtn = modal.querySelector(".close-button");
-    if (closeBtn) {
-      closeBtn.addEventListener("click", () => closeArtistModal(a.id));
-    }
+    closeBtn.addEventListener("click", () => closeArtistModal(a.id));
 
     const imgs = modal.querySelectorAll(".artist-modal-gallery img");
     imgs.forEach(img => {
@@ -128,9 +118,10 @@ function initArtist3() {
       }
     });
 
-    // Stato iniziale
-    residentContainer.style.display = "flex";
+    // Stato iniziale: resident visibili
+    residentContainer.style.display = "grid";
     guestContainer.style.display = "none";
+
     btnResident.classList.add("active");
     btnGuest.classList.remove("active");
   }
@@ -138,24 +129,24 @@ function initArtist3() {
   // RENDER MODALI
   function renderModals() {
     modalContainer.innerHTML = "";
-    artists.forEach(a => {
-      modalContainer.appendChild(createArtistModal(a));
-    });
+    artists.forEach(a => modalContainer.appendChild(createArtistModal(a)));
   }
 
   // SWITCH RESIDENT / GUEST
   btnResident.addEventListener("click", () => {
     btnResident.classList.add("active");
     btnGuest.classList.remove("active");
-    residentContainer.style.display = "flex";
+
+    residentContainer.style.display = "grid";
     guestContainer.style.display = "none";
   });
 
   btnGuest.addEventListener("click", () => {
     btnGuest.classList.add("active");
     btnResident.classList.remove("active");
+
     residentContainer.style.display = "none";
-    guestContainer.style.display = "flex";
+    guestContainer.style.display = "grid";
   });
 
   // OPEN/CLOSE MODALE
@@ -174,5 +165,4 @@ function initArtist3() {
   }
 }
 
-// Disponibile globalmente
 window.initArtist3 = initArtist3;
