@@ -70,7 +70,7 @@
     "path": "images/artist3/wilma",
     "images": ["wilma1.jpg","wilma2.jpg","wilma3.jpg","wilma4.jpg"],
     "cover": "wilma1.jpg"
-  }
+  },
   {
     "id": "SRosa",
     "name": "S. Rosa",
