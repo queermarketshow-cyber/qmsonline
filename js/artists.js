@@ -89,22 +89,18 @@ function initArtist3() {
       </div>
     `;
 
-    // Chiudi cliccando fuori dal contenuto
     modal.addEventListener("click", () => closeArtistModal(a.id));
 
-    // Non chiudere se clicchi dentro il contenuto
     const content = modal.querySelector(".artist-modal-content");
     if (content) {
       content.addEventListener("click", (e) => e.stopPropagation());
     }
 
-    // Pulsante di chiusura
     const closeBtn = modal.querySelector(".close-button");
     if (closeBtn) {
       closeBtn.addEventListener("click", () => closeArtistModal(a.id));
     }
 
-    // Lightbox sulle immagini (se esiste funzione globale openLightbox)
     const imgs = modal.querySelectorAll(".artist-modal-gallery img");
     imgs.forEach(img => {
       img.addEventListener("click", () => {
@@ -124,14 +120,15 @@ function initArtist3() {
 
     artists.forEach(a => {
       const card = createArtistCard(a);
+
       if (a.type === "resident") {
         residentContainer.appendChild(card);
-      } else {
+      } else if (a.type === "guest") {
         guestContainer.appendChild(card);
       }
     });
 
-    // Stato iniziale: resident visibili, guest nascosti
+    // Stato iniziale
     residentContainer.style.display = "flex";
     guestContainer.style.display = "none";
     btnResident.classList.add("active");
@@ -177,5 +174,5 @@ function initArtist3() {
   }
 }
 
-// Se vuoi avere la funzione disponibile globalmente:
+// Disponibile globalmente
 window.initArtist3 = initArtist3;
