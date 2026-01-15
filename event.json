@@ -126,9 +126,9 @@
     "start": "2025-04-26",
     "end": "2025-05-09",
     "recurringWeekdays": [],
-    "specificDates": [],
+    "specificDates": ["2025-04-26", "2025-04-27", "2025-05-02", "2025-05-03", "2025-05-04", "2025-05-07", "2025-05-08", "2025-05-09"],
     "location": "Progetto, Lecce",
-    "image": "images/eventi/20250427 20250426 progetto.webp",
+    "image": "images/eventi/takeover.jpg",
     "categories": ["performance"]
   }
 ]

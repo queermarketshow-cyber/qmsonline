@@ -49,9 +49,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const end = ev.end ? parseDate(ev.end) : start;
 
   // 1) Se specificDates esiste, ha priorità assoluta
-  if (ev.specificDates && ev.specificDates.length > 0) {
-    return ev.specificDates.map(parseDate);
-  }
+  if (Array.isArray(ev.specificDates) && ev.specificDates.length > 0) {
+  return ev.specificDates
+    .filter(d => typeof d === "string" && d.trim() !== "")
+    .map(parseDate)
+    .filter(d => !isNaN(d)); // elimina eventuali Invalid Date
+}
+
 
   // 2) Se recurringWeekdays esiste → generiamo ricorrenze settimanali
   if (ev.recurringWeekdays && ev.recurringWeekdays.length > 0) {
@@ -227,12 +231,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const months = {};
-    futureEvents.forEach((ev) => {
-      const first = getEventDates(ev)[0];
-      const key = `${first.getFullYear()}-${first.getMonth() + 1}`;
-      if (!months[key]) months[key] = [];
+futureEvents.forEach((ev) => {
+  const dates = getEventDates(ev);
+
+  dates.forEach((d) => {
+    const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+    if (!months[key]) months[key] = [];
+    if (!months[key].includes(ev)) {
       months[key].push(ev);
-    });
+    }
+  });
+});
+
 
     futureMonths = Object.keys(months).sort((a, b) => {
       const [yA, mA] = a.split("-").map(Number);
@@ -307,12 +317,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
     const months = {};
-    pastEvents.forEach((ev) => {
-      const first = getEventDates(ev)[0];
-      const key = `${first.getFullYear()}-${first.getMonth() + 1}`;
-      if (!months[key]) months[key] = [];
+pastEvents.forEach((ev) => {
+  const dates = getEventDates(ev);
+
+  dates.forEach((d) => {
+    const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+    if (!months[key]) months[key] = [];
+    if (!months[key].includes(ev)) {
       months[key].push(ev);
-    });
+    }
+  });
+});
+
+
 
     const sortedMonths = Object.keys(months).sort((a, b) => {
       const [yA, mA] = a.split("-").map(Number);
