@@ -419,30 +419,51 @@ footer {
   color: #eee;
 }
 
-/* highlight evento */
+/* GIORNO CON EVENTO — BOX FUXIA + NUMERO BIANCO */
+.calendar-day.has-event {
+  background: #ff2fa8 !important;
+  border-color: #000;
+}
+
+.calendar-day.has-event .calendar-day-number {
+  color: #000 !important;
+  font-weight: 900;
+  position: relative;
+  z-index: 2; /* sopra la X */
+}
+
+/* X IRREGOLARE BIANCA DIETRO AL NUMERO */
 .calendar-day.has-event::before {
   content: "";
   position: absolute;
-  top: 6px;
-  left: 6px;
-  width: 28px;
-  height: 28px;
-  border: 3px solid #ff2fa8;
-  border-radius: 50%;
-  z-index: 1;
+  top: 2px;
+  left: 1px;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  opacity: 100%;
+  z-index: 3;
+
+  mask-image: url("data:image/svg+xml;utf8,\
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+      <path d='M10 20 L20 10 L50 40 L80 10 L90 20 L60 50 L90 80 L80 90 L50 60 L20 90 L10 80 L40 50 Z' fill=\"black\"/>\
+    </svg>");
+  mask-size: 70%;
+  mask-position: center;
+  mask-repeat: no-repeat;
 }
 
-/* post-it */
+/* POST-IT PIÙ COLLAGE */
 .event-postit {
   position: absolute;
   bottom: 6px;
   right: 6px;
   width: clamp(55px, 10vw, 90px);
   height: clamp(55px, 10vw, 90px);
-  background: #ff2fa8;
+  background: #fff;
   border: 2px solid #000;
   box-shadow: 4px 4px 0 #000;
-  transform: rotate(-4deg);
+  transform: rotate(-6deg);
   overflow: hidden;
   cursor: pointer;
   z-index: 3;
@@ -450,7 +471,7 @@ footer {
 }
 
 .event-postit:hover {
-  transform: rotate(-4deg) translate(-3px, -3px);
+  transform: rotate(-6deg) translate(-3px, -3px);
   box-shadow: 6px 6px 0 #000;
 }
 
@@ -458,6 +479,7 @@ footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: rotate(-4deg);
 }
 
 /* ============================================================
@@ -643,6 +665,7 @@ footer {
     flex-direction: column;
   }
 }
+
 /* ————————————————————————————————
    ARTIST GALLERY → COERENTE CON CARTELLE
 —————————————————————————————————— */

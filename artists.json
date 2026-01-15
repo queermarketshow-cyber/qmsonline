@@ -82,5 +82,18 @@
     "path": "images/artist3/ospiti",
     "images": ["srosa.jpeg"],
     "cover": "srosa.jpeg"
+  },
+    {
+    "id": "TheSpoiled",
+    "name": "The Spoiled",
+    "role": "Band/Music",
+    "bio_short": "elettronica e chitarre riverberate in un suono malinconico e nostalgico.",
+    "bio_long": "The Spoiled è un progetto post-punk pugliese guidato da Giovanni Santolla, che unisce beat elettronici, synth distorti e chitarre immerse nel riverbero, creando un sound malinconico e nostalgico. Nel 2024 autoproduce l’EP Time, distribuito digitalmente da Manic Depression Records. Il 4 aprile 2025 esce l’album Living Ghosts per Swiss Dark Nights. Dopo l’uscita del disco, The Spoiled collabora con band internazionali come Darkways, Corlyx, Chaos International e Hinfort e intraprende un’intensa attività live in tutta Europa.",
+    "instagram": "https://www.instagram.com/thespoiled.music/",
+    "type": "guest",
+    "path": "images/artist3/ospiti",
+    "images": ["thespoiled.jpeg"],
+    "cover": "thespoiled.jpeg"
   } 
+
 ]

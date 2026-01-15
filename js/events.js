@@ -45,23 +45,50 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getEventDates(ev) {
-    const start = parseDate(ev.start);
-    const end = ev.end ? parseDate(ev.end) : start;
+  const start = parseDate(ev.start);
+  const end = ev.end ? parseDate(ev.end) : start;
 
-    // Se specificDates esiste, ignoriamo il range
-    if (ev.specificDates && ev.specificDates.length > 0) {
-      return ev.specificDates.map(parseDate);
-    }
-
-    // Altrimenti generiamo il range completo
-    const dates = [];
-    let cur = new Date(start);
-    while (cur <= end) {
-      dates.push(new Date(cur));
-      cur.setDate(cur.getDate() + 1);
-    }
-    return dates;
+  // 1) Se specificDates esiste, ha priorità assoluta
+  if (ev.specificDates && ev.specificDates.length > 0) {
+    return ev.specificDates.map(parseDate);
   }
+
+  // 2) Se recurringWeekdays esiste → generiamo ricorrenze settimanali
+  if (ev.recurringWeekdays && ev.recurringWeekdays.length > 0) {
+    const occurrences = [];
+
+    ev.recurringWeekdays.forEach((weekday) => {
+      // Trova la prima occorrenza del weekday nel range
+      const first = new Date(start);
+      const diff = (weekday - first.getDay() + 7) % 7;
+      first.setDate(first.getDate() + diff);
+
+      let cur = new Date(first);
+      while (cur <= end) {
+        occurrences.push(new Date(cur));
+        cur.setDate(cur.getDate() + 7);
+      }
+    });
+
+    // Ordiniamo e rimuoviamo eventuali duplicati
+    const unique = Array.from(
+      new Set(occurrences.map((d) => d.getTime()))
+    ).map((t) => new Date(t));
+
+    unique.sort((a, b) => a - b);
+    return unique;
+  }
+
+  // 3) Nessuna ricorrenza → range completo (comportamento originale)
+  const dates = [];
+  let cur = new Date(start);
+  while (cur <= end) {
+    dates.push(new Date(cur));
+    cur.setDate(cur.getDate() + 1);
+  }
+  return dates;
+}
+
 
   function eventMatchesFilter(ev) {
     if (currentFilter === "all") return true;
