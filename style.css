@@ -432,26 +432,7 @@ footer {
   z-index: 2; /* sopra la X */
 }
 
-/* X IRREGOLARE BIANCA DIETRO AL NUMERO */
-.calendar-day.has-event::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 1px;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  opacity: 100%;
-  z-index: 3;
 
-  mask-image: url("data:image/svg+xml;utf8,\
-    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
-      <path d='M10 20 L20 10 L50 40 L80 10 L90 20 L60 50 L90 80 L80 90 L50 60 L20 90 L10 80 L40 50 Z' fill=\"black\"/>\
-    </svg>");
-  mask-size: 70%;
-  mask-position: center;
-  mask-repeat: no-repeat;
-}
 
 /* POST-IT PIÙ COLLAGE */
 .event-postit {
