@@ -1070,6 +1070,28 @@ footer {
 #lightbox.lightbox-artist .lightbox-next {
   display: none !important;
 }
+/* ICONA INSTAGRAM NELLA MODALE ARTISTA */
+.artist-modal a[href*="instagram"] img,
+.artist-modal a[href*="instagram"] svg,
+.artist-modal a[href*="instagram"] i,
+.artist-modal a[href*="instagram"] .icon,
+.artist-modal .instagram-icon {
+  width: 100px !important;
+  height: 100px !important;
+  display: inline-block;
+  filter: invert(29%) sepia(96%) saturate(7480%) hue-rotate(-20deg) brightness(152%) contrast(0%) !important;
+  /* trasforma nero/blu → bianco #ffffff */
+  transition: transform 0.15s ease-out;
+  margin-left: 6px;
+}
+
+.artist-modal a[href*="instagram"]:hover img,
+.artist-modal a[href*="instagram"]:hover svg,
+.artist-modal a[href*="instagram"]:hover i,
+.artist-modal a[href*="instagram"]:hover .icon,
+.artist-modal .instagram-icon:hover {
+  transform: scale(1.2) rotate(-4deg);
+}
 
 /* ————————————————————————————————
    GALLERIA A MOSAICO
