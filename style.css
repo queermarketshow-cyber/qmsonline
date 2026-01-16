@@ -1271,3 +1271,133 @@ footer {
     padding: 1.5rem;
   }
 }
+/* ————————————————
+   SEZIONE SOSTIENICI — versione leggibile
+——————————————— */
+
+.qms-sostienici-section {
+  padding: 6rem 2rem;
+  background: #000; /* sfondo nero */
+  color: #fff;      /* testo bianco */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Rimuovo la texture pesante */
+.qms-sostienici-section::before {
+  content: none;
+}
+
+.qms-sostienici-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 3rem;
+}
+
+/* ——— Titolo punk ma leggibile ——— */
+
+.qms-sostienici-title {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.qms-sostienici-title span {
+  background: #ff2e9a;
+  padding: 0.25em 0.45em;
+  display: inline-block;
+  transform: rotate(-1deg);
+  color: #000; /* testo nero dentro il banner */
+  font-weight: 900;
+}
+
+/* ——— Testo leggibile ——— */
+
+.qms-sostienici-intro {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #fff;
+}
+
+.qms-sostienici-body p {
+  margin-bottom: 1.2rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #fff;
+}
+
+.qms-sostienici-subtitle {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.qms-sostienici-list {
+  margin: 1rem 0 2rem;
+  padding-left: 1.2rem;
+}
+
+.qms-sostienici-list li {
+  margin-bottom: 0.8rem;
+  list-style: square;
+  color: #fff;
+}
+
+/* ——— Bottone punk leggibile ——— */
+
+.qms-sostienici-button {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 1rem 1.6rem;
+  background: #ff2e9a;
+  color: #000;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 3px solid #ff2e9a;
+  transform: rotate(-1.5deg);
+  transition: 0.15s ease;
+}
+
+.qms-sostienici-button:hover {
+  transform: rotate(1deg) scale(1.05);
+  background: #000;
+  color: #ff2e9a;
+  border-color: #ff2e9a;
+}
+
+/* ——— Widget Chuffed ——— */
+
+.qms-sostienici-frame {
+  border: 3px dashed #ff2e9a;
+  padding: 1rem;
+  background: #111;
+  transform: rotate(1deg);
+  box-shadow: 6px 6px 0 #ff2e9a;
+}
+
+.qms-sostienici-iframe {
+  width: 100%;
+  height: 600px;
+  border: none;
+}
+
+/* ——— Responsive ——— */
+
+@media (max-width: 900px) {
+  .qms-sostienici-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .qms-sostienici-frame {
+    transform: rotate(0deg);
+  }
+}
