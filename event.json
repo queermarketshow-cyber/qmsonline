@@ -130,5 +130,17 @@
     "location": "Progetto, Lecce",
     "image": "images/eventi/takeover.jpg",
     "categories": ["performance"]
+  },
+    {
+    "id": "event-2026-03-01-takeover",
+    "title": "Takeover",
+    "start": "2026-03-01",
+    "end": "2026-06-28",
+    "recurringWeekdays": ["0"],
+    "specificDates": [],
+    "location": "Progetto, Lecce",
+    "image": "images/eventi/2026 dragitup.jpeg",
+    "categories": ["workshop"]
   }
+
 ]
