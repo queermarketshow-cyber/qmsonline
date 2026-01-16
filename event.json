@@ -134,13 +134,13 @@
     {
     "id": "event-2026-03-01-takeover",
     "title": "Takeover",
-    "start": "2026-03-01",
-    "end": "2026-06-28",
-    "recurringWeekdays": ["0"],
+    "start": "2026-02-26",
+    "end": "2026-02-26",
+    "recurringWeekdays": [],
     "specificDates": [],
-    "location": "Progetto, Lecce",
+    "location": "Minima Fucina di Quartiere, Lecce",
     "image": "images/eventi/2026 dragitup.jpeg",
-    "categories": ["workshop"]
+    "categories": ["workshop", "talk", "djset"]
   }
 
 ]
