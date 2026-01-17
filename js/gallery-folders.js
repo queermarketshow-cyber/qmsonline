@@ -1,14 +1,28 @@
-/* PREVIEW CARTELLE */
+/* PREVIEW CARTELLE — RANDOM ORDER */
+
+// Fisher–Yates shuffle (non muta l’array originale)
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 function renderFolderPreviews() {
   const container = document.querySelector('.gallery-folders');
   if (!container || !galleryData) return;
 
   container.innerHTML = '';
 
-  galleryData.forEach((folder, folderIndex) => {
+  // 🔀 RANDOMIZZA L’ORDINE DELLE CARTELLE
+  const randomizedFolders = shuffleArray(galleryData);
+
+  randomizedFolders.forEach((folder, randomizedIndex) => {
     const preview = document.createElement('div');
     preview.className = 'folder-preview';
-    preview.dataset.folderIndex = folderIndex;
+    preview.dataset.folderIndex = randomizedIndex;
 
     const img = document.createElement('img');
     img.src = `${folder.path}/${folder.images[0]}`;
@@ -25,7 +39,11 @@ function renderFolderPreviews() {
 
     container.appendChild(preview);
   });
+
+  // Dopo il render, riattiva l’observer
+  setupVisibilityObserver();
 }
+
 
 /* VISIBILITY OBSERVER */
 function setupVisibilityObserver() {
@@ -39,6 +57,7 @@ function setupVisibilityObserver() {
 
   document.querySelectorAll('.folder-preview').forEach(el => observer.observe(el));
 }
+
 
 /* SLIDESHOW RANDOM */
 function startRandomSlideshow() {
