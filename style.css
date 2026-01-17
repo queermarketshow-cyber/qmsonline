@@ -1411,3 +1411,96 @@ footer {
   color: #ff7fc4; /* rosa più chiaro in hover */
   text-decoration: underline;
 }
+.qms-footer {
+  width: 100%;
+  background: #000;
+  color: #555;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-top: 60px;
+}
+
+/* Blocchi sx e dx */
+.qms-footer-left {
+  text-align: left;
+  text-align-last: left;
+}
+
+.qms-footer-right {
+  text-align: right;
+  text-align-last: right;
+}
+
+.qms-footer strong {
+  color: #666;
+  font-weight: 600;
+}
+
+.qms-footer a {
+  color: #666;
+  text-decoration: none;
+}
+
+.qms-footer a:hover {
+  color: #888;
+  text-decoration: underline;
+}
+
+/* Mobile responsive */
+@media (max-width: 700px) {
+  .qms-footer {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .qms-footer-left,
+  .qms-footer-right {
+    text-align: center;
+    text-align-last: center;
+  }
+}
+.trasparenza-page {
+  max-width: 800px;
+  margin: 80px auto;
+  padding: 0 20px;
+  color: #ddd;
+}
+
+.trasparenza-page h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #fff;
+  text-align: left;
+}
+
+.trasparenza-intro {
+  color: #aaa;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.trasparenza-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trasparenza-list li {
+  margin-bottom: 12px;
+}
+
+.trasparenza-list a {
+  color: #888; /* grigio scuro, non invasivo */
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.trasparenza-list a:hover {
+  color: #bbb;
+  text-decoration: underline;
+}

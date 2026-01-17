@@ -66,10 +66,16 @@ function startRandomSlideshow() {
     if (!galleryData || visibleFolders.size === 0 || previews.length === 0) return;
 
     const visibleArray = Array.from(visibleFolders);
-    const randomFolderIndex = visibleArray[Math.floor(Math.random() * visibleArray.length)];
+    const randomVisibleIndex = visibleArray[Math.floor(Math.random() * visibleArray.length)];
 
-    const preview = previews[randomFolderIndex];
-    const folder = galleryData[randomFolderIndex];
+    // Recupera la preview corretta
+    const preview = previews.find(p => p.dataset.folderIndex == randomVisibleIndex);
+    if (!preview) return;
+
+    // Recupera l’indice REALE della cartella
+    const realIndex = preview.dataset.folderIndex;
+    const folder = galleryData[realIndex];
+
     const img = preview.querySelector('img');
     if (!img) return;
 
