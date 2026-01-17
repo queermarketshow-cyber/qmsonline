@@ -165,31 +165,30 @@
 <!-- Officine M.A.I. + -->
 <a href="https://www.instagram.com/officinemaipiu/" 
    target="_blank" 
-   class="artist-card collab-card"
-   data-ig="officinemaipiu">
-  <img class="ig-thumb" src="images/placeholder.jpg" alt="Officine M.A.I. +">
+   class="artist-card collab-card">
+  <img class="ig-thumb" src="images/collab/omlogo.jpg" alt="Officine M.A.I. +">
   <div class="artista-info">
     <h3>Officine M.A.I. +</h3>
     <p>Spazio / Collettivo</p>
   </div>
 </a>
+
 <!-- INDECOROSA -->
 <a href="https://www.instagram.com/indecorosazine/" 
    target="_blank" 
-   class="artist-card collab-card"
-   data-ig="indecorosazine">
-  <img class="ig-thumb" src="images/placeholder.jpg" alt="INDECOROSA">
+   class="artist-card collab-card">
+  <img class="ig-thumb" src="images/collab/indecorosa.jpg" alt="INDECOROSA">
   <div class="artista-info">
     <h3>INDECOROSA</h3>
-    <p>Zine / Pogetto</p>
+    <p>Zine / Progetto</p>
   </div>
 </a>
+
 <!-- FUORIBINARIA -->
 <a href="https://www.instagram.com/fuoribinaria/" 
    target="_blank" 
-   class="artist-card collab-card"
-   data-ig="fuoribinaria">
-  <img class="ig-thumb" src="images/placeholder.jpg" alt="FUORIBINARIA">
+   class="artist-card collab-card">
+  <img class="ig-thumb" src="images/collab/fuoribinaria.jpg" alt="FUORIBINARIA">
   <div class="artista-info">
     <h3>FUORIBINARIA</h3>
     <p>Spazio / Collettivo</p>
@@ -231,14 +230,13 @@
   </div>
 </div>
 
-<!-- LIGHTBOX -->
-<div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
-  <div class="lightbox-inner" onclick="event.stopPropagation()">
-    <span class="lightbox-prev" onclick="prevLightbox()">&#10094;</span>
-    <img id="lightbox-img" src="" alt="Immagine ingrandita">
-    <span class="lightbox-next" onclick="nextLightbox()">&#10095;</span>
-    <button class="lightbox-close" onclick="closeLightbox()">×</button>
-  </div>
+<div id="lightbox" class="lightbox hidden">
+  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+
+  <img id="lightbox-img" class="lightbox-img" src="">
+
+  <!-- CAPTION AGGIUNTA -->
+  <div id="lightbox-caption" class="lightbox-caption"></div>
 </div>
 
 <!-- Contatti -->
@@ -339,23 +337,6 @@
     initArtist3();
   });
 </script>
-<script>
-document.querySelectorAll('[data-ig]').forEach(card => {
-  const username = card.getAttribute('data-ig');
-  const img = card.querySelector('.ig-thumb');
-
-  fetch(`https://www.instagram.com/${username}/?__a=1&__d=dis`)
-    .then(res => res.json())
-    .then(data => {
-      const url = data?.graphql?.user?.profile_pic_url_hd;
-      if (url) img.src = url;
-    })
-    .catch(() => {
-      console.warn("Impossibile caricare thumbnail IG per", username);
-    });
-});
-</script>
-
 
 </body>
 </html>
