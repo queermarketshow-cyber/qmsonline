@@ -218,6 +218,12 @@
   <div class="modal-content">
     <button class="close">&times;</button>
 
+    <!-- Caption album + fotografi -->
+    <div class="modal-caption">
+      <h3 class="modal-album-title"></h3>
+      <p class="modal-photographer"></p>
+    </div>
+
     <!-- Griglia immagini della cartella -->
     <div class="modal-grid"></div>
 
@@ -230,13 +236,14 @@
   </div>
 </div>
 
-<div id="lightbox" class="lightbox hidden">
-  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-
-  <img id="lightbox-img" class="lightbox-img" src="">
-
-  <!-- CAPTION AGGIUNTA -->
-  <div id="lightbox-caption" class="lightbox-caption"></div>
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <span class="lightbox-prev" onclick="prevLightbox()">&#10094;</span>
+    <img id="lightbox-img" src="" alt="Immagine ingrandita">
+    <span class="lightbox-next" onclick="nextLightbox()">&#10095;</span>
+    <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  </div>
 </div>
 
 <!-- Contatti -->

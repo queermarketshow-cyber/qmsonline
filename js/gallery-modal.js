@@ -7,12 +7,70 @@ function openFolderModal(folder) {
   const grid = modal.querySelector('.modal-grid');
   const carousel = modal.querySelector('.carousel');
 
+  /* ============================
+     CAPTION ALBUM + FOTOGRAFI
+  ============================ */
+  const titleEl = modal.querySelector('.modal-album-title');
+  const phEl = modal.querySelector('.modal-photographer');
+
+  // Titolo album
+  if (titleEl) {
+    titleEl.textContent = folder.name || "";
+  }
+
+  // Fotografi (multi-support)
+  if (phEl) {
+    const photographers = folder.photographers || folder.photographer || null;
+
+    if (!photographers) {
+      phEl.textContent = "";
+    } else {
+      let html = "pics by ";
+
+      // Caso 1: stringa singola
+      if (typeof photographers === "string") {
+        html += photographers;
+
+      // Caso 2: array
+      } else if (Array.isArray(photographers)) {
+        html += photographers
+          .map(ph => {
+            if (typeof ph === "string") {
+              return ph;
+            }
+            if (typeof ph === "object" && ph.name) {
+              return ph.url
+                ? `<a href="${ph.url}" target="_blank">${ph.name}</a>`
+                : ph.name;
+            }
+            return "";
+          })
+          .filter(Boolean)
+          .join(", ");
+
+      // Caso 3: oggetto singolo {name, url}
+      } else if (typeof photographers === "object" && photographers.name) {
+        html += photographers.url
+          ? `<a href="${photographers.url}" target="_blank">${photographers.name}</a>`
+          : photographers.name;
+      }
+
+      phEl.innerHTML = html;
+    }
+  }
+
+  /* ============================
+     RESET GRIGLIA + CAROSELLO
+  ============================ */
   grid.innerHTML = '';
   if (carousel) {
     carousel.classList.add('hidden');
     carousel.classList.remove('fullscreen');
   }
 
+  /* ============================
+     GENERA GRIGLIA IMMAGINI
+  ============================ */
   folder.images.forEach((imgName, index) => {
     const img = document.createElement('img');
     img.src = `${folder.path}/${imgName}`;
@@ -53,7 +111,9 @@ function closeGalleryModal() {
   document.body.style.overflow = '';
 }
 
-/* CAROSELLO */
+/* ============================
+   CAROSELLO
+============================ */
 function openCarousel(index) {
   currentIndex = index;
 

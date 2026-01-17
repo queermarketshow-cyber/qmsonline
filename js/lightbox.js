@@ -9,9 +9,6 @@ function openLightbox(src) {
 
   lightboxImg.src = src;
 
-  // Aggiorna caption
-  updateLightboxCaption();
-
   lightbox.classList.remove('hidden');
   lightbox.classList.add('open');
 
@@ -28,55 +25,33 @@ function closeLightbox() {
   lightbox.classList.remove('open');
   lightbox.classList.add('hidden');
 
+  // Riattiva scroll
   document.body.style.overflow = '';
 
+  // Se la gallery modal è aperta, deve tornare cliccabile
   const galleryModal = document.getElementById('galleryModal');
   if (galleryModal && galleryModal.classList.contains('open')) {
     galleryModal.style.pointerEvents = 'auto';
   }
 
+  // Se il mosaico è aperto, deve tornare cliccabile
   const mosaic = document.querySelector('.mosaic-gallery');
   if (mosaic && mosaic.classList.contains('open')) {
     mosaic.style.pointerEvents = 'auto';
   }
 }
 
-/* PREV */
+/* NAVIGAZIONE */
 function prevLightbox() {
   if (!currentFolder) return;
-
   currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
-  const newSrc = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
-  lightboxImg.src = newSrc;
-
-  updateLightboxCaption();
+  lightboxImg.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
-/* NEXT */
 function nextLightbox() {
   if (!currentFolder) return;
-
   currentIndex = (currentIndex + 1) % currentFolder.images.length;
-  const newSrc = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
-  lightboxImg.src = newSrc;
-
-  updateLightboxCaption();
-}
-
-/* CAPTION */
-function updateLightboxCaption() {
-  const caption = document.getElementById('lightbox-caption');
-  if (!caption || !currentFolder) return;
-
-  const title = currentFolder.name || "";
-  const ph = currentFolder.photographer || "";
-  const phUrl = currentFolder.photographerUrl || "";
-
-  let html = "";
-  if (title) html += `<strong>${title}</strong>`;
-  if (ph) html += `<br>pics by <a href="${phUrl}" target="_blank">${ph}</a>`;
-
-  caption.innerHTML = html;
+  lightboxImg.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
 /* SWIPE */
