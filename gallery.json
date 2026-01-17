@@ -25,8 +25,8 @@
         "399077309_368124075537534_4224233337868335204_n..webp",
         "399183480_3530383930532215_5961325845723736035_n..webp"
       ],
-      "photographer": "Grace Martella",
-      "photographerurl": "https://www.instagram.com/grace_martella/"
+      "photographers": { "name": "Grace Martella", "url": "https://www.instagram.com/grace_martella/" }
+
     },
     {
       "name": "Carnival @ CinemaElio",
@@ -117,7 +117,8 @@
         "453878400_281711101687373_5461015577721722686_n..webp",
         "453992887_392087703890715_2731024664276383125_n..webp",
         "454057918_516604447709741_3987476315884137009_n..webp"
-      ]
+      ],
+      "photographers": { "name": "Grace Martella", "url": "https://www.instagram.com/grace_martella/" }
     },
     {
       "name": "PORNOINVERNO",

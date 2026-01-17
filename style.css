@@ -1076,8 +1076,8 @@ footer {
 .artist-modal a[href*="instagram"] i,
 .artist-modal a[href*="instagram"] .icon,
 .artist-modal .instagram-icon {
-  width: 100px !important;
-  height: 100px !important;
+  width: 20px !important;
+  height: 20px !important;
   display: inline-block;
   filter: invert(29%) sepia(96%) saturate(7480%) hue-rotate(-20deg) brightness(152%) contrast(0%) !important;
   /* trasforma nero/blu → bianco #ffffff */
@@ -1401,20 +1401,13 @@ footer {
     transform: rotate(0deg);
   }
 }
-.lightbox-caption {
-  margin-top: 12px;
-  font-size: 0.9rem;
-  color: #fff;
-  text-align: center;
-  line-height: 1.4;
-  padding: 0 20px;
-}
-
-.lightbox-caption a {
-  color: #ff66cc;
+.modal-photographer a {
+  color: #ff4fa8; /* rosa punk */
   text-decoration: none;
+  font-weight: 500;
 }
 
-.lightbox-caption a:hover {
+.modal-photographer a:hover {
+  color: #ff7fc4; /* rosa più chiaro in hover */
   text-decoration: underline;
 }

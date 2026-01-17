@@ -22,7 +22,7 @@ function renderFolderPreviews() {
   randomizedFolders.forEach((folder, randomizedIndex) => {
     const preview = document.createElement('div');
     preview.className = 'folder-preview';
-    preview.dataset.folderIndex = randomizedIndex;
+    preview.dataset.folderIndex = galleryData.indexOf(folder);
 
     const img = document.createElement('img');
     img.src = `${folder.path}/${folder.images[0]}`;
