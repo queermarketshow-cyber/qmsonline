@@ -94,6 +94,18 @@
     "path": "images/artist3/ospiti",
     "images": ["thespoiled.jpeg"],
     "cover": "thespoiled.jpeg"
+  },
+  {
+    "id": "Porcahontas",
+    "name": "Porcah Ontas",
+    "role": "Drag Performer",
+    "bio_short": "drag queer militante: corpo ribelle e scandalosamente favolosa, palco come arma, glitter come bandiera.",
+    "bio_long": "Porcah Ontas è una drag queen, artista queer e attivista transfemminista. Nata in Colombia e cresciuta in Italia, porta sul palco un immaginario suo, politico e profondamente emotivo, dove il corpo diventa atto di resistenza e il glamour si mescola alla rabbia. Da sempre in prima linea nel combattere disinformazione e ignoranza legate alla salute sessuale e all’HIV, trasforma lo stigma in voce e visibilità. Le sue performance parlano di identità, marginalità, salute mentale e diritti. Organizza e anima spazi culturali e serate queer come luoghi di comunità, orgoglio e rivoluzione gentile. Nel 2025 debutta nella musica con il singolo Morte a Venezia, estensione sonora del suo immaginario dark e politico. Per Porcah, il drag non è solo spettacolo: è lotta, cura e dichiarazione d’esistenza.",
+    "instagram": "https://www.instagram.com/porcahontas69/",
+    "type": "guest",
+    "path": "images/artist3/ospiti",
+    "images": ["porcahontas.jpeg"],
+    "cover": "porcahontas.jpeg"
   } 
 
 ]
