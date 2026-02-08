@@ -5,19 +5,14 @@ async function loadGalleryImages() {
 
     const result = [];
 
-    function extract(node, base = "") {
-      if (Array.isArray(node)) {
-        node.forEach(n => extract(n, base));
-      } else if (typeof node === "object") {
-        if (node.folder) {
-          extract(node.files, `${base}${node.folder}/`);
-        }
-      } else if (typeof node === "string") {
-        result.push(`${base}${node}`);
-      }
-    }
+    data.folders.forEach(folder => {
+      const safeFolder = encodeURI(folder.path); // mantiene gli slash
+      folder.images.forEach(img => {
+        const safeImg = encodeURIComponent(img); // codifica tutto il necessario
+        result.push(`${safeFolder}/${safeImg}`);
+      });
+    });
 
-    extract(data);
     return result;
 
   } catch (e) {
@@ -62,7 +57,6 @@ function resizeAll() {
 async function initMasonry() {
   await applyRandomImages();
 
-  // Aspetta che il browser abbia finito TUTTO il reflow
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       resizeAll();
