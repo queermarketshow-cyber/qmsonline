@@ -1707,3 +1707,24 @@ footer {
 .poster-artist3.poster-XS .poster-collage-xs {
   pointer-events: none;
 }
+/* ————————————————————————————————
+   ETICHETTA SEZIONE SU TUTTI I POSTER
+—————————————————————————————————— */
+
+.poster::before {
+  content: attr(data-section);
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 6px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  background: #000;
+  color: #fff;
+  border: 1px solid #fff;
+  box-shadow: 0 0 0 2px #000 inset;
+  pointer-events: none;
+  z-index: 10;
+  transform: rotate(-2deg);
+}
