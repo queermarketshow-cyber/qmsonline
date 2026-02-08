@@ -18,12 +18,47 @@
 <!-- SFONDO LOGO -->
 <div class="logo-background"></div>
 
-<!-- HOME -->
-<section id="home" class="home-section">
-  <div class="home-content">
-    <h1>Queer Market Show</h1>
-    <a href="#manifesto" class="enter-button" id="enterBtn">Entra</a>
+<!-- HOME — MASONRY B2-B -->
+<section id="home" class="home-section collage-home">
+
+  <div class="masonry-grid">
+
+    <!-- POSTER L — PROSSIMI EVENTI -->
+    <a href="#calendario" class="poster poster-L poster-eventi tilt-left">
+      <h2>PROSSIMI EVENTI</h2>
+      <span class="sticker">→ vai subito</span>
+    </a>
+
+    <!-- POSTER M — MANIFESTO -->
+    <a href="#manifesto" class="poster poster-M poster-manifesto tilt-right">
+      <h2>MANIFESTO</h2>
+      <p class="poster-teaser">“Non siamo un festival, siamo un’infrastruttura di desiderio.”</p>
+    </a>
+
+    <!-- POSTER S — GALLERIA -->
+    <a href="#gallery" class="poster poster-S poster-galleria tilt-left">
+      <h2>GALLERIA</h2>
+      <div class="poster-collage">
+        <div class="collage-img img1"></div>
+        <div class="collage-img img2"></div>
+        <div class="collage-img img3"></div>
+      </div>
+    </a>
+
+    <!-- POSTER M — ARTIST3 -->
+    <a href="#artist3" class="poster poster-M poster-artist3 tilt-right">
+      <h2>ARTIST3</h2>
+      <span class="sticker small">corpi che insistono</span>
+    </a>
+
+    <!-- POSTER L — SOSTIENICI -->
+    <a href="#sostienici" class="poster poster-L poster-sostienici tilt-right">
+      <h2>SOSTIENICI</h2>
+      <span class="sticker">supporta il festival</span>
+    </a>
+
   </div>
+
 </section>
 
 <!-- NAVBAR -->
@@ -348,6 +383,7 @@
 <script src="/js/gallery-modal.js"></script>
 <script src="/js/events.js"></script>
 <script src="/js/artists.js"></script>
+<script src="/js/home.js"></script>
 
 <script>
   window.addEventListener("load", () => {
