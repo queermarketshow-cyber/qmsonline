@@ -1980,3 +1980,32 @@ footer {
   display: block !important;
   overflow: visible !important;
 }
+.masonry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 10px;
+  gap: 10px;
+}
+
+/* Ogni poster deve avere un’altezza minima */
+.poster {
+  display: block;
+  padding: 20px;
+  min-height: 180px;
+}
+
+/* Collage della galleria */
+.poster-collage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+}
+
+.poster-collage .collage-img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}

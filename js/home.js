@@ -27,14 +27,29 @@ function pickRandom(arr, n) {
 
 async function applyRandomImages() {
   const imgs = await loadGalleryImages();
-  if (!imgs.length) return;
+  if (!imgs.length) return [];
 
   const chosen = pickRandom(imgs, 3);
   const els = document.querySelectorAll('.poster-galleria .collage-img');
 
+  // Precarica le immagini
+  const preload = chosen.map(src => {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = resolve;
+      img.onerror = resolve;
+      img.src = src;
+    });
+  });
+
+  await Promise.all(preload);
+
+  // Applica i background SOLO dopo il preload
   els.forEach((el, i) => {
     el.style.backgroundImage = `url('${chosen[i]}')`;
   });
+
+  return chosen;
 }
 
 function resizeMasonryItem(item) {
@@ -56,12 +71,7 @@ function resizeAll() {
 
 async function initMasonry() {
   await applyRandomImages();
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      resizeAll();
-    });
-  });
+  resizeAll();
 }
 
 window.addEventListener('load', () => {
