@@ -1546,7 +1546,9 @@ footer {
 
 /* L = banner orizzontale cinemascope */
 .poster-L {
-  aspect-ratio: 21 / 9;
+  .poster-L {
+  aspect-ratio: calc(14 / 9 + (var(--rand) * 0.3));
+}
   grid-column: span 2;
 }
 @media (min-width: 768px) {
@@ -1698,4 +1700,10 @@ footer {
   filter: grayscale(100%) contrast(1.3);
   border: 1px solid #000;
   transform: rotate(calc(-1deg + (var(--i) * 0.15deg)));
+}
+.poster-artist3.poster-XS .poster-collage-xs {
+  pointer-events: none;
+}
+.poster-artist3.poster-XS .poster-collage-xs {
+  pointer-events: none;
 }
