@@ -1,0 +1,74 @@
+{
+  "artist3": [
+    {
+      "name": "alister",
+      "path": "images/artist3/alister",
+      "images": [
+        "alister1.jpg",
+        "alister2.jpg",
+        "alister3.jpg",
+        "alister4.jpg"
+
+      ]
+    },
+    {
+      "name": "billie",
+      "path": "images/artist3/billie",
+      "images": [
+        "billie1.jpg",
+        "billie2.jpg"
+      ]
+    },
+    {
+      "name": "franz",
+      "path": "images/artist3/franz",
+      "images": [
+        "franz1.jpg",
+        "franz2.jpg",
+        "franz3.jpg",
+        "franz4.jpg",
+        "franz5.jpg",
+        "franz6.jpg"
+      ]
+    },
+    {
+      "name": "lela",
+      "path": "images/artist3/lela",
+      "images": [
+        "lela1.jpg",
+        "lela2.jpg",
+        "lela3.jpg",
+        "lela4.jpg"
+      ]
+    },
+    {
+      "name": "ospiti",
+      "path": "images/artist3/ospiti",
+      "images": [
+        "porcahontas.jpg",
+        "srosa.jpg",
+        "thespoiled.jpg"
+      ]
+    },
+    {
+      "name": "rebel",
+      "path": "images/artist3/rebel",
+      "images": [
+        "rebel1.jpg",
+        "rebel2.jpg",
+        "rebel3.jpg",
+        "rebel4.jpg"
+      ]
+    },
+    {
+      "name": "wilma",
+      "path": "images/artist3/wilma",
+      "images": [
+        "wilma1.jpg",
+        "wilma2.jpg",
+        "wilma3.jpg",
+        "wilma4.jpg"
+      ]
+    }
+  ]
+}

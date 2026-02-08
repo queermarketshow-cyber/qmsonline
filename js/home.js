@@ -71,13 +71,87 @@ function resizeAll() {
 
 async function initMasonry() {
   await applyRandomImages();
-  resizeAll();
+  forceMasonryReflow();
+}
+
+function forceMasonryReflow() {
+  // Aspetta che il browser ridisegni tutto
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      resizeAll();
+    });
+  });
 }
 
 window.addEventListener('load', () => {
   setTimeout(initMasonry, 300);
 });
 
+// Ricalcolo intelligente al resize
+let resizeTimeout;
 window.addEventListener('resize', () => {
-  setTimeout(resizeAll, 150);
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    forceMasonryReflow();
+  }, 200);
 });
+
+
+// ------------------------------
+// 1. Loader per artist3.json
+// ------------------------------
+async function loadArtist3Images() {
+  try {
+    const response = await fetch('artist3.json');
+    const data = await response.json();
+
+    const result = [];
+
+    // artist3.json ha struttura:
+    // { "artist3": [ { name, path, images[] }, ... ] }
+    data.artist3.forEach(folder => {
+      const safeFolder = encodeURI(folder.path);
+      folder.images.forEach(img => {
+        const safeImg = encodeURIComponent(img);
+        result.push(`${safeFolder}/${safeImg}`);
+      });
+    });
+
+    return result;
+
+  } catch (e) {
+    console.error("Errore JSON ARTIST3:", e);
+    return [];
+  }
+}
+
+
+// ------------------------------
+// 2. Applica collage XS (16 immagini random)
+// ------------------------------
+async function applyArtist3XS() {
+  const imgs = await loadArtist3Images();
+  if (!imgs.length) return;
+
+  // Randomizza l’array e prendi le prime 16
+  const chosen = imgs
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 16);
+
+  const cells = document.querySelectorAll('.poster-artist3.poster-XS .cell');
+
+  cells.forEach((cell, i) => {
+    if (chosen[i]) {
+      cell.style.backgroundImage = `url('${chosen[i]}')`;
+    }
+  });
+}
+
+
+// ------------------------------
+// 3. Avvia dopo la masonry
+// ------------------------------
+window.addEventListener('load', () => {
+  setTimeout(applyArtist3XS, 500);
+});
+
