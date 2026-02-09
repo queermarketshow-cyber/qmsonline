@@ -1,383 +1,336 @@
 /* ============================================================
-   EVENTI 2.0 — JSON → CALENDARIO + MODALE
+   1) VARIABILI GLOBALI
 ============================================================ */
 
-document.addEventListener("DOMContentLoaded", () => {
-  const today = new Date();
+let events = [];
+let currentMonth;
+let currentYear;
 
-  /* ELEMENTI BASE */
-  const futureContainer = document.getElementById("future-calendar");
-  const futureMonthContainer = document.getElementById("future-month-container");
-  const timeline = document.getElementById("past-events");
 
-  const btnFuture = document.getElementById("show-future");
-  const btnPast = document.getElementById("show-past");
-  const filterButtons = document.querySelectorAll(".calendar-filters button");
+/* ============================================================
+   2) CARICAMENTO EVENTI DA events.json
+============================================================ */
 
-  const modal = document.getElementById("event-modal");
-  const modalBody = document.getElementById("event-modal-body");
-  const modalClose = document.querySelector(".event-modal-close");
+fetch("events.json")
+  .then(res => res.json())
+  .then(data => {
+    events = data.map(ev => ({
+      ...ev,
+      date: ev.start, // normalizziamo
+      dateReadable: new Date(ev.start).toLocaleDateString("it-IT", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }),
+      past: new Date(ev.start) < new Date()
+    }));
 
-  /* STATO */
-  let events = [];
-  let currentFilter = "all";
-  let currentView = "future";
-  let futureMonths = [];
-  let currentFutureMonthIndex = 0;
+    currentMonth = new Date().getMonth();
+    currentYear = new Date().getFullYear();
 
-  /* ============================================================
-     CARICA EVENTS.JSON
-  ============================================================ */
-  fetch("event.json")
-    .then((res) => res.json())
-    .then((data) => {
-      events = data;
-      showFuture();
-    })
-    .catch((err) => console.error("Errore nel caricamento degli eventi:", err));
+    initializeCalendarSystem();
+  })
+  .catch(err => console.error("Errore nel caricamento di events.json:", err));
 
-  /* ============================================================
-     UTILS DATE
-  ============================================================ */
 
-  function parseDate(str) {
-    return new Date(str + "T00:00:00");
-  }
+/* ============================================================
+   3) INIZIALIZZAZIONE COMPLETA
+============================================================ */
 
-  function getEventDates(ev) {
-  const start = parseDate(ev.start);
-  const end = ev.end ? parseDate(ev.end) : start;
-
-  // 1) Se specificDates esiste, ha priorità assoluta
-  if (Array.isArray(ev.specificDates) && ev.specificDates.length > 0) {
-  return ev.specificDates
-    .filter(d => typeof d === "string" && d.trim() !== "")
-    .map(parseDate)
-    .filter(d => !isNaN(d)); // elimina eventuali Invalid Date
+function initializeCalendarSystem() {
+  renderCalendar(currentMonth, currentYear);
+  initHybridCalendar(events);
+  renderPastEvents(events);
+  initMonthNavigation();
 }
 
 
-  // 2) Se recurringWeekdays esiste → generiamo ricorrenze settimanali
-  if (ev.recurringWeekdays && ev.recurringWeekdays.length > 0) {
-    const occurrences = [];
+/* ============================================================
+   4) CALENDARIO DESKTOP
+============================================================ */
 
-    ev.recurringWeekdays.forEach((weekday) => {
-      // Trova la prima occorrenza del weekday nel range
-      const first = new Date(start);
-      const diff = (weekday - first.getDay() + 7) % 7;
-      first.setDate(first.getDate() + diff);
+function renderCalendar(month, year) {
+  const container = document.getElementById("future-month-container");
+  if (!container) return;
 
-      let cur = new Date(first);
-      while (cur <= end) {
-        occurrences.push(new Date(cur));
-        cur.setDate(cur.getDate() + 7);
+  container.innerHTML = "";
+
+  const date = new Date(year, month, 1);
+  const monthName = date.toLocaleString("it-IT", { month: "long" });
+
+  const monthEl = document.createElement("div");
+  monthEl.className = "calendar-month";
+  monthEl.textContent = `${monthName} ${year}`;
+  container.appendChild(monthEl);
+
+  const grid = document.createElement("div");
+  grid.className = "calendar-grid";
+
+  const firstDay = date.getDay() === 0 ? 6 : date.getDay() - 1;
+  for (let i = 0; i < firstDay; i++) {
+    const empty = document.createElement("div");
+    empty.className = "calendar-day empty";
+    grid.appendChild(empty);
+  }
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dayEl = document.createElement("div");
+    dayEl.className = "calendar-day";
+
+    const fullDate = new Date(year, month, d);
+    const iso = fullDate.toISOString().split("T")[0];
+    dayEl.dataset.date = iso;
+
+    const num = document.createElement("div");
+    num.className = "calendar-day-number";
+    num.textContent = d;
+    dayEl.appendChild(num);
+
+    const todaysEvents = events.filter(ev => ev.date === iso && !ev.past);
+
+    if (todaysEvents.length > 0) {
+      dayEl.classList.add("has-event");
+
+      const postit = document.createElement("div");
+      postit.className = "event-postit";
+
+      if (todaysEvents[0].image) {
+        const img = document.createElement("img");
+        img.src = todaysEvents[0].image;
+        postit.appendChild(img);
       }
-    });
 
-    // Ordiniamo e rimuoviamo eventuali duplicati
-    const unique = Array.from(
-      new Set(occurrences.map((d) => d.getTime()))
-    ).map((t) => new Date(t));
-
-    unique.sort((a, b) => a - b);
-    return unique;
-  }
-
-  // 3) Nessuna ricorrenza → range completo (comportamento originale)
-  const dates = [];
-  let cur = new Date(start);
-  while (cur <= end) {
-    dates.push(new Date(cur));
-    cur.setDate(cur.getDate() + 1);
-  }
-  return dates;
-}
-
-
-  function eventMatchesFilter(ev) {
-    if (currentFilter === "all") return true;
-    return ev.categories.includes(currentFilter);
-  }
-
-  /* ============================================================
-     MODALE EVENTO
-  ============================================================ */
-
-  function openEventModal(ev) {
-    if (!modal || !modalBody) return;
-
-    const dates = getEventDates(ev);
-    const options = { day: "numeric", month: "long", year: "numeric" };
-
-    let dateLabel = "";
-    if (dates.length === 1) {
-      dateLabel = dates[0].toLocaleDateString("it-IT", options);
-    } else {
-      const first = dates[0].toLocaleDateString("it-IT", options);
-      const last = dates[dates.length - 1].toLocaleDateString("it-IT", options);
-      dateLabel = `${first} → ${last}`;
+      postit.addEventListener("click", () => openEventModal(todaysEvents[0]));
+      dayEl.appendChild(postit);
     }
 
-    const categories = ev.categories
-      .map((c) => `<span class="event-tag">${c}</span>`)
-      .join(" ");
+    grid.appendChild(dayEl);
+  }
 
-    modalBody.innerHTML = `
-      <div class="modal-two-columns">
-        <div class="modal-left">
-          <img src="${ev.image}" alt="${ev.title}" class="modal-img">
+  container.appendChild(grid);
+}
+
+
+/* ============================================================
+   5) NAVIGAZIONE MESE
+============================================================ */
+
+function initMonthNavigation() {
+  const prevBtn = document.getElementById("prev-month");
+  const nextBtn = document.getElementById("next-month");
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar(currentMonth, currentYear);
+      initHybridCalendar(events);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar(currentMonth, currentYear);
+      initHybridCalendar(events);
+    });
+  }
+}
+
+
+/* ============================================================
+   6) TIMELINE MOBILE
+============================================================ */
+
+function generateMobileTimeline(events) {
+  const timeline = document.getElementById("mobile-timeline");
+  if (!timeline) return;
+
+  timeline.innerHTML = "";
+
+  events
+    .filter(ev => !ev.past)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .forEach(ev => {
+      const tilt = (Math.random() * 2 - 1).toFixed(2) + "deg";
+
+      const el = document.createElement("div");
+      el.className = "timeline-event";
+      el.dataset.date = ev.date;
+      el.style.setProperty("--tilt", tilt);
+
+      el.innerHTML = `
+        <div class="timeline-event-date">${ev.dateReadable}</div>
+        <div class="timeline-event-title">${ev.title}</div>
+
+        <div class="timeline-event-tags">
+          ${ev.categories
+            .map(cat => `<span class="timeline-event-tag">${cat}</span>`)
+            .join("")}
         </div>
-        <div class="modal-right">
-          <div class="event-modal-date">${dateLabel}</div>
-          <div class="event-modal-categories">${categories}</div>
-          <div class="event-modal-description">
-            <h3>${ev.title}</h3>
-            <p>${ev.location}</p>
-          </div>
-        </div>
+
+        <div class="timeline-event-desc">${ev.description || ""}</div>
+
+        ${
+          ev.image
+            ? `<img src="${ev.image}" class="timeline-event-img" alt="">`
+            : ""
+        }
+      `;
+
+      el.addEventListener("click", () => openEventModal(ev));
+
+      timeline.appendChild(el);
+    });
+}
+
+
+/* ============================================================
+   7) EVENTI PASSATI
+============================================================ */
+
+function renderPastEvents(events) {
+  const container = document.getElementById("past-events");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const past = events
+    .filter(ev => ev.past)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  past.forEach(ev => {
+    const el = document.createElement("div");
+    el.className = "timeline-event";
+    el.style.setProperty("--tilt", (Math.random() * 2 - 1).toFixed(2) + "deg");
+
+    el.innerHTML = `
+      <div class="timeline-event-date">${ev.dateReadable}</div>
+      <div class="timeline-event-title">${ev.title}</div>
+      <div class="timeline-event-tags">
+        ${ev.categories
+          .map(cat => `<span class="timeline-event-tag">${cat}</span>`)
+          .join("")}
       </div>
+      <div class="timeline-event-desc">${ev.description || ""}</div>
+      ${
+        ev.image
+          ? `<img src="${ev.image}" class="timeline-event-img" alt="">`
+          : ""
+      }
     `;
 
-    modal.style.display = "flex";
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
+    el.addEventListener("click", () => openEventModal(ev));
 
-  function closeEventModal() {
-    modal.style.display = "none";
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  modalClose?.addEventListener("click", closeEventModal);
-  modal?.addEventListener("click", (e) => {
-    if (e.target === modal) closeEventModal();
+    container.appendChild(el);
   });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeEventModal();
-  });
-
-  /* ============================================================
-     COSTRUZIONE GRIGLIA MENSILE
-  ============================================================ */
-
-  function buildCalendarMonth(year, month, monthEvents) {
-    const monthName = new Date(year, month).toLocaleDateString("it-IT", {
-      month: "long",
-      year: "numeric",
-    }).toUpperCase();
-
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("calendar-month-wrapper");
-    wrapper.innerHTML = `
-      <div class="calendar-month">${monthName}</div>
-      <div class="calendar-grid"></div>
-    `;
-
-    const grid = wrapper.querySelector(".calendar-grid");
-
-    const firstDay = new Date(year, month, 1).getDay() || 7;
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    for (let i = 1; i < firstDay; i++) {
-      grid.appendChild(document.createElement("div"));
-    }
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const cell = document.createElement("div");
-      cell.classList.add("calendar-day");
-      cell.innerHTML = `<div class="calendar-day-number">${day}</div>`;
-
-      monthEvents.forEach((ev) => {
-        const dates = getEventDates(ev);
-        dates.forEach((d) => {
-          if (
-            d.getFullYear() === year &&
-            d.getMonth() === month &&
-            d.getDate() === day
-          ) {
-            cell.classList.add("has-event");
-
-            const postit = document.createElement("div");
-            postit.classList.add("event-postit");
-            postit.innerHTML = `<img src="${ev.image}" alt="">`;
-            postit.onclick = () => openEventModal(ev);
-
-            cell.appendChild(postit);
-          }
-        });
-      });
-
-      grid.appendChild(cell);
-    }
-
-    return wrapper;
-  }
-
-  /* ============================================================
-     EVENTI FUTURI
-  ============================================================ */
-
-  function showFuture() {
-    currentView = "future";
-
-    futureContainer.style.display = "flex";
-    timeline.style.display = "none";
-    futureMonthContainer.innerHTML = "";
-
-    const futureEvents = events.filter((ev) => {
-      const last = getEventDates(ev).slice(-1)[0];
-      return last >= today && eventMatchesFilter(ev);
-    });
-
-    const months = {};
-futureEvents.forEach((ev) => {
-  const dates = getEventDates(ev);
-
-  dates.forEach((d) => {
-    const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
-    if (!months[key]) months[key] = [];
-    if (!months[key].includes(ev)) {
-      months[key].push(ev);
-    }
-  });
-});
+}
 
 
-    futureMonths = Object.keys(months).sort((a, b) => {
-      const [yA, mA] = a.split("-").map(Number);
-      const [yB, mB] = b.split("-").map(Number);
-      return new Date(yA, mA - 1) - new Date(yB, mB - 1);
-    });
+/* ============================================================
+   8) LINK CALENDARIO → TIMELINE
+============================================================ */
 
-    const prevBtn = document.getElementById("prev-month");
-    const nextBtn = document.getElementById("next-month");
+function linkCalendarToTimeline() {
+  const days = document.querySelectorAll(".calendar-day.has-event");
 
-    if (futureMonths.length === 0) {
-      futureMonthContainer.innerHTML =
-        "<p>Nessun evento futuro per questo filtro.</p>";
-      prevBtn.style.opacity = "0.3";
-      nextBtn.style.opacity = "0.3";
-      return;
-    }
-
-    currentFutureMonthIndex = 0;
-
-    function renderFutureMonth() {
-      futureMonthContainer.innerHTML = "";
-      const key = futureMonths[currentFutureMonthIndex];
-      const [year, month] = key.split("-").map(Number);
-
-      futureMonthContainer.appendChild(
-        buildCalendarMonth(year, month - 1, months[key])
+  days.forEach(day => {
+    day.addEventListener("click", () => {
+      const date = day.dataset.date;
+      const target = document.querySelector(
+        `.timeline-event[data-date="${date}"]`
       );
 
-      prevBtn.style.opacity = currentFutureMonthIndex > 0 ? "1" : "0.3";
-      nextBtn.style.opacity =
-        currentFutureMonthIndex < futureMonths.length - 1 ? "1" : "0.3";
-    }
-
-    renderFutureMonth();
-
-    prevBtn.onclick = () => {
-      if (currentFutureMonthIndex > 0) {
-        currentFutureMonthIndex--;
-        renderFutureMonth();
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
       }
-    };
+    });
+  });
+}
 
-    nextBtn.onclick = () => {
-      if (currentFutureMonthIndex < futureMonths.length - 1) {
-        currentFutureMonthIndex++;
-        renderFutureMonth();
-      }
+
+/* ============================================================
+   9) SCROLL-REVEAL
+============================================================ */
+
+function enableTimelineReveal() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add("visible");
+    });
+  });
+
+  document
+    .querySelectorAll(".timeline-event")
+    .forEach(el => observer.observe(el));
+}
+
+
+/* ============================================================
+   10) INTEGRAZIONE IBRIDA
+============================================================ */
+
+function initHybridCalendar(events) {
+  generateMobileTimeline(events);
+  linkCalendarToTimeline();
+  enableTimelineReveal();
+}
+
+
+/* ============================================================
+   11) MODALE EVENTO
+============================================================ */
+
+function openEventModal(ev) {
+  const modal = document.getElementById("event-modal");
+  const body = document.getElementById("event-modal-body");
+
+  body.innerHTML = `
+    <div class="modal-two-columns">
+      <div class="modal-left">
+        ${ev.image ? `<img src="${ev.image}" class="modal-img">` : ""}
+      </div>
+      <div class="modal-right">
+        <div class="event-modal-date">${ev.dateReadable}</div>
+        <div class="event-modal-categories">
+          ${ev.categories
+            .map(cat => `<span class="event-tag">${cat}</span>`)
+            .join("")}
+        </div>
+        <h2>${ev.title}</h2>
+        <p>${ev.description || ""}</p>
+      </div>
+    </div>
+  `;
+
+  modal.style.display = "flex";
+
+  const img = body.querySelector(".modal-img");
+  if (img) {
+    img.onload = () => {
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      const content = document.querySelector(".event-modal-content");
+
+      if (w > h) content.dataset.orientation = "landscape";
+      else if (h > w) content.dataset.orientation = "portrait";
+      else content.dataset.orientation = "square";
     };
   }
+}
 
-  /* ============================================================
-     EVENTI PASSATI
-  ============================================================ */
-
-  function showPast() {
-    currentView = "past";
-
-    futureContainer.style.display = "none";
-    timeline.style.display = "block";
-    timeline.innerHTML = "";
-
-    const pastEvents = events
-      .filter((ev) => {
-        const last = getEventDates(ev).slice(-1)[0];
-        return last < today && eventMatchesFilter(ev);
-      })
-      .sort((a, b) => {
-        const da = getEventDates(a).slice(-1)[0];
-        const db = getEventDates(b).slice(-1)[0];
-        return db - da;
-      });
-
-    const months = {};
-pastEvents.forEach((ev) => {
-  const dates = getEventDates(ev);
-
-  dates.forEach((d) => {
-    const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
-    if (!months[key]) months[key] = [];
-    if (!months[key].includes(ev)) {
-      months[key].push(ev);
-    }
+document
+  .querySelector(".event-modal-close")
+  ?.addEventListener("click", () => {
+    document.getElementById("event-modal").style.display = "none";
   });
-});
-
-
-
-    const sortedMonths = Object.keys(months).sort((a, b) => {
-      const [yA, mA] = a.split("-").map(Number);
-      const [yB, mB] = b.split("-").map(Number);
-      return new Date(yB, mB - 1) - new Date(yA, mA - 1);
-    });
-
-    if (sortedMonths.length === 0) {
-      timeline.innerHTML = "<p>Nessun evento passato per questo filtro.</p>";
-      return;
-    }
-
-    sortedMonths.forEach((key) => {
-      const [year, month] = key.split("-").map(Number);
-      timeline.appendChild(
-        buildCalendarMonth(year, month - 1, months[key])
-      );
-    });
-  }
-
-  /* ============================================================
-     BOTTONI FUTURO/PASSATO
-  ============================================================ */
-
-  btnFuture.onclick = () => {
-    btnFuture.classList.add("active");
-    btnPast.classList.remove("active");
-    showFuture();
-  };
-
-  btnPast.onclick = () => {
-    btnPast.classList.add("active");
-    btnFuture.classList.remove("active");
-    showPast();
-  };
-
-  /* ============================================================
-     FILTRI
-  ============================================================ */
-
-  filterButtons.forEach((btn) => {
-    btn.onclick = () => {
-      filterButtons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentFilter = btn.dataset.filter || "all";
-
-      if (currentView === "future") showFuture();
-      else showPast();
-    };
-  });
-});

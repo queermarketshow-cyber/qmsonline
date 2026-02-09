@@ -149,10 +149,12 @@
   </div>
 </section>
 
-<!-- EVENTI -->
-<section id="calendario" class="scroll-section">
-  <h2>Eventi</h2>
-  <p>Scopri dove trovarci nei prossimi mesi.</p>
+<!-- EVENTI / CALENDARIO -->
+<section id="calendario" class="scroll-section calendar-section">
+  <div class="calendar-header">
+    <h2>Eventi</h2>
+    <p>Scopri dove trovarci nei prossimi mesi.</p>
+  </div>
 
   <!-- FILTRI -->
   <div class="calendar-filters">
@@ -165,21 +167,31 @@
     <button data-filter="djset">Dj Set</button>
   </div>
 
-  <!-- CALENDARIO FUTURO -->
-  <div id="future-calendar">
-    <button id="prev-month">◀</button>
-    <div id="future-month-container"></div>
-    <button id="next-month">▶</button>
+  <!-- WRAPPER CALENDARIO + TIMELINE -->
+  <div class="calendar-layout">
+
+    <!-- CALENDARIO FUTURO (DESKTOP) -->
+    <div id="future-calendar" class="calendar-grid-wrapper">
+      <button id="prev-month" class="calendar-nav prev-month">◀</button>
+      <div id="future-month-container" class="month-container"></div>
+      <button id="next-month" class="calendar-nav next-month">▶</button>
+    </div>
+
+    <!-- TIMELINE MOBILE (EVENTI FUTURI) -->
+    <div id="mobile-timeline" class="mobile-timeline">
+      <!-- popolata via JS con gli stessi eventi del calendario -->
+    </div>
+
   </div>
 
-  <!-- CONTROLLI -->
+  <!-- CONTROLLI FUTURI / PASSATI -->
   <div class="calendar-controls">
     <button id="show-future" class="active">Eventi futuri</button>
     <button id="show-past">Eventi passati</button>
   </div>
 
   <!-- EVENTI PASSATI (GENERATI DINAMICAMENTE) -->
-  <div id="past-events"></div>
+  <div id="past-events" class="past-events"></div>
 </section>
 
 <!-- MODALE EVENTO (POPOLATA DINAMICAMENTE) -->

@@ -627,6 +627,115 @@ footer {
     flex-direction: column;
   }
 }
+/* ============================================================
+   LAYOUT IBRIDO — CALENDARIO DESKTOP / TIMELINE MOBILE
+============================================================ */
+
+/* wrapper generale */
+.calendar-layout {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+/* TIMELINE MOBILE — nascosta su desktop */
+.mobile-timeline {
+  display: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* CARD EVENTO MOBILE */
+.timeline-event {
+  background: #ff2fa8;
+  border: 3px solid #000;
+  box-shadow: 6px 6px 0 #000;
+  padding: 1rem;
+  transform: rotate(-1deg);
+  position: relative;
+  overflow: visible;
+}
+
+/* data */
+.timeline-event-date {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #000;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+
+/* titolo */
+.timeline-event-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #000;
+  margin-bottom: 0.4rem;
+}
+
+/* categoria */
+.timeline-event-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.timeline-event-tag {
+  background: #000;
+  color: #ff2fa8;
+  padding: 2px 8px;
+  border: 2px solid #000;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* descrizione */
+.timeline-event-desc {
+  font-size: 1rem;
+  color: #000;
+  line-height: 1.4;
+}
+
+/* immagine */
+.timeline-event-img {
+  width: 100%;
+  height: auto;
+  margin-top: 0.8rem;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0 #000;
+}
+
+/* micro-tilt randomico (JS) */
+.timeline-event[data-tilt] {
+  transform: rotate(var(--tilt));
+}
+
+/* ============================================================
+   RESPONSIVE SWITCH
+============================================================ */
+
+/* MOBILE: mostra timeline, nasconde calendario */
+@media (max-width: 768px) {
+
+  /* nascondi calendario desktop */
+  #future-calendar {
+    display: none !important;
+  }
+
+  /* mostra timeline */
+  .mobile-timeline {
+    display: flex;
+  }
+}
+
+/* DESKTOP: timeline nascosta */
+@media (min-width: 769px) {
+  .mobile-timeline {
+    display: none;
+  }
+}
 
 /* ————————————————————————————————
    ARTIST GALLERY → COERENTE CON CARTELLE
