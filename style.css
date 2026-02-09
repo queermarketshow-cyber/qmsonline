@@ -304,7 +304,9 @@ footer {
   margin: 1.5rem 0;
 }
 
-.calendar-controls { margin: 2rem 0 1rem; }
+.calendar-controls {
+  margin: 2rem 0 1rem;
+}
 
 .calendar-filters button,
 .calendar-controls button,
@@ -344,6 +346,7 @@ footer {
 
 #future-month-container {
   width: min(100%, 900px);
+  transition: opacity 0.25s ease;
 }
 
 .calendar-month {
@@ -426,6 +429,7 @@ footer {
   padding: 2rem 0;
 }
 
+/* wrapper mese passato */
 .past-month-wrapper {
   display: none;
   flex-direction: column;
@@ -444,7 +448,7 @@ footer {
 }
 
 /* ============================================================
-   MOBILE — TIMELINE FUTURA + PASSATA
+   TIMELINE MOBILE (FUTURA + PASSATA)
 ============================================================ */
 .mobile-timeline {
   display: none;
@@ -494,12 +498,6 @@ footer {
   text-transform: uppercase;
 }
 
-.timeline-event-desc {
-  font-size: 1rem;
-  color: #000;
-  line-height: 1.4;
-}
-
 .timeline-event-img {
   width: 100%;
   height: auto;
@@ -517,7 +515,6 @@ footer {
 
   /* mostra eventi passati anche su mobile */
   #past-events { display: flex !important; }
-  #past-events .past-month-wrapper { display: flex !important; }
 }
 
 @media (min-width: 769px) {
@@ -583,6 +580,7 @@ footer {
 @media (max-width: 700px) {
   .modal-two-columns { flex-direction: column; }
 }
+
 
 /* ————————————————————————————————
    ARTIST GALLERY → COERENTE CON CARTELLE

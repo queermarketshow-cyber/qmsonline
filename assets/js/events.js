@@ -7,15 +7,19 @@ let currentMonth;
 let currentYear;
 
 const today = new Date();
-const todayMonth = today.getMonth();
 const todayYear = today.getFullYear();
+const todayMonth = today.getMonth();
+const todayDay = today.getDate();
 
-// mese precedente
+// Normalizziamo "oggi" a mezzanotte
+const todayDate = new Date(todayYear, todayMonth, todayDay);
+
+// Mese precedente
 const prevMonthDate = new Date(todayYear, todayMonth - 1, 1);
 const prevMonth = prevMonthDate.getMonth();
 const prevYear = prevMonthDate.getFullYear();
 
-// categoria attiva
+// Categoria attiva
 let activeCategory = "all";
 
 
@@ -28,6 +32,7 @@ fetch("events.json")
   .then(data => {
     events = data.map(ev => {
       const d = new Date(ev.start);
+
       return {
         ...ev,
         date: ev.start,
@@ -38,7 +43,7 @@ fetch("events.json")
           month: "long",
           year: "numeric"
         }),
-        past: d < new Date(todayYear, todayMonth, 1)
+        past: d < todayDate
       };
     });
 
@@ -102,17 +107,24 @@ function initControls() {
   futureBtn.addEventListener("click", () => {
     futureBtn.classList.add("active");
     pastBtn.classList.remove("active");
+
     document.getElementById("future-calendar").style.display = "flex";
-    document.getElementById("mobile-timeline").style.display = "";
+    document.getElementById("mobile-timeline").style.display = "flex";
     document.getElementById("past-events").style.display = "none";
+
+    renderCalendar(currentMonth, currentYear);
+    renderMobileTimeline();
   });
 
   pastBtn.addEventListener("click", () => {
     pastBtn.classList.add("active");
     futureBtn.classList.remove("active");
+
     document.getElementById("future-calendar").style.display = "none";
     document.getElementById("mobile-timeline").style.display = "none";
     document.getElementById("past-events").style.display = "flex";
+
+    renderPastEvents();
   });
 }
 
@@ -197,22 +209,26 @@ function renderCalendar(month, year) {
 document.getElementById("prev-month").addEventListener("click", () => {
   let m = currentMonth - 1;
   let y = currentYear;
+
   if (m < 0) { m = 11; y--; }
 
   if (y < todayYear || (y === todayYear && m < todayMonth)) return;
 
   currentMonth = m;
   currentYear = y;
+
   renderCalendar(currentMonth, currentYear);
 });
 
 document.getElementById("next-month").addEventListener("click", () => {
   let m = currentMonth + 1;
   let y = currentYear;
+
   if (m > 11) { m = 0; y++; }
 
   currentMonth = m;
   currentYear = y;
+
   renderCalendar(currentMonth, currentYear);
 });
 
@@ -266,8 +282,8 @@ function renderPastEvents() {
   const filtered = events.filter(ev => {
     const d = ev.dateObj;
     return (
-      d.getFullYear() === prevYear &&
-      d.getMonth() === prevMonth &&
+      d < todayDate &&
+      d >= new Date(prevYear, prevMonth, 1) &&
       (activeCategory === "all" || ev.categories.includes(activeCategory))
     );
   });
