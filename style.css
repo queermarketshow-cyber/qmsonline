@@ -294,21 +294,25 @@ footer {
 }
 
 /* ============================================================
-   EVENTI — FILTRI
+   FILTRI + CONTROLLI
 ============================================================ */
-.calendar-filters {
+.calendar-filters,
+.calendar-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin: 1.5rem 0;
 }
 
-.calendar-filters button {
+.calendar-controls { margin: 2rem 0 1rem; }
+
+.calendar-filters button,
+.calendar-controls button,
+.past-month-controls button {
   padding: 6px 14px;
   border: 2px solid #000;
   background: #ff2fa8;
   cursor: pointer;
-  color: #000;
   font-weight: 700;
   text-transform: uppercase;
   box-shadow: 3px 3px 0 #000;
@@ -320,38 +324,14 @@ footer {
   box-shadow: 5px 5px 0 #000;
 }
 
-.calendar-filters button.active {
-  background: #000;
-  color: #ff2fa8;
-}
-
-/* ============================================================
-   CONTROLLI FUTURO / PASSATO
-============================================================ */
-.calendar-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 2rem 0 1rem;
-}
-
-.calendar-controls button {
-  padding: 6px 14px;
-  border: 2px solid #000;
-  background: #ff2fa8;
-  cursor: pointer;
-  font-weight: 700;
-  text-transform: uppercase;
-  box-shadow: 3px 3px 0 #000;
-}
-
+.calendar-filters button.active,
 .calendar-controls button.active {
   background: #000;
   color: #ff2fa8;
 }
 
 /* ============================================================
-   CALENDARIO FUTURO
+   CALENDARIO FUTURO (DESKTOP)
 ============================================================ */
 #future-calendar {
   display: flex;
@@ -366,7 +346,6 @@ footer {
   width: min(100%, 900px);
 }
 
-/* mese */
 .calendar-month {
   font-size: clamp(1.6rem, 4vw, 2.4rem);
   font-weight: 900;
@@ -376,14 +355,12 @@ footer {
   letter-spacing: 1px;
 }
 
-/* griglia */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.6rem;
 }
 
-/* giorno */
 .calendar-day {
   position: relative;
   aspect-ratio: 1 / 1;
@@ -392,7 +369,6 @@ footer {
   padding: 0.4rem;
   font-size: clamp(0.8rem, 1.4vw, 1rem);
   color: #aaa;
-  overflow: visible;
 }
 
 .calendar-day-number {
@@ -400,7 +376,6 @@ footer {
   color: #eee;
 }
 
-/* GIORNO CON EVENTO — BOX FUXIA + NUMERO BIANCO */
 .calendar-day.has-event {
   background: #ff2fa8 !important;
   border-color: #000;
@@ -409,13 +384,10 @@ footer {
 .calendar-day.has-event .calendar-day-number {
   color: #000 !important;
   font-weight: 900;
-  position: relative;
-  z-index: 2; /* sopra la X */
+  z-index: 2;
 }
 
-
-
-/* POST-IT PIÙ COLLAGE */
+/* post-it */
 .event-postit {
   position: absolute;
   bottom: 6px;
@@ -445,30 +417,25 @@ footer {
 }
 
 /* ============================================================
-   EVENTI PASSATI — DESKTOP (NUOVA VERSIONE)
+   EVENTI PASSATI (DESKTOP)
 ============================================================ */
-
 #past-events {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 2rem 0;
-  width: 100%;
 }
 
-/* wrapper mese singolo */
 .past-month-wrapper {
-  display: none; /* JS → mostra solo il mese attivo */
+  display: none;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* mese visibile */
 .past-month-wrapper.active {
   display: flex;
 }
 
-/* controlli mese */
 .past-month-controls {
   display: flex;
   justify-content: space-between;
@@ -476,149 +443,9 @@ footer {
   margin-bottom: 1rem;
 }
 
-.past-month-controls button {
-  padding: 6px 14px;
-  border: 2px solid #000;
-  background: #ff2fa8;
-  cursor: pointer;
-  font-weight: 700;
-  text-transform: uppercase;
-  box-shadow: 3px 3px 0 #000;
-}
-
 /* ============================================================
-   MOBILE — mostra eventi passati
+   MOBILE — TIMELINE FUTURA + PASSATA
 ============================================================ */
-
-@media (max-width: 768px) {
-  #past-events {
-    display: flex !important;
-  }
-
-  /* timeline mobile per eventi passati */
-  #past-events .past-month-wrapper {
-    display: flex !important;
-  }
-}
-/* ============================================================
-   MODALE EVENTO
-============================================================ */
-#event-modal {
-  position: fixed;
-  inset: 0;
-  display: none; /* JS → flex */
-  justify-content: center;
-  align-items: center;
-  background: rgba(0,0,0,0.75);
-  z-index: 30000;
-}
-
-.event-modal-content {
-  background: var(--bg-color);
-  color: var(--secondary-color);
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 900px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 8px 8px 0 #000;
-  transform-origin: center;
-}
-
-/* rotazioni dinamiche */
-.event-modal-content[data-orientation="portrait"] {
-  transform: rotate(-1.5deg) skew(-1deg);
-}
-
-.event-modal-content[data-orientation="landscape"] {
-  transform: rotate(1.5deg) skew(1deg);
-}
-
-.event-modal-content[data-orientation="square"] {
-  transform: rotate(0.5deg);
-}
-
-/* chiusura */
-.event-modal-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: transparent;
-  border: none;
-  color: inherit;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-/* layout */
-.modal-two-columns {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.modal-left {
-  flex: 1 1 40%;
-}
-
-.modal-right {
-  flex: 1 1 50%;
-}
-
-/* immagine */
-.modal-img {
-  width: 100%;
-  height: auto;
-  border: 2px solid #000;
-  box-shadow: 6px 6px 0 #000;
-  display: block;
-}
-
-/* meta */
-.event-modal-date {
-  font-weight: 900;
-  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
-  color: #ff2fa8;
-  margin-bottom: 0.5rem;
-}
-
-.event-modal-categories {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 1rem;
-}
-
-.event-tag {
-  background: #ff2fa8;
-  color: #000;
-  padding: 2px 8px;
-  border: 2px solid #000;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  box-shadow: 2px 2px 0 #000;
-}
-
-/* responsive */
-@media (max-width: 700px) {
-  .modal-two-columns {
-    flex-direction: column;
-  }
-}
-/* ============================================================
-   LAYOUT IBRIDO — CALENDARIO DESKTOP / TIMELINE MOBILE
-============================================================ */
-
-/* wrapper generale */
-.calendar-layout {
-  width: 100%;
-  margin-top: 2rem;
-}
-
-/* TIMELINE MOBILE — nascosta su desktop */
 .mobile-timeline {
   display: none;
   flex-direction: column;
@@ -626,7 +453,6 @@ footer {
   margin-top: 2rem;
 }
 
-/* CARD EVENTO MOBILE */
 .timeline-event {
   background: #ff2fa8;
   border: 3px solid #000;
@@ -634,10 +460,8 @@ footer {
   padding: 1rem;
   transform: rotate(-1deg);
   position: relative;
-  overflow: visible;
 }
 
-/* data */
 .timeline-event-date {
   font-size: 1.2rem;
   font-weight: 900;
@@ -646,7 +470,6 @@ footer {
   text-transform: uppercase;
 }
 
-/* titolo */
 .timeline-event-title {
   font-size: 1.4rem;
   font-weight: 900;
@@ -654,7 +477,6 @@ footer {
   margin-bottom: 0.4rem;
 }
 
-/* categoria */
 .timeline-event-tags {
   display: flex;
   gap: 6px;
@@ -672,14 +494,12 @@ footer {
   text-transform: uppercase;
 }
 
-/* descrizione */
 .timeline-event-desc {
   font-size: 1rem;
   color: #000;
   line-height: 1.4;
 }
 
-/* immagine */
 .timeline-event-img {
   width: 100%;
   height: auto;
@@ -688,34 +508,80 @@ footer {
   box-shadow: 4px 4px 0 #000;
 }
 
-/* micro-tilt randomico (JS) */
-.timeline-event[data-tilt] {
-  transform: rotate(var(--tilt));
-}
-
 /* ============================================================
    RESPONSIVE SWITCH
 ============================================================ */
-
-/* MOBILE: mostra timeline, nasconde calendario */
 @media (max-width: 768px) {
+  #future-calendar { display: none !important; }
+  .mobile-timeline { display: flex; }
 
-  /* nascondi calendario desktop */
-  #future-calendar {
-    display: none !important;
-  }
-
-  /* mostra timeline */
-  .mobile-timeline {
-    display: flex;
-  }
+  /* mostra eventi passati anche su mobile */
+  #past-events { display: flex !important; }
+  #past-events .past-month-wrapper { display: flex !important; }
 }
 
-/* DESKTOP: timeline nascosta */
 @media (min-width: 769px) {
-  .mobile-timeline {
-    display: none;
-  }
+  .mobile-timeline { display: none; }
+}
+
+/* ============================================================
+   MODALE EVENTO
+============================================================ */
+#event-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.75);
+  z-index: 30000;
+}
+
+.event-modal-content {
+  background: var(--bg-color);
+  color: var(--secondary-color);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 8px 8px 0 #000;
+}
+
+.event-modal-content[data-orientation="portrait"] { transform: rotate(-1.5deg) skew(-1deg); }
+.event-modal-content[data-orientation="landscape"] { transform: rotate(1.5deg) skew(1deg); }
+.event-modal-content[data-orientation="square"] { transform: rotate(0.5deg); }
+
+.event-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-two-columns {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.modal-left { flex: 1 1 40%; }
+.modal-right { flex: 1 1 50%; }
+
+.modal-img {
+  width: 100%;
+  border: 2px solid #000;
+  box-shadow: 6px 6px 0 #000;
+}
+
+@media (max-width: 700px) {
+  .modal-two-columns { flex-direction: column; }
 }
 
 /* ————————————————————————————————

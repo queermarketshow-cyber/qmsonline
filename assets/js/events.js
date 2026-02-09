@@ -1,60 +1,132 @@
 /* ============================================================
-   1) VARIABILI GLOBALI
+   CONFIGURAZIONE BASE
 ============================================================ */
 
 let events = [];
 let currentMonth;
 let currentYear;
 
+const today = new Date();
+const todayMonth = today.getMonth();
+const todayYear = today.getFullYear();
+
+// mese precedente
+const prevMonthDate = new Date(todayYear, todayMonth - 1, 1);
+const prevMonth = prevMonthDate.getMonth();
+const prevYear = prevMonthDate.getFullYear();
+
+// categoria attiva
+let activeCategory = "all";
+
 
 /* ============================================================
-   2) CARICAMENTO EVENTI DA events.json
+   CARICAMENTO EVENTI
 ============================================================ */
 
-fetch('events.json')
+fetch("events.json")
   .then(res => res.json())
   .then(data => {
-    events = data.map(ev => ({
-      ...ev,
-      date: ev.start, // normalizziamo
-      dateReadable: new Date(ev.start).toLocaleDateString("it-IT", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-      }),
-      past: new Date(ev.start) < new Date()
-    }));
+    events = data.map(ev => {
+      const d = new Date(ev.start);
+      return {
+        ...ev,
+        date: ev.start,
+        dateObj: d,
+        dateReadable: d.toLocaleDateString("it-IT", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }),
+        past: d < new Date(todayYear, todayMonth, 1)
+      };
+    });
 
-    currentMonth = new Date().getMonth();
-    currentYear = new Date().getFullYear();
+    currentMonth = todayMonth;
+    currentYear = todayYear;
 
-    initializeCalendarSystem();
-  })
-  .catch(err => console.error("Errore nel caricamento di events.json:", err));
+    initFilters();
+    initControls();
+    renderAll();
+  });
 
 
 /* ============================================================
-   3) INIZIALIZZAZIONE COMPLETA
+   INIZIALIZZAZIONE
 ============================================================ */
 
-function initializeCalendarSystem() {
+function renderAll() {
   renderCalendar(currentMonth, currentYear);
-  initHybridCalendar(events);
-  renderPastEvents(events);
-  initMonthNavigation();
+  renderMobileTimeline();
+  renderPastEvents();
+  linkCalendarToTimeline();
+  enableTimelineReveal();
 }
 
 
 /* ============================================================
-   4) CALENDARIO DESKTOP
+   FILTRI CATEGORIE
+============================================================ */
+
+function initFilters() {
+  const container = document.getElementById("calendar-filters");
+  if (!container) return;
+
+  const allCats = new Set();
+  events.forEach(ev => ev.categories.forEach(c => allCats.add(c)));
+
+  container.innerHTML = `
+    <button data-cat="all" class="active">Tutti</button>
+    ${[...allCats].map(c => `<button data-cat="${c}">${c}</button>`).join("")}
+  `;
+
+  container.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      container.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeCategory = btn.dataset.cat;
+      renderAll();
+    });
+  });
+}
+
+
+/* ============================================================
+   CONTROLLI FUTURO / PASSATO
+============================================================ */
+
+function initControls() {
+  const futureBtn = document.getElementById("show-future");
+  const pastBtn = document.getElementById("show-past");
+
+  futureBtn.addEventListener("click", () => {
+    futureBtn.classList.add("active");
+    pastBtn.classList.remove("active");
+    document.getElementById("future-calendar").style.display = "flex";
+    document.getElementById("mobile-timeline").style.display = "";
+    document.getElementById("past-events").style.display = "none";
+  });
+
+  pastBtn.addEventListener("click", () => {
+    pastBtn.classList.add("active");
+    futureBtn.classList.remove("active");
+    document.getElementById("future-calendar").style.display = "none";
+    document.getElementById("mobile-timeline").style.display = "none";
+    document.getElementById("past-events").style.display = "flex";
+  });
+}
+
+
+/* ============================================================
+   CALENDARIO FUTURO (DESKTOP)
 ============================================================ */
 
 function renderCalendar(month, year) {
   const container = document.getElementById("future-month-container");
   if (!container) return;
 
-  container.innerHTML = "";
+  container.style.opacity = 0;
+  setTimeout(() => { container.innerHTML = ""; }, 150);
 
   const date = new Date(year, month, 1);
   const monthName = date.toLocaleString("it-IT", { month: "long" });
@@ -69,9 +141,7 @@ function renderCalendar(month, year) {
 
   const firstDay = date.getDay() === 0 ? 6 : date.getDay() - 1;
   for (let i = 0; i < firstDay; i++) {
-    const empty = document.createElement("div");
-    empty.className = "calendar-day empty";
-    grid.appendChild(empty);
+    grid.appendChild(document.createElement("div"));
   }
 
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -89,7 +159,11 @@ function renderCalendar(month, year) {
     num.textContent = d;
     dayEl.appendChild(num);
 
-    const todaysEvents = events.filter(ev => ev.date === iso && !ev.past);
+    const todaysEvents = events.filter(ev =>
+      ev.date === iso &&
+      !ev.past &&
+      (activeCategory === "all" || ev.categories.includes(activeCategory))
+    );
 
     if (todaysEvents.length > 0) {
       dayEl.classList.add("has-event");
@@ -111,56 +185,51 @@ function renderCalendar(month, year) {
   }
 
   container.appendChild(grid);
+
+  setTimeout(() => { container.style.opacity = 1; }, 150);
 }
 
 
 /* ============================================================
-   5) NAVIGAZIONE MESE
+   NAVIGAZIONE MESI FUTURI (CLAMP)
 ============================================================ */
 
-function initMonthNavigation() {
-  const prevBtn = document.getElementById("prev-month");
-  const nextBtn = document.getElementById("next-month");
+document.getElementById("prev-month").addEventListener("click", () => {
+  let m = currentMonth - 1;
+  let y = currentYear;
+  if (m < 0) { m = 11; y--; }
 
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
-      currentMonth--;
-      if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-      }
-      renderCalendar(currentMonth, currentYear);
-      initHybridCalendar(events);
-    });
-  }
+  if (y < todayYear || (y === todayYear && m < todayMonth)) return;
 
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      currentMonth++;
-      if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-      }
-      renderCalendar(currentMonth, currentYear);
-      initHybridCalendar(events);
-    });
-  }
-}
+  currentMonth = m;
+  currentYear = y;
+  renderCalendar(currentMonth, currentYear);
+});
+
+document.getElementById("next-month").addEventListener("click", () => {
+  let m = currentMonth + 1;
+  let y = currentYear;
+  if (m > 11) { m = 0; y++; }
+
+  currentMonth = m;
+  currentYear = y;
+  renderCalendar(currentMonth, currentYear);
+});
 
 
 /* ============================================================
-   6) TIMELINE MOBILE
+   TIMELINE MOBILE FUTURA
 ============================================================ */
 
-function generateMobileTimeline(events) {
+function renderMobileTimeline() {
   const timeline = document.getElementById("mobile-timeline");
   if (!timeline) return;
 
   timeline.innerHTML = "";
 
   events
-    .filter(ev => !ev.past)
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .filter(ev => !ev.past && (activeCategory === "all" || ev.categories.includes(activeCategory)))
+    .sort((a, b) => a.dateObj - b.dateObj)
     .forEach(ev => {
       const tilt = (Math.random() * 2 - 1).toFixed(2) + "deg";
 
@@ -172,123 +241,43 @@ function generateMobileTimeline(events) {
       el.innerHTML = `
         <div class="timeline-event-date">${ev.dateReadable}</div>
         <div class="timeline-event-title">${ev.title}</div>
-
         <div class="timeline-event-tags">
-          ${ev.categories
-            .map(cat => `<span class="timeline-event-tag">${cat}</span>`)
-            .join("")}
+          ${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}
         </div>
-
-        <div class="timeline-event-desc">${ev.description || ""}</div>
-
-        ${
-          ev.image
-            ? `<img src="${ev.image}" class="timeline-event-img" alt="">`
-            : ""
-        }
+        ${ev.image ? `<img src="${ev.image}" class="timeline-event-img">` : ""}
       `;
 
       el.addEventListener("click", () => openEventModal(ev));
-
       timeline.appendChild(el);
     });
 }
 
 
 /* ============================================================
-   7) EVENTI PASSATI
+   EVENTI PASSATI (SOLO MESE PRECEDENTE)
 ============================================================ */
 
-function renderPastEvents(events) {
+function renderPastEvents() {
   const container = document.getElementById("past-events");
   if (!container) return;
 
   container.innerHTML = "";
 
-  const past = events
-    .filter(ev => ev.past)
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  past.forEach(ev => {
-    const el = document.createElement("div");
-    el.className = "timeline-event";
-    el.style.setProperty("--tilt", (Math.random() * 2 - 1).toFixed(2) + "deg");
-
-    el.innerHTML = `
-      <div class="timeline-event-date">${ev.dateReadable}</div>
-      <div class="timeline-event-title">${ev.title}</div>
-      <div class="timeline-event-tags">
-        ${ev.categories
-          .map(cat => `<span class="timeline-event-tag">${cat}</span>`)
-          .join("")}
-      </div>
-      <div class="timeline-event-desc">${ev.description || ""}</div>
-      ${
-        ev.image
-          ? `<img src="${ev.image}" class="timeline-event-img" alt="">`
-          : ""
-      }
-    `;
-
-    el.addEventListener("click", () => openEventModal(ev));
-
-    container.appendChild(el);
-  });
-}
-/* ============================================================
-   NAVIGAZIONE MENSILE EVENTI PASSATI
-============================================================ */
-
-function groupPastEventsByMonth(events) {
-  const groups = {};
-
-  events.forEach(ev => {
-    const d = new Date(ev.date);
-    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(ev);
+  const filtered = events.filter(ev => {
+    const d = ev.dateObj;
+    return (
+      d.getFullYear() === prevYear &&
+      d.getMonth() === prevMonth &&
+      (activeCategory === "all" || ev.categories.includes(activeCategory))
+    );
   });
 
-  return groups;
-}
-
-function renderPastEvents(events) {
-  const container = document.getElementById("past-events");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const past = events.filter(ev => ev.past);
-  const groups = groupPastEventsByMonth(past);
-  const months = Object.keys(groups).sort().reverse();
-
-  months.forEach((monthKey, i) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "past-month-wrapper";
-    if (i === 0) wrapper.classList.add("active");
-
-    const [year, month] = monthKey.split("-");
-    const monthName = new Date(year, month - 1).toLocaleString("it-IT", {
-      month: "long",
-      year: "numeric"
-    });
-
-    wrapper.innerHTML = `
-      <div class="past-month-controls">
-        <button class="past-prev">←</button>
-        <div class="calendar-month">${monthName}</div>
-        <button class="past-next">→</button>
-      </div>
-      <div class="past-month-events"></div>
-    `;
-
-    const list = wrapper.querySelector(".past-month-events");
-
-    groups[monthKey].forEach(ev => {
+  filtered
+    .sort((a, b) => a.dateObj - b.dateObj)
+    .forEach(ev => {
       const el = document.createElement("div");
       el.className = "timeline-event";
-      el.style.setProperty("--tilt", (Math.random()*2-1).toFixed(2)+"deg");
+      el.style.setProperty("--tilt", (Math.random() * 2 - 1).toFixed(2) + "deg");
 
       el.innerHTML = `
         <div class="timeline-event-date">${ev.dateReadable}</div>
@@ -300,88 +289,40 @@ function renderPastEvents(events) {
       `;
 
       el.addEventListener("click", () => openEventModal(ev));
-      list.appendChild(el);
+      container.appendChild(el);
     });
-
-    container.appendChild(wrapper);
-  });
-
-  initPastMonthNavigation();
 }
 
-function initPastMonthNavigation() {
-  const months = [...document.querySelectorAll(".past-month-wrapper")];
-  let index = 0;
-
-  function show(i) {
-    months.forEach((m, idx) => m.classList.toggle("active", idx === i));
-  }
-
-  months.forEach((wrapper, i) => {
-    wrapper.querySelector(".past-prev").addEventListener("click", () => {
-      index = (index - 1 + months.length) % months.length;
-      show(index);
-    });
-
-    wrapper.querySelector(".past-next").addEventListener("click", () => {
-      index = (index + 1) % months.length;
-      show(index);
-    });
-  });
-}
 
 /* ============================================================
-   8) LINK CALENDARIO → TIMELINE
+   LINK CALENDARIO → TIMELINE
 ============================================================ */
 
 function linkCalendarToTimeline() {
-  const days = document.querySelectorAll(".calendar-day.has-event");
-
-  days.forEach(day => {
+  document.querySelectorAll(".calendar-day.has-event").forEach(day => {
     day.addEventListener("click", () => {
-      const date = day.dataset.date;
-      const target = document.querySelector(
-        `.timeline-event[data-date="${date}"]`
-      );
-
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      const target = document.querySelector(`.timeline-event[data-date="${day.dataset.date}"]`);
+      if (target) target.scrollIntoView({ behavior: "smooth" });
     });
   });
 }
 
 
 /* ============================================================
-   9) SCROLL-REVEAL
+   SCROLL REVEAL
 ============================================================ */
 
 function enableTimelineReveal() {
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add("visible");
-    });
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
   });
 
-  document
-    .querySelectorAll(".timeline-event")
-    .forEach(el => observer.observe(el));
+  document.querySelectorAll(".timeline-event").forEach(el => observer.observe(el));
 }
 
 
 /* ============================================================
-   10) INTEGRAZIONE IBRIDA
-============================================================ */
-
-function initHybridCalendar(events) {
-  generateMobileTimeline(events);
-  linkCalendarToTimeline();
-  enableTimelineReveal();
-}
-
-
-/* ============================================================
-   11) MODALE EVENTO
+   MODALE EVENTO
 ============================================================ */
 
 function openEventModal(ev) {
@@ -396,34 +337,16 @@ function openEventModal(ev) {
       <div class="modal-right">
         <div class="event-modal-date">${ev.dateReadable}</div>
         <div class="event-modal-categories">
-          ${ev.categories
-            .map(cat => `<span class="event-tag">${cat}</span>`)
-            .join("")}
+          ${ev.categories.map(c => `<span class="event-tag">${c}</span>`).join("")}
         </div>
         <h2>${ev.title}</h2>
-        <p>${ev.description || ""}</p>
       </div>
     </div>
   `;
 
   modal.style.display = "flex";
-
-  const img = body.querySelector(".modal-img");
-  if (img) {
-    img.onload = () => {
-      const w = img.naturalWidth;
-      const h = img.naturalHeight;
-      const content = document.querySelector(".event-modal-content");
-
-      if (w > h) content.dataset.orientation = "landscape";
-      else if (h > w) content.dataset.orientation = "portrait";
-      else content.dataset.orientation = "square";
-    };
-  }
 }
 
-document
-  .querySelector(".event-modal-close")
-  ?.addEventListener("click", () => {
-    document.getElementById("event-modal").style.display = "none";
-  });
+document.querySelector(".event-modal-close").addEventListener("click", () => {
+  document.getElementById("event-modal").style.display = "none";
+});
