@@ -235,7 +235,100 @@ function renderPastEvents(events) {
     container.appendChild(el);
   });
 }
+/* ============================================================
+   NAVIGAZIONE MENSILE EVENTI PASSATI
+============================================================ */
 
+function groupPastEventsByMonth(events) {
+  const groups = {};
+
+  events.forEach(ev => {
+    const d = new Date(ev.date);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(ev);
+  });
+
+  return groups;
+}
+
+function renderPastEvents(events) {
+  const container = document.getElementById("past-events");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const past = events.filter(ev => ev.past);
+  const groups = groupPastEventsByMonth(past);
+  const months = Object.keys(groups).sort().reverse();
+
+  months.forEach((monthKey, i) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "past-month-wrapper";
+    if (i === 0) wrapper.classList.add("active");
+
+    const [year, month] = monthKey.split("-");
+    const monthName = new Date(year, month - 1).toLocaleString("it-IT", {
+      month: "long",
+      year: "numeric"
+    });
+
+    wrapper.innerHTML = `
+      <div class="past-month-controls">
+        <button class="past-prev">←</button>
+        <div class="calendar-month">${monthName}</div>
+        <button class="past-next">→</button>
+      </div>
+      <div class="past-month-events"></div>
+    `;
+
+    const list = wrapper.querySelector(".past-month-events");
+
+    groups[monthKey].forEach(ev => {
+      const el = document.createElement("div");
+      el.className = "timeline-event";
+      el.style.setProperty("--tilt", (Math.random()*2-1).toFixed(2)+"deg");
+
+      el.innerHTML = `
+        <div class="timeline-event-date">${ev.dateReadable}</div>
+        <div class="timeline-event-title">${ev.title}</div>
+        <div class="timeline-event-tags">
+          ${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}
+        </div>
+        ${ev.image ? `<img src="${ev.image}" class="timeline-event-img">` : ""}
+      `;
+
+      el.addEventListener("click", () => openEventModal(ev));
+      list.appendChild(el);
+    });
+
+    container.appendChild(wrapper);
+  });
+
+  initPastMonthNavigation();
+}
+
+function initPastMonthNavigation() {
+  const months = [...document.querySelectorAll(".past-month-wrapper")];
+  let index = 0;
+
+  function show(i) {
+    months.forEach((m, idx) => m.classList.toggle("active", idx === i));
+  }
+
+  months.forEach((wrapper, i) => {
+    wrapper.querySelector(".past-prev").addEventListener("click", () => {
+      index = (index - 1 + months.length) % months.length;
+      show(index);
+    });
+
+    wrapper.querySelector(".past-next").addEventListener("click", () => {
+      index = (index + 1) % months.length;
+      show(index);
+    });
+  });
+}
 
 /* ============================================================
    8) LINK CALENDARIO → TIMELINE
