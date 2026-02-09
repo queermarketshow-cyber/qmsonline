@@ -1515,6 +1515,12 @@ footer {
   gap: 1rem;
 }
 
+@media (max-width: 600px) {
+  .masonry-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
 /* ————————————————————————————————
    POSTER — BASE
 —————————————————————————————————— */
@@ -1530,6 +1536,7 @@ footer {
   box-shadow: 0 0 0 2px #000 inset;
   overflow: visible;
   transform: rotate(-1deg);
+  max-width: 100%;
 }
 
 .poster h2 {
@@ -1546,13 +1553,19 @@ footer {
 
 /* L = banner orizzontale cinemascope */
 .poster-L {
-  .poster-L {
-  aspect-ratio: calc(14 / 9 + (var(--rand) * 0.3));
-}
   grid-column: span 2;
 }
+
 @media (min-width: 768px) {
-  .poster-L { grid-column: span 3; }
+  .poster-L {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .poster-L {
+    grid-column: span 1;
+  }
 }
 
 /* M = quadrato polaroid */
