@@ -506,7 +506,7 @@ footer {
 }
 
 /* ============================================================
-   RESPONSIVE SWITCH
+   RESPONSIVE SWITCH — VERSIONE CORRETTA
 ============================================================ */
 
 /* MOBILE */
@@ -520,9 +520,8 @@ footer {
 @media (min-width: 769px) {
   .mobile-timeline { display: none !important; }
   #future-calendar { display: flex !important; }
-  #past-events { display: none; } /* mostrati solo col toggle */
+  #past-events { display: none !important; } /* mostrati solo col toggle */
 }
-
 /* ============================================================
    MODALE EVENTO
 ============================================================ */
