@@ -423,13 +423,12 @@ footer {
    EVENTI PASSATI (DESKTOP)
 ============================================================ */
 #past-events {
-  display: flex;
+  display: none; /* nascosto di default */
   flex-direction: column;
   gap: 2rem;
   padding: 2rem 0;
 }
 
-/* wrapper mese passato */
 .past-month-wrapper {
   display: none;
   flex-direction: column;
@@ -448,10 +447,10 @@ footer {
 }
 
 /* ============================================================
-   TIMELINE MOBILE (FUTURA + PASSATA)
+   TIMELINE MOBILE (FUTURA)
 ============================================================ */
 .mobile-timeline {
-  display: none;
+  display: none; /* nascosta di default */
   flex-direction: column;
   gap: 1.5rem;
   margin-top: 2rem;
@@ -509,16 +508,75 @@ footer {
 /* ============================================================
    RESPONSIVE SWITCH
 ============================================================ */
+
+/* MOBILE */
 @media (max-width: 768px) {
   #future-calendar { display: none !important; }
-  .mobile-timeline { display: flex; }
-
-  /* mostra eventi passati anche su mobile */
-  #past-events { display: flex !important; }
+  .mobile-timeline { display: flex !important; }
+  #past-events { display: none !important; } /* i passati si vedono solo col toggle */
 }
 
+/* DESKTOP */
 @media (min-width: 769px) {
-  .mobile-timeline { display: none; }
+  .mobile-timeline { display: none !important; }
+  #future-calendar { display: flex !important; }
+  #past-events { display: none; } /* mostrati solo col toggle */
+}
+
+/* ============================================================
+   MODALE EVENTO
+============================================================ */
+#event-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.75);
+  z-index: 30000;
+}
+
+.event-modal-content {
+  background: var(--bg-color);
+  color: var(--secondary-color);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 8px 8px 0 #000;
+}
+
+.event-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-two-columns {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.modal-left { flex: 1 1 40%; }
+.modal-right { flex: 1 1 50%; }
+
+.modal-img {
+  width: 100%;
+  border: 2px solid #000;
+  box-shadow: 6px 6px 0 #000;
+}
+
+@media (max-width: 700px) {
+  .modal-two-columns { flex-direction: column; }
 }
 
 /* ============================================================

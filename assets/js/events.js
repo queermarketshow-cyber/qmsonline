@@ -22,6 +22,11 @@ const prevYear = prevMonthDate.getFullYear();
 // Categoria attiva
 let activeCategory = "all";
 
+// Utility per capire se siamo su mobile
+function isMobile() {
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
 
 /* ============================================================
    CARICAMENTO EVENTI
@@ -108,8 +113,16 @@ function initControls() {
     futureBtn.classList.add("active");
     pastBtn.classList.remove("active");
 
+    // Desktop → calendario
     document.getElementById("future-calendar").style.display = "flex";
-    document.getElementById("mobile-timeline").style.display = "flex";
+
+    // Mobile → timeline
+    if (isMobile()) {
+      document.getElementById("mobile-timeline").style.display = "flex";
+    } else {
+      document.getElementById("mobile-timeline").style.display = "none";
+    }
+
     document.getElementById("past-events").style.display = "none";
 
     renderCalendar(currentMonth, currentYear);
