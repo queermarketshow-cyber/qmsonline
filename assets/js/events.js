@@ -11,7 +11,7 @@ let currentYear;
    2) CARICAMENTO EVENTI DA events.json
 ============================================================ */
 
-fetch("events.json")
+fetch('events.json')
   .then(res => res.json())
   .then(data => {
     events = data.map(ev => ({

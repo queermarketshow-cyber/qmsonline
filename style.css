@@ -354,7 +354,7 @@ footer {
    CALENDARIO FUTURO
 ============================================================ */
 #future-calendar {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 2rem;

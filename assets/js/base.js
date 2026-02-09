@@ -23,7 +23,7 @@ if (enterBtn) {
    CARICAMENTO GALLERIA
 =============================== */
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('/gallery.json')
+  fetch('gallery.json')
     .then(res => res.json())
     .then(data => {
       galleryData = data.folders || [];
