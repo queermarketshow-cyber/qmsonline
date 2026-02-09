@@ -47,8 +47,7 @@ fetch("events.json")
           day: "numeric",
           month: "long",
           year: "numeric"
-        }),
-        past: d < todayDate
+        })
       };
     });
 
@@ -113,20 +112,17 @@ function initControls() {
     futureBtn.classList.add("active");
     pastBtn.classList.remove("active");
 
-    // Desktop → calendario
     document.getElementById("future-calendar").style.display = "flex";
+    document.getElementById("past-events").style.display = "none";
 
-    // Mobile → timeline
     if (isMobile()) {
       document.getElementById("mobile-timeline").style.display = "flex";
     } else {
       document.getElementById("mobile-timeline").style.display = "none";
     }
 
-    document.getElementById("past-events").style.display = "none";
-
     renderCalendar(currentMonth, currentYear);
-    renderMobileTimeline();
+    if (isMobile()) renderMobileTimeline();
   });
 
   pastBtn.addEventListener("click", () => {
@@ -186,7 +182,7 @@ function renderCalendar(month, year) {
 
     const todaysEvents = events.filter(ev =>
       ev.date === iso &&
-      !ev.past &&
+      ev.dateObj >= todayDate &&
       (activeCategory === "all" || ev.categories.includes(activeCategory))
     );
 
@@ -257,7 +253,10 @@ function renderMobileTimeline() {
   timeline.innerHTML = "";
 
   events
-    .filter(ev => !ev.past && (activeCategory === "all" || ev.categories.includes(activeCategory)))
+    .filter(ev =>
+      ev.dateObj >= todayDate &&
+      (activeCategory === "all" || ev.categories.includes(activeCategory))
+    )
     .sort((a, b) => a.dateObj - b.dateObj)
     .forEach(ev => {
       const tilt = (Math.random() * 2 - 1).toFixed(2) + "deg";
