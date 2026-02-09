@@ -7,22 +7,17 @@ let currentMonth;
 let currentYear;
 
 const today = new Date();
+const todayISO = today.toISOString().split("T")[0];
+
 const todayYear = today.getFullYear();
 const todayMonth = today.getMonth();
-const todayDay = today.getDate();
 
-// Normalizziamo "oggi" a mezzanotte
-const todayDate = new Date(todayYear, todayMonth, todayDay);
-
-// Mese precedente
 const prevMonthDate = new Date(todayYear, todayMonth - 1, 1);
 const prevMonth = prevMonthDate.getMonth();
 const prevYear = prevMonthDate.getFullYear();
 
-// Categoria attiva
 let activeCategory = "all";
 
-// Utility per capire se siamo su mobile
 function isMobile() {
   return window.matchMedia("(max-width: 768px)").matches;
 }
@@ -37,7 +32,6 @@ fetch("events.json")
   .then(data => {
     events = data.map(ev => {
       const d = new Date(ev.start);
-
       return {
         ...ev,
         date: ev.start,
@@ -112,14 +106,7 @@ function initControls() {
     futureBtn.classList.add("active");
     pastBtn.classList.remove("active");
 
-    document.getElementById("future-calendar").style.display = "flex";
     document.getElementById("past-events").style.display = "none";
-
-    if (isMobile()) {
-      document.getElementById("mobile-timeline").style.display = "flex";
-    } else {
-      document.getElementById("mobile-timeline").style.display = "none";
-    }
 
     renderCalendar(currentMonth, currentYear);
     if (isMobile()) renderMobileTimeline();
@@ -129,8 +116,6 @@ function initControls() {
     pastBtn.classList.add("active");
     futureBtn.classList.remove("active");
 
-    document.getElementById("future-calendar").style.display = "none";
-    document.getElementById("mobile-timeline").style.display = "none";
     document.getElementById("past-events").style.display = "flex";
 
     renderPastEvents();
@@ -146,8 +131,7 @@ function renderCalendar(month, year) {
   const container = document.getElementById("future-month-container");
   if (!container) return;
 
-  container.style.opacity = 0;
-  setTimeout(() => { container.innerHTML = ""; }, 150);
+  container.innerHTML = "";
 
   const date = new Date(year, month, 1);
   const monthName = date.toLocaleString("it-IT", { month: "long" });
@@ -182,7 +166,7 @@ function renderCalendar(month, year) {
 
     const todaysEvents = events.filter(ev =>
       ev.date === iso &&
-      ev.dateObj >= todayDate &&
+      ev.date >= todayISO &&
       (activeCategory === "all" || ev.categories.includes(activeCategory))
     );
 
@@ -206,40 +190,7 @@ function renderCalendar(month, year) {
   }
 
   container.appendChild(grid);
-
-  setTimeout(() => { container.style.opacity = 1; }, 150);
 }
-
-
-/* ============================================================
-   NAVIGAZIONE MESI FUTURI (CLAMP)
-============================================================ */
-
-document.getElementById("prev-month").addEventListener("click", () => {
-  let m = currentMonth - 1;
-  let y = currentYear;
-
-  if (m < 0) { m = 11; y--; }
-
-  if (y < todayYear || (y === todayYear && m < todayMonth)) return;
-
-  currentMonth = m;
-  currentYear = y;
-
-  renderCalendar(currentMonth, currentYear);
-});
-
-document.getElementById("next-month").addEventListener("click", () => {
-  let m = currentMonth + 1;
-  let y = currentYear;
-
-  if (m > 11) { m = 0; y++; }
-
-  currentMonth = m;
-  currentYear = y;
-
-  renderCalendar(currentMonth, currentYear);
-});
 
 
 /* ============================================================
@@ -254,17 +205,14 @@ function renderMobileTimeline() {
 
   events
     .filter(ev =>
-      ev.dateObj >= todayDate &&
+      ev.date >= todayISO &&
       (activeCategory === "all" || ev.categories.includes(activeCategory))
     )
-    .sort((a, b) => a.dateObj - b.dateObj)
+    .sort((a, b) => a.date.localeCompare(b.date))
     .forEach(ev => {
-      const tilt = (Math.random() * 2 - 1).toFixed(2) + "deg";
-
       const el = document.createElement("div");
       el.className = "timeline-event";
       el.dataset.date = ev.date;
-      el.style.setProperty("--tilt", tilt);
 
       el.innerHTML = `
         <div class="timeline-event-date">${ev.dateReadable}</div>
@@ -282,7 +230,7 @@ function renderMobileTimeline() {
 
 
 /* ============================================================
-   EVENTI PASSATI (SOLO MESE PRECEDENTE)
+   EVENTI PASSATI
 ============================================================ */
 
 function renderPastEvents() {
@@ -294,18 +242,17 @@ function renderPastEvents() {
   const filtered = events.filter(ev => {
     const d = ev.dateObj;
     return (
-      d < todayDate &&
+      ev.date < todayISO &&
       d >= new Date(prevYear, prevMonth, 1) &&
       (activeCategory === "all" || ev.categories.includes(activeCategory))
     );
   });
 
   filtered
-    .sort((a, b) => a.dateObj - b.dateObj)
+    .sort((a, b) => a.date.localeCompare(b.date))
     .forEach(ev => {
       const el = document.createElement("div");
       el.className = "timeline-event";
-      el.style.setProperty("--tilt", (Math.random() * 2 - 1).toFixed(2) + "deg");
 
       el.innerHTML = `
         <div class="timeline-event-date">${ev.dateReadable}</div>
@@ -319,33 +266,6 @@ function renderPastEvents() {
       el.addEventListener("click", () => openEventModal(ev));
       container.appendChild(el);
     });
-}
-
-
-/* ============================================================
-   LINK CALENDARIO → TIMELINE
-============================================================ */
-
-function linkCalendarToTimeline() {
-  document.querySelectorAll(".calendar-day.has-event").forEach(day => {
-    day.addEventListener("click", () => {
-      const target = document.querySelector(`.timeline-event[data-date="${day.dataset.date}"]`);
-      if (target) target.scrollIntoView({ behavior: "smooth" });
-    });
-  });
-}
-
-
-/* ============================================================
-   SCROLL REVEAL
-============================================================ */
-
-function enableTimelineReveal() {
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
-  });
-
-  document.querySelectorAll(".timeline-event").forEach(el => observer.observe(el));
 }
 
 
