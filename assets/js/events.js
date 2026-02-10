@@ -2,7 +2,7 @@
    CONFIGURAZIONE BASE
 ============================================================ */
 
-let events = [];          
+let events = [];
 let currentMonth;
 let currentYear;
 
@@ -15,6 +15,14 @@ let activeCategory = "all";
 
 function isMobile() {
   return window.matchMedia("(max-width: 768px)").matches;
+}
+
+/* ============================================================
+   RILEVAMENTO DEVICE "DELICATI" (OPPO / COLOROS)
+============================================================ */
+
+function isOppoDevice() {
+  return /OPPO|CPH|PCLM|PCRT|PCKM|RMX|CPH/i.test(navigator.userAgent);
 }
 
 
@@ -159,22 +167,26 @@ function renderAll() {
 
   if (!showingPast) {
     renderCalendar(currentMonth, currentYear);
-    renderMobileCalendarCarousel();  
+    renderMobileCalendarCarousel();
     renderFutureList();
   }
 
   renderPastEvents();
   linkCalendarToTimeline();
 }
+
+
 /* ============================================================
-   DOT WINDOW (5 DOT VISIBILI)
+   DOT WINDOW (15 DOT VISIBILI)
 ============================================================ */
 
 function generateDotsWindow(total, activeIndex) {
   const dotsContainer = document.getElementById("mobile-dots");
+  if (!dotsContainer) return;
+
   dotsContainer.innerHTML = "";
 
-  const windowSize = 25;
+  const windowSize = 15;
   const half = Math.floor(windowSize / 2);
 
   let start = Math.max(0, activeIndex - half);
@@ -380,16 +392,14 @@ function renderMobileCalendarCarousel() {
   carousel.innerHTML = "";
   dotsContainer.innerHTML = "";
 
-  // 🔥 TIMELINE CONTINUA: TUTTI GLI EVENTI ORDINATI
   const timelineEvents = events
     .filter(ev => activeCategory === "all" || ev.categories.includes(activeCategory))
     .sort((a, b) => a.dateObj - b.dateObj);
 
-  // 🔍 TROVA IL PRIMO EVENTO FUTURO
   const firstFutureIndex = timelineEvents.findIndex(ev => ev.dateObj >= todayDate);
   const startIndex = firstFutureIndex !== -1 ? firstFutureIndex : 0;
 
-  timelineEvents.forEach((ev, idx) => {
+  timelineEvents.forEach(ev => {
     const card = document.createElement("div");
     card.className = "mobile-event-card";
 
@@ -404,15 +414,16 @@ function renderMobileCalendarCarousel() {
 
     card.addEventListener("click", () => openEventModal(ev));
     carousel.appendChild(card);
-
   });
-  // 🔥 Generazione dot con finestra dinamica
-  generateDotsWindow(timelineEvents.length, startIndex);
 
-  // 🔥 PASSIAMO startIndex ALLO SWIPE
+  generateDotsWindow(timelineEvents.length, startIndex);
   initMobileSwipe(carousel, dotsContainer, startIndex);
 
-  // 🔥 SCROLL AUTOMATICO AL PRIMO EVENTO FUTURO
+  if (isOppoDevice()) {
+    carousel.style.scrollSnapType = "none";
+    carousel.style.webkitScrollSnapType = "none";
+  }
+
   requestAnimationFrame(() => {
     if (carousel.children[startIndex]) {
       carousel.scrollTo({
@@ -422,45 +433,20 @@ function renderMobileCalendarCarousel() {
     }
   });
 }
-// ————————————————————————————————
-// AGGIORNAMENTO DOT DURANTE LO SCROLL
-// ————————————————————————————————
-carousel.addEventListener("scroll", () => {
-  const cardWidth = carousel.offsetWidth;
-  const newIndex = Math.round(carousel.scrollLeft / cardWidth);
-
-  if (newIndex !== index) {
-    index = newIndex;
-    updateDots();
-  }
-});
-
 
 
 /* ============================================================
-   SWIPE + FRECCE + DOTS
+   SWIPE + FRECCE + DOTS (ROBUSTO MULTI-DEVICE)
 ============================================================ */
 
 function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
-  let index = startIndex; // 🔥 PARTIAMO DAL PRIMO EVENTO FUTURO
+  let index = startIndex;
   const cards = carousel.children;
   const total = cards.length;
-  const dots = dotsContainer.children;
 
   function updateDots() {
-  generateDotsWindow(total, index);
-}
-// 🔥 Aggiorna dot anche durante scroll lento
-carousel.addEventListener("scroll", () => {
-  const cardWidth = carousel.offsetWidth;
-  const newIndex = Math.round(carousel.scrollLeft / cardWidth);
-
-  if (newIndex !== index) {
-    index = newIndex;
-    updateDots();
+    generateDotsWindow(total, index);
   }
-});
-
 
   function goTo(i) {
     index = Math.max(0, Math.min(i, total - 1));
@@ -475,7 +461,6 @@ carousel.addEventListener("scroll", () => {
     updateDots();
   }
 
-  // esponiamo goTo per i dots
   window.goTo = goTo;
 
   const prev = document.getElementById("mobile-prev");
@@ -489,10 +474,12 @@ carousel.addEventListener("scroll", () => {
   let startX = 0;
 
   carousel.addEventListener("touchstart", e => {
+    if (!e.touches || !e.touches[0]) return;
     startX = e.touches[0].clientX;
   });
 
   carousel.addEventListener("touchend", e => {
+    if (!e.changedTouches || !e.changedTouches[0]) return;
     const endX = e.changedTouches[0].clientX;
     const diff = endX - startX;
 
@@ -500,11 +487,41 @@ carousel.addEventListener("scroll", () => {
       if (diff < 0) goTo(index + 1);
       else goTo(index - 1);
     }
+
+    if (isOppoDevice()) {
+      requestAnimationFrame(() => {
+        const targetCard = cards[index];
+        if (targetCard) {
+          carousel.scrollLeft = targetCard.offsetLeft;
+        }
+      });
+    }
   });
 
-  // 🔥 AGGIORNIAMO I DOTS ALL'AVVIO
+  carousel.addEventListener("scroll", () => {
+    if (isOppoDevice()) {
+      const newIndex = [...cards].findIndex(card => {
+        return Math.abs(card.offsetLeft - carousel.scrollLeft) < 20;
+      });
+
+      if (newIndex !== -1 && newIndex !== index) {
+        index = newIndex;
+        updateDots();
+      }
+    } else {
+      const cardWidth = carousel.offsetWidth || 1;
+      const newIndex = Math.round(carousel.scrollLeft / cardWidth);
+
+      if (newIndex !== index) {
+        index = newIndex;
+        updateDots();
+      }
+    }
+  });
+
   updateDots();
 }
+
 
 /* ============================================================
    LISTA FUTURA DESKTOP
@@ -592,16 +609,32 @@ function linkCalendarToTimeline() {
 
 
 /* ============================================================
-   MODALE EVENTO
+   MODALE EVENTO + BODY LOCK
 ============================================================ */
+
+function lockBodyForModal() {
+  const scrollY = window.scrollY || window.pageYOffset;
+  document.body.dataset.scrollY = scrollY;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollY}px`;
+  document.body.style.width = "100%";
+}
+
+function unlockBodyFromModal() {
+  const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.width = "";
+  window.scrollTo(0, scrollY);
+}
 
 function openEventModal(ev) {
   const modal = document.getElementById("event-modal");
-  const body = document.getElementById("event-modal-body");
+  const modalBody = document.getElementById("event-modal-body");
 
-  if (!modal || !body) return;
+  if (!modal || !modalBody) return;
 
-  body.innerHTML = `
+  modalBody.innerHTML = `
     <div class="modal-two-columns">
       <div class="modal-left">
         ${ev.image ? `<img src="${ev.image}" class="modal-img">` : ""}
@@ -617,8 +650,14 @@ function openEventModal(ev) {
   `;
 
   modal.style.display = "flex";
+  lockBodyForModal();
 }
 
-document.querySelector(".event-modal-close").addEventListener("click", () => {
-  document.getElementById("event-modal").style.display = "none";
-});
+const modalCloseBtn = document.querySelector(".event-modal-close");
+if (modalCloseBtn) {
+  modalCloseBtn.addEventListener("click", () => {
+    const modal = document.getElementById("event-modal");
+    if (modal) modal.style.display = "none";
+    unlockBodyFromModal();
+  });
+}
