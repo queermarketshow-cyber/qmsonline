@@ -464,24 +464,43 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
     updateDots();
   }
 
-  // esposto globalmente per i dot
   window.goTo = goTo;
 
-  // 🔥 swipe universale via Pointer Events (funziona su OPPO, Android, iOS, desktop touch)
+  // ---------------------------------------------------------
+  // 🔥 PATCH: swipe orizzontale solo se il gesto è chiaramente orizzontale
+  // ---------------------------------------------------------
   let startX = 0;
+  let startY = 0;
   let isDragging = false;
+  let allowHorizontal = false;
 
   const onPointerDown = e => {
-    // consideriamo solo input "touch-like"
     if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
+
     startX = e.clientX;
+    startY = e.clientY;
     isDragging = true;
+    allowHorizontal = false; // verrà deciso dopo
   };
 
   const onPointerMove = e => {
     if (!isDragging) return;
     if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
-    e.preventDefault(); // blocca gesture di sistema laterali
+
+    const dx = Math.abs(e.clientX - startX);
+    const dy = Math.abs(e.clientY - startY);
+
+    // 👉 Se il gesto è verticale → lascia tutto libero
+    if (dy > dx) {
+      allowHorizontal = false;
+      return; // scroll verticale naturale
+    }
+
+    // 👉 Se il gesto è chiaramente orizzontale → attiva swipe
+    if (dx > dy * 1.2) {
+      allowHorizontal = true;
+      e.preventDefault(); // blocca scroll verticale SOLO ora
+    }
   };
 
   const endDrag = e => {
@@ -492,13 +511,17 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
     }
 
     isDragging = false;
+
+    // Se non era un gesto orizzontale chiaro → non fare swipe
+    if (!allowHorizontal) return;
+
     const diff = e.clientX - startX;
 
     if (Math.abs(diff) > 40) {
       if (diff < 0) goTo(index + 1);
       else goTo(index - 1);
     } else {
-      goTo(index); // resta sulla card corrente
+      goTo(index);
     }
   };
 
@@ -508,9 +531,6 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
   carousel.addEventListener("pointercancel", endDrag);
   carousel.addEventListener("pointerleave", endDrag);
 
-  // ❌ niente listener di scroll: i dot si aggiornano solo via goTo()
-  // (evitiamo conflitti con scrollLeft e con il sistema)
-
   // frecce
   const prev = document.getElementById("mobile-prev");
   const next = document.getElementById("mobile-next");
@@ -519,9 +539,9 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
     next.onclick = () => goTo(index + 1);
   }
 
-  // avvio
   goTo(startIndex, true);
 }
+
 
 
 /* ============================================================

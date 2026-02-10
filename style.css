@@ -2050,40 +2050,43 @@ body.modal-open {
   line-height: 1.2;
 }
 /* ————————————————————————————————
-   PATCH PRIORITÀ SCROLL VERTICALE
+   MOBILE CALENDAR — VERSIONE COMPATIBILE
+   (Scroll verticale prioritario, swipe gestito dal JS)
 —————————————————————————————————— */
 
-/* 1) Carosello: verticalità prioritaria */
+/* 1) Carosello: lascia passare lo scroll verticale */
 #mobile-calendar-carousel {
   overflow-x: hidden !important;
   overflow-y: auto !important;
 
-  /* PRIORITÀ ASSOLUTA ALLO SCROLL VERTICALE */
-  touch-action: pan-y pinch-zoom !important;
+  /* Il browser deve privilegiare il pan verticale */
+  touch-action: pan-y !important;
 
-  /* Evita che il browser provi a interpretare swipe orizzontali */
+  /* Nessun comportamento nativo che interferisca */
   overscroll-behavior-x: none !important;
   overscroll-behavior-y: auto !important;
 
-  user-select: none !important;
   scroll-snap-type: none !important;
+  user-select: none !important;
 }
 
-/* 2) Card: nessun vincolo che interferisca con lo scroll */
+/* 2) Card: non devono bloccare lo scroll verticale */
 .mobile-event-card {
   flex: 0 0 100% !important;
   min-width: 100% !important;
   scroll-snap-align: none !important;
-  touch-action: pan-y !important; /* rinforzo */
+
+  /* Le card devono lasciar passare il pan verticale */
+  touch-action: pan-y !important;
 }
 
-/* 3) Frecce */
+/* 3) Frecce sempre cliccabili */
 .mobile-arrow {
   pointer-events: auto !important;
   z-index: 9999 !important;
 }
 
-/* 4) Dots */
+/* 4) Dots sopra la card */
 #mobile-dots {
   top: 8px !important;
   bottom: auto !important;
@@ -2115,6 +2118,7 @@ body.modal-open {
 #mobile-calendar-carousel::-webkit-scrollbar {
   display: none !important;
 }
+
 /* ————————————————————————————————
    PATCH POSTER — FIX TAGLI SU MOBILE
 —————————————————————————————————— */
