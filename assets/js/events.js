@@ -340,7 +340,7 @@ if (nextBtn) {
 
 
 /* ============================================================
-   MOBILE CAROUSEL (STESSI EVENTI DEL DESKTOP)
+   MOBILE CAROUSEL (TIMELINE CONTINUA)
 ============================================================ */
 
 function renderMobileCalendarCarousel() {
@@ -351,15 +351,16 @@ function renderMobileCalendarCarousel() {
   carousel.innerHTML = "";
   dotsContainer.innerHTML = "";
 
-  const monthEvents = events.filter(ev => {
-    return (
-      ev.dateObj.getFullYear() === currentYear &&
-      ev.dateObj.getMonth() === currentMonth &&
-      (activeCategory === "all" || ev.categories.includes(activeCategory))
-    );
-  });
+  // 🔥 TIMELINE CONTINUA: TUTTI GLI EVENTI ORDINATI
+  const timelineEvents = events
+    .filter(ev => activeCategory === "all" || ev.categories.includes(activeCategory))
+    .sort((a, b) => a.dateObj - b.dateObj);
 
-  monthEvents.forEach((ev, idx) => {
+  // 🔍 TROVA IL PRIMO EVENTO FUTURO
+  const firstFutureIndex = timelineEvents.findIndex(ev => ev.dateObj >= todayDate);
+  const startIndex = firstFutureIndex !== -1 ? firstFutureIndex : 0;
+
+  timelineEvents.forEach((ev, idx) => {
     const card = document.createElement("div");
     card.className = "mobile-event-card";
 
@@ -375,22 +376,35 @@ function renderMobileCalendarCarousel() {
     card.addEventListener("click", () => openEventModal(ev));
     carousel.appendChild(card);
 
+    // DOTS
     const dot = document.createElement("div");
-    dot.className = "mobile-dot" + (idx === 0 ? " active" : "");
+    dot.className = "mobile-dot" + (idx === startIndex ? " active" : "");
     dot.addEventListener("click", () => goTo(idx));
     dotsContainer.appendChild(dot);
   });
 
-  initMobileSwipe(carousel, dotsContainer);
+  // 🔥 PASSIAMO startIndex ALLO SWIPE
+  initMobileSwipe(carousel, dotsContainer, startIndex);
+
+  // 🔥 SCROLL AUTOMATICO AL PRIMO EVENTO FUTURO
+  requestAnimationFrame(() => {
+    if (carousel.children[startIndex]) {
+      carousel.scrollTo({
+        left: carousel.children[startIndex].offsetLeft,
+        behavior: "smooth"
+      });
+    }
+  });
 }
+
 
 
 /* ============================================================
    SWIPE + FRECCE + DOTS
 ============================================================ */
 
-function initMobileSwipe(carousel, dotsContainer) {
-  let index = 0;
+function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
+  let index = startIndex; // 🔥 PARTIAMO DAL PRIMO EVENTO FUTURO
   const cards = carousel.children;
   const total = cards.length;
   const dots = dotsContainer.children;
@@ -414,6 +428,7 @@ function initMobileSwipe(carousel, dotsContainer) {
     updateDots();
   }
 
+  // esponiamo goTo per i dots
   window.goTo = goTo;
 
   const prev = document.getElementById("mobile-prev");
@@ -439,8 +454,10 @@ function initMobileSwipe(carousel, dotsContainer) {
       else goTo(index - 1);
     }
   });
-}
 
+  // 🔥 AGGIORNIAMO I DOTS ALL'AVVIO
+  updateDots();
+}
 
 /* ============================================================
    LISTA FUTURA DESKTOP
