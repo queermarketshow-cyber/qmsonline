@@ -2050,45 +2050,53 @@ body.modal-open {
   line-height: 1.2;
 }
 /* ————————————————————————————————
-   PATCH FINALE — FIX SWIPE + FRECCE + DOTS
-   (Compatibile con tutto il CSS esistente)
+   PATCH PRIORITÀ SCROLL VERTICALE
 —————————————————————————————————— */
 
-/* 1) Carosello: rimuove conflitti tra scroll e swipe */
+/* 1) Carosello: verticalità prioritaria */
 #mobile-calendar-carousel {
-  overflow-x: hidden !important;   /* impedisce lo scroll nativo */
-  touch-action: pan-y !important;  /* swipe orizzontale gestito da JS */
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
+  /* PRIORITÀ ASSOLUTA ALLO SCROLL VERTICALE */
+  touch-action: pan-y pinch-zoom !important;
+
+  /* Evita che il browser provi a interpretare swipe orizzontali */
+  overscroll-behavior-x: none !important;
+  overscroll-behavior-y: auto !important;
+
   user-select: none !important;
   scroll-snap-type: none !important;
 }
 
-/* 2) Card: dimensione stabile per swipe */
+/* 2) Card: nessun vincolo che interferisca con lo scroll */
 .mobile-event-card {
   flex: 0 0 100% !important;
   min-width: 100% !important;
   scroll-snap-align: none !important;
+  touch-action: pan-y !important; /* rinforzo */
 }
 
-/* 3) Frecce: sempre cliccabili sopra tutto */
+/* 3) Frecce */
 .mobile-arrow {
   pointer-events: auto !important;
   z-index: 9999 !important;
 }
 
-/* 4) Dots: posizione corretta SOPRA la card */
+/* 4) Dots */
 #mobile-dots {
   top: 8px !important;
   bottom: auto !important;
   z-index: 9999 !important;
 }
 
-/* 5) Prevenzione conflitti con altre sezioni */
+/* 5) Wrapper */
 #mobile-calendar-wrapper {
   overflow: hidden !important;
   position: relative !important;
 }
 
-/* 6) Fix per device problematici (Oppo, Xiaomi, Samsung) */
+/* 6) Fix device problematici */
 #mobile-calendar-carousel,
 .mobile-event-card,
 .mobile-arrow {
@@ -2096,14 +2104,14 @@ body.modal-open {
   overscroll-behavior: contain !important;
 }
 
-/* 7) Hitbox frecce migliorata */
+/* 7) Hitbox frecce */
 #mobile-prev,
 #mobile-next {
   padding: 14px 18px !important;
   touch-action: manipulation !important;
 }
 
-/* 8) Prevenzione blocchi da CSS duplicati */
+/* 8) Scrollbar invisibile */
 #mobile-calendar-carousel::-webkit-scrollbar {
   display: none !important;
 }
