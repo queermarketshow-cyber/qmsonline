@@ -419,10 +419,6 @@ function renderMobileCalendarCarousel() {
   generateDotsWindow(timelineEvents.length, startIndex);
   initMobileSwipe(carousel, dotsContainer, startIndex);
 
-  if (isOppoDevice()) {
-    carousel.style.scrollSnapType = "none";
-    carousel.style.webkitScrollSnapType = "none";
-  }
 
   requestAnimationFrame(() => {
     if (carousel.children[startIndex]) {
@@ -461,6 +457,7 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
     updateDots();
   }
 
+  // esponiamo per i dot
   window.goTo = goTo;
 
   const prev = document.getElementById("mobile-prev");
@@ -487,40 +484,23 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
       if (diff < 0) goTo(index + 1);
       else goTo(index - 1);
     }
-
-    if (isOppoDevice()) {
-      requestAnimationFrame(() => {
-        const targetCard = cards[index];
-        if (targetCard) {
-          carousel.scrollLeft = targetCard.offsetLeft;
-        }
-      });
-    }
   });
 
+  // indicizzazione basata sulla card più vicina → funziona ovunque
   carousel.addEventListener("scroll", () => {
-    if (isOppoDevice()) {
-      const newIndex = [...cards].findIndex(card => {
-        return Math.abs(card.offsetLeft - carousel.scrollLeft) < 20;
-      });
+    const newIndex = [...cards].findIndex(card => {
+      return Math.abs(card.offsetLeft - carousel.scrollLeft) < card.offsetWidth / 2;
+    });
 
-      if (newIndex !== -1 && newIndex !== index) {
-        index = newIndex;
-        updateDots();
-      }
-    } else {
-      const cardWidth = carousel.offsetWidth || 1;
-      const newIndex = Math.round(carousel.scrollLeft / cardWidth);
-
-      if (newIndex !== index) {
-        index = newIndex;
-        updateDots();
-      }
+    if (newIndex !== -1 && newIndex !== index) {
+      index = newIndex;
+      updateDots();
     }
   });
 
   updateDots();
 }
+
 
 
 /* ============================================================
@@ -612,7 +592,14 @@ function linkCalendarToTimeline() {
    MODALE EVENTO + BODY LOCK
 ============================================================ */
 
+function shouldLockBody() {
+  // blocchiamo solo su mobile in verticale
+  return isMobile() && window.innerHeight > window.innerWidth;
+}
+
 function lockBodyForModal() {
+  if (!shouldLockBody()) return;
+
   const scrollY = window.scrollY || window.pageYOffset;
   document.body.dataset.scrollY = scrollY;
   document.body.style.position = "fixed";
@@ -621,12 +608,15 @@ function lockBodyForModal() {
 }
 
 function unlockBodyFromModal() {
+  if (!shouldLockBody()) return;
+
   const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
   document.body.style.position = "";
   document.body.style.top = "";
   document.body.style.width = "";
   window.scrollTo(0, scrollY);
 }
+
 
 function openEventModal(ev) {
   const modal = document.getElementById("event-modal");
