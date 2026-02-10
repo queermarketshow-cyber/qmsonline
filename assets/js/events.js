@@ -439,7 +439,7 @@ function renderMobileCalendarCarousel() {
 
 
 /* ============================================================
-   SWIPE + FRECCE + DOTS (ROBUSTO MULTI-DEVICE)
+   SWIPE + FRECCE + DOTS (VERSIONE POINTER, NO CONFLITTI)
 ============================================================ */
 
 function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
@@ -467,46 +467,49 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
   // esposto globalmente per i dot
   window.goTo = goTo;
 
-  // swipe manuale universale
+  // 🔥 swipe universale via Pointer Events (funziona su OPPO, Android, iOS, desktop touch)
   let startX = 0;
   let isDragging = false;
 
-  carousel.addEventListener("touchstart", e => {
-    if (!e.touches[0]) return;
-    startX = e.touches[0].clientX;
+  const onPointerDown = e => {
+    // consideriamo solo input "touch-like"
+    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
+    startX = e.clientX;
     isDragging = true;
-  });
+  };
 
-  carousel.addEventListener("touchmove", e => {
+  const onPointerMove = e => {
     if (!isDragging) return;
-    e.preventDefault(); // impedisce al sistema di rubare la gesture
-  }, { passive: false });
+    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
+    e.preventDefault(); // blocca gesture di sistema laterali
+  };
 
-  carousel.addEventListener("touchend", e => {
-    if (!isDragging || !e.changedTouches[0]) return;
+  const endDrag = e => {
+    if (!isDragging) return;
+    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") {
+      isDragging = false;
+      return;
+    }
+
     isDragging = false;
-
-    const diff = e.changedTouches[0].clientX - startX;
+    const diff = e.clientX - startX;
 
     if (Math.abs(diff) > 40) {
       if (diff < 0) goTo(index + 1);
       else goTo(index - 1);
     } else {
-      goTo(index); // torna alla card corrente
+      goTo(index); // resta sulla card corrente
     }
-  });
+  };
 
-  // indicizzazione basata sulla card più vicina (funziona anche con touchpad)
-  carousel.addEventListener("scroll", () => {
-    const newIndex = cards.findIndex(card => {
-      return Math.abs(card.offsetLeft - carousel.scrollLeft) < card.offsetWidth / 2;
-    });
+  carousel.addEventListener("pointerdown", onPointerDown);
+  carousel.addEventListener("pointermove", onPointerMove, { passive: false });
+  carousel.addEventListener("pointerup", endDrag);
+  carousel.addEventListener("pointercancel", endDrag);
+  carousel.addEventListener("pointerleave", endDrag);
 
-    if (newIndex !== -1 && newIndex !== index) {
-      index = newIndex;
-      updateDots();
-    }
-  });
+  // ❌ niente listener di scroll: i dot si aggiornano solo via goTo()
+  // (evitiamo conflitti con scrollLeft e con il sistema)
 
   // frecce
   const prev = document.getElementById("mobile-prev");
