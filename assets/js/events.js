@@ -437,68 +437,76 @@ function renderMobileCalendarCarousel() {
 
 function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
   let index = startIndex;
-  const cards = carousel.children;
+  const cards = [...carousel.children];
   const total = cards.length;
 
   function updateDots() {
     generateDotsWindow(total, index);
   }
 
-  function goTo(i) {
+  function goTo(i, instant = false) {
     index = Math.max(0, Math.min(i, total - 1));
-    const targetCard = cards[index];
-    if (!targetCard) return;
+    const target = cards[index];
+    if (!target) return;
 
     carousel.scrollTo({
-      left: targetCard.offsetLeft,
-      behavior: "smooth"
+      left: target.offsetLeft,
+      behavior: instant ? "auto" : "smooth"
     });
 
     updateDots();
   }
 
-  // esponiamo per i dot
   window.goTo = goTo;
 
+  // 🔥 blocchiamo lo scroll libero su TUTTI i device
+  carousel.addEventListener("scroll", () => {
+    const target = cards[index];
+    if (!target) return;
+    if (Math.abs(carousel.scrollLeft - target.offsetLeft) > 2) {
+      carousel.scrollLeft = target.offsetLeft;
+    }
+  });
+
+  // 🔥 swipe manuale universale
+  let startX = 0;
+  let isDragging = false;
+
+  carousel.addEventListener("touchstart", e => {
+    if (!e.touches[0]) return;
+    startX = e.touches[0].clientX;
+    isDragging = true;
+  });
+
+  carousel.addEventListener("touchmove", e => {
+    if (!isDragging) return;
+    e.preventDefault(); // impedisce al sistema di rubare la gesture
+  }, { passive: false });
+
+  carousel.addEventListener("touchend", e => {
+    if (!isDragging || !e.changedTouches[0]) return;
+    isDragging = false;
+
+    const diff = e.changedTouches[0].clientX - startX;
+
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) goTo(index + 1);
+      else goTo(index - 1);
+    } else {
+      goTo(index); // torna alla card corrente
+    }
+  });
+
+  // frecce
   const prev = document.getElementById("mobile-prev");
   const next = document.getElementById("mobile-next");
-
   if (prev && next) {
     prev.onclick = () => goTo(index - 1);
     next.onclick = () => goTo(index + 1);
   }
 
-  let startX = 0;
-
-  carousel.addEventListener("touchstart", e => {
-    if (!e.touches || !e.touches[0]) return;
-    startX = e.touches[0].clientX;
-  });
-
-  carousel.addEventListener("touchend", e => {
-    if (!e.changedTouches || !e.changedTouches[0]) return;
-    const endX = e.changedTouches[0].clientX;
-    const diff = endX - startX;
-
-    if (Math.abs(diff) > 50) {
-      if (diff < 0) goTo(index + 1);
-      else goTo(index - 1);
-    }
-  });
-
-  // indicizzazione basata sulla card più vicina → funziona ovunque
-  carousel.addEventListener("scroll", () => {
-    const newIndex = [...cards].findIndex(card => {
-      return Math.abs(card.offsetLeft - carousel.scrollLeft) < card.offsetWidth / 2;
-    });
-
-    if (newIndex !== -1 && newIndex !== index) {
-      index = newIndex;
-      updateDots();
-    }
-  });
-
-  updateDots();
+  // avvio
+  goTo(startIndex, true);
 }
 
 

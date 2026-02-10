@@ -528,7 +528,6 @@ footer {
 #mobile-calendar-carousel {
   display: flex;
   overflow-x: hidden;
-  scroll-snap-type: x mandatory;
   width: 100%;
   touch-action: pan-x;
 }
@@ -678,7 +677,6 @@ footer {
   display: flex;
   width: 100%;
   overflow-x: scroll;
-  scroll-snap-type: x mandatory;
 }
 
 .mobile-event-card {
@@ -688,12 +686,10 @@ footer {
   display: flex;
   width: 100%;
   overflow-x: scroll;
-  scroll-snap-type: x mandatory;
 }
 
 .mobile-event-card {
   flex: 0 0 100%;
-  scroll-snap-align: center;
 }
 
 /* ————————————————————————————————
