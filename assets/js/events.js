@@ -19,6 +19,7 @@ function isMobile() {
 
 /* ============================================================
    RILEVAMENTO DEVICE "DELICATI" (OPPO / COLOROS)
+   (attualmente non usato, ma pronto se servirà)
 ============================================================ */
 
 function isOppoDevice() {
@@ -381,7 +382,7 @@ if (nextBtn) {
 
 
 /* ============================================================
-   MOBILE CAROUSEL (TIMELINE CONTINUA)
+   MOBILE CAROUSEL (TIMELINE CONTINUA, SENZA MODALE)
 ============================================================ */
 
 function renderMobileCalendarCarousel() {
@@ -405,26 +406,32 @@ function renderMobileCalendarCarousel() {
 
     card.innerHTML = `
       ${ev.image ? `<img src="${ev.image}">` : ""}
+
       <div class="mobile-event-date">${ev.dateReadable}</div>
       <div class="mobile-event-title">${ev.title}</div>
+
+      <div class="mobile-event-info">
+        ${ev.time ? `<div class="mobile-event-time">🕒 ${ev.time}</div>` : ""}
+        ${ev.location ? `<div class="mobile-event-location">📍 ${ev.location}</div>` : ""}
+      </div>
+
       <div class="mobile-event-tags">
         ${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}
       </div>
     `;
 
-    card.addEventListener("click", () => openEventModal(ev));
+    // niente modale qui: il carosello è solo navigazione
     carousel.appendChild(card);
   });
 
   generateDotsWindow(timelineEvents.length, startIndex);
   initMobileSwipe(carousel, dotsContainer, startIndex);
 
-
   requestAnimationFrame(() => {
     if (carousel.children[startIndex]) {
       carousel.scrollTo({
         left: carousel.children[startIndex].offsetLeft,
-        behavior: "smooth"
+        behavior: "auto"
       });
     }
   });
@@ -457,18 +464,10 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
     updateDots();
   }
 
+  // esposto globalmente per i dot
   window.goTo = goTo;
 
-  // 🔥 blocchiamo lo scroll libero su TUTTI i device
-  carousel.addEventListener("scroll", () => {
-    const target = cards[index];
-    if (!target) return;
-    if (Math.abs(carousel.scrollLeft - target.offsetLeft) > 2) {
-      carousel.scrollLeft = target.offsetLeft;
-    }
-  });
-
-  // 🔥 swipe manuale universale
+  // swipe manuale universale
   let startX = 0;
   let isDragging = false;
 
@@ -497,6 +496,18 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
     }
   });
 
+  // indicizzazione basata sulla card più vicina (funziona anche con touchpad)
+  carousel.addEventListener("scroll", () => {
+    const newIndex = cards.findIndex(card => {
+      return Math.abs(card.offsetLeft - carousel.scrollLeft) < card.offsetWidth / 2;
+    });
+
+    if (newIndex !== -1 && newIndex !== index) {
+      index = newIndex;
+      updateDots();
+    }
+  });
+
   // frecce
   const prev = document.getElementById("mobile-prev");
   const next = document.getElementById("mobile-next");
@@ -508,7 +519,6 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
   // avvio
   goTo(startIndex, true);
 }
-
 
 
 /* ============================================================
@@ -530,6 +540,7 @@ function renderFutureList() {
     .forEach(ev => {
       const el = document.createElement("div");
       el.className = "timeline-event";
+      el.dataset.date = ev.dateStr;
 
       el.innerHTML = `
         <div class="timeline-event-date">${ev.dateReadable}</div>
@@ -566,6 +577,7 @@ function renderPastEvents() {
     .forEach(ev => {
       const el = document.createElement("div");
       el.className = "timeline-event";
+      el.dataset.date = ev.dateStr;
 
       el.innerHTML = `
         <div class="timeline-event-date">${ev.dateReadable}</div>
@@ -583,7 +595,7 @@ function renderPastEvents() {
 
 
 /* ============================================================
-   LINK CALENDARIO → TIMELINE MOBILE
+   LINK CALENDARIO → TIMELINE (USA data-date)
 ============================================================ */
 
 function linkCalendarToTimeline() {
@@ -624,7 +636,6 @@ function unlockBodyFromModal() {
   document.body.style.width = "";
   window.scrollTo(0, scrollY);
 }
-
 
 function openEventModal(ev) {
   const modal = document.getElementById("event-modal");
