@@ -10,9 +10,9 @@ async function loadGalleryImages() {
     const result = [];
 
     data.folders.forEach(folder => {
-      const safeFolder = encodeURI(folder.path); // mantiene gli slash
+      const safeFolder = encodeURI(folder.path);
       folder.images.forEach(img => {
-        const safeImg = encodeURIComponent(img); // codifica tutto il necessario
+        const safeImg = encodeURIComponent(img);
         result.push(`${safeFolder}/${safeImg}`);
       });
     });
@@ -58,8 +58,6 @@ async function loadArtist3Images() {
 
     const result = [];
 
-    // artist3.json ha struttura:
-    // { "artist3": [ { name, path, images[] }, ... ] }
     data.artist3.forEach(folder => {
       const safeFolder = encodeURI(folder.path);
       folder.images.forEach(img => {
@@ -134,16 +132,13 @@ function initLazyBackgrounds() {
   const items = document.querySelectorAll('[data-bg]');
   if (!items.length) return;
 
-  // Fallback se IntersectionObserver non esiste
   if (!('IntersectionObserver' in window)) {
     items.forEach(el => {
       const bg = el.dataset.bg;
       if (bg) {
         el.style.backgroundImage = `url('${bg}')`;
         el.classList.add('glitch-in');
-        setTimeout(() => {
-          el.classList.remove('glitch-in');
-        }, 320);
+        setTimeout(() => el.classList.remove('glitch-in'), 320);
       }
       const poster = el.closest('.poster');
       if (poster) resizeMasonryItem(poster);
@@ -161,18 +156,12 @@ function initLazyBackgrounds() {
       if (bg) {
         el.style.backgroundImage = `url('${bg}')`;
         el.classList.add('glitch-in');
-
-        // Rimuove la classe dopo l’animazione (glitch medio ~280ms)
-        setTimeout(() => {
-          el.classList.remove('glitch-in');
-        }, 320);
+        setTimeout(() => el.classList.remove('glitch-in'), 320);
       }
 
-      // Aggiorna la masonry per questo poster
       const poster = el.closest('.poster');
       if (poster) resizeMasonryItem(poster);
 
-      // Glitch solo la prima volta
       observer.unobserve(el);
     });
   }, {
@@ -180,37 +169,56 @@ function initLazyBackgrounds() {
   });
 
   items.forEach(el => {
-    if (el.dataset.bg) {
-      observer.observe(el);
-    }
+    if (el.dataset.bg) observer.observe(el);
   });
 }
 
 /* ============================================================
-   INIT MASONRY + COLLAGE
+   PATCH POSTER HOME — CARICAMENTO IMMEDIATO + FIX MASONRY
 ============================================================ */
 
-async function initMasonry() {
-  // 1. Prepara i data-bg per Galleria e Artist3
+/* 1) Carica SUBITO i background dei poster della home */
+function forceHomePosterBackgrounds() {
+  document.querySelectorAll('.poster [data-bg]').forEach(el => {
+    const bg = el.dataset.bg;
+    if (bg && bg.trim() !== "") {
+      el.style.backgroundImage = `url('${bg}')`;
+    }
+  });
+}
+
+/* 2) Ricalcola la masonry DOPO che i background sono applicati */
+function reflowHomePosters() {
+  const posters = document.querySelectorAll('.masonry-grid .poster');
+  posters.forEach(p => resizeMasonryItem(p));
+}
+
+/* 3) Patch globale: forza il caricamento dei poster appena pronti */
+async function initHomePostersPatch() {
   await setupGalleryCollage();
   await setupArtist3XSData();
 
-  // 2. Attiva lazy-loading + glitch
-  initLazyBackgrounds();
+  forceHomePosterBackgrounds();
 
-  // 3. Primo calcolo masonry
-  forceMasonryReflow();
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      reflowHomePosters();
+    });
+  });
 }
 
 /* ============================================================
-   EVENTI GLOBALI
+   INIT MASONRY + PATCH
 ============================================================ */
 
 window.addEventListener('load', () => {
-  setTimeout(initMasonry, 300);
+  setTimeout(() => {
+    initHomePostersPatch();
+    initLazyBackgrounds(); // lazy load per tutto il resto
+  }, 200);
 });
 
-// Ricalcolo intelligente al resize
+/* Ricalcolo intelligente al resize */
 let resizeTimeout;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimeout);

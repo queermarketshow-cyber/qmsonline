@@ -2107,3 +2107,59 @@ body.modal-open {
 #mobile-calendar-carousel::-webkit-scrollbar {
   display: none !important;
 }
+/* ————————————————————————————————
+   PATCH POSTER — FIX TAGLI SU MOBILE
+—————————————————————————————————— */
+
+/* 1. Il wrapper deve poter crescere */
+.poster-grid,
+.poster-collage {
+  overflow: visible !important;
+}
+
+/* 2. Ogni poster deve avere un aspect-ratio stabile */
+.poster-card,
+.poster-item {
+  aspect-ratio: 3 / 4 !important; /* o 4/5 se preferisci */
+  height: auto !important;
+}
+
+/* 3. Le immagini devono riempire senza tagliarsi */
+.poster-card img,
+.poster-item img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* 4. Le rotazioni non devono essere clippate */
+.poster-card,
+.poster-item {
+  overflow: visible !important;
+}
+
+/* 5. Su mobile niente rotazioni estreme */
+@media (max-width: 600px) {
+  .poster-card,
+  .poster-item {
+    transform: rotate(0deg) !important;
+    box-shadow: 4px 4px 0 #ff00ff !important;
+  }
+}
+/* ————————————————————————————————
+   PATCH LAZY LOAD — FORZA IL CARICAMENTO
+—————————————————————————————————— */
+
+/* Chrome/Safari fix: gli elementi trasformati non triggerano lazy load */
+.poster-card,
+.poster-item {
+  will-change: transform;
+  contain: paint;
+}
+
+/* Forza il browser a considerare i poster “visibili” */
+.poster-grid,
+.poster-collage {
+  min-height: 1px;
+}
