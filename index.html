@@ -24,7 +24,7 @@
   <div class="masonry-grid">
 
     <!-- POSTER m — PROSSIMI EVENTI -->
-    <a href="#calendario" class="poster poster-M poster-eventi tilt-left" data-section="Eventi">
+    <a href="#eventi" class="poster poster-M poster-eventi tilt-left" data-section="Eventi">
       <h2>PROSSIMI EVENTI</h2>
       <span class="sticker">→ scopri ora</span>
     </a>
@@ -154,30 +154,53 @@
   <!-- FILTRI CATEGORIE -->
   <div class="calendar-filters" id="calendar-filters"></div>
 
-  <!-- CONTROLLI FUTURO / PASSATO -->
-  <div class="calendar-controls">
-    <button id="show-future" class="active">Eventi futuri</button>
-    <button id="show-past">Eventi passati</button>
-  </div>
 
   <div class="calendar-layout">
 
-    <!-- CALENDARIO FUTURO (DESKTOP) -->
+    <!-- ============================
+         CALENDARIO FUTURO (DESKTOP)
+    ============================= -->
     <div id="future-calendar">
       <button id="prev-month">←</button>
       <div id="future-month-container"></div>
       <button id="next-month">→</button>
     </div>
 
-    <!-- TIMELINE MOBILE FUTURA -->
+    <!-- ============================
+         CALENDARIO MOBILE (CAROUSEL)
+    ============================= -->
+    <div id="mobile-calendar-wrapper">
+
+      <!-- PALLINI INDICATORI -->
+      <div id="mobile-dots"></div>
+
+      <!-- FRECCIA SINISTRA -->
+      <button id="mobile-prev" class="mobile-arrow">‹</button>
+
+      <!-- CAROSELLO -->
+      <div id="mobile-calendar-carousel">
+        <!-- Le card vengono inserite via JS -->
+      </div>
+
+      <!-- FRECCIA DESTRA -->
+      <button id="mobile-next" class="mobile-arrow">›</button>
+    </div>
+
+    <!-- ============================
+         TIMELINE MOBILE (fallback)
+    ============================= -->
     <div id="mobile-timeline" class="mobile-timeline"></div>
 
-    <!-- EVENTI PASSATI (TIMELINE + MENSILE DESKTOP) -->
+    <!-- ============================
+         EVENTI PASSATI (DESKTOP)
+    ============================= -->
     <div id="past-events"></div>
 
   </div>
 
-  <!-- MODALE EVENTO -->
+  <!-- ============================
+       MODALE EVENTO
+  ============================= -->
   <div id="event-modal">
     <div class="event-modal-content">
       <button class="event-modal-close">✕</button>

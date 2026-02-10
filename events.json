@@ -22,6 +22,28 @@
     "categories": ["performance", "djset"]
   },
   {
+    "id": "event-2026-02-26-dragitup",
+    "title": "Drag it up",
+    "start": "2026-02-26",
+    "end": "2026-02-26",
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "location": "Minima Fucina di Quartiere, Lecce",
+    "image": "images/eventi/2026 dragitup.jpeg",
+    "categories": ["workshop", "talk", "djset"]
+  },
+  {
+    "id": "event-2025-12-28-tombolet-cabaret",
+    "title": "Tombolet Cabaret",
+    "start": "2025-12-28",
+    "end": null,
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "location": "Too Much, Lecce",
+    "image": "images/eventi/20251228 tombolet.jpg",
+    "categories": ["giochi", "performance"]
+  },
+  {
     "id": "event-2025-12-13-dissensi-festival",
     "title": "Dissensi Festival",
     "start": "2025-12-13",
@@ -44,17 +66,6 @@
     "categories": ["performance"]
   },
   {
-    "id": "event-2025-12-28-tombolet-cabaret",
-    "title": "Tombolet Cabaret",
-    "start": "2025-12-28",
-    "end": null,
-    "recurringWeekdays": [],
-    "specificDates": [],
-    "location": "Too Much, Lecce",
-    "image": "images/eventi/20251207 tombolet.jpg",
-    "categories": ["giochi", "performance"]
-  },
-  {
     "id": "event-2025-12-07-tombolet-cabaret",
     "title": "Tombolet Cabaret",
     "start": "2025-12-07",
@@ -62,7 +73,7 @@
     "recurringWeekdays": [],
     "specificDates": [],
     "location": "Too Much, Lecce",
-    "image": "images/eventi/20251228 tombolet.jpg",
+    "image": "images/eventi/20251207 tombolet.jpg",
     "categories": ["giochi", "performance"]
   },
   {
@@ -126,21 +137,19 @@
     "start": "2025-04-26",
     "end": "2025-05-09",
     "recurringWeekdays": [],
-    "specificDates": ["2025-04-26", "2025-04-27", "2025-05-02", "2025-05-03", "2025-05-04", "2025-05-07", "2025-05-08", "2025-05-09"],
+    "specificDates": [
+      "2025-04-26",
+      "2025-04-27",
+      "2025-05-02",
+      "2025-05-03",
+      "2025-05-04",
+      "2025-05-07",
+      "2025-05-08",
+      "2025-05-09"
+    ],
     "location": "Progetto, Lecce",
     "image": "images/eventi/takeover.jpg",
     "categories": ["performance"]
-  },
-  {
-    "id": "event-2026-03-01-dragitup",
-    "title": "Drag it up",
-    "start": "2026-02-26",
-    "end": "2026-02-26",
-    "recurringWeekdays": [],
-    "specificDates": [],
-    "location": "Minima Fucina di Quartiere, Lecce",
-    "image": "images/eventi/2026 dragitup.jpeg",
-    "categories": ["workshop", "talk", "djset"]
   },
   {
     "id": "event-2025-03-07-uomini",
@@ -154,7 +163,7 @@
     "categories": ["talk"]
   },
   {
-    "id": "event-2025-03-04-Carnival",
+    "id": "event-2025-03-04-carnival",
     "title": "Carnival Party",
     "start": "2025-03-04",
     "end": "2025-03-04",
@@ -165,7 +174,7 @@
     "categories": ["performance", "djset"]
   },
   {
-    "id": "event-2025-02-20-Liturgia",
+    "id": "event-2025-02-20-liturgia",
     "title": "Liturgia Queer",
     "start": "2025-02-20",
     "end": "2025-02-20",
@@ -176,7 +185,7 @@
     "categories": ["performance", "djset"]
   },
   {
-    "id": "event-2025-02-07-Aperipio",
+    "id": "event-2025-02-07-aperipio",
     "title": "Aperipio",
     "start": "2025-02-07",
     "end": "2025-02-07",
@@ -187,7 +196,7 @@
     "categories": ["performance"]
   },
   {
-    "id": "event-2025-01-05-Tombolata",
+    "id": "event-2025-01-05-tombolata",
     "title": "Tombolata",
     "start": "2025-01-05",
     "end": "2025-01-05",
@@ -198,17 +207,6 @@
     "categories": ["performance", "giochi", "djset"]
   },
   {
-    "id": "event-2024-06-29-ordafest",
-    "title": "Orda Fest",
-    "start": "2024-06-29",
-    "end": null,
-    "recurringWeekdays": [],
-    "specificDates": [],
-    "location": "Masseria Tagliatelle, Lecce",
-    "image": "images/eventi/20242629 ordafest.heic",
-    "categories": ["performance", "djset"]
-  },
-  {
     "id": "event-2024-12-21-cracking-catalitico",
     "title": "Cracking Catalitico",
     "start": "2024-12-21",
@@ -216,7 +214,7 @@
     "recurringWeekdays": [],
     "specificDates": [],
     "location": "Teatro Asfalto, Lecce",
-    "image": "images/eventi/20241222 20241221 cracking.webp",
+    "image": "images/eventi/20241221 cracking.webp",
     "categories": ["performance"]
   },
   {
@@ -275,15 +273,15 @@
     "categories": ["performance", "djset"]
   },
   {
-    "id": "event-2024-05-20-power-up",
-    "title": "Power Up",
-    "start": "2024-05-20",
-    "end": "2024-06-25",
+    "id": "event-2024-06-29-ordafest",
+    "title": "Orda Fest",
+    "start": "2024-06-29",
+    "end": null,
     "recurringWeekdays": [],
-    "specificDates": ["2025-05-20", "2024-05-31", "2024-06-07", "2024-06-17", "2024-06-25"],
-    "location": "Crocevia Centro Multiculturale, Lecce",
-    "image": "images/eventi/power up.webp",
-    "categories": ["performance", "workshop"]
+    "specificDates": [],
+    "location": "Masseria Tagliatelle, Lecce",
+    "image": "images/eventi/20240629 ordafest.heic",
+    "categories": ["performance", "djset"]
   },
   {
     "id": "event-2024-06-09-q4p",
@@ -294,6 +292,34 @@
     "specificDates": [],
     "location": "Zei Spazio Sociale, Lecce",
     "image": "images/eventi/20240609 q4p.webp",
+    "categories": ["performance", "djset", "talk"]
+  },
+  {
+    "id": "event-2024-05-20-power-up",
+    "title": "Power Up",
+    "start": "2024-05-20",
+    "end": "2024-06-25",
+    "recurringWeekdays": [],
+    "specificDates": [
+      "2024-05-20",
+      "2024-05-31",
+      "2024-06-07",
+      "2024-06-17",
+      "2024-06-25"
+    ],
+    "location": "Crocevia Centro Multiculturale, Lecce",
+    "image": "images/eventi/power up.webp",
+    "categories": ["performance", "workshop"]
+  },
+  {
+    "id": "event-2024-02-24-q4p",
+    "title": "Queers for Palestine",
+    "start": "2024-02-24",
+    "end": "2024-02-24",
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "location": "Manifatture Knoss, Lecce",
+    "image": "images/eventi/20240224 q4p.webp",
     "categories": ["performance", "djset", "talk"]
   },
   {
@@ -363,7 +389,7 @@
     "categories": ["performance", "djset", "talk"]
   },
   {
-    "id": "event-2023-03-11-QMS-live-75",
+    "id": "event-2023-03-11-qms-live-75",
     "title": "Live 75",
     "start": "2023-03-11",
     "end": "2023-03-11",
@@ -385,7 +411,7 @@
     "categories": ["performance", "djset", "talk"]
   },
   {
-    "id": "event-2022-09-24-qms",
+    "id": "event-2022-09-24-qms-taggiate",
     "title": "QMS - TAGGHIATE",
     "start": "2022-09-24",
     "end": "2022-09-24",
@@ -406,7 +432,7 @@
     "image": "images/eventi/20220628 qms botte.webp",
     "categories": ["performance", "djset"]
   },
- {
+  {
     "id": "event-2022-06-13-qms",
     "title": "QMS",
     "start": "2022-06-13",
@@ -417,7 +443,7 @@
     "image": "images/eventi/20220613 qms.webp",
     "categories": ["performance", "djset"]
   },
- {
+  {
     "id": "event-2022-06-04-qms",
     "title": "QMS",
     "start": "2022-06-04",
@@ -451,7 +477,7 @@
     "categories": ["performance", "djset", "talk"]
   },
   {
-    "id": "event-2022-05-13-c'è-porno-per-te",
+    "id": "event-2022-05-13-ce-porno-per-te",
     "title": "C'è Porno Per Te",
     "start": "2022-05-13",
     "end": "2022-05-13",
@@ -471,18 +497,5 @@
     "location": "Zei Spazio Sociale, Lecce",
     "image": "images/eventi/20220507 qms.webp",
     "categories": ["performance", "djset", "talk"]
-  },
-  {
-    "id": "event-2024-02-24-q4p",
-    "title": "Queers for Palestine",
-    "start": "2024-02-24",
-    "end": "2024-02-24",
-    "recurringWeekdays": [],
-    "specificDates": [],
-    "location": "Manifatture Knoss, Lecce",
-    "image": "images/eventi/20240224 q4p.webp",
-    "categories": ["performance", "djset", "talk"]
   }
-
-
 ]
