@@ -1904,3 +1904,139 @@ footer {
   .manifesto-lead { font-size: 1.3rem; }
   .manifesto-body p { font-size: 1.05rem; }
 }
+
+body.modal-open {
+  overflow: hidden;
+  height: 100vh;
+  touch-action: none;
+}
+
+/* ————————————————————————————————
+   BODY LOCK PER MODALI (TOUCH FIX)
+—————————————————————————————————— */
+body.modal-open {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none !important;
+  position: fixed !important;
+  width: 100% !important;
+}
+/* ————————————————————————————————
+   TOUCH-ACTION FIX PER CAROSELLO E GALLERIE
+—————————————————————————————————— */
+.artist-gallery,
+.modal-grid,
+.mosaic-grid,
+#mobile-calendar-carousel,
+.gallery-folders {
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch;
+}
+/* ————————————————————————————————
+   HITBOX MIGLIORATE PER MOBILE
+—————————————————————————————————— */
+@media (max-width: 768px) {
+  a, button, .clickable, .calendar-day, .event-postit {
+    min-height: 48px;
+    padding: 12px 14px;
+  }
+
+  .navbar a,
+  .menu-mobile a {
+    padding: 12px 0;
+    display: block;
+  }
+}
+/* ————————————————————————————————
+   CALENDARIO MOBILE — TAP PIÙ GRANDI
+—————————————————————————————————— */
+@media (max-width: 768px) {
+  .calendar-day {
+    padding: 1rem !important;
+    font-size: 1rem !important;
+  }
+
+  .event-postit {
+    width: 70px !important;
+    height: 70px !important;
+  }
+}
+/* ————————————————————————————————
+   NAVBAR MOBILE — TOUCH FIX
+—————————————————————————————————— */
+@media (max-width: 768px) {
+  .menu-mobile {
+    touch-action: pan-y !important;
+  }
+
+  .menu-toggle {
+    touch-action: manipulation !important;
+  }
+}
+/* ————————————————————————————————
+   MODALI — SCROLL INTERNO FLUIDO
+—————————————————————————————————— */
+.artist-modal-content,
+#galleryModal .modal-content,
+.event-modal-content,
+.mosaic-gallery {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+/* ————————————————————————————————
+   DOT INDICATOR — EVENTI MOBILE
+—————————————————————————————————— */
+#mobile-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 50;
+}
+
+/* stato base: piccoli, discreti */
+.mobile-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background: #ff2fa8;
+  opacity: 0.25;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    filter 0.25s ease,
+    box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+/* DOT ATTIVO: neon + glow + saturazione */
+.mobile-dot.active {
+  opacity: 1;
+  transform: scale(1.6) rotate(-3deg);
+  filter: saturate(2) brightness(1.4);
+  box-shadow:
+    0 0 6px #ff2fa8,
+    0 0 12px #ff2fa8,
+    0 0 18px #ff2fa8;
+  animation: dotPulse 1.2s infinite alternate ease-in-out;
+}
+
+/* pulsazione glitch */
+@keyframes dotPulse {
+  0% {
+    transform: scale(1.5) rotate(-2deg);
+    box-shadow:
+      0 0 6px #ff2fa8,
+      0 0 12px #ff2fa8;
+  }
+  100% {
+    transform: scale(1.7) rotate(2deg);
+    box-shadow:
+      0 0 10px #ff2fa8,
+      0 0 20px #ff2fa8,
+      0 0 30px #ff2fa8;
+  }
+}

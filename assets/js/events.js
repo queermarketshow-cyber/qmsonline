@@ -166,6 +166,35 @@ function renderAll() {
   renderPastEvents();
   linkCalendarToTimeline();
 }
+/* ============================================================
+   DOT WINDOW (5 DOT VISIBILI)
+============================================================ */
+
+function generateDotsWindow(total, activeIndex) {
+  const dotsContainer = document.getElementById("mobile-dots");
+  dotsContainer.innerHTML = "";
+
+  const windowSize = 25;
+  const half = Math.floor(windowSize / 2);
+
+  let start = Math.max(0, activeIndex - half);
+  let end = Math.min(total - 1, activeIndex + half);
+
+  if (activeIndex < half) {
+    end = Math.min(total - 1, windowSize - 1);
+  }
+
+  if (activeIndex > total - half - 1) {
+    start = Math.max(0, total - windowSize);
+  }
+
+  for (let i = start; i <= end; i++) {
+    const dot = document.createElement("div");
+    dot.className = "mobile-dot" + (i === activeIndex ? " active" : "");
+    dot.addEventListener("click", () => goTo(i));
+    dotsContainer.appendChild(dot);
+  }
+}
 
 
 /* ============================================================
@@ -376,12 +405,9 @@ function renderMobileCalendarCarousel() {
     card.addEventListener("click", () => openEventModal(ev));
     carousel.appendChild(card);
 
-    // DOTS
-    const dot = document.createElement("div");
-    dot.className = "mobile-dot" + (idx === startIndex ? " active" : "");
-    dot.addEventListener("click", () => goTo(idx));
-    dotsContainer.appendChild(dot);
   });
+  // 🔥 Generazione dot con finestra dinamica
+  generateDotsWindow(timelineEvents.length, startIndex);
 
   // 🔥 PASSIAMO startIndex ALLO SWIPE
   initMobileSwipe(carousel, dotsContainer, startIndex);
@@ -396,6 +422,18 @@ function renderMobileCalendarCarousel() {
     }
   });
 }
+// ————————————————————————————————
+// AGGIORNAMENTO DOT DURANTE LO SCROLL
+// ————————————————————————————————
+carousel.addEventListener("scroll", () => {
+  const cardWidth = carousel.offsetWidth;
+  const newIndex = Math.round(carousel.scrollLeft / cardWidth);
+
+  if (newIndex !== index) {
+    index = newIndex;
+    updateDots();
+  }
+});
 
 
 
@@ -410,10 +448,19 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
   const dots = dotsContainer.children;
 
   function updateDots() {
-    Array.from(dots).forEach((d, i) => {
-      d.classList.toggle("active", i === index);
-    });
+  generateDotsWindow(total, index);
+}
+// 🔥 Aggiorna dot anche durante scroll lento
+carousel.addEventListener("scroll", () => {
+  const cardWidth = carousel.offsetWidth;
+  const newIndex = Math.round(carousel.scrollLeft / cardWidth);
+
+  if (newIndex !== index) {
+    index = newIndex;
+    updateDots();
   }
+});
+
 
   function goTo(i) {
     index = Math.max(0, Math.min(i, total - 1));
