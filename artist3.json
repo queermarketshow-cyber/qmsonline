@@ -15,8 +15,8 @@
       "name": "billie",
       "path": "images/artist3/billie",
       "images": [
-        "billie1.jpg",
-        "billie2.jpg"
+        "Billie1.jpg",
+        "Billie2.jpg"
       ]
     },
     {
@@ -45,9 +45,9 @@
       "name": "ospiti",
       "path": "images/artist3/ospiti",
       "images": [
-        "porcahontas.jpg",
-        "srosa.jpg",
-        "thespoiled.jpg"
+        "porcahontas.jpeg",
+        "srosa.jpeg",
+        "thespoiled.jpeg"
       ]
     },
     {
