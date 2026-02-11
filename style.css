@@ -2329,16 +2329,21 @@ body.modal-open {
 }
 
 
+
 /* ============================
-   HOME FULLSCREEN
+   OFFSET NAVBAR
 ============================= */
+
+:root {
+  --navbar-height: 80px;
+}
 
 .home-collage {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - var(--navbar-height));
+  padding-top: var(--navbar-height);
   overflow: hidden;
-  padding: 0;
 }
 
 
@@ -2349,15 +2354,13 @@ body.modal-open {
 .poster {
   display: block;
   position: absolute;
-  padding: 1.6rem;
+  padding: 1.2rem;
   color: #fff;
   text-decoration: none;
   border: 2px solid #fff;
   background: rgba(255,255,255,0.05);
   box-shadow: 0 0 0 2px #000 inset;
-  overflow: visible;
   transform-origin: center;
-  max-width: 100%;
   content-visibility: auto;
 }
 
@@ -2372,7 +2375,7 @@ body.modal-open {
   top: 10px;
   left: 10px;
   padding: 6px 10px;
-  font-size: 1.4rem;          /* <<< ETICHETTA PIÙ GRANDE */
+  font-size: 1.3rem;
   font-weight: 900;
   text-transform: uppercase;
   background: #000;
@@ -2386,28 +2389,39 @@ body.modal-open {
 
 
 /* ============================
-   DIMENSIONI ANARCHICHE
+   TAGLIE POSTER CORRETTE
 ============================= */
 
-.poster-L {
-  width: 32vw;
-  height: 42vh;
-}
-
-.poster-M {
-  width: 24vw;
-  height: 32vh;
-}
-
-.poster-S {
-  width: 18vw;
-  height: 28vh;
-}
-
+/* XS — Polaroid (3:4) */
 .poster-XS {
-  width: 16vw;
-  height: 20vh;
+  width: 20vw;
+  height: calc(12vw * 1.33);
 }
+
+/* S — Quadrato (1:1) */
+.poster-S {
+  width: 34vw;
+  height: 34vw;
+}
+
+/* M — Cartolina orizzontale (3:2) */
+.poster-M {
+  width: 34vw;
+  height: calc(34vw * 0.66);
+}
+
+/* L — Banner orizzontale full width (sottile) */
+.poster-L {
+  width: 100vw;
+  height: 18vh;
+}
+
+/* XL — Stendardo verticale full height */
+.poster-XL {
+  height: calc(100vh - var(--navbar-height));
+  width: 18vw;
+}
+
 
 
 /* ============================
@@ -2419,75 +2433,59 @@ body.modal-open {
 
 
 /* ============================
-   PALETTE SPECIFICHE
+   PALETTE
 ============================= */
 
-.poster-eventi {
-  background: var(--primary-color);
-  color: #000;
-  border-color: #000;
-}
-
-.poster-manifesto {
-  background: #111;
-  border: 3px dashed var(--primary-color);
-}
-
-.poster-galleria {
-  background: #222;
-  border-color: #fff;
-}
-
-.poster-artist3 {
-  background: #fff;
-  color: #000;
-  border-color: #000;
-}
-
-.poster-sostienici {
-  background: #000;
-  color: var(--primary-color);
-  border: 3px solid var(--primary-color);
-}
+.poster-eventi { background: var(--primary-color); color: #000; border-color: #000; }
+.poster-manifesto { background: #111; border: 3px dashed var(--primary-color); }
+.poster-galleria { background: #222; border-color: #fff; }
+.poster-artist3 { background: #fff; color: #000; border-color: #000; }
+.poster-sostienici { background: #000; color: var(--primary-color); border: 3px solid var(--primary-color); }
 
 
 /* ============================
    POSIZIONAMENTO ANARCHICO
+   (basato sulle nuove proporzioni)
 ============================= */
 
-.p-eventi {
-  top: 6%;
-  left: 4%;
-  z-index: 3;
+/* SOSTIENICI — L — banner in basso */
+.p-sostienici {
+  bottom: 4%;
+  left: 0;
+  z-index: 1;
 }
 
-.p-artist3 {
-  top: 10%;
-  right: 6%;
-  z-index: 4;
-}
-
-.p-galleria {
-  bottom: 8%;
-  left: 12%;
+/* MANIFESTO — XL — stendardo a sinistra */
+.p-manifesto {
+  top: 0;
+  left: 94%;
   z-index: 2;
 }
 
-.p-sostienici {
-  bottom: 6%;
-  right: 8%;
+/* ARTIST3 — M — centro */
+.p-artist3 {
+  top: 8%;
+  left: 1%;
   z-index: 3;
 }
 
-.p-manifesto {
-  top: 32%;
-  left: 38%;
+/* GALLERIA — S — destra */
+.p-galleria {
+  top: 18%;
+  right: 10%;
+  z-index: 4;
+}
+
+/* PROSSIMI EVENTI — XS — in alto */
+.p-eventi {
+  top: 6%;
+  left: 20%;
   z-index: 5;
 }
 
 
 /* ============================
-   MOBILE RESPONSIVE
+   MOBILE
 ============================= */
 
 @media (max-width: 768px) {
@@ -2514,16 +2512,4 @@ body.modal-open {
     padding: 5px 8px;
   }
 }
-/* Altezza navbar (puoi regolarla se necessario) */
-:root {
-  --navbar-height: 60px;
-}
 
-/* HOME FULLSCREEN con offset per la navbar */
-.home-collage {
-  position: relative;
-  width: 100%;
-  height: calc(100vh - var(--navbar-height));
-  padding-top: var(--navbar-height);
-  overflow: hidden;
-}
