@@ -527,17 +527,19 @@ footer {
 
 #mobile-calendar-carousel {
   display: flex;
-  overflow-x: hidden;
   width: 100%;
-  touch-action: pan-x;
+  overflow-x: hidden;   /* niente scroll orizzontale nativo */
+  overflow-y: visible;  /* lascia passare lo scroll verticale */
+  touch-action: pan-y;  /* verticale prioritario */
 }
 
+
 .mobile-event-card {
+  flex: 0 0 100%;
   min-width: 100%;
-  scroll-snap-align: center;
-  padding: 20px;
-  box-sizing: border-box;
+  touch-action: pan-y;  /* lascia passare lo scroll verticale */
 }
+
 
 .mobile-event-card img {
   width: 100%;
@@ -676,21 +678,33 @@ footer {
 #mobile-calendar-carousel {
   display: flex;
   width: 100%;
-  overflow-x: scroll;
+  overflow-x: hidden;   /* niente scroll orizzontale nativo */
+  overflow-y: visible;  /* lascia passare lo scroll verticale */
+  touch-action: pan-y;  /* verticale prioritario */
 }
+
 
 .mobile-event-card {
   flex: 0 0 100%;
+  min-width: 100%;
+  touch-action: pan-y;  /* lascia passare lo scroll verticale */
 }
+
 #mobile-calendar-carousel {
   display: flex;
   width: 100%;
-  overflow-x: scroll;
+  overflow-x: hidden;   /* niente scroll orizzontale nativo */
+  overflow-y: visible;  /* lascia passare lo scroll verticale */
+  touch-action: pan-y;  /* verticale prioritario */
 }
+
 
 .mobile-event-card {
   flex: 0 0 100%;
+  min-width: 100%;
+  touch-action: pan-y;  /* lascia passare lo scroll verticale */
 }
+
 
 /* ————————————————————————————————
    ARTIST GALLERY → COERENTE CON CARTELLE
@@ -1923,11 +1937,14 @@ body.modal-open {
 .artist-gallery,
 .modal-grid,
 .mosaic-grid,
-#mobile-calendar-carousel,
-.gallery-folders {
-  touch-action: pan-y !important;
-  -webkit-overflow-scrolling: touch;
+#mobile-calendar-carousel {
+  display: flex;
+  width: 100%;
+  overflow-x: hidden;   /* niente scroll orizzontale nativo */
+  overflow-y: visible;  /* lascia passare lo scroll verticale */
+  touch-action: pan-y;  /* verticale prioritario */
 }
+
 /* ————————————————————————————————
    HITBOX MIGLIORATE PER MOBILE
 —————————————————————————————————— */
@@ -2069,19 +2086,19 @@ body.modal-open {
 #mobile-calendar-carousel {
   display: flex;
   width: 100%;
-  overflow-x: hidden;            /* nessuno scroll nativo orizzontale */
-  overflow-y: visible;           /* lascia passare lo scroll verticale */
-  touch-action: pan-y;           /* verticale prioritario */
+  overflow-x: hidden;   /* niente scroll orizzontale nativo */
+  overflow-y: visible;  /* lascia passare lo scroll verticale */
+  touch-action: pan-y;  /* verticale prioritario */
 }
+
 
 /* Card: larghezza piena, nessun blocco allo scroll verticale */
 .mobile-event-card {
   flex: 0 0 100%;
   min-width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  touch-action: pan-y;           /* lascia passare lo scroll verticale */
+  touch-action: pan-y;  /* lascia passare lo scroll verticale */
 }
+
 
 .mobile-event-card img {
   width: 100%;
