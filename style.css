@@ -2327,3 +2327,203 @@ body.modal-open {
 .artist-modal-gallery img * {
   touch-action: pan-y !important;
 }
+
+
+/* ============================
+   HOME FULLSCREEN
+============================= */
+
+.home-collage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  padding: 0;
+}
+
+
+/* ============================
+   POSTER BASE
+============================= */
+
+.poster {
+  display: block;
+  position: absolute;
+  padding: 1.6rem;
+  color: #fff;
+  text-decoration: none;
+  border: 2px solid #fff;
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 0 2px #000 inset;
+  overflow: visible;
+  transform-origin: center;
+  max-width: 100%;
+  content-visibility: auto;
+}
+
+
+/* ============================
+   ETICHETTA GRANDE
+============================= */
+
+.poster::before {
+  content: attr(data-section);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 6px 10px;
+  font-size: 1.4rem;          /* <<< ETICHETTA PIÙ GRANDE */
+  font-weight: 900;
+  text-transform: uppercase;
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 3px #000 inset;
+  pointer-events: none;
+  z-index: 10;
+  transform: rotate(-2deg);
+}
+
+
+/* ============================
+   DIMENSIONI ANARCHICHE
+============================= */
+
+.poster-L {
+  width: 32vw;
+  height: 42vh;
+}
+
+.poster-M {
+  width: 24vw;
+  height: 32vh;
+}
+
+.poster-S {
+  width: 18vw;
+  height: 28vh;
+}
+
+.poster-XS {
+  width: 16vw;
+  height: 20vh;
+}
+
+
+/* ============================
+   ROTAZIONI
+============================= */
+
+.tilt-left { transform: rotate(-3deg); }
+.tilt-right { transform: rotate(3deg); }
+
+
+/* ============================
+   PALETTE SPECIFICHE
+============================= */
+
+.poster-eventi {
+  background: var(--primary-color);
+  color: #000;
+  border-color: #000;
+}
+
+.poster-manifesto {
+  background: #111;
+  border: 3px dashed var(--primary-color);
+}
+
+.poster-galleria {
+  background: #222;
+  border-color: #fff;
+}
+
+.poster-artist3 {
+  background: #fff;
+  color: #000;
+  border-color: #000;
+}
+
+.poster-sostienici {
+  background: #000;
+  color: var(--primary-color);
+  border: 3px solid var(--primary-color);
+}
+
+
+/* ============================
+   POSIZIONAMENTO ANARCHICO
+============================= */
+
+.p-eventi {
+  top: 6%;
+  left: 4%;
+  z-index: 3;
+}
+
+.p-artist3 {
+  top: 10%;
+  right: 6%;
+  z-index: 4;
+}
+
+.p-galleria {
+  bottom: 8%;
+  left: 12%;
+  z-index: 2;
+}
+
+.p-sostienici {
+  bottom: 6%;
+  right: 8%;
+  z-index: 3;
+}
+
+.p-manifesto {
+  top: 32%;
+  left: 38%;
+  z-index: 5;
+}
+
+
+/* ============================
+   MOBILE RESPONSIVE
+============================= */
+
+@media (max-width: 768px) {
+
+  .home-collage {
+    height: auto;
+    padding: 6vh 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4vh;
+  }
+
+  .poster {
+    position: relative;
+    width: 80vw !important;
+    height: auto !important;
+    aspect-ratio: 3 / 2;
+    transform: rotate(0deg) !important;
+  }
+
+  .poster::before {
+    font-size: 1.2rem;
+    padding: 5px 8px;
+  }
+}
+/* Altezza navbar (puoi regolarla se necessario) */
+:root {
+  --navbar-height: 60px;
+}
+
+/* HOME FULLSCREEN con offset per la navbar */
+.home-collage {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--navbar-height));
+  padding-top: var(--navbar-height);
+  overflow: hidden;
+}

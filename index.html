@@ -18,70 +18,44 @@
 <!-- SFONDO LOGO -->
 <div class="logo-background"></div>
 
-<!-- HOME — MASONRY B2-B -->
-<section id="home" class="home-section collage-home">
+<!-- ============================
+     HOME COLLAGE ANARCHICO
+============================= -->
 
-  <div class="masonry-grid">
+<section id="home" class="home-collage">
 
-    <!-- POSTER xs — PROSSIMI EVENTI -->
-    <div class="poster poster-xs poster-eventi tilt-left" data-section="Eventi">
-      <a href="#calendario" class="poster-link"></a>
-      <h2>PROSSIMI EVENTI</h2>
-      <span class="sticker">→ scopri ora</span>
-    </div>
+  <!-- PROSSIMI EVENTI -->
+  <a href="#calendario"
+     class="poster poster-L poster-eventi tilt-left p-eventi"
+     data-section="Prossimi Eventi">
+  </a>
 
-    <!-- POSTER xs — MANIFESTO -->
-    <div class="poster poster-xs poster-manifesto tilt-right" data-section="Manifesto">
-      <a href="#manifesto" class="poster-link"></a>
-      <p class="poster-teaser">infrastrutture di desiderio.</p>
-    </div>
+  <!-- ARTIST3 -->
+  <a href="#artist3"
+     class="poster poster-XS poster-artist3 tilt-right p-artist3"
+     data-section="Artist3">
+    <img src="images/collage.jpg" alt="Artist3">
+  </a>
 
-<!-- POSTER m — GALLERIA -->
-<div class="poster poster-m poster-galleria tilt-left" data-section="Galleria">
-  <a href="#gallery" class="poster-link"></a>
-  <h2>GALLERIA</h2>
+  <!-- GALLERIA -->
+  <a href="#gallery"
+     class="poster poster-M poster-galleria tilt-left p-galleria"
+     data-section="Galleria">
+  </a>
 
-  <div class="poster-collage">
-    <div class="collage-img img1"></div>
-    <div class="collage-img img2"></div>
-    <div class="collage-img img3"></div>
-  </div>
-</div>
+  <!-- SOSTIENICI -->
+  <a href="#sostienici"
+     class="poster poster-S poster-sostienici tilt-right p-sostienici"
+     data-section="Sostienici">
+  </a>
 
-
-<!-- POSTER xs — ARTIST3 -->
-<div class="poster poster-XS poster-artist3 tilt-right" data-section="Artist3">
-  <a href="#artist3" class="poster-link"></a>
-  <h2>ARTIST3</h2>
-
-  <div class="poster-collage-xs">
-    <div class="cell" style="--i:1"></div>
-    <div class="cell" style="--i:2"></div>
-    <div class="cell" style="--i:3"></div>
-    <div class="cell" style="--i:4"></div>
-    <div class="cell" style="--i:5"></div>
-    <div class="cell" style="--i:6"></div>
-    <div class="cell" style="--i:7"></div>
-    <div class="cell" style="--i:8"></div>
-    <div class="cell" style="--i:9"></div>
-    <div class="cell" style="--i:10"></div>
-    <div class="cell" style="--i:11"></div>
-    <div class="cell" style="--i:12"></div>
-    <div class="cell" style="--i:13"></div>
-    <div class="cell" style="--i:14"></div>
-    <div class="cell" style="--i:15"></div>
-    <div class="cell" style="--i:16"></div>
-  </div>
-</div>
-
-    <!-- POSTER L — SOSTIENICI -->
-    <div class="poster poster-L poster-sostienici tilt-right" data-section="Sostienici">
-      <a href="#sostienici" class="poster-link"></a>
-      <h2>crowdfunding</h2>
-      <span class="sticker">supporta Qms</span>
-    </div>
-
-  </div>
+  <!-- MANIFESTO -->
+  <a href="#manifesto"
+     class="poster poster-M poster-manifesto tilt-left p-manifesto"
+     data-section="Manifesto">
+    <h2>Manifesto</h2>
+    <h3>Non siamo qui per decorare. Siamo qui per disturbare.</h3>
+  </a>
 
 </section>
 
@@ -436,7 +410,6 @@
 <script src="assets/js/gallery-modal.js"></script>
 <script src="assets/js/events.js"></script>
 <script src="assets/js/artists.js"></script>
-<script src="assets/js/home.js" defer></script>
 <script src="assets/js/manifesto.js"></script>
 <script>
   window.addEventListener("load", () => {
