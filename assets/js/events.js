@@ -466,81 +466,64 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
 
   window.goTo = goTo;
 
-  // ---------------------------------------------------------
-  // 🔥 PATCH: swipe orizzontale solo se il gesto è chiaramente orizzontale
-  // ---------------------------------------------------------
-  let startX = 0;
-  let startY = 0;
-  let isDragging = false;
-  let allowHorizontal = false;
+// ---------------------------------------------------------
+// 🔥 PATCH: swipe orizzontale solo se il gesto è chiaramente orizzontale
+// ---------------------------------------------------------
+let startX = 0;
+let startY = 0;
+let isDragging = false;
+let allowHorizontal = false;
 
-  const onPointerDown = e => {
-    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
+const onPointerDown = e => {
+  if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
 
-    startX = e.clientX;
-    startY = e.clientY;
-    isDragging = true;
-    allowHorizontal = false; // verrà deciso dopo
-  };
+  startX = e.clientX;
+  startY = e.clientY;
+  isDragging = true;
+  allowHorizontal = false;
+};
 
-  const onPointerMove = e => {
-    if (!isDragging) return;
-    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
+const onPointerMove = e => {
+  if (!isDragging) return;
+  if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
 
-    const dx = Math.abs(e.clientX - startX);
-    const dy = Math.abs(e.clientY - startY);
+  const dx = Math.abs(e.clientX - startX);
+  const dy = Math.abs(e.clientY - startY);
 
-    // 👉 Se il gesto è verticale → lascia tutto libero
-    if (dy > dx) {
-      allowHorizontal = false;
-      return; // scroll verticale naturale
-    }
-
-    // 👉 Se il gesto è chiaramente orizzontale → attiva swipe
-    if (dx > dy * 1.2) {
-      allowHorizontal = true;
-      e.preventDefault(); // blocca scroll verticale SOLO ora
-    }
-  };
-
-  const endDrag = e => {
-    if (!isDragging) return;
-    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") {
-      isDragging = false;
-      return;
-    }
-
-    isDragging = false;
-
-    // Se non era un gesto orizzontale chiaro → non fare swipe
-    if (!allowHorizontal) return;
-
-    const diff = e.clientX - startX;
-
-    if (Math.abs(diff) > 40) {
-      if (diff < 0) goTo(index + 1);
-      else goTo(index - 1);
-    } else {
-      goTo(index);
-    }
-  };
-
-  carousel.addEventListener("pointerdown", onPointerDown);
-  carousel.addEventListener("pointermove", onPointerMove, { passive: false });
-  carousel.addEventListener("pointerup", endDrag);
-  carousel.addEventListener("pointercancel", endDrag);
-  carousel.addEventListener("pointerleave", endDrag);
-
-  // frecce
-  const prev = document.getElementById("mobile-prev");
-  const next = document.getElementById("mobile-next");
-  if (prev && next) {
-    prev.onclick = () => goTo(index - 1);
-    next.onclick = () => goTo(index + 1);
+  // 👉 Se il gesto è verticale → scroll libero
+  if (dy > dx) {
+    allowHorizontal = false;
+    return; // NON bloccare lo scroll verticale
   }
 
-  goTo(startIndex, true);
-}
+  // 👉 Se il gesto è chiaramente orizzontale → attiva swipe
+  if (dx > dy * 1.2) {
+    allowHorizontal = true;
+    e.preventDefault(); // blocca verticale SOLO ORA
+  }
+};
+
+const endDrag = e => {
+  if (!isDragging) return;
+  if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") {
+    isDragging = false;
+    return;
+  }
+
+  isDragging = false;
+
+  // Se non era un gesto orizzontale → non fare swipe
+  if (!allowHorizontal) return;
+
+  const diff = e.clientX - startX;
+
+  if (Math.abs(diff) > 40) {
+    if (diff < 0) goTo(index + 1);
+    else goTo(index - 1);
+  } else {
+    goTo(index);
+  }
+};
 
 
 
