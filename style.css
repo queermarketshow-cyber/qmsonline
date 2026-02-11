@@ -1608,7 +1608,7 @@ footer {
 
 .poster {
   display: block;
-  position: relative;
+  position: relative; /* NECESSARIO PER OVERLAY LINK */
   padding: 1.6rem;
   color: #fff;
   text-decoration: none;
@@ -1619,6 +1619,22 @@ footer {
   transform: rotate(-1deg);
   max-width: 100%;
   content-visibility: auto;
+}
+
+/* OVERLAY LINK — FULL AREA, CLICCABILE */
+.poster-link {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: block;
+  pointer-events: auto;
+}
+
+/* TUTTO IL RESTO NON INTERCETTA IL CLICK */
+.poster *:not(.poster-link) {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .poster h2 {
@@ -1645,7 +1661,7 @@ footer {
 
 @media (max-width: 600px) {
   .poster-L {
-    grid-column: span 2; /* mantiene blocco unico */
+    grid-column: span 2;
   }
 }
 
@@ -1686,6 +1702,7 @@ footer {
   right: 10px;
   transform: rotate(3deg);
   box-shadow: 0 0 0 2px #000 inset;
+  pointer-events: none;
 }
 
 .sticker.small { font-size: 0.65rem; }
