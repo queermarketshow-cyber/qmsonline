@@ -439,7 +439,7 @@ function renderMobileCalendarCarousel() {
 
 
 /* ============================================================
-   SWIPE + FRECCE + DOTS (VERSIONE POINTER, NO CONFLITTI)
+   SWIPE + FRECCE + DOTS (VERSIONE ANGOLARE, SAFE)
 ============================================================ */
 
 function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
@@ -464,66 +464,82 @@ function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
     updateDots();
   }
 
+  // esposto globalmente per i dot
   window.goTo = goTo;
 
-// ---------------------------------------------------------
-// 🔥 PATCH: swipe orizzontale solo se il gesto è chiaramente orizzontale
-// ---------------------------------------------------------
-let startX = 0;
-let startY = 0;
-let isDragging = false;
-let allowHorizontal = false;
+  // ---------------------------------------------------------
+  // SWIPE ORIZZONTALE SOLO SE IL GESTO È CHIARAMENTE ORIZZONTALE
+  // Nessun preventDefault: lo scroll verticale resta sempre nativo
+  // ---------------------------------------------------------
+  let startX = 0;
+  let startY = 0;
+  let lastX = 0;
+  let lastY = 0;
+  let isDragging = false;
 
-const onPointerDown = e => {
-  if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
+  const onPointerDown = e => {
+    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
 
-  startX = e.clientX;
-  startY = e.clientY;
-  isDragging = true;
-  allowHorizontal = false;
-};
+    startX = e.clientX;
+    startY = e.clientY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    isDragging = true;
+  };
 
-const onPointerMove = e => {
-  if (!isDragging) return;
-  if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
+  const onPointerMove = e => {
+    if (!isDragging) return;
+    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
 
-  const dx = Math.abs(e.clientX - startX);
-  const dy = Math.abs(e.clientY - startY);
+    // aggiorniamo solo la posizione, nessun preventDefault
+    lastX = e.clientX;
+    lastY = e.clientY;
+  };
 
-  // 👉 Se il gesto è verticale → scroll libero
-  if (dy > dx) {
-    allowHorizontal = false;
-    return; // NON bloccare lo scroll verticale
-  }
+  const endDrag = e => {
+    if (!isDragging) return;
+    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") {
+      isDragging = false;
+      return;
+    }
 
-  // 👉 Se il gesto è chiaramente orizzontale → attiva swipe
-  if (dx > dy * 1.2) {
-    allowHorizontal = true;
-    e.preventDefault(); // blocca verticale SOLO ORA
-  }
-};
-
-const endDrag = e => {
-  if (!isDragging) return;
-  if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") {
     isDragging = false;
-    return;
+
+    const dx = lastX - startX;
+    const dy = lastY - startY;
+
+    // gesto troppo piccolo → ignora
+    if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+
+    // se non è chiaramente orizzontale → lascia che resti solo scroll verticale
+    if (Math.abs(dx) <= Math.abs(dy) * 1.2) return;
+
+    // da qui in poi: gesto chiaramente orizzontale
+    if (Math.abs(dx) > 40) {
+      if (dx < 0) goTo(index + 1);
+      else goTo(index - 1);
+    } else {
+      goTo(index);
+    }
+  };
+
+  carousel.addEventListener("pointerdown", onPointerDown);
+  carousel.addEventListener("pointermove", onPointerMove); // nessuna opzione, quindi passive di default
+  carousel.addEventListener("pointerup", endDrag);
+  carousel.addEventListener("pointercancel", endDrag);
+  carousel.addEventListener("pointerleave", endDrag);
+
+  // frecce
+  const prev = document.getElementById("mobile-prev");
+  const next = document.getElementById("mobile-next");
+  if (prev && next) {
+    prev.onclick = () => goTo(index - 1);
+    next.onclick = () => goTo(index + 1);
   }
 
-  isDragging = false;
-
-  // Se non era un gesto orizzontale → non fare swipe
-  if (!allowHorizontal) return;
-
-  const diff = e.clientX - startX;
-
-  if (Math.abs(diff) > 40) {
-    if (diff < 0) goTo(index + 1);
-    else goTo(index - 1);
-  } else {
-    goTo(index);
-  }
-};
+  // avvio
+  goTo(startIndex, true);
+}
 
 
 
