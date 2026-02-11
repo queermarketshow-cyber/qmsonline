@@ -2582,3 +2582,45 @@ body.modal-open {
     padding: 4px 6px;
   }
 }
+/* NAVBAR FIX */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+/* HOME */
+.home-collage {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--navbar-height));
+  padding-top: var(--navbar-height);
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* GERARCHIA */
+.p-xxl { z-index: 0; }
+.p-l   { z-index: 1; }
+.p-xl  { z-index: 2; }
+.p-m   { z-index: 3; }
+.p-s   { z-index: 4; }
+.p-xs  { z-index: 5; }
+
+/* XXL FULLSCREEN */
+.poster-XXL {
+  width: 100vw;
+  height: calc(100vh - var(--navbar-height));
+  top: 0;
+  left: 0;
+}
+
+/* MOBILE: mantieni il collage */
+@media (max-width: 768px) {
+  .poster {
+    transform: scale(0.8);
+    transform-origin: top left;
+  }
+}
