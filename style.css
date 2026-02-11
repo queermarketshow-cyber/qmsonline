@@ -2049,76 +2049,112 @@ body.modal-open {
 .mobile-event-location {
   line-height: 1.2;
 }
-/* ————————————————————————————————
-   MOBILE CALENDAR — VERSIONE COMPATIBILE
-   (Scroll verticale prioritario, swipe gestito dal JS)
-—————————————————————————————————— */
+/* ============================================================
+   MOBILE CALENDAR — VERSIONE PULITA E COMPATIBILE
+============================================================ */
 
-/* 1) Carosello: lascia passare lo scroll verticale */
-#mobile-calendar-carousel {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-
-  /* Il browser deve privilegiare il pan verticale */
-  touch-action: pan-y !important;
-
-  /* Nessun comportamento nativo che interferisca */
-  overscroll-behavior-x: none !important;
-  overscroll-behavior-y: auto !important;
-
-  scroll-snap-type: none !important;
-  user-select: none !important;
-}
-
-/* 2) Card: non devono bloccare lo scroll verticale */
-.mobile-event-card {
-  flex: 0 0 100% !important;
-  min-width: 100% !important;
-  scroll-snap-align: none !important;
-
-  /* Le card devono lasciar passare il pan verticale */
-  touch-action: pan-y !important;
-}
-
-/* 3) Frecce sempre cliccabili */
-.mobile-arrow {
-  pointer-events: auto !important;
-  z-index: 9999 !important;
-}
-
-/* 4) Dots sopra la card */
-#mobile-dots {
-  top: 8px !important;
-  bottom: auto !important;
-  z-index: 9999 !important;
-}
-
-/* 5) Wrapper */
+/* Wrapper del carosello */
 #mobile-calendar-wrapper {
-  overflow: hidden !important;
-  position: relative !important;
+  display: none;                 /* attivato solo via media query */
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;              /* impedisce overflow orizzontale */
+  width: 100%;
+  max-width: 100vw;
+  margin-top: 2rem;
 }
 
-/* 6) Fix device problematici */
-#mobile-calendar-carousel,
-.mobile-event-card,
+/* Carosello: scroll verticale libero, swipe orizzontale gestito dal JS */
+#mobile-calendar-carousel {
+  display: flex;
+  width: 100%;
+  overflow-x: hidden;            /* nessuno scroll nativo orizzontale */
+  overflow-y: visible;           /* lascia passare lo scroll verticale */
+  touch-action: pan-y;           /* verticale prioritario */
+}
+
+/* Card: larghezza piena, nessun blocco allo scroll verticale */
+.mobile-event-card {
+  flex: 0 0 100%;
+  min-width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  touch-action: pan-y;           /* lascia passare lo scroll verticale */
+}
+
+.mobile-event-card img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border: 2px solid #000;
+  box-shadow: 6px 6px 0 #000;
+}
+
+/* Frecce */
 .mobile-arrow {
-  -webkit-overflow-scrolling: auto !important;
-  overscroll-behavior: contain !important;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: 2px solid #000;
+  padding: 8px 12px;
+  font-size: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #000;
 }
 
-/* 7) Hitbox frecce */
-#mobile-prev,
-#mobile-next {
-  padding: 14px 18px !important;
-  touch-action: manipulation !important;
+#mobile-prev { left: 10px; }
+#mobile-next { right: 10px; }
+
+/* Dots */
+#mobile-dots {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 25;
 }
 
-/* 8) Scrollbar invisibile */
-#mobile-calendar-carousel::-webkit-scrollbar {
-  display: none !important;
+.mobile-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background: #ff2fa8;
+  opacity: 0.4;
+  transition: 0.15s;
 }
 
+.mobile-dot.active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* ============================================================
+   RESPONSIVE SWITCH
+============================================================ */
+
+/* MOBILE */
+@media (max-width: 768px) {
+  #future-calendar { display: none !important; }
+  #mobile-calendar-wrapper { display: flex !important; }
+  .mobile-timeline { display: none !important; }
+  #past-events { display: none !important; }
+}
+
+/* DESKTOP */
+@media (min-width: 769px) {
+  #future-calendar { display: flex !important; }
+  #mobile-calendar-wrapper { display: none !important; }
+  .mobile-timeline { display: none !important; }
+  #past-events { display: none; }
+}
 /* ————————————————————————————————
    PATCH POSTER — FIX TAGLI SU MOBILE
 —————————————————————————————————— */
