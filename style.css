@@ -2344,11 +2344,13 @@ body.modal-open {
   height: calc(100vh - var(--navbar-height));
   padding-top: var(--navbar-height);
   overflow: hidden;
-  pointer-events: none; /* evita che la navbar interferisca */
+
+  /* FIX: la navbar non deve bloccare i click sui poster */
+  pointer-events: none;
 }
 
 .home-collage .poster {
-  pointer-events: auto; /* i poster restano cliccabili */
+  pointer-events: auto;
 }
 
 
@@ -2366,7 +2368,7 @@ body.modal-open {
   background: rgba(255,255,255,0.05);
   box-shadow: 0 0 0 2px #000 inset;
   transform-origin: center;
-  overflow: hidden; /* necessario per crop immagini */
+  overflow: hidden;
 }
 
 
@@ -2382,9 +2384,10 @@ body.modal-open {
   display: block;
 }
 
-/* L / XL → crop manifesto/banner */
+/* L / XL / XXL → crop manifesto/banner */
 .poster-L img,
-.poster-XL img {
+.poster-XL img,
+.poster-XXL img {
   object-fit: cover;
   object-position: center;
 }
@@ -2408,7 +2411,7 @@ body.modal-open {
   border: 2px solid #fff;
   box-shadow: 0 0 0 3px #000 inset;
   pointer-events: none;
-  z-index: 20; /* SEMPRE sopra l’immagine */
+  z-index: 20;
   transform: rotate(-2deg);
 }
 
@@ -2417,22 +2420,10 @@ body.modal-open {
    TAGLIE POSTER CORRETTE
 ============================= */
 
-/* XS — Polaroid (3:4) */
-.poster-XS {
-  width: 20vw;
-  height: calc(20vw * 1.33);
-}
-
-/* S — Quadrato (1:1) */
-.poster-S {
-  width: 34vw;
-  height: 34vw;
-}
-
-/* M — Cartolina orizzontale (3:2) */
-.poster-M {
-  width: 34vw;
-  height: calc(34vw * 0.66);
+/* XXL — OCCUPA TUTTO LO SCHERMO */
+.poster-XXL {
+  width: 100vw;
+  height: calc(100vh - var(--navbar-height));
 }
 
 /* L — Banner orizzontale full width */
@@ -2445,6 +2436,24 @@ body.modal-open {
 .poster-XL {
   height: calc(100vh - var(--navbar-height));
   width: 18vw;
+}
+
+/* M — Cartolina orizzontale (3:2) */
+.poster-M {
+  width: 34vw;
+  height: calc(34vw * 0.66);
+}
+
+/* S — Quadrato */
+.poster-S {
+  width: 34vw;
+  height: 34vw;
+}
+
+/* XS — Polaroid (3:4) */
+.poster-XS {
+  width: 20vw;
+  height: calc(20vw * 1.33);
 }
 
 
@@ -2469,37 +2478,45 @@ body.modal-open {
 
 /* ============================
    POSIZIONAMENTO ANARCHICO
+   (aggiornato per XXL)
 ============================= */
 
-/* SOSTIENICI — L — banner in basso */
+/* XXL — sfondo totale */
+.p-xxl {
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* L — banner */
 .p-sostienici {
   bottom: 4%;
   left: 0;
   z-index: 1;
 }
 
-/* MANIFESTO — XL — stendardo a destra */
+/* XL — stendardo */
 .p-manifesto {
   top: 0;
   left: 94%;
   z-index: 2;
 }
 
-/* ARTIST3 — M — centro */
+/* M */
 .p-artist3 {
   top: 8%;
   left: 1%;
   z-index: 3;
 }
 
-/* GALLERIA — S — destra */
+/* S */
 .p-galleria {
   top: 18%;
   right: 10%;
   z-index: 4;
 }
 
-/* PROSSIMI EVENTI — XS — in alto */
+/* XS */
 .p-eventi {
   top: 6%;
   left: 20%;
@@ -2526,28 +2543,17 @@ body.modal-open {
   /* Manteniamo il collage anarchico */
   .poster {
     position: absolute;
+    padding: 0.6rem;
     transform: rotate(0deg);
-    padding: 0.8rem;
   }
 
-  /* Ridimensioniamo le taglie per mobile */
-  .poster-XS {
-    width: 28vw;
-    height: calc(28vw * 1.33);
-  }
-
-  .poster-S {
-    width: 40vw;
-    height: 40vw;
-  }
-
-  .poster-M {
-    width: 48vw;
-    height: calc(48vw * 0.66);
+  /* Ridimensionamento proporzionale */
+  .poster-XXL {
+    width: 100vw;
+    height: calc(100vh - var(--navbar-height));
   }
 
   .poster-L {
-    width: 100vw;
     height: 14vh;
   }
 
@@ -2556,7 +2562,21 @@ body.modal-open {
     height: calc(100vh - var(--navbar-height));
   }
 
-  /* Etichette più piccole ma sempre visibili */
+  .poster-M {
+    width: 48vw;
+    height: calc(48vw * 0.66);
+  }
+
+  .poster-S {
+    width: 40vw;
+    height: 40vw;
+  }
+
+  .poster-XS {
+    width: 28vw;
+    height: calc(28vw * 1.33);
+  }
+
   .poster::before {
     font-size: 1rem;
     padding: 4px 6px;
