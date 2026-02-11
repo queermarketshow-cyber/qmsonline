@@ -2233,3 +2233,32 @@ body.modal-open {
 .artist-card * {
   touch-action: pan-y !important;
 }
+/* ============================================================
+   FIX GLOBALE: scroll verticale immediato su TUTTE le card cliccabili
+============================================================ */
+
+.card,
+.timeline-event,
+.mobile-event-card,
+.artist-card,
+.folder-preview,
+.qms-item,
+.gallery-item,
+.event-postit,
+.mosaic-grid img,
+.artist-modal-gallery img {
+  touch-action: pan-y !important;
+}
+/* Anche i figli non devono bloccare il pan verticale */
+.card *,
+.timeline-event *,
+.mobile-event-card *,
+.artist-card *,
+.folder-preview *,
+.qms-item *,
+.gallery-item *,
+.event-postit *,
+.mosaic-grid img *,
+.artist-modal-gallery img * {
+  touch-action: pan-y !important;
+}
