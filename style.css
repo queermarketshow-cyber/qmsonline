@@ -228,20 +228,68 @@ footer {
   width: 100%;
   padding: 2rem 1rem;
   margin: 0;
-  display: block;          /* ← niente flex */
-  min-height: auto;        /* ← niente full screen */
-  height: auto;            /* ← lascia crescere la grid */
-  text-align: left;        /* ← evita centrature indesiderate */
-  overflow: visible;       /* ← la grid deve poter espandersi */
+  display: block;
+  min-height: auto;
+  height: auto;
+  text-align: left;
+  overflow: visible;
 }
 
 .collage-home {
-  padding-top: 6rem;       /* spazio sotto la navbar */
+  padding-top: 6rem;
 }
 
-/* Rimuovi completamente la vecchia home-content */
 .home-content {
   display: none !important;
+}
+
+/* ————————————————————————————————
+   FIX DEFINITIVO POSTER GALLERIA + ARTIST3
+—————————————————————————————————— */
+
+/* Overlay cliccabile */
+.poster-link {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: block;
+  pointer-events: auto;
+}
+
+/* Tutto il resto non deve bloccare i click */
+.poster *:not(.poster-link) {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* COLLAGE GALLERIA */
+.poster-collage {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.poster-collage .collage-img {
+  z-index: 5;
+}
+
+/* COLLAGE ARTIST3 */
+.poster-collage-xs {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.poster-collage-xs .cell {
+  z-index: 5;
+}
+
+/* Etichetta sezione */
+.poster::before {
+  z-index: 10;
 }
 
 /* ————————————————————————————————
