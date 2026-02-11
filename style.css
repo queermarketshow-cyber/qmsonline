@@ -2228,3 +2228,8 @@ body.modal-open {
 .poster-collage {
   min-height: 1px;
 }
+/* Fix scroll verticale immediato nelle card artista */
+.artist-card,
+.artist-card * {
+  touch-action: pan-y !important;
+}
