@@ -2498,7 +2498,7 @@ body.modal-open {
 /* XL — stendardo */
 .p-manifesto {
   top: 0;
-  left: 94%;
+  left: 80%;
   z-index: 2;
 }
 
@@ -2623,4 +2623,15 @@ body.modal-open {
     transform: scale(0.8);
     transform-origin: top left;
   }
+}
+:root {
+  --navbar-height: 0px;
+}
+.home-collage {
+  margin-top: var(--navbar-height);
+  position: relative;
+  overflow-x: hidden;
+}
+.poster {
+  max-width: 100%;
 }

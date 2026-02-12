@@ -412,6 +412,16 @@
     initArtist3();
   });
 </script>
+<script>
+function updateNavbarHeight() {
+  const nav = document.querySelector('.navbar'); 
+  document.documentElement.style.setProperty('--navbar-height', nav.offsetHeight + 'px');
+}
+
+window.addEventListener('load', updateNavbarHeight);
+window.addEventListener('resize', updateNavbarHeight);
+</script>
+
 
 <footer class="qms-footer">
   <div class="qms-footer-left">
