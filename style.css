@@ -2527,7 +2527,7 @@ body.modal-open {
 
 
 /* ============================
-   MOBILE — MANTENERE IL COLLAGE
+   MOBILE — COLLAGE ANARCHICO
 ============================= */
 
 @media (max-width: 768px) {
@@ -2537,61 +2537,71 @@ body.modal-open {
   }
 
   .home-collage {
-    height: calc(100vh - var(--navbar-height));
+    position: relative;
+    margin-top: var(--navbar-height);
+    height: auto;
+    min-height: calc(100vh - var(--navbar-height));
+    overflow-x: hidden;
+    overflow-y: visible;
     padding-top: var(--navbar-height);
-    overflow: hidden;
   }
 
-  /* Manteniamo il collage anarchico */
   .poster {
     position: absolute;
-    padding: 0rem;
-    transform: rotate(0deg);
-
+    transform: rotate(var(--tilt, 0deg));
+    width: var(--poster-width, 50vw);
+    height: var(--poster-height, auto);
+    z-index: var(--z, 1);
+    max-width: 100%;
   }
 
-  /* Ridimensionamento proporzionale */
+  /* Poster anarchici con proporzioni e layering */
   .poster-XXL {
-    width: 100vw;
-    height: calc(100vh - var(--navbar-height));
-  }
-
-  .poster-L {
-    height: 14vh;
+    --poster-width: 90vw;
+    --poster-height: calc(100vh - var(--navbar-height));
+    --tilt: -2deg;
+    --z: 1;
   }
 
   .poster-XL {
-    width: 28vw;
-    height: calc(100vh - var(--navbar-height));
+    --poster-width: 80vw;
+    --poster-height: calc(100vh - var(--navbar-height));
+    --tilt: 3deg;
+    --z: 2;
+  }
+
+  .poster-L {
+    --poster-width: 70vw;
+    --poster-height: 14vh;
+    --tilt: -4deg;
+    --z: 3;
   }
 
   .poster-M {
-    width: 48vw;
-    height: calc(48vw * 0.66);
+    --poster-width: 48vw;
+    --poster-height: calc(48vw * 0.66);
+    --tilt: 2deg;
+    --z: 4;
   }
 
   .poster-S {
-    width: 40vw;
-    height: 40vw;
+    --poster-width: 40vw;
+    --poster-height: 40vw;
+    --tilt: -1deg;
+    --z: 5;
   }
 
   .poster-XS {
-    width: 28vw;
-    height: calc(28vw * 1.33);
+    --poster-width: 28vw;
+    --poster-height: calc(28vw * 1.33);
+    --tilt: 5deg;
+    --z: 6;
   }
 
   .poster::before {
     font-size: 1rem;
     padding: 4px 6px;
   }
-}
-/* NAVBAR FIX */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
 }
 
 /* HOME */
@@ -2637,4 +2647,82 @@ body.modal-open {
 }
 .poster {
   max-width: 100%;
+}
+/* ============================
+   MOBILE — COLLAGE ANARCHICO
+============================= */
+
+@media (max-width: 768px) {
+
+  :root {
+    --navbar-height: 70px;
+  }
+
+  .home-collage {
+    position: relative;
+    margin-top: var(--navbar-height);
+    height: auto;
+    min-height: calc(100vh - var(--navbar-height));
+    overflow-x: hidden;
+    overflow-y: visible;
+    padding-top: var(--navbar-height);
+  }
+
+  .poster {
+    position: absolute;
+    transform: rotate(var(--tilt, 0deg));
+    width: var(--poster-width, 50vw);
+    height: var(--poster-height, auto);
+    z-index: var(--z, 1);
+    max-width: 100%;
+    padding: 0%;
+  }
+
+  /* Poster anarchici con proporzioni e layering */
+  .poster-XXL {
+    --poster-width: 90vw;
+    --poster-height: calc(100vh - var(--navbar-height));
+    --tilt: -2deg;
+    --z: 1;
+  }
+
+  .poster-XL {
+    --poster-width: 80vw;
+    --poster-height: calc(100vh - var(--navbar-height));
+    --tilt: 3deg;
+    --z: 2;
+  }
+
+  .poster-L {
+    --poster-width: 70vw;
+    --poster-height: 14vh;
+    --tilt: -4deg;
+    --z: 3;
+  }
+
+  .poster-M {
+    --poster-width: 48vw;
+    --poster-height: calc(48vw * 0.66);
+    --tilt: 2deg;
+    --z: 4;
+  }
+
+  .poster-S {
+    --poster-width: 40vw;
+    --poster-height: 40vw;
+    --tilt: -1deg;
+    --z: 5;
+  }
+
+  .poster-XS {
+    --poster-width: 28vw;
+    --poster-height: calc(28vw * 1.33);
+    --tilt: 5deg;
+    --z: 6;
+  }
+
+  .poster::before {
+    font-size: 1rem;
+    padding: 4px 6px;
+  }
 }
