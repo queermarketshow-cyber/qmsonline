@@ -2385,12 +2385,16 @@ body.modal-open {
 /* L / XL / XXL → crop manifesto/banner */
 .poster-L img,
 .poster-XL img,
-.poster-XXL img {
+.poster-XXL img{
   object-fit: cover;
   object-position: center;
 }
 
-
+.poster-XS img {
+  object-fit: cover;
+  object-position: center;
+  padding-top: 30%;
+}
 /* ============================
    ETICHETTA GRANDE
 ============================= */
