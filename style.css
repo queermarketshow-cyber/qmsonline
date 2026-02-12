@@ -2684,6 +2684,7 @@ body.modal-open {
     --poster-height: calc(100vh - var(--navbar-height));
     --tilt: -2deg;
     --z: 1;
+    
   }
 
   .poster-XL {
@@ -2725,4 +2726,45 @@ body.modal-open {
     font-size: 1rem;
     padding: 4px 6px;
   }
+  /* ============================
+   MOBILE — POSIZIONI POSTER
+============================= */
+
+
+  /* XXL */
+  .poster-XXL {
+    top: 0;
+    left: 0;
+  }
+
+  /* XL */
+  .poster-XL {
+    top: 0;
+    left: 50%;
+  }
+
+  /* L */
+  .poster-L {
+    top: 80%;
+    left: 0;
+  }
+
+  /* M */
+  .poster-M {
+    top: 30%;
+    left: 50vw;
+  }
+
+  /* S */
+  .poster-S {
+    top: 30%;
+    left: 50%;
+  }
+
+  /* XS */
+  .poster-XS {
+    top: 15vh;
+    left: 10%;
+  }
+
 }
