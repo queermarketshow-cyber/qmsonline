@@ -1657,7 +1657,6 @@ footer {
 .poster {
   display: block;
   position: relative; /* NECESSARIO PER OVERLAY LINK */
-  padding: 1.6rem;
   color: #fff;
   text-decoration: none;
   border: 2px solid #fff;
@@ -2361,7 +2360,6 @@ body.modal-open {
 .poster {
   display: block;
   position: absolute;
-  padding: 1.2rem;
   color: #fff;
   text-decoration: none;
   border: 2px solid #fff;
@@ -2543,8 +2541,9 @@ body.modal-open {
   /* Manteniamo il collage anarchico */
   .poster {
     position: absolute;
-    padding: 0.6rem;
+    padding: 0rem;
     transform: rotate(0deg);
+
   }
 
   /* Ridimensionamento proporzionale */
