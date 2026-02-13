@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queer Market Show APS</title>
+
+  <link rel="icon" href="images/logo-qms.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <section id="gallery" class="scroll-section qms-archive-page">
+  <h2>Archivio Fotografico</h2>
+  <p class="archive-intro">
+    Tutte le immagini del Queer Market Show.
+  </p>
+
+  <!-- Cartelle galleria generate via JS -->
+  <div class="gallery-folders"></div>
+
+  <!-- Galleria a mosaico -->
+  <div class="mosaic-gallery hidden">
+    <button class="mosaic-close">×</button>
+    <div class="mosaic-grid"></div>
+  </div>
+</section>
+
+<!-- Modale Galleria -->
+<div id="galleryModal" class="modal hidden">
+  <div class="modal-content">
+    <button class="close">&times;</button>
+
+    <!-- Caption album + fotografi -->
+    <div class="modal-caption">
+      <h3 class="modal-album-title"></h3>
+      <p class="modal-photographer"></p>
+    </div>
+
+    <!-- Griglia immagini della cartella -->
+    <div class="modal-grid"></div>
+
+    <!-- Carosello interno -->
+    <div class="carousel hidden">
+      <span class="prev">&#10094;</span>
+      <img class="carousel-img" src="" alt="">
+      <span class="next">&#10095;</span>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <span class="lightbox-prev" onclick="prevLightbox()">&#10094;</span>
+    <img id="lightbox-img" src="" alt="Immagine ingrandita">
+    <span class="lightbox-next" onclick="nextLightbox()">&#10095;</span>
+    <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  </div>
+</div>
+
+<!-- SCRIPT MODULARI -->
+<script src="assets/js/base.js"></script>
+<script src="assets/js/navbar.js"></script>
+<script src="assets/js/lightbox.js"></script>
+<script src="assets/js/gallery-folders.js"></script>
+<script src="assets/js/mosaic-gallery.js"></script>
+<script src="assets/js/gallery-modal.js"></script>
+<script src="assets/js/events.js"></script>
+<script src="assets/js/artists.js"></script>
+<script src="assets/js/manifesto.js"></script>
+<script>
+  window.addEventListener("load", () => {
+    initArtist3();
+  });
+</script>
+<script>
+function updateNavbarHeight() {
+  const nav = document.querySelector('.navbar'); 
+  document.documentElement.style.setProperty('--navbar-height', nav.offsetHeight + 'px');
+}
+
+window.addEventListener('load', updateNavbarHeight);
+window.addEventListener('resize', updateNavbarHeight);
+</script>
+
+</body>
+</html>
