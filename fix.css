@@ -1,24 +1,36 @@
 /* ============================================================
-   QMS-FIX.CSS – mantiene l'estetica, corregge soltanto misure
+   QUEER MARKET SHOW — qms-fix.css
+   Patch funzionale 2024
+   ↳ Mantiene l'estetica originale, corregge:
+      • calcolo fullscreen / vh
+      • navbar fissa
+      • apertura testi nella sezione “Sostienici”
+      • bug Safari/iOS
 ============================================================ */
 
-/* NAVBAR */
+/* NAVBAR — Altezza dinamica */
 :root {
-  --navbar-height: 80px;
+  --navbar-height: 80px; /* desktop */
 }
 
 @media (max-width: 768px) {
-  :root { --navbar-height: 70px; }
+  :root {
+    --navbar-height: 70px; /* mobile */
+  }
 }
 
 .navbar {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: var(--navbar-height);
   z-index: var(--z-navbar, 10000);
 }
 
-/* adattamento sezioni fullscreen */
+/* ============================================================
+   GESTIONE FULLSCREEN — Sezioni principali
+============================================================ */
 .hero-section,
 .manifesto-section,
 .contact-section,
@@ -28,31 +40,65 @@
   position: relative;
 }
 
-/* HOME COLLAGE CORRETTA */
-.home-collage {
+/* HOME collage — margine compensato dalla navbar */
+.home-collage,
+.collage-home {
   min-height: calc(100dvh - var(--navbar-height));
   margin-top: var(--navbar-height);
   overflow: hidden;
 }
 
-/* SOSTIENICI — apertura libera per testi <p> */
+/* Ancore scroll corrette */
+section[id] {
+  scroll-margin-top: calc(var(--navbar-height) + 10px);
+}
+
+/* ============================================================
+   SEZIONE “SOSTIENICI” — apertura e scroll dei paragrafi
+============================================================ */
+
+/* Evita overflow e clipping dei contenuti */
 .qms-sostienici-section {
   overflow: visible !important;
 }
+
 .qms-sostienici-wrapper,
-.qms-accordion,
-.qms-sostienici-text {
+.qms-sostienici-text,
+.qms-accordion {
   height: auto !important;
   max-height: none !important;
   overflow: visible !important;
 }
 
-/* scroll ancore */
-section[id] { scroll-margin-top: calc(var(--navbar-height) + 10px); }
-
-/* Compatibilità Safari mobile */
-@supports (-webkit-touch-callout: none) {
-  html, body { height: -webkit-fill-available; }
+/* Apertura fluida dell’accordion */
+.qms-acc-content {
+  transition: max-height 0.35s ease, padding 0.25s ease;
+}
+.qms-acc-item.active .qms-acc-content {
+  max-height: 1000px;
+  padding: 1rem 1.5rem 1.5rem;
 }
 
-html { scroll-behavior: smooth; }
+/* ============================================================
+   FIX iOS / Safari — stabilizza 100vh
+============================================================ */
+@supports (-webkit-touch-callout: none) {
+  html,
+  body {
+    height: -webkit-fill-available;
+  }
+}
+
+/* ============================================================
+   SCROLL E UX
+============================================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
