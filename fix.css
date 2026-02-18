@@ -1,0 +1,58 @@
+/* ============================================================
+   QMS-FIX.CSS – mantiene l'estetica, corregge soltanto misure
+============================================================ */
+
+/* NAVBAR */
+:root {
+  --navbar-height: 80px;
+}
+
+@media (max-width: 768px) {
+  :root { --navbar-height: 70px; }
+}
+
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--navbar-height);
+  z-index: var(--z-navbar, 10000);
+}
+
+/* adattamento sezioni fullscreen */
+.hero-section,
+.manifesto-section,
+.contact-section,
+.qms-sostienici-section {
+  min-height: calc(100dvh - var(--navbar-height));
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* HOME COLLAGE CORRETTA */
+.home-collage {
+  min-height: calc(100dvh - var(--navbar-height));
+  margin-top: var(--navbar-height);
+  overflow: hidden;
+}
+
+/* SOSTIENICI — apertura libera per testi <p> */
+.qms-sostienici-section {
+  overflow: visible !important;
+}
+.qms-sostienici-wrapper,
+.qms-accordion,
+.qms-sostienici-text {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* scroll ancore */
+section[id] { scroll-margin-top: calc(var(--navbar-height) + 10px); }
+
+/* Compatibilità Safari mobile */
+@supports (-webkit-touch-callout: none) {
+  html, body { height: -webkit-fill-available; }
+}
+
+html { scroll-behavior: smooth; }
