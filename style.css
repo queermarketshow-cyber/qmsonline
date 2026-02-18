@@ -3181,86 +3181,103 @@ body.modal-open {
   white-space: nowrap;
 }
 /* ============================================================
-   PATCH FINALE — FIX NAVBAR FISSA + SEZIONI FULLSCREEN
-   (da incollare in fondo al file CSS esistente)
-   www.queermarketshow.com – 2024 patch
+   PATCH COMPLETA E COMPATIBILE – NAVBAR FIX + SOSTIENICI FIX
+   (rispetta il comportamento originale del sito)
 ============================================================ */
 
-/* Altezza navbar dinamica */
+/* Altezza dinamica della navbar */
 :root {
-  --navbar-height: 70px; /* base mobile */
+  --navbar-height: 80px;
 }
-
-@media (min-width: 769px) {
+@media (max-width: 768px) {
   :root {
-    --navbar-height: 80px; /* desktop */
+    --navbar-height: 70px;
   }
 }
 
-/* Assicura che ogni sezione "full" rispetti l'altezza disponibile */
-.fullscreen-fix,
+/* Navbar corretta */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
+  z-index: var(--z-navbar, 10000);
+}
+
+/* Ancore corrette */
+section[id] {
+  scroll-margin-top: calc(var(--navbar-height) + 10px);
+}
+
+/* Sezioni fullscreen reali (compensano la navbar) */
 .hero-section,
 .home-section,
 .manifesto-section,
 .contact-section,
 .qms-sostienici-section {
   min-height: calc(100dvh - var(--navbar-height));
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* Per sezioni già piene (evita spazi doppi) */
-.hero-section,
-.home-section {
+/* Home collage mantiene padding — perfetta com’è */
+.home-collage,
+.collage-home {
   padding-top: var(--navbar-height);
 }
 
-/* Navbar sempre sopra e mai sovrapposta ai click */
-.navbar {
-  position: fixed;
-  top: 0;
-  inset-inline: 0;
-  height: var(--navbar-height);
-  z-index: var(--z-navbar, 10000);
-}
-
-/* Assicura che le ancore non restino coperte */
-section[id] {
-  scroll-margin-top: calc(var(--navbar-height) + 10px);
-}
-
-/* Fix globale Safari/iOS per 100vh */
-html,
-body {
+/* BODY & HTML (compatibilità mobile Safari + overflow) */
+html, body {
   min-height: 100dvh;
   height: auto;
   overflow-x: hidden;
-  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Home collage già perfetta → nessun cambiamento estetico */
-.home-collage {
-  height: calc(100dvh - var(--navbar-height));
-  margin-top: var(--navbar-height);
-  overflow: hidden;
+/* ============================================================
+   FIX SPECIFICO SEZIONE “SOSTIENICI”
+============================================================ */
+
+/* Rende nuovamente visibile il contenuto dell’accordion */
+.qms-sostienici-section {
+  display: flex;
+  align-items: stretch; /* non forza altezza ai figli */
+  overflow: visible !important;
+  min-height: calc(100dvh - var(--navbar-height));
 }
 
-/* Correzione overflow modali e sezioni per dispositivi piccoli */
-@media (max-width: 768px) {
-  body.modal-open {
-    height: 100dvh !important;
-    overflow: hidden !important;
+/* Evita che wrapper o testo restino bloccati */
+.qms-sostienici-wrapper,
+.qms-sostienici-text,
+.qms-accordion {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-right: 0 !important;
+}
+
+/* Gli item dell’accordion possono espandersi liberamente */
+.qms-acc-item.active .qms-acc-content {
+  max-height: 1000px; /* apertura ampia e fluida */
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+/* Controllo transizione apertura per fluidità */
+.qms-acc-content {
+  transition: max-height 0.35s ease, padding 0.25s ease;
+}
+
+/* ============================================================
+   FIX iOS Safari visual height (stabilità vh)
+============================================================ */
+
+@supports (-webkit-touch-callout: none) {
+  html, body {
+    height: -webkit-fill-available;
   }
-  .menu-mobile {
-    top: var(--navbar-height);
-  }
 }
 
-/* Scroll fluido coerente */
-html {
-  scroll-behavior: smooth;
-}
+/* Scroll fluido */
+html { scroll-behavior: smooth; }
 
