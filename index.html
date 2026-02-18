@@ -323,10 +323,20 @@
 </div>
 
 <!-- Contatti -->
-<section id="contatti" class="scroll-section">
-  <h2>Contatti</h2>
-  <p>Scrivici, collaboriamo, costruiamo insieme.</p>
+<section id="contatti" class="contact-section scroll-section">
 
+  <!-- MANIFESTO -->
+  <div class="contact-intro">
+    Hai un evento?<br>
+    Una performance?<br>
+    Un delirio?<br>
+    Una fantasia?<br>
+    Un’urgenza queer?<br><br>
+    Scrivici.<br>
+    Siamo qui per questo.
+  </div>
+
+  <!-- SOCIAL ICONS -->
   <div class="social-links">
     <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
       <i class="fab fa-instagram"></i>
@@ -341,6 +351,23 @@
       <i class="fas fa-envelope"></i>
     </a>
   </div>
+
+  <!-- FORM -->
+  <form class="contact-form"
+        action="mailto:queermarketshow@gmail.com"
+        method="POST"
+        enctype="text/plain">
+
+    <input type="text" name="Nome" placeholder="Il tuo nome" required>
+    <input type="email" name="Email" placeholder="La tua email" required>
+
+    <textarea name="Messaggio"
+              placeholder="Raccontaci la tua idea, progetto, fantasia, urgenza..."
+              required></textarea>
+
+    <button type="submit">Invia</button>
+  </form>
+
 </section>
 
 <section id="sostienici" class="qms-sostienici-section">
