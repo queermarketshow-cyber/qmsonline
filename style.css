@@ -51,7 +51,7 @@ body {
 /* sezioni principali */
 .hero-section,
 .home-section {
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -1293,7 +1293,7 @@ footer {
 
 #lightbox-img {
   max-width: 100vw;
-  max-height: 100vh;
+  max-height: 100dvh;
   object-fit: contain;
   border-radius: 4px;
   transform-origin: center center;
@@ -1894,13 +1894,13 @@ footer {
   text-decoration: underline;
 }
 .qms-sostienici-section {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
 }
 .qms-sostienici-wrapper {
   height: 100%;
-  max-height: 100vh;
+  max-height: 100dvh;
   display: grid;
   grid-template-columns: 1fr 0.9fr;
   gap: 3rem;
@@ -1920,7 +1920,7 @@ footer {
   align-items: flex-start;
 }
 .qms-accordion {
-  max-height: calc(100vh - 260px); /* titolo + intro + CTA finale */
+  max-height: calc(100dvh - 260px); /* titolo + intro + CTA finale */
   overflow-y: auto;
   padding-right: 0.5rem;
   scrollbar-width: none;
@@ -2300,7 +2300,7 @@ footer {
 
 body.modal-open {
   overflow: hidden;
-  height: 100vh;
+  height: 100dvh;
   touch-action: none;
 }
 
@@ -2309,7 +2309,7 @@ body.modal-open {
 —————————————————————————————————— */
 body.modal-open {
   overflow: hidden !important;
-  height: 100vh !important;
+  height: 100dvh !important;
   touch-action: none !important;
   position: fixed !important;
   width: 100% !important;
@@ -2659,7 +2659,7 @@ body.modal-open {
 .home-collage {
   position: relative;
   width: 100%;
-  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
   padding-top: var(--navbar-height);
   overflow: hidden;
 
@@ -2744,7 +2744,7 @@ body.modal-open {
 /* XXL — OCCUPA TUTTO LO SCHERMO */
 .poster-XXL {
   width: 100vw;
-  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
 }
 
 /* L — Banner orizzontale full width */
@@ -2755,7 +2755,7 @@ body.modal-open {
 
 /* XL — Stendardo verticale full height */
 .poster-XL {
-  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
   width: 18vw;
 }
 
@@ -2859,7 +2859,7 @@ body.modal-open {
     position: relative;
     margin-top: var(--navbar-height);
     height: auto;
-    min-height: calc(100vh - var(--navbar-height));
+    min-height: calc(100dvh - var(--navbar-height));
     overflow-x: hidden;
     overflow-y: visible;
     padding-top: var(--navbar-height);
@@ -2877,14 +2877,14 @@ body.modal-open {
   /* Poster anarchici con proporzioni e layering */
   .poster-XXL {
     --poster-width: 90vw;
-    --poster-height: calc(100vh - var(--navbar-height));
+    --poster-height: calc(100dvh - var(--navbar-height));
     --tilt: -2deg;
     --z: 1;
   }
 
   .poster-XL {
     --poster-width: 80vw;
-    --poster-height: calc(100vh - var(--navbar-height));
+    --poster-height: calc(100dvh - var(--navbar-height));
     --tilt: 3deg;
     --z: 2;
   }
@@ -2927,7 +2927,7 @@ body.modal-open {
 .home-collage {
   position: relative;
   width: 100%;
-  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
   padding-top: var(--navbar-height);
   overflow: hidden;
   z-index: 1;
@@ -2944,7 +2944,7 @@ body.modal-open {
 /* XXL FULLSCREEN */
 .poster-XXL {
   width: 100vw;
-  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
   top: 0;
   left: 0;
 }
@@ -2981,7 +2981,7 @@ body.modal-open {
     position: relative;
     margin-top: var(--navbar-height);
     height: auto;
-    min-height: calc(100vh - var(--navbar-height));
+    min-height: calc(100dvh - var(--navbar-height));
     overflow-x: hidden;
     overflow-y: visible;
     padding-top: var(--navbar-height);
@@ -3000,7 +3000,7 @@ body.modal-open {
   /* Poster anarchici con proporzioni e layering */
   .poster-XXL {
     --poster-width: 90vw;
-    --poster-height: calc(100vh - var(--navbar-height));
+    --poster-height: calc(100dvh - var(--navbar-height));
     --tilt: -2deg;
     --z: 1;
     
@@ -3008,7 +3008,7 @@ body.modal-open {
 
   .poster-XL {
     --poster-width: 80vw;
-    --poster-height: calc(100vh - var(--navbar-height));
+    --poster-height: calc(100dvh - var(--navbar-height));
     --tilt: 3deg;
     --z: 2;
   }
