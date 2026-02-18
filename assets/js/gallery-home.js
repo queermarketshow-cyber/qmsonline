@@ -28,17 +28,33 @@ async function loadChaosGallery() {
   const gridWidth = grid.clientWidth;
   const gridHeight = grid.clientHeight;
 
+  // 🔥 SCALING DINAMICO
+  const scaleFactor = Math.min(gridWidth, gridHeight) / 900; // base 900px
+  const labelScale = Math.max(0.6, Math.min(1.2, scaleFactor));
+  const ctaScale = Math.max(0.5, Math.min(1.0, scaleFactor));
+
+  // Applica scaling alle label
+  labels.forEach(label => {
+    label.style.transform = `scale(${labelScale})`;
+    label.style.transformOrigin = "left top";
+  });
+
+  // Applica scaling alla CTA
+  cta.style.transform = `translate(-50%, -50%) rotate(-6deg) scale(${ctaScale})`;
+
   // ---------------------------
-  // FUNZIONE DI COLLISIONE
+  // FUNZIONE DI COLLISIONE CON BUFFER
   // ---------------------------
-  function isColliding(a, b) {
+  const BUFFER = 12; // distanza minima tra label
+
+  function isCollidingBuffered(a, b) {
     const ar = a.getBoundingClientRect();
     const br = b.getBoundingClientRect();
     return !(
-      ar.right < br.left ||
-      ar.left > br.right ||
-      ar.bottom < br.top ||
-      ar.top > br.bottom
+      ar.right + BUFFER < br.left ||
+      ar.left - BUFFER > br.right ||
+      ar.bottom + BUFFER < br.top ||
+      ar.top - BUFFER > br.bottom
     );
   }
 
@@ -49,13 +65,12 @@ async function loadChaosGallery() {
     const img = document.createElement('img');
     img.src = item.src;
 
-    // margini di sicurezza
     const maxX = gridWidth * 0.75;
     const maxY = gridHeight * 0.75;
 
     const top = Math.random() * maxY;
     const left = Math.random() * maxX;
-    const rot = Math.random() * 60 - 30;
+    const rot = Math.random() * 50 - 25; // rotazione leggermente ridotta
     const z = Math.floor(Math.random() * 50) + 1;
 
     img.style.top = top + 'px';
@@ -70,41 +85,37 @@ async function loadChaosGallery() {
   // POSIZIONA LABELS SENZA SOVRAPPOSIZIONI
   // ---------------------------
   const placedLabels = [];
-
-  // misura CTA una volta sola
   const ctaRect = cta.getBoundingClientRect();
 
   labels.forEach((label, i) => {
     let attempts = 0;
     let placed = false;
 
-    // misura label
     label.style.visibility = 'hidden';
     label.style.display = 'block';
 
     const labelWidth = label.offsetWidth;
     const labelHeight = label.offsetHeight;
 
-    while (!placed && attempts < 400) {
+    while (!placed && attempts < 500) {
       attempts++;
 
-      // margini per evitare overflow
       const maxX = gridWidth - labelWidth - 20;
       const maxY = gridHeight - labelHeight - 20;
 
       const top = Math.random() * maxY;
       const left = Math.random() * maxX;
-      const rot = Math.random() * 40 - 20;
+      const rot = Math.random() * 30 - 15; // rotazione più morbida
 
       label.style.top = top + 'px';
       label.style.left = left + 'px';
-      label.style.transform = `rotate(${rot}deg)`;
+      label.style.transform = `rotate(${rot}deg) scale(${labelScale})`;
 
       let collision = false;
 
       // collisione con altre labels
       for (const other of placedLabels) {
-        if (isColliding(label, other)) {
+        if (isCollidingBuffered(label, other)) {
           collision = true;
           break;
         }
@@ -113,15 +124,14 @@ async function loadChaosGallery() {
       // collisione con CTA
       if (!collision) {
         const lr = label.getBoundingClientRect();
-        if (!(lr.right < ctaRect.left ||
-              lr.left > ctaRect.right ||
-              lr.bottom < ctaRect.top ||
-              lr.top > ctaRect.bottom)) {
+        if (!(lr.right + BUFFER < ctaRect.left ||
+              lr.left - BUFFER > ctaRect.right ||
+              lr.bottom + BUFFER < ctaRect.top ||
+              lr.top - BUFFER > ctaRect.bottom)) {
           collision = true;
         }
       }
 
-      // se non collide → posizione accettata
       if (!collision) {
         placed = true;
         placedLabels.push(label);
