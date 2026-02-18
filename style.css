@@ -1758,6 +1758,33 @@ footer {
   box-shadow: 6px 6px 0 #ff2e9a;
   transform: rotate(-0.4deg);
 }
+@media (max-width: 1100px) {
+  .qms-sostienici-wrapper {
+    grid-template-columns: 1fr;
+    max-height: none;
+    height: auto;
+  }
+
+  .qms-sostienici-text {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .qms-accordion {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .qms-sostienici-widget {
+    margin-top: 3rem;
+  }
+
+  .qms-sostienici-iframe {
+    height: 450px; /* più adatto al tablet */
+  }
+}
+
 
 /* ————————————————
    FOOTER + TRASPARENZA (lasciati invariati)
