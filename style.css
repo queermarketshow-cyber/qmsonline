@@ -342,6 +342,7 @@ footer {
 }
 
 .social-links a {
+  text-decoration: none; /* elimina la sottolineatura */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -353,6 +354,11 @@ footer {
   box-shadow: 0.6vw 0.6vw 0 #ff2e9a;
   transform: rotate(-4deg);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.social-links a:visited,
+.social-links a:active,
+.social-links a:focus {
+  text-decoration: none;
 }
 
 .social-links a i {
@@ -423,6 +429,79 @@ footer {
 
   .contact-form textarea {
     max-height: 20dvh;
+  }
+}
+/* ————————————————————————————————
+   MOBILE VERSION (max-width: 800px)
+—————————————————————————————————— */
+
+@media (max-width: 800px) {
+
+  .contact-section {
+    height: 100dvh;
+    padding: 4vw 5vw;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4vw;
+  }
+
+  /* BLOCCO SINISTRA/DESKTOP → diventa TOP */
+  .contact-left,
+  .contact-right {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    flex: unset;
+  }
+
+  /* MANIFESTO COMPATTO */
+  .contact-intro {
+    font-size: clamp(16px, 4vw, 22px);
+    padding: 3vw 4vw;
+    max-width: 100%;
+    transform: rotate(-1deg);
+    box-shadow: 0.8vw 0.8vw 0 #000;
+  }
+
+  /* SOCIAL ICONS CENTRALI */
+  .social-links {
+    justify-content: center;
+    gap: 4vw;
+  }
+
+  .social-links a {
+    width: clamp(40px, 12vw, 60px);
+    height: clamp(40px, 12vw, 60px);
+    transform: rotate(-3deg);
+  }
+
+  .social-links a i {
+    font-size: clamp(18px, 6vw, 28px);
+  }
+
+  /* FORM COMPATTO SENZA SCROLL */
+  .contact-form {
+    max-width: 100%;
+    width: 100%;
+    padding: 4vw;
+    gap: 3vw;
+    transform: rotate(1deg);
+    box-shadow: 1vw 1vw 0 #000;
+
+    /* NIENTE SCROLL INTERNO */
+    max-height: none;
+    overflow: visible;
+  }
+
+  .contact-form textarea {
+    min-height: 18dvh; /* abbastanza grande da scrivere */
+    max-height: 22dvh; /* ma non esplode */
+  }
+
+  .contact-form button {
+    font-size: clamp(14px, 4vw, 20px);
+    padding: 2.5vw 4vw;
   }
 }
 
