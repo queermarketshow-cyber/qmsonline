@@ -3180,4 +3180,87 @@ body.modal-open {
   filter: contrast(1.4);
   white-space: nowrap;
 }
+/* ============================================================
+   PATCH FINALE — FIX NAVBAR FISSA + SEZIONI FULLSCREEN
+   (da incollare in fondo al file CSS esistente)
+   www.queermarketshow.com – 2024 patch
+============================================================ */
+
+/* Altezza navbar dinamica */
+:root {
+  --navbar-height: 70px; /* base mobile */
+}
+
+@media (min-width: 769px) {
+  :root {
+    --navbar-height: 80px; /* desktop */
+  }
+}
+
+/* Assicura che ogni sezione "full" rispetti l'altezza disponibile */
+.fullscreen-fix,
+.hero-section,
+.home-section,
+.manifesto-section,
+.contact-section,
+.qms-sostienici-section {
+  min-height: calc(100dvh - var(--navbar-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Per sezioni già piene (evita spazi doppi) */
+.hero-section,
+.home-section {
+  padding-top: var(--navbar-height);
+}
+
+/* Navbar sempre sopra e mai sovrapposta ai click */
+.navbar {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  height: var(--navbar-height);
+  z-index: var(--z-navbar, 10000);
+}
+
+/* Assicura che le ancore non restino coperte */
+section[id] {
+  scroll-margin-top: calc(var(--navbar-height) + 10px);
+}
+
+/* Fix globale Safari/iOS per 100vh */
+html,
+body {
+  min-height: 100dvh;
+  height: auto;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
+/* Home collage già perfetta → nessun cambiamento estetico */
+.home-collage {
+  height: calc(100dvh - var(--navbar-height));
+  margin-top: var(--navbar-height);
+  overflow: hidden;
+}
+
+/* Correzione overflow modali e sezioni per dispositivi piccoli */
+@media (max-width: 768px) {
+  body.modal-open {
+    height: 100dvh !important;
+    overflow: hidden !important;
+  }
+  .menu-mobile {
+    top: var(--navbar-height);
+  }
+}
+
+/* Scroll fluido coerente */
+html {
+  scroll-behavior: smooth;
+}
 
