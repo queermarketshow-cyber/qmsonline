@@ -346,20 +346,14 @@
       <a href="mailto:queermarketshow@gmail.com"><i class="fas fa-envelope"></i></a>
     </div>
 
-    <form class="contact-form"
-          action="mailto:queermarketshow@gmail.com"
-          method="POST"
-          enctype="text/plain">
-
-      <input type="text" name="Nome" placeholder="Il tuo nome" required>
-      <input type="email" name="Email" placeholder="La tua email" required>
-
-      <textarea name="Messaggio"
-                placeholder="Raccontaci la tua idea, progetto, fantasia, urgenza..."
-                required></textarea>
-
+    <form class="contact-form" id="qmsForm" action="https://formspree.io/f/xbdakywd" method="POST">
+      <input type="text" name="name" placeholder="Il tuo nome" required>
+      <input type="email" name="email" placeholder="La tua email" required>
+      <textarea name="message" placeholder="Scrivi qui il tuo messaggio…" required></textarea>
       <button type="submit">Invia</button>
+      <p class="form-status"></p>
     </form>
+
 
   </div>
 
@@ -510,6 +504,8 @@
 <script src="assets/js/artists.js"></script>
 <script src="assets/js/manifesto.js"></script>
 <script src="assets/js/gallery-home.js"></script>
+<script src="assets/js/form.js"></script>
+
 <script>
   window.addEventListener("load", () => {
     initArtist3();

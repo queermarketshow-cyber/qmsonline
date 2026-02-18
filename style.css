@@ -3280,4 +3280,48 @@ html, body {
 
 /* Scroll fluido */
 html { scroll-behavior: smooth; }
+/* ============================================================
+   CONTACT FORM — stato invio e "GRAZIE!"
+============================================================ */
+
+.contact-form.sending button {
+  background: #000;
+  color: var(--primary-color);
+  cursor: progress;
+}
+
+.contact-form .form-status {
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.contact-form.sent {
+  text-align: center;
+  color: #fff;
+}
+
+.form-thanks {
+  padding: 3rem 1rem;
+  border: 0.6vw solid #fff;
+  background: #000;
+  box-shadow: 1vw 1vw 0 #ff2e9a;
+  transition: all 0.4s ease-out;
+  transform: rotate(-1.5deg);
+}
+
+.form-thanks h2 {
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: 900;
+  color: #ff2e9a;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.form-thanks p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
 
