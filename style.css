@@ -2780,17 +2780,22 @@ body.modal-open {
   box-shadow: 3px 3px 0 var(--qms-accent, #ff2e9a);
 }
 
-/* SEZIONE: diventa contenitore di posizionamento */
+/* SEZIONE: contenitore principale */
 .qms-gallery-narrativa.chaos {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
+/* GRIGLIA PRINCIPALE: deve leggere il viewport reale */
 .qms-gallery-grid {
   position: relative;
   width: 100%;
-  height: 100vh; /* riempie lo schermo */
+  height: 100dvh; /* più affidabile di 100vh su mobile */
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* LAYER IMMAGINI */
@@ -2801,15 +2806,16 @@ body.modal-open {
   z-index: 1;
 }
 
-/* IMMAGINI PIÙ PICCOLE → PIÙ DENSE */
+/* IMMAGINI — più piccole, più dense, ma responsive */
 .qms-gallery-images img {
   position: absolute;
-  width: 28vw; /* prima 45vw */
-  height: 28vw;
+  width: min(28vw, 38vh); /* evita immagini troppo grandi in orizzontale */
+  height: min(28vw, 38vh);
   object-fit: cover;
   border: 0.6vw solid #fff;
   box-shadow: 1vw 1vw 0 #000;
   filter: contrast(1.4) brightness(0.9) saturate(1.2) grayscale(0.15);
+  box-sizing: border-box;
 }
 
 /* LAYER ETICHETTE */
@@ -2820,21 +2826,24 @@ body.modal-open {
   z-index: 5000;
 }
 
+/* LABEL — ora non escono più dal riquadro */
 .qms-gallery-labels .label {
   position: absolute;
   background: #ff2e9a;
   padding: 1vw 2vw;
-  font-size: 3vw;
+  font-size: clamp(14px, 3vw, 32px); /* responsive, non esplode su mobile */
   font-weight: 900;
   text-transform: uppercase;
   color: #fff;
   box-shadow: 1vw 1vw 0 #000;
-  white-space: nowrap;
+  white-space: normal; /* prima era nowrap → rompeva tutto */
+  max-width: 40vw; /* evita overflow orizzontale */
+  overflow-wrap: break-word;
   transform-origin: left top;
   z-index: 5001;
 }
 
-/* CTA — VIA DI FUGA DAL CAOS */
+/* CTA — via di fuga dal caos */
 .chaos-button {
   position: absolute;
   top: 50%;
@@ -2843,7 +2852,7 @@ body.modal-open {
   z-index: 9999;
   background: #ff2e9a;
   padding: 2vw 4vw;
-  font-size: 5vw;
+  font-size: clamp(20px, 5vw, 60px);
   font-weight: 900;
   color: #fff;
   text-transform: uppercase;
@@ -2852,3 +2861,4 @@ body.modal-open {
   filter: contrast(1.4);
   white-space: nowrap;
 }
+

@@ -23,8 +23,10 @@ async function loadChaosGallery() {
   const cta = document.querySelector('.chaos-button');
 
   const grid = document.querySelector('.qms-gallery-grid');
-  const gridHeight = grid.offsetHeight;
-  const gridWidth = grid.offsetWidth;
+
+  // 🔥 DIMENSIONI REALI DEL CONTAINER
+  const gridWidth = grid.clientWidth;
+  const gridHeight = grid.clientHeight;
 
   // ---------------------------
   // FUNZIONE DI COLLISIONE
@@ -47,8 +49,12 @@ async function loadChaosGallery() {
     const img = document.createElement('img');
     img.src = item.src;
 
-    const top = Math.random() * gridHeight;
-    const left = Math.random() * gridWidth;
+    // margini di sicurezza
+    const maxX = gridWidth * 0.75;
+    const maxY = gridHeight * 0.75;
+
+    const top = Math.random() * maxY;
+    const left = Math.random() * maxX;
     const rot = Math.random() * 60 - 30;
     const z = Math.floor(Math.random() * 50) + 1;
 
@@ -61,20 +67,33 @@ async function loadChaosGallery() {
   });
 
   // ---------------------------
-  // POSIZIONA LABELS CON ANTI-COLLISIONE
+  // POSIZIONA LABELS SENZA SOVRAPPOSIZIONI
   // ---------------------------
   const placedLabels = [];
+
+  // misura CTA una volta sola
+  const ctaRect = cta.getBoundingClientRect();
 
   labels.forEach((label, i) => {
     let attempts = 0;
     let placed = false;
 
-    while (!placed && attempts < 200) {
+    // misura label
+    label.style.visibility = 'hidden';
+    label.style.display = 'block';
+
+    const labelWidth = label.offsetWidth;
+    const labelHeight = label.offsetHeight;
+
+    while (!placed && attempts < 400) {
       attempts++;
 
-      // posizione casuale vicino al centro
-      const top = Math.random() * gridHeight;
-      const left = Math.random() * gridWidth;
+      // margini per evitare overflow
+      const maxX = gridWidth - labelWidth - 20;
+      const maxY = gridHeight - labelHeight - 20;
+
+      const top = Math.random() * maxY;
+      const left = Math.random() * maxX;
       const rot = Math.random() * 40 - 20;
 
       label.style.top = top + 'px';
@@ -83,7 +102,7 @@ async function loadChaosGallery() {
 
       let collision = false;
 
-      // 1. controlla collisione con altre labels
+      // collisione con altre labels
       for (const other of placedLabels) {
         if (isColliding(label, other)) {
           collision = true;
@@ -91,17 +110,25 @@ async function loadChaosGallery() {
         }
       }
 
-      // 2. controlla collisione con CTA
-      if (!collision && isColliding(label, cta)) {
-        collision = true;
+      // collisione con CTA
+      if (!collision) {
+        const lr = label.getBoundingClientRect();
+        if (!(lr.right < ctaRect.left ||
+              lr.left > ctaRect.right ||
+              lr.bottom < ctaRect.top ||
+              lr.top > ctaRect.bottom)) {
+          collision = true;
+        }
       }
 
-      // 3. se non collide → posizione accettata
+      // se non collide → posizione accettata
       if (!collision) {
         placed = true;
         placedLabels.push(label);
       }
     }
+
+    label.style.visibility = 'visible';
   });
 }
 
