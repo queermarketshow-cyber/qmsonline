@@ -12,6 +12,15 @@
   --z-lightbox: 21000;
   --z-gallery: 20000;
   --z-overlay: 15000;
+
+  /* Altezza navbar (desktop/mobile) */
+  --navbar-height: 80px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 70px;
+  }
 }
 
 /* ————————————————————————————————
@@ -34,6 +43,7 @@ body {
   background-color: var(--bg-color);
   color: var(--secondary-color);
   position: relative;
+  min-height: 100dvh;
 }
 
 /* sfondo mani */
@@ -48,10 +58,10 @@ body {
   z-index: -1;
 }
 
-/* sezioni principali */
+/* sezioni principali base (la home avrà override suoi) */
 .hero-section,
 .home-section {
-  min-height: 100dvh;
+  min-height: calc(100dvh - var(--navbar-height));
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -60,13 +70,15 @@ body {
   text-align: center;
 }
 
+/* sezioni “a scorrimento” con bordo superiore */
 .scroll-section {
   padding: 4rem 2rem;
   border-top: 1px solid var(--primary-color);
 }
 
+/* offset delle ancore rispetto alla navbar fissa */
 section[id] {
-  scroll-margin-top: 90px;
+  scroll-margin-top: var(--navbar-height);
 }
 
 /* pulsanti generici */
@@ -81,7 +93,7 @@ section[id] {
   cursor: pointer;
 }
 
-/* footer */
+/* footer generico */
 footer {
   text-align: center;
   padding: 2rem;
@@ -91,11 +103,14 @@ footer {
 /* ————————————————————————————————
    NAVBAR + MENU
 —————————————————————————————————— */
+
+/* NAVBAR UNICA E DEFINITIVA */
 .navbar {
   position: fixed;
-  inset-inline: 0;
   top: 0;
-  height: 60px;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
   background: var(--primary-color);
   display: flex;
   align-items: center;
@@ -169,6 +184,7 @@ footer {
   display: none;
 }
 
+/* DESKTOP */
 @media (min-width: 769px) {
   .menu-desktop {
     display: flex;
@@ -179,10 +195,11 @@ footer {
   }
 }
 
+/* MOBILE */
 @media (max-width: 768px) {
   .menu-mobile {
     position: fixed;
-    top: 60px;
+    top: var(--navbar-height);
     left: 0;
     right: 0;
     background: var(--primary-color);
@@ -220,27 +237,446 @@ footer {
     text-decoration: line-through 3px solid #fff;
   }
 }
-
 /* ————————————————————————————————
-   HOME / MASONRY FIX
+   HOME — BASE
 —————————————————————————————————— */
+
 .home-section {
   width: 100%;
-  padding: 2rem 1rem;
   margin: 0;
-  display: block;
-  min-height: auto;
-  height: auto;
+  padding: 0;
   text-align: left;
-  overflow: visible;
 }
 
+.home-collage,
 .collage-home {
-  padding-top: 6rem;
+  position: relative;
+  width: 100%;
+  height: calc(100dvh - var(--navbar-height));
+  margin-top: var(--navbar-height);
+  padding: var(--navbar-height) 1rem 0;
+  overflow: hidden;
+  z-index: 1;
 }
 
-.home-content {
-  display: none !important;
+.home-content { display: none !important; }
+
+/* ————————————————————————————————
+   MASONRY (fallback)
+—————————————————————————————————— */
+
+.masonry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-auto-rows: 10px;
+  gap: 1rem;
+  content-visibility: auto;
+}
+
+@media (max-width: 600px) {
+  .masonry-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 12px;
+  }
+}
+
+/* ————————————————————————————————
+   POSTER — BASE
+—————————————————————————————————— */
+
+.poster {
+  position: absolute;
+  display: block;
+  max-width: 100%;
+  color: #fff;
+  text-decoration: none;
+  border: 2px solid #fff;
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 0 2px #000 inset;
+  transform-origin: center;
+  overflow: hidden;
+}
+
+/* overlay cliccabile */
+.poster-link {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.poster *:not(.poster-link) {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* immagini */
+.poster img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* varianti crop */
+.poster-L img,
+.poster-XL img,
+.poster-XXL img,
+.poster-XS img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.poster-XS img { padding-top: 30%; }
+
+/* titolo */
+.poster h2 {
+  font-family: var(--font-sans);
+  font-size: 1.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+}
+
+/* etichetta */
+.poster::before {
+  content: attr(data-section);
+  position: absolute;
+  top: 8px; left: 8px;
+  padding: 6px 10px;
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 3px #000 inset;
+  transform: rotate(-2deg);
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* ————————————————————————————————
+   TAGLIE POSTER (DESKTOP)
+—————————————————————————————————— */
+
+.poster-XXL { width: 100vw; height: calc(100dvh - var(--navbar-height)); top: 0; left: 0; }
+.poster-L   { width: 100vw; height: 18vh; }
+.poster-XL  { width: 18vw; height: calc(100dvh - var(--navbar-height)); }
+.poster-M   { width: 34vw; height: calc(34vw * 0.66); }
+.poster-S   { width: 34vw; height: 34vw; }
+.poster-XS  { width: 20vw; height: calc(20vw * 1.33); }
+
+/* Z-index */
+.p-xxl { z-index: 0; }
+.p-l   { z-index: 1; }
+.p-xl  { z-index: 2; }
+.p-m   { z-index: 3; }
+.p-s   { z-index: 4; }
+.p-xs  { z-index: 5; }
+
+/* POSIZIONI ANARCHICHE */
+.p-xxl        { top: 0; left: 0; }
+.p-sostienici { bottom: 4%; left: 0; }
+.p-manifesto  { top: 0; left: 80%; }
+.p-artist3    { top: 8%; left: 1%; }
+.p-galleria   { top: 18%; right: 10%; }
+.p-eventi     { top: 6%; left: 20%; }
+
+/* ————————————————————————————————
+   PALETTE + STICKER
+—————————————————————————————————— */
+
+.poster-eventi     { background: var(--primary-color); color: #000; border-color: #000; }
+.poster-manifesto  { background: #111; border: 3px dashed var(--primary-color); }
+.poster-galleria   { background: #222; border-color: #fff; }
+.poster-artist3    { background: #fff; color: #000; border-color: #000; }
+.poster-sostienici { background: #000; color: var(--primary-color); border: 3px solid var(--primary-color); }
+
+.sticker {
+  background: var(--primary-color);
+  color: #000;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  position: absolute;
+  bottom: 10px; right: 10px;
+  transform: rotate(3deg);
+  box-shadow: 0 0 0 2px #000 inset;
+  pointer-events: none;
+}
+.sticker.small { font-size: 0.65rem; }
+
+/* ————————————————————————————————
+   COLLAGE INTERNO
+—————————————————————————————————— */
+
+.poster-collage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.collage-img,
+.poster-collage-xs .cell {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%) contrast(1.3);
+  border: 1px solid #fff;
+  box-shadow: 0 0 0 2px #000 inset;
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+
+.collage-img.glitch-in,
+.poster-collage-xs .cell.glitch-in {
+  animation: glitchIn 0.28s steps(2, end);
+  opacity: 1;
+}
+
+@keyframes glitchIn {
+  0%   { clip-path: inset(0 0 80% 0);  transform: translate(-2px, 1px); }
+  25%  { clip-path: inset(20% 0 40% 0); transform: translate(2px, -1px); }
+  50%  { clip-path: inset(40% 0 20% 0); transform: translate(-1px, 2px); }
+  75%  { clip-path: inset(10% 0 60% 0); transform: translate(1px, -2px); }
+  100% { clip-path: inset(0 0 0 0);     transform: none; }
+}
+
+/* POSTER XS — COLLAGE ARTIST3 */
+.poster-artist3.poster-XS {
+  padding: 0;
+  background: #fff;
+  border: 2px solid #000;
+}
+
+.poster-collage-xs {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 2px;
+  padding: 4px;
+  background: #000;
+}
+
+.poster-collage-xs .cell {
+  border: 1px solid #000;
+  transform: rotate(calc(-1deg + (var(--i) * 0.15deg)));
+}
+
+/* ————————————————————————————————
+   MOBILE — COLLAGE ANARCHICO
+—————————————————————————————————— */
+
+@media (max-width: 768px) {
+
+  .home-collage,
+  .collage-home {
+    height: auto;
+    min-height: calc(100dvh - var(--navbar-height));
+    overflow-y: visible;
+  }
+
+  .poster {
+    transform: rotate(var(--tilt, 0deg));
+    width: var(--poster-width, 50vw);
+    height: var(--poster-height, auto);
+    z-index: var(--z, 1);
+    padding: 0;
+  }
+
+  .poster-XXL { --poster-width: 90vw; --poster-height: calc(100dvh - var(--navbar-height)); --tilt: -2deg; --z: 1; top: 0; left: 0; }
+  .poster-XL  { --poster-width: 80vw; --poster-height: calc(100dvh - var(--navbar-height)); --tilt: 3deg;  --z: 2; top: 0; left: 50%; }
+  .poster-L   { --poster-width: 70vw; --poster-height: 14vh; --tilt: -4deg; --z: 3; top: 80%; left: 0; }
+  .poster-M   { --poster-width: 48vw; --poster-height: calc(48vw * 0.66); --tilt: 2deg; --z: 4; top: 30%; left: 50vw; }
+  .poster-S   { --poster-width: 40vw; --poster-height: 40vw; --tilt: -1deg; --z: 5; top: 30%; left: 50%; }
+  .poster-XS  { --poster-width: 28vw; --poster-height: calc(28vw * 1.33); --tilt: 5deg; --z: 6; top: 15vh; left: 10%; }
+
+  .poster::before {
+    font-size: 1rem;
+    padding: 4px 6px;
+  }
+}
+/* ————————————————————————————————
+   ROTAZIONI ANARCHICHE — DESKTOP
+—————————————————————————————————— */
+
+.poster {
+  transform: rotate(var(--tilt, 0deg));
+}
+
+/* Rotazioni per taglia */
+.poster-XXL { --tilt: -1.5deg; }
+.poster-XL  { --tilt:  2.5deg; }
+.poster-L   { --tilt: -3deg; }
+.poster-M   { --tilt:  1.8deg; }
+.poster-S   { --tilt: -2.2deg; }
+.poster-XS  { --tilt:  4deg; }
+
+/* ————————————————————————————————
+   TITOLI
+—————————————————————————————————— */
+
+.manifesto-title {
+  font-family: var(--font-sans);
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  transform: rotate(-1.5deg);
+}
+
+/* ————————————————————————————————
+   LEAD
+—————————————————————————————————— */
+
+.manifesto-lead {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
+  line-height: 1.3;
+  transform: rotate(-1deg);
+  background: var(--primary-color);
+  color: #000;
+  padding: 1rem;
+  border: 3px solid #000;
+  box-shadow: 0 0 0 3px #fff inset;
+}
+
+/* ————————————————————————————————
+   CORPO
+—————————————————————————————————— */
+
+.manifesto-body p {
+  font-size: 1.2rem;
+  line-height: 1.55;
+  margin-bottom: 1.6rem;
+  opacity: 0;
+  transform: translateY(10px) rotate(-0.3deg);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.manifesto-body p.visible {
+  opacity: 1;
+  transform: translateY(0) rotate(var(--tilt, -0.3deg));
+}
+
+/* Frasi-chiave */
+.manifesto-body strong {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  padding: 0.2rem 0.4rem;
+  box-shadow: 0 0 0 2px #000 inset;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.manifesto-body strong.active {
+  background: var(--primary-color);
+  color: #000;
+}
+
+/* ————————————————————————————————
+   MOBILE
+—————————————————————————————————— */
+
+@media (max-width: 600px) {
+  .manifesto-title { font-size: 2.4rem; }
+  .manifesto-lead { font-size: 1.3rem; }
+  .manifesto-body p { font-size: 1.05rem; }
+}
+
+body.modal-open {
+  overflow: hidden;
+  height: 100dvh;
+  touch-action: none;
+}
+
+/* ============================
+   MANIFESTO — SEZIONE FULLSCREEN
+============================ */
+
+.manifesto-section {
+  padding: 6rem 1.5rem 4rem;
+  background: #000;
+  color: #fff;
+  position: relative;
+  min-height: calc(100dvh - var(--navbar-height));
+  box-sizing: border-box;
+}
+
+/* contenitore centrato in larghezza */
+.manifesto-container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* titolo */
+.manifesto-title {
+  font-family: var(--font-sans);
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  transform: rotate(-1.5deg);
+}
+
+/* lead */
+.manifesto-lead {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
+  line-height: 1.3;
+  transform: rotate(-1deg);
+  background: var(--primary-color);
+  color: #000;
+  padding: 1rem;
+  border: 3px solid #000;
+  box-shadow: 0 0 0 3px #fff inset;
+}
+
+/* corpo testo */
+.manifesto-body p {
+  font-size: 1.2rem;
+  line-height: 1.55;
+  margin-bottom: 1.6rem;
+  opacity: 0;
+  transform: translateY(10px) rotate(-0.3deg);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+/* quando JS aggiunge .visible */
+.manifesto-body p.visible {
+  opacity: 1;
+  transform: translateY(0) rotate(var(--tilt, -0.3deg));
+}
+
+/* frasi chiave */
+.manifesto-body strong {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  padding: 0.2rem 0.4rem;
+  box-shadow: 0 0 0 2px #000 inset;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.manifesto-body strong.active {
+  background: var(--primary-color);
+  color: #000;
+}
+
+/* mobile */
+@media (max-width: 600px) {
+  .manifesto-title { font-size: 2.4rem; }
+  .manifesto-lead { font-size: 1.3rem; }
+  .manifesto-body p { font-size: 1.05rem; }
 }
 
 /* ————————————————————————————————
@@ -1136,347 +1572,6 @@ footer {
     column-count: 1;
   }
 }
-/* ————————————————————————————————
-   GALLERIA A CARTELLE — PREVIEW
-—————————————————————————————————— */
-.gallery-folders {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
-  padding: 20px 0;
-}
-
-.folder-preview {
-  position: relative;
-  overflow: hidden;
-  border: 2px solid var(--primary-color);
-  background: #000;
-  cursor: pointer;
-  border-radius: 6px;
-  transform: rotate(-1deg);
-  transition: transform 0.2s ease;
-}
-
-.folder-preview:hover {
-  transform: rotate(1deg) scale(1.02);
-}
-
-.folder-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: contrast(1.1) brightness(0.9);
-}
-
-.folder-overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 12px;
-  background: #000;
-  color: var(--primary-color);
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  text-align: center;
-}
-
-@media (max-width: 768px) {
-  .gallery-folders {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ————————————————————————————————
-   MODALE GALLERIA (CARTELLE)
-—————————————————————————————————— */
-#galleryModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: var(--z-gallery);
-  padding: 2rem;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-#galleryModal .modal-content {
-  background: #000;
-  border: 3px solid var(--primary-color);
-  padding: 1.5rem;
-  border-radius: 10px;
-  max-width: 95%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 0 20px rgba(255,0,255,0.4);
-}
-
-.modal-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
-}
-
-.modal-grid img {
-  width: 100%;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 2px solid var(--primary-color);
-  transition: transform 0.2s ease;
-}
-
-.modal-grid img:hover {
-  transform: scale(1.03);
-}
-
-@media (max-width: 600px) {
-  .modal-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  }
-}
-
-#galleryModal .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 2rem;
-  color: var(--primary-color);
-  cursor: pointer;
-  font-weight: bold;
-  background: none;
-  border: none;
-}
-
-/* ————————————————————————————————
-   LIGHTBOX UNIFICATA
-—————————————————————————————————— */
-.lightbox.hidden,
-#galleryModal.hidden,
-.artist-modal.hidden,
-.mosaic-gallery.hidden {
-  display: none !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-.lightbox.open,
-#galleryModal.open,
-.artist-modal.open,
-.mosaic-gallery.open {
-  display: flex !important;
-  pointer-events: auto !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-#lightbox.lightbox {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  z-index: var(--z-lightbox);
-}
-
-.lightbox-inner {
-  position: relative;
-  pointer-events: auto;
-  touch-action: none;
-}
-
-#lightbox-img {
-  max-width: 100vw;
-  max-height: 100dvh;
-  object-fit: contain;
-  border-radius: 4px;
-  transform-origin: center center;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: #000;
-  color: #fff;
-  border: none;
-  font-size: 1.5rem;
-  padding: 0.3rem 0.6rem;
-  cursor: pointer;
-  z-index: 100000;
-}
-
-.lightbox-prev,
-.lightbox-next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 3rem;
-  color: #fff;
-  cursor: pointer;
-  user-select: none;
-  padding: 0 0.5rem;
-  z-index: 100000;
-}
-
-.lightbox-prev { left: -40px; }
-.lightbox-next { right: -40px; }
-
-@media (max-width: 768px) {
-  .lightbox-prev { left: 10px; }
-  .lightbox-next { right: 10px; }
-}
-
-#lightbox.open ~ #galleryModal {
-  pointer-events: none;
-}
-/* Frecce nascoste quando il lightbox è aperto da una modale artista */
-#lightbox.lightbox-artist .lightbox-prev,
-#lightbox.lightbox-artist .lightbox-next {
-  display: none !important;
-}
-/* ICONA INSTAGRAM NELLA MODALE ARTISTA */
-.artist-modal a[href*="instagram"] img,
-.artist-modal a[href*="instagram"] svg,
-.artist-modal a[href*="instagram"] i,
-.artist-modal a[href*="instagram"] .icon,
-.artist-modal .instagram-icon {
-  width: 20px !important;
-  height: 20px !important;
-  display: inline-block;
-  filter: invert(29%) sepia(96%) saturate(7480%) hue-rotate(-20deg) brightness(152%) contrast(0%) !important;
-  /* trasforma nero/blu → bianco #ffffff */
-  transition: transform 0.15s ease-out;
-  margin-left: 6px;
-}
-
-.artist-modal a[href*="instagram"]:hover img,
-.artist-modal a[href*="instagram"]:hover svg,
-.artist-modal a[href*="instagram"]:hover i,
-.artist-modal a[href*="instagram"]:hover .icon,
-.artist-modal .instagram-icon:hover {
-  transform: scale(1.2) rotate(-4deg);
-}
-
-/* ————————————————————————————————
-   GALLERIA A MOSAICO
-—————————————————————————————————— */
-.mosaic-gallery {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  z-index: calc(var(--z-gallery) - 1);
-  overflow-y: auto;
-  padding: 2rem;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-.mosaic-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
-}
-
-.mosaic-grid img {
-  width: 100%;
-  border-radius: 6px;
-  border: 2px solid var(--primary-color);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.mosaic-grid img:hover {
-  transform: scale(1.03);
-}
-
-.mosaic-close {
-  position: absolute;
-  top: 20px;
-  right: 25px;
-  font-size: 3rem;
-  color: var(--primary-color);
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-  font-weight: bold;
-  text-shadow: 0 0 10px rgba(255,0,255,0.5);
-}
-
-@media (max-width: 600px) {
-  .mosaic-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-}
-
-/* ————————————————————————————————
-   QMS MASONRY (ALTRE GALLERIE / MEDIA)
-—————————————————————————————————— */
-.qms-masonry {
-  column-count: 3;
-  column-gap: 1.2rem;
-}
-
-.qms-item {
-  break-inside: avoid;
-  margin-bottom: 1.2rem;
-  background: #000;
-  color: #fff;
-  padding: 0.5rem;
-  border: 1px solid #ff00aa;
-  border-radius: 4px;
-  transition: transform 0.3s ease;
-}
-
-.qms-item:hover {
-  transform: scale(1.02);
-}
-
-.qms-item img,
-.qms-item iframe {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 4px;
-}
-
-.qms-item.ig span {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #ff00aa;
-}
-
-.video-preview {
-  width: 100%;
-  padding-top: 56.25%;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  border-radius: 4px;
-  border: 1px solid #ff00aa;
-}
-
-.play-icon {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  color: #ff00aa;
-  background: rgba(0,0,0,0.6);
-  padding: 0.5rem 1rem;
-  border-radius: 50%;
-}
 
 /* ————————————————————————————————
    OVERFLOW KILLER
@@ -1931,380 +2026,6 @@ footer {
 }
 
 /* ————————————————————————————————
-   HOME — BASE
-—————————————————————————————————— */
-
-.home-section {
-  display: block;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-  overflow: visible;
-}
-
-.collage-home {
-  padding-top: 80px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-/* ————————————————————————————————
-   MASONRY — FLUIDA E ANARCHICA
-—————————————————————————————————— */
-
-.masonry-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  grid-auto-rows: 10px;
-  gap: 1rem;
-  content-visibility: auto;
-}
-
-/* MOBILE: 2 COLONNE FISSE */
-@media (max-width: 600px) {
-  .masonry-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 12px;
-  }
-}
-
-/* ————————————————————————————————
-   POSTER — BASE
-—————————————————————————————————— */
-
-.poster {
-  display: block;
-  position: relative; /* NECESSARIO PER OVERLAY LINK */
-  color: #fff;
-  text-decoration: none;
-  border: 2px solid #fff;
-  background: rgba(255,255,255,0.05);
-  box-shadow: 0 0 0 2px #000 inset;
-  overflow: visible;
-  transform: rotate(-1deg);
-  max-width: 100%;
-  content-visibility: auto;
-}
-
-/* OVERLAY LINK — FULL AREA, CLICCABILE */
-.poster-link {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  display: block;
-  pointer-events: auto;
-}
-
-/* TUTTO IL RESTO NON INTERCETTA IL CLICK */
-.poster *:not(.poster-link) {
-  position: relative;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.poster h2 {
-  font-family: var(--font-sans);
-  font-size: 1.8rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  margin: 0 0 0.5rem 0;
-}
-
-/* ————————————————————————————————
-   POSTER — PROPORZIONI ANARCHICHE (L/M/S/XS)
-—————————————————————————————————— */
-
-.poster-L {
-  grid-column: span 2;
-}
-
-@media (min-width: 768px) {
-  .poster-L {
-    grid-column: span 3;
-  }
-}
-
-@media (max-width: 600px) {
-  .poster-L {
-    grid-column: span 2;
-  }
-}
-
-.poster-M {
-  aspect-ratio: 1 / 1;
-  grid-column: span 1;
-}
-
-.poster-S {
-  aspect-ratio: 5 / 7;
-  grid-column: span 1;
-}
-
-.poster-XS {
-  aspect-ratio: 14 / 9;
-  grid-column: span 1;
-}
-
-/* ————————————————————————————————
-   INCLINAZIONI
-—————————————————————————————————— */
-
-.tilt-left { transform: rotate(-1.5deg); }
-.tilt-right { transform: rotate(1.5deg); }
-
-/* ————————————————————————————————
-   STICKER
-—————————————————————————————————— */
-
-.sticker {
-  background: var(--primary-color);
-  color: #000;
-  padding: 4px 8px;
-  font-size: 0.75rem;
-  font-weight: 900;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  transform: rotate(3deg);
-  box-shadow: 0 0 0 2px #000 inset;
-  pointer-events: none;
-}
-
-.sticker.small { font-size: 0.65rem; }
-
-/* ————————————————————————————————
-   PALETTE SPECIFICA
-—————————————————————————————————— */
-
-.poster-eventi {
-  background: var(--primary-color);
-  color: #000;
-  border-color: #000;
-}
-.poster-eventi h2 { color: #000; }
-
-.poster-manifesto {
-  background: #111;
-  border: 3px dashed var(--primary-color);
-}
-
-.poster-galleria {
-  background: #222;
-  border-color: #fff;
-}
-
-.poster-artist3 {
-  background: #fff;
-  color: #000;
-  border-color: #000;
-}
-.poster-artist3 h2 { color: #000; }
-
-.poster-sostienici {
-  background: #000;
-  color: var(--primary-color);
-  border: 3px solid var(--primary-color);
-}
-.poster-sostienici h2 { color: var(--primary-color); }
-
-/* ————————————————————————————————
-   COLLAGE — ANARCHICO
-—————————————————————————————————— */
-
-.poster-collage {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-}
-
-.collage-img {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  filter: grayscale(100%) contrast(1.3);
-  border: 1px solid #fff;
-  box-shadow: 0 0 0 2px #000 inset;
-  transform: rotate(-2deg);
-  opacity: 0;
-  transition: opacity 0.25s ease-out;
-}
-
-/* GLITCH MEDIO ALLA PRIMA APPARIZIONE */
-.collage-img.glitch-in,
-.poster-collage-xs .cell.glitch-in {
-  animation: glitchIn 0.28s steps(2, end);
-  opacity: 1;
-}
-
-@keyframes glitchIn {
-  0% { clip-path: inset(0 0 80% 0); transform: translate(-2px, 1px); }
-  25% { clip-path: inset(20% 0 40% 0); transform: translate(2px, -1px); }
-  50% { clip-path: inset(40% 0 20% 0); transform: translate(-1px, 2px); }
-  75% { clip-path: inset(10% 0 60% 0); transform: translate(1px, -2px); }
-  100% { clip-path: inset(0 0 0 0); transform: none; }
-}
-
-/* ————————————————————————————————
-   POSTER XS — COLLAGE ARTIST3
-—————————————————————————————————— */
-
-.poster-XS {
-  aspect-ratio: 14 / 9;
-  grid-column: span 1;
-  position: relative;
-  overflow: hidden;
-}
-
-.poster-artist3.poster-XS {
-  padding: 0;
-  background: #fff;
-  border: 2px solid #000;
-}
-
-.poster-artist3.poster-XS .poster-collage-xs {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  gap: 2px;
-  padding: 4px;
-  background: #000;
-}
-
-.poster-artist3.poster-XS .poster-collage-xs .cell {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  filter: grayscale(100%) contrast(1.3);
-  border: 1px solid #000;
-  transform: rotate(calc(-1deg + (var(--i) * 0.15deg)));
-  opacity: 0;
-  transition: opacity 0.25s ease-out;
-}
-
-/* ————————————————————————————————
-   ETICHETTA SEZIONE SU TUTTI I POSTER
-—————————————————————————————————— */
-
-.poster::before {
-  content: attr(data-section);
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 3px 6px;
-  font-size: 0.7rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  background: #000;
-  color: #fff;
-  border: 1px solid #fff;
-  box-shadow: 0 0 0 2px #000 inset;
-  pointer-events: none;
-  z-index: 10;
-  transform: rotate(-2deg);
-}
-
-/* ————————————————————————————————
-   MANIFESTO — SEZIONE
-—————————————————————————————————— */
-
-.manifesto-section {
-  padding: 6rem 1.5rem 4rem;
-  background: #000;
-  color: #fff;
-}
-
-.manifesto-container {
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-/* ————————————————————————————————
-   TITOLI
-—————————————————————————————————— */
-
-.manifesto-title {
-  font-family: var(--font-sans);
-  font-size: 3rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
-  transform: rotate(-1.5deg);
-}
-
-/* ————————————————————————————————
-   LEAD
-—————————————————————————————————— */
-
-.manifesto-lead {
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin-bottom: 2.5rem;
-  line-height: 1.3;
-  transform: rotate(-1deg);
-  background: var(--primary-color);
-  color: #000;
-  padding: 1rem;
-  border: 3px solid #000;
-  box-shadow: 0 0 0 3px #fff inset;
-}
-
-/* ————————————————————————————————
-   CORPO
-—————————————————————————————————— */
-
-.manifesto-body p {
-  font-size: 1.2rem;
-  line-height: 1.55;
-  margin-bottom: 1.6rem;
-  opacity: 0;
-  transform: translateY(10px) rotate(-0.3deg);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-}
-
-.manifesto-body p.visible {
-  opacity: 1;
-  transform: translateY(0) rotate(var(--tilt, -0.3deg));
-}
-
-/* Frasi-chiave */
-.manifesto-body strong {
-  display: inline-block;
-  background: #fff;
-  color: #000;
-  padding: 0.2rem 0.4rem;
-  box-shadow: 0 0 0 2px #000 inset;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.manifesto-body strong.active {
-  background: var(--primary-color);
-  color: #000;
-}
-
-/* ————————————————————————————————
-   MOBILE
-—————————————————————————————————— */
-
-@media (max-width: 600px) {
-  .manifesto-title { font-size: 2.4rem; }
-  .manifesto-lead { font-size: 1.3rem; }
-  .manifesto-body p { font-size: 1.05rem; }
-}
-
-body.modal-open {
-  overflow: hidden;
-  height: 100dvh;
-  touch-action: none;
-}
-
-/* ————————————————————————————————
    BODY LOCK PER MODALI (TOUCH FIX)
 —————————————————————————————————— */
 body.modal-open {
@@ -2672,432 +2393,6 @@ body.modal-open {
 }
 
 
-/* ============================
-   POSTER BASE
-============================= */
-
-.poster {
-  display: block;
-  position: absolute;
-  color: #fff;
-  text-decoration: none;
-  border: 2px solid #fff;
-  background: rgba(255,255,255,0.05);
-  box-shadow: 0 0 0 2px #000 inset;
-  transform-origin: center;
-  overflow: hidden;
-}
-
-
-/* ============================
-   IMMAGINI
-============================= */
-
-/* Default: XS / S / M → immagine intera */
-.poster img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-/* L / XL / XXL → crop manifesto/banner */
-.poster-L img,
-.poster-XL img,
-.poster-XXL img{
-  object-fit: cover;
-  object-position: center;
-}
-
-.poster-XS img {
-  object-fit: cover;
-  object-position: center;
-  padding-top: 30%;
-}
-/* ============================
-   ETICHETTA GRANDE
-============================= */
-
-.poster::before {
-  content: attr(data-section);
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 6px 10px;
-  font-size: 1.4rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  background: #000;
-  color: #fff;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 3px #000 inset;
-  pointer-events: none;
-  z-index: 20;
-  transform: rotate(-2deg);
-}
-
-
-/* ============================
-   TAGLIE POSTER CORRETTE
-============================= */
-
-/* XXL — OCCUPA TUTTO LO SCHERMO */
-.poster-XXL {
-  width: 100vw;
-  height: calc(100dvh - var(--navbar-height));
-}
-
-/* L — Banner orizzontale full width */
-.poster-L {
-  width: 100vw;
-  height: 18vh;
-}
-
-/* XL — Stendardo verticale full height */
-.poster-XL {
-  height: calc(100dvh - var(--navbar-height));
-  width: 18vw;
-}
-
-/* M — Cartolina orizzontale (3:2) */
-.poster-M {
-  width: 34vw;
-  height: calc(34vw * 0.66);
-}
-
-/* S — Quadrato */
-.poster-S {
-  width: 34vw;
-  height: 34vw;
-}
-
-/* XS — Polaroid (3:4) */
-.poster-XS {
-  width: 20vw;
-  height: calc(20vw * 1.33);
-}
-
-
-/* ============================
-   ROTAZIONI
-============================= */
-
-.tilt-left { transform: rotate(-3deg); }
-.tilt-right { transform: rotate(3deg); }
-
-
-/* ============================
-   PALETTE
-============================= */
-
-.poster-eventi { background: var(--primary-color); color: #000; border-color: #000; }
-.poster-manifesto { background: #111; border: 3px dashed var(--primary-color); }
-.poster-galleria { background: #222; border-color: #fff; }
-.poster-artist3 { background: #fff; color: #000; border-color: #000; }
-.poster-sostienici { background: #000; color: var(--primary-color); border: 3px solid var(--primary-color); }
-
-
-/* ============================
-   POSIZIONAMENTO ANARCHICO
-   (aggiornato per XXL)
-============================= */
-
-/* XXL — sfondo totale */
-.p-xxl {
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-
-/* L — banner */
-.p-sostienici {
-  bottom: 4%;
-  left: 0;
-  z-index: 1;
-}
-
-/* XL — stendardo */
-.p-manifesto {
-  top: 0;
-  left: 80%;
-  z-index: 2;
-}
-
-/* M */
-.p-artist3 {
-  top: 8%;
-  left: 1%;
-  z-index: 3;
-}
-
-/* S */
-.p-galleria {
-  top: 18%;
-  right: 10%;
-  z-index: 4;
-}
-
-/* XS */
-.p-eventi {
-  top: 6%;
-  left: 20%;
-  z-index: 5;
-}
-
-
-/* ============================
-   MOBILE — COLLAGE ANARCHICO
-============================= */
-
-@media (max-width: 768px) {
-
-  :root {
-    --navbar-height: 70px;
-  }
-
-  .home-collage {
-    position: relative;
-    margin-top: var(--navbar-height);
-    height: auto;
-    min-height: calc(100dvh - var(--navbar-height));
-    overflow-x: hidden;
-    overflow-y: visible;
-    padding-top: var(--navbar-height);
-  }
-
-  .poster {
-    position: absolute;
-    transform: rotate(var(--tilt, 0deg));
-    width: var(--poster-width, 50vw);
-    height: var(--poster-height, auto);
-    z-index: var(--z, 1);
-    max-width: 100%;
-  }
-
-  /* Poster anarchici con proporzioni e layering */
-  .poster-XXL {
-    --poster-width: 90vw;
-    --poster-height: calc(100dvh - var(--navbar-height));
-    --tilt: -2deg;
-    --z: 1;
-  }
-
-  .poster-XL {
-    --poster-width: 80vw;
-    --poster-height: calc(100dvh - var(--navbar-height));
-    --tilt: 3deg;
-    --z: 2;
-  }
-
-  .poster-L {
-    --poster-width: 70vw;
-    --poster-height: 14vh;
-    --tilt: -4deg;
-    --z: 3;
-  }
-
-  .poster-M {
-    --poster-width: 48vw;
-    --poster-height: calc(48vw * 0.66);
-    --tilt: 2deg;
-    --z: 4;
-  }
-
-  .poster-S {
-    --poster-width: 40vw;
-    --poster-height: 40vw;
-    --tilt: -1deg;
-    --z: 5;
-  }
-
-  .poster-XS {
-    --poster-width: 28vw;
-    --poster-height: calc(28vw * 1.33);
-    --tilt: 5deg;
-    --z: 6;
-  }
-
-  .poster::before {
-    font-size: 1rem;
-    padding: 4px 6px;
-  }
-}
-
-/* HOME */
-.home-collage {
-  position: relative;
-  width: 100%;
-  height: calc(100dvh - var(--navbar-height));
-  padding-top: var(--navbar-height);
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* GERARCHIA */
-.p-xxl { z-index: 0; }
-.p-l   { z-index: 1; }
-.p-xl  { z-index: 2; }
-.p-m   { z-index: 3; }
-.p-s   { z-index: 4; }
-.p-xs  { z-index: 5; }
-
-/* XXL FULLSCREEN */
-.poster-XXL {
-  width: 100vw;
-  height: calc(100dvh - var(--navbar-height));
-  top: 0;
-  left: 0;
-}
-
-/* MOBILE: mantieni il collage */
-@media (max-width: 768px) {
-  .poster {
-    transform: scale(0.8);
-    transform-origin: top left;
-  }
-}
-:root {
-  --navbar-height: 0px;
-}
-.home-collage {
-  margin-top: var(--navbar-height);
-  position: relative;
-  overflow-x: hidden;
-}
-.poster {
-  max-width: 100%;
-}
-/* ============================
-   MOBILE — COLLAGE ANARCHICO
-============================= */
-
-@media (max-width: 768px) {
-
-  :root {
-    --navbar-height: 70px;
-  }
-
-  .home-collage {
-    position: relative;
-    margin-top: var(--navbar-height);
-    height: auto;
-    min-height: calc(100dvh - var(--navbar-height));
-    overflow-x: hidden;
-    overflow-y: visible;
-    padding-top: var(--navbar-height);
-  }
-
-  .poster {
-    position: absolute;
-    transform: rotate(var(--tilt, 0deg));
-    width: var(--poster-width, 50vw);
-    height: var(--poster-height, auto);
-    z-index: var(--z, 1);
-    max-width: 100%;
-    padding: 0%;
-  }
-
-  /* Poster anarchici con proporzioni e layering */
-  .poster-XXL {
-    --poster-width: 90vw;
-    --poster-height: calc(100dvh - var(--navbar-height));
-    --tilt: -2deg;
-    --z: 1;
-    
-  }
-
-  .poster-XL {
-    --poster-width: 80vw;
-    --poster-height: calc(100dvh - var(--navbar-height));
-    --tilt: 3deg;
-    --z: 2;
-  }
-
-  .poster-L {
-    --poster-width: 70vw;
-    --poster-height: 14vh;
-    --tilt: -4deg;
-    --z: 3;
-  }
-
-  .poster-M {
-    --poster-width: 48vw;
-    --poster-height: calc(48vw * 0.66);
-    --tilt: 2deg;
-    --z: 4;
-  }
-
-  .poster-S {
-    --poster-width: 40vw;
-    --poster-height: 40vw;
-    --tilt: -1deg;
-    --z: 5;
-  }
-
-  .poster-XS {
-    --poster-width: 28vw;
-    --poster-height: calc(28vw * 1.33);
-    --tilt: 5deg;
-    --z: 6;
-  }
-
-  .poster::before {
-    font-size: 1rem;
-    padding: 4px 6px;
-  }
-  /* ============================
-   MOBILE — POSIZIONI POSTER
-============================= */
-
-
-  /* XXL */
-  .poster-XXL {
-    top: 0;
-    left: 0;
-  }
-
-  /* XL */
-  .poster-XL {
-    top: 0;
-    left: 50%;
-  }
-
-  /* L */
-  .poster-L {
-    top: 80%;
-    left: 0;
-  }
-
-  /* M */
-  .poster-M {
-    top: 30%;
-    left: 50vw;
-  }
-
-  /* S */
-  .poster-S {
-    top: 30%;
-    left: 50%;
-  }
-
-  /* XS */
-  .poster-XS {
-    top: 15vh;
-    left: 10%;
-  }
-
-}
-.qms-sostienici-subtitle {
-  font-size: 1.4rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin: 2.8rem 0 1.2rem;
-  display: inline-block;
-  padding: 0.2rem 0.4rem;
-  background: var(--qms-highlight, #f39ed8);
-  transform: rotate(-1.5deg);
-  box-shadow: 3px 3px 0 var(--qms-accent, #ff2e9a);
-}
 
 /* SEZIONE: contenitore principale */
 .qms-gallery-narrativa.chaos {
@@ -3323,5 +2618,376 @@ html { scroll-behavior: smooth; }
   font-size: 1.1rem;
   font-weight: 600;
   color: #fff;
+}
+/* ————————————————————————————————
+   GALLERIA A CARTELLE — PREVIEW
+—————————————————————————————————— */
+
+.gallery-folders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.folder-preview {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--primary-color);
+  background: #000;
+  cursor: pointer;
+  border-radius: 6px;
+  transform: rotate(-1.5deg);
+  transition: transform 0.25s ease;
+  box-shadow: 0 0 0 3px #000 inset;
+}
+
+.folder-preview:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.folder-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.9);
+}
+
+.folder-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: var(--primary-color);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-align: center;
+  box-shadow: 0 -3px 0 #000 inset;
+}
+
+@media (max-width: 768px) {
+  .gallery-folders {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ————————————————————————————————
+   MODALE GALLERIA (CARTELLE)
+—————————————————————————————————— */
+
+#galleryModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-gallery);
+  padding: 2rem;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+#galleryModal.open {
+  display: flex;
+}
+
+#galleryModal .modal-content {
+  background: #000;
+  border: 3px solid var(--primary-color);
+  padding: 1.5rem;
+  border-radius: 10px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 20px rgba(255,0,255,0.4);
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.modal-grid img {
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid var(--primary-color);
+  transition: transform 0.2s ease;
+  transform: rotate(-1deg);
+}
+
+.modal-grid img:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+#galleryModal .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: bold;
+  background: none;
+  border: none;
+}
+
+/* ————————————————————————————————
+   LIGHTBOX FULLSCREEN + THUMBNAILS
+—————————————————————————————————— */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  z-index: var(--z-lightbox);
+}
+
+.lightbox.open {
+  display: flex;
+}
+
+.lightbox-inner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 80vh;
+  pointer-events: auto;
+}
+
+#lightbox-img {
+  max-width: 90vw;
+  max-height: 70vh;
+  object-fit: contain;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 4px #000 inset;
+  transform: rotate(-1deg);
+}
+
+/* Frecce */
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  padding: 0 0.5rem;
+  z-index: 100000;
+}
+
+.lightbox-prev { left: -3rem; }
+.lightbox-next { right: -3rem; }
+
+@media (max-width: 768px) {
+  .lightbox-prev { left: 10px; }
+  .lightbox-next { right: 10px; }
+}
+
+/* Close */
+.lightbox-close {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  background: var(--primary-color);
+  color: #000;
+  border: 3px solid #000;
+  font-size: 2rem;
+  font-weight: 900;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  transform: rotate(3deg);
+}
+
+/* ————————————————————————————————
+   THUMBNAIL STRIP
+—————————————————————————————————— */
+
+.lightbox-thumbs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.lightbox-thumbs img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border: 2px solid #fff;
+  cursor: pointer;
+  opacity: 0.6;
+  transform: rotate(-2deg);
+}
+
+.lightbox-thumbs img.active {
+  opacity: 1;
+  border-color: var(--primary-color);
+  transform: rotate(0deg) scale(1.05);
+}
+
+/* ————————————————————————————————
+   MOSAICO FULLSCREEN
+—————————————————————————————————— */
+
+.mosaic-gallery {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: calc(var(--z-gallery) - 1);
+  overflow-y: auto;
+  padding: 2rem;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.mosaic-gallery.open {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mosaic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.mosaic-grid img {
+  width: 100%;
+  border-radius: 6px;
+  border: 2px solid var(--primary-color);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  transform: rotate(-1deg);
+}
+
+.mosaic-grid img:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.mosaic-close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 3rem;
+  color: var(--primary-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255,0,255,0.5);
+}
+
+@media (max-width: 600px) {
+  .mosaic-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+/* ————————————————————————————————
+   QMS MASONRY (ALTRE GALLERIE / MEDIA)
+—————————————————————————————————— */
+
+.qms-masonry {
+  column-count: 3;
+  column-gap: 1.2rem;
+}
+
+.qms-item {
+  break-inside: avoid;
+  margin-bottom: 1.2rem;
+  background: #000;
+  color: #fff;
+  padding: 0.5rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.qms-item:hover {
+  transform: scale(1.02);
+}
+
+.qms-item img,
+.qms-item iframe {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+}
+
+.qms-item.ig span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--primary-color);
+}
+
+.video-preview {
+  width: 100%;
+  padding-top: 56.25%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-radius: 4px;
+  border: 1px solid var(--primary-color);
+}
+
+.play-icon {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: var(--primary-color);
+  background: rgba(0,0,0,0.6);
+  padding: 0.5rem 1rem;
+  border-radius: 50%;
+}
+/* ————————————————————————————————
+   SCROLLBAR INVISIBILI — VERSIONE DEFINITIVA
+—————————————————————————————————— */
+
+/* Chrome / Safari / Edge */
+*::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: none !important;
+}
+
+/* Per sicurezza, rimuoviamo anche eventuali track */
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* E i thumb */
+*::-webkit-scrollbar-thumb {
+  background: transparent !important;
+  border: none !important;
 }
 
