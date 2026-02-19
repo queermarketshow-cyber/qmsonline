@@ -141,21 +141,13 @@ function updateCarousel() {
   img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
-document.getElementById('galleryModal')
-  ?.querySelector('.prev')
-  ?.addEventListener('click', () => {
-    if (!currentFolder) return;
-    currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
-    updateCarousel();
-  });
+/* Frecce disattivate ma logica del carosello preservata */
+const prevBtn = document.getElementById('galleryModal')?.querySelector('.prev');
+const nextBtn = document.getElementById('galleryModal')?.querySelector('.next');
 
-document.getElementById('galleryModal')
-  ?.querySelector('.next')
-  ?.addEventListener('click', () => {
-    if (!currentFolder) return;
-    currentIndex = (currentIndex + 1) % currentFolder.images.length;
-    updateCarousel();
-  });
+if (prevBtn) prevBtn.style.display = "none";
+if (nextBtn) nextBtn.style.display = "none";
+
 
 document.getElementById('galleryModal')
   ?.querySelector('.close')
