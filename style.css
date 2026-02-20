@@ -3250,3 +3250,30 @@ html { scroll-behavior: smooth; }
     padding: 1.4rem;
   }
 }
+/* MENU SELEZIONE MESE */
+.month-selector {
+  position: absolute;
+  background: #000;
+  border: 2px solid #ff2fa8;
+  box-shadow: 6px 6px 0 #000;
+  padding: 0.6rem;
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.month-selector button {
+  background: #ff2fa8;
+  color: #000;
+  border: 2px solid #000;
+  padding: 0.3rem 0.6rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: left;
+}
+
+.month-selector button:hover {
+  background: #000;
+  color: #ff2fa8;
+}
