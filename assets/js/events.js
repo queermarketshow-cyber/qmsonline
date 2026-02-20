@@ -343,11 +343,11 @@ function renderCalendar(month, year) {
    NAVIGAZIONE MESI
 ============================================================ */
 
-const prevBtn = document.getElementById("prev-month");
-const nextBtn = document.getElementById("next-month");
+const calprevBtn = document.getElementById("prev-month");
+const calnextBtn = document.getElementById("next-month");
 
-if (prevBtn) {
-  prevBtn.addEventListener("click", () => {
+if (calprevBtn) {
+  calprevBtn.addEventListener("click", () => {
     let m = currentMonth;
     let y = currentYear;
 
@@ -363,8 +363,8 @@ if (prevBtn) {
   });
 }
 
-if (nextBtn) {
-  nextBtn.addEventListener("click", () => {
+if (calnextBtn) {
+  calnextBtn.addEventListener("click", () => {
     let m = currentMonth;
     let y = currentYear;
 
