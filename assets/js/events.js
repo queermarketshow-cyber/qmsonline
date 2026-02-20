@@ -268,6 +268,10 @@ function initControls() {
    CALENDARIO DESKTOP
 ============================================================ */
 
+/* ============================================================
+   CALENDARIO DESKTOP + SELETTORE MESE
+============================================================ */
+
 function renderCalendar(month, year) {
   const container = document.getElementById("future-month-container");
   if (!container) return;
@@ -277,11 +281,59 @@ function renderCalendar(month, year) {
   const date = new Date(year, month, 1);
   const monthName = date.toLocaleString("it-IT", { month: "long" });
 
+  /* -------------------------------
+     HEADER MESE (cliccabile)
+  --------------------------------*/
   const monthEl = document.createElement("div");
   monthEl.className = "calendar-month";
   monthEl.textContent = `${monthName} ${year}`;
   container.appendChild(monthEl);
 
+  /* -------------------------------
+     MENU SELEZIONE MESE
+  --------------------------------*/
+  const selector = document.createElement("div");
+  selector.className = "month-selector";
+  selector.style.display = "none";
+
+  // Genera lista mesi futuri con eventi (24 mesi)
+  const months = [];
+  let y = todayYear;
+  let m = 0;
+
+  for (let i = 0; i < 24; i++) {
+    if (monthHasEvents(m, y)) {
+      months.push({ month: m, year: y });
+    }
+    m++;
+    if (m > 11) { m = 0; y++; }
+  }
+
+  months.forEach(({ month, year }) => {
+    const btn = document.createElement("button");
+    const name = new Date(year, month, 1).toLocaleString("it-IT", { month: "long" });
+    btn.textContent = `${name} ${year}`;
+
+    btn.addEventListener("click", () => {
+      currentMonth = month;
+      currentYear = year;
+      selector.style.display = "none";
+      renderAll();
+    });
+
+    selector.appendChild(btn);
+  });
+
+  monthEl.style.position = "relative";
+  monthEl.appendChild(selector);
+
+  monthEl.addEventListener("click", () => {
+    selector.style.display = selector.style.display === "flex" ? "none" : "flex";
+  });
+
+  /* -------------------------------
+     GRIGLIA CALENDARIO
+  --------------------------------*/
   const grid = document.createElement("div");
   grid.className = "calendar-grid";
 
@@ -340,14 +392,14 @@ function renderCalendar(month, year) {
 
 
 /* ============================================================
-   NAVIGAZIONE MESI
+   NAVIGAZIONE MESI (rinominata per evitare conflitti)
 ============================================================ */
 
-const calprevBtn = document.getElementById("prev-month");
-const calnextBtn = document.getElementById("next-month");
+const calPrevBtn = document.getElementById("prev-month");
+const calNextBtn = document.getElementById("next-month");
 
-if (calprevBtn) {
-  calprevBtn.addEventListener("click", () => {
+if (calPrevBtn) {
+  calPrevBtn.addEventListener("click", () => {
     let m = currentMonth;
     let y = currentYear;
 
@@ -363,8 +415,8 @@ if (calprevBtn) {
   });
 }
 
-if (calnextBtn) {
-  calnextBtn.addEventListener("click", () => {
+if (calNextBtn) {
+  calNextBtn.addEventListener("click", () => {
     let m = currentMonth;
     let y = currentYear;
 
@@ -379,7 +431,6 @@ if (calnextBtn) {
     renderAll();
   });
 }
-
 
 /* ============================================================
    MOBILE CAROUSEL (TIMELINE CONTINUA, SENZA MODALE)
