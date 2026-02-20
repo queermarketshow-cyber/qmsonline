@@ -497,5 +497,16 @@
     "location": "Zei Spazio Sociale, Lecce",
     "image": "images/eventi/20220507 qms.webp",
     "categories": ["performance", "djset", "talk"]
+  },
+  {
+    "id": "event-2026-03-01-spazi-celesti",
+    "title": "Spazi Celesti",
+    "start": "2026-03-01",
+    "end": "2026-03-01",
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "location": "Ecomuseo Palazzo Donno, Cursi (LE)",
+    "image": "images/eventi/20260301 spazi celesti.jpg",
+    "categories": ["performance", "djset", "talk", "aperitivo"]
   }
 ]
