@@ -3149,8 +3149,14 @@ html { scroll-behavior: smooth; }
 
 /* DESKTOP */
 @media (min-width: 769px) {
-  #future-calendar { display: flex; }
+  #future-calendar { display: flex; }   /* MOSTRA il calendario desktop */
   #mobile-calendar-wrapper { display: none; }
+
+  /* Nascondi completamente le liste sotto il calendario */
+  #future-events-list,
+  #past-events {
+    display: none !important;
+  }
 }
 
 /* ============================================================
