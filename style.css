@@ -3267,7 +3267,7 @@ html { scroll-behavior: smooth; }
   flex-direction: column;
   gap: 0.8rem;
   width: max-content;
-  min-width: 180px;
+  min-width: 200px;
 }
 
 /* Dropdown ANNO + MESE */
@@ -3292,9 +3292,9 @@ html { scroll-behavior: smooth; }
 .month-selector button {
   background: #ff2fa8;
   color: #000;
-  border: 2px solid #000;
+  border: 1px solid #000;
   padding: 0.4rem 0.8rem;
-  font-weight: 900;
+  font-weight: 800;
   cursor: pointer;
   text-align: center;
   box-shadow: 3px 3px 0 #000;

@@ -290,6 +290,7 @@ function renderCalendar(month, year) {
   monthWrapper.style.alignItems = "center";
   monthWrapper.style.gap = "8px";
   monthWrapper.style.cursor = "pointer";
+  monthWrapper.style.position = "relative";
 
   const monthText = document.createElement("span");
   monthText.textContent = `${monthName} ${year}`;
@@ -298,6 +299,7 @@ function renderCalendar(month, year) {
   triangle.textContent = "▼";
   triangle.style.fontSize = "1rem";
   triangle.style.transform = "translateY(2px)";
+  triangle.className = "month-triangle";
 
   monthWrapper.appendChild(monthText);
   monthWrapper.appendChild(triangle);
@@ -379,16 +381,9 @@ function buildYearMonthSelector(monthWrapper) {
   const selector = document.createElement("div");
   selector.className = "month-selector";
   selector.style.display = "none";
-  selector.style.flexDirection = "column";
-  selector.style.gap = "0.6rem";
-  selector.style.padding = "0.8rem";
-  selector.style.background = "#000";
-  selector.style.border = "2px solid #ff2fa8";
-  selector.style.boxShadow = "6px 6px 0 #000";
-  selector.style.position = "absolute";
-  selector.style.top = "100%";
-  selector.style.left = "0";
-  selector.style.zIndex = "50";
+
+  /* BLOCCA LA CHIUSURA AUTOMATICA */
+  selector.addEventListener("click", e => e.stopPropagation());
 
   /* -------------------------------
      1) Raccogli TUTTI gli anni e mesi con eventi
@@ -408,57 +403,27 @@ function buildYearMonthSelector(monthWrapper) {
      Dropdown ANNO
   --------------------------------*/
   const yearSelect = document.createElement("select");
-  yearSelect.style.padding = "0.4rem";
-  yearSelect.style.fontWeight = "900";
-  yearSelect.style.background = "#ff2fa8";
-  yearSelect.style.border = "2px solid #000";
-  yearSelect.style.cursor = "pointer";
-
-  const defaultYearOption = document.createElement("option");
-  defaultYearOption.textContent = "Seleziona anno";
-  defaultYearOption.value = "";
-  yearSelect.appendChild(defaultYearOption);
+  yearSelect.innerHTML = `<option value="">Seleziona anno</option>`;
 
   years.forEach(y => {
-    const opt = document.createElement("option");
-    opt.value = y;
-    opt.textContent = y;
-    yearSelect.appendChild(opt);
+    yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
   });
 
   /* -------------------------------
      Dropdown MESE (disabilitato finché non scelgo anno)
   --------------------------------*/
   const monthSelect = document.createElement("select");
-  monthSelect.style.padding = "0.4rem";
-  monthSelect.style.fontWeight = "900";
-  monthSelect.style.background = "#ff2fa8";
-  monthSelect.style.border = "2px solid #000";
-  monthSelect.style.cursor = "pointer";
+  monthSelect.innerHTML = `<option value="">Seleziona mese</option>`;
   monthSelect.disabled = true;
 
-  const defaultMonthOption = document.createElement("option");
-  defaultMonthOption.textContent = "Seleziona mese";
-  defaultMonthOption.value = "";
-  monthSelect.appendChild(defaultMonthOption);
-
-  /* -------------------------------
-     Quando seleziono l’anno → popolo i mesi
-  --------------------------------*/
   yearSelect.addEventListener("change", () => {
     const y = Number(yearSelect.value);
-    monthSelect.innerHTML = "";
-    monthSelect.appendChild(defaultMonthOption);
     monthSelect.disabled = false;
+    monthSelect.innerHTML = `<option value="">Seleziona mese</option>`;
 
-    const months = [...map.get(y)].sort((a, b) => a - b);
-
-    months.forEach(m => {
-      const opt = document.createElement("option");
+    [...map.get(y)].sort((a, b) => a - b).forEach(m => {
       const name = new Date(y, m, 1).toLocaleString("it-IT", { month: "long" });
-      opt.value = m;
-      opt.textContent = name;
-      monthSelect.appendChild(opt);
+      monthSelect.innerHTML += `<option value="${m}">${name}</option>`;
     });
   });
 
@@ -467,12 +432,6 @@ function buildYearMonthSelector(monthWrapper) {
   --------------------------------*/
   const okBtn = document.createElement("button");
   okBtn.textContent = "OK";
-  okBtn.style.padding = "0.4rem 0.8rem";
-  okBtn.style.fontWeight = "900";
-  okBtn.style.background = "#ff2fa8";
-  okBtn.style.border = "2px solid #000";
-  okBtn.style.cursor = "pointer";
-  okBtn.style.boxShadow = "3px 3px 0 #000";
 
   okBtn.addEventListener("click", () => {
     const y = Number(yearSelect.value);
@@ -484,6 +443,7 @@ function buildYearMonthSelector(monthWrapper) {
     currentMonth = m;
 
     selector.style.display = "none";
+    monthWrapper.classList.remove("menu-open");
     renderAll();
   });
 
@@ -494,14 +454,15 @@ function buildYearMonthSelector(monthWrapper) {
   selector.appendChild(monthSelect);
   selector.appendChild(okBtn);
 
-  monthWrapper.style.position = "relative";
   monthWrapper.appendChild(selector);
 
   /* -------------------------------
      Toggle apertura menu
   --------------------------------*/
   monthWrapper.addEventListener("click", () => {
-    selector.style.display = selector.style.display === "flex" ? "none" : "flex";
+    const isOpen = selector.style.display === "flex";
+    selector.style.display = isOpen ? "none" : "flex";
+    monthWrapper.classList.toggle("menu-open", !isOpen);
   });
 }
 
