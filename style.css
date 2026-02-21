@@ -3318,3 +3318,29 @@ html { scroll-behavior: smooth; }
 .calendar-month.menu-open span:last-child {
   transform: translateY(2px) rotate(180deg);
 }
+.sticker-button {
+  display: inline-block;
+  margin-top: 24px;
+  margin-left: 70%;
+  padding: 10px 18px;
+  background: #ff2bb5;
+  color: #000;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #000;
+  border-radius: 6px;
+  transform: rotate(-2deg);
+  box-shadow: 3px 3px 0 #000;
+  transition: 0.15s ease;
+}
+
+.sticker-button:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 4px 4px 0 #000;
+}
+
+.manifesto-brief p {
+  max-width: 70ch;
+  margin-bottom: 1.2em;
+}
