@@ -600,12 +600,11 @@ body.modal-open {
 }
 
 /* ============================
-   MANIFESTO — SEZIONE FULLSCREEN
+   MANIFESTO — SEZIONE RESPONSIVE
 ============================ */
 
 .manifesto-section {
-  height: 100dvh;
-  min-height: 100dvh;
+  min-height: 100dvh; /* fullscreen quando possibile */
   padding: 0 !important;
   margin: 0 !important;
 
@@ -616,15 +615,19 @@ body.modal-open {
 
   display: flex;
   flex-direction: column;
-  justify-content: center; /* centra verticalmente */
+  justify-content: center; /* centratura solo se c’è spazio */
   align-items: center;
+
+  overflow: visible; /* evita accavallamenti */
 }
 
 /* contenitore centrato in larghezza */
 .manifesto-container {
   max-width: 760px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 1.5rem; /* solo laterale */
+  padding: 2rem 1.5rem; /* padding laterale + respiro verticale */
+  box-sizing: border-box;
 }
 
 /* titolo */
@@ -642,13 +645,18 @@ body.modal-open {
   margin-top: 0 !important;
 }
 
-/* mobile */
+/* mobile: niente centratura verticale forzata */
 @media (max-width: 600px) {
+  .manifesto-section {
+    justify-content: flex-start;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
   .manifesto-title { font-size: 2.4rem; }
   .manifesto-lead { font-size: 1.3rem; }
   .manifesto-body p { font-size: 1.05rem; }
 }
-
 /* ————————————————————————————————
    FIX DEFINITIVO POSTER GALLERIA + ARTIST3
 —————————————————————————————————— */
@@ -1166,56 +1174,71 @@ body.modal-open {
   }
 }
 /* ————————————————————————————————
-   COLLAB & ALTRO — VERSIONE QMS
-   (coerente con ARTIST3 + ARCHIVIO)
+   PARTNERSHIP — MASONRY CHE SI ADATTA ALLA VIEWPORT
 —————————————————————————————————— */
 
-/* Sezione */
-#partnership {
-  padding: 2rem 1.5rem;
+.partnership {
   background: #000;
-  min-height: calc(100dvh - var(--navbar-height));
   color: #fff;
-  overflow-y: auto;
-}
 
-#partnership h2 {
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  text-transform: uppercase;
-  font-weight: 900;
-  color: var(--primary-color);
-  transform: rotate(-1deg);
-  margin-bottom: 0.5rem;
-}
+  /* la sezione non deve scrollare internamente */
+  overflow: hidden;
 
-#partnership p {
-  max-width: 700px;
-  line-height: 1.5;
-  margin-bottom: 2rem;
-  color: #fff;
-  transform: rotate(-0.5deg);
+  /* la sezione occupa la viewport */
+  height: 100dvh;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
 }
 
 /* ————————————————————————————————
-   CARD COLLAB (deriva da artist-card)
+   GRIGLIA: si adatta alla viewport
+—————————————————————————————————— */
+
+.partnership .collab-grid {
+  display: grid;
+
+  /* numero di colonne variabile */
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+
+  /* la griglia occupa tutto lo spazio disponibile */
+  flex: 1;
+  height: 100%;
+  width: 100%;
+
+  /* spazio tra card */
+  gap: 1rem;
+
+  /* le righe si adattano in proporzione */
+  grid-auto-rows: 1fr;
+
+  /* impedisce overflow laterale */
+  overflow: hidden;
+}
+
+/* ————————————————————————————————
+   CARD: si scalano automaticamente
 —————————————————————————————————— */
 
 .collab-card {
-  position: relative;
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
+
+  /* mantiene proporzioni interne */
+  aspect-ratio: 4 / 5;
+
   border: 3px solid var(--primary-color);
   background: #000;
-  cursor: pointer;
   border-radius: 6px;
+
   transform: rotate(-1.5deg);
   transition: transform 0.25s ease;
-  box-shadow: 0 0 0 3px #000 inset, 0 0 12px rgba(255,0,255,0.25);
 
-  /* dimensioni coerenti */
-  aspect-ratio: 4 / 5;
-  min-width: 260px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .collab-card:hover {
@@ -1223,7 +1246,7 @@ body.modal-open {
 }
 
 /* ————————————————————————————————
-   IMMAGINI (YouTube thumbnail + IG)
+   IMMAGINI
 —————————————————————————————————— */
 
 .collab-card img,
@@ -1232,13 +1255,11 @@ body.modal-open {
   height: 100%;
   object-fit: cover;
   flex: 1;
-  filter: contrast(1.1) brightness(0.9);
   display: block;
-  border-bottom: 2px solid #000;
 }
 
 /* ————————————————————————————————
-   OVERLAY (nome + tipo)
+   OVERLAY
 —————————————————————————————————— */
 
 .collab-card .artista-info {
@@ -1250,32 +1271,17 @@ body.modal-open {
   font-weight: 900;
   text-transform: uppercase;
   font-size: clamp(0.75rem, 1.8vw, 1rem);
-  letter-spacing: 1px;
   text-align: center;
   padding: 0.8rem;
   opacity: 0;
   transform: translateY(100%) rotate(-1deg);
   transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
-  box-shadow: 0 0 0 2px #fff inset;
 }
 
 .collab-card:hover .artista-info {
   opacity: 1;
   transform: translateY(0) rotate(0deg);
-}
-
-.collab-card .artista-info h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 900;
-}
-
-.collab-card .artista-info p {
-  margin: 0.2rem 0 0;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #fff;
 }
 
 /* MOBILE: overlay sempre visibile */
@@ -1287,11 +1293,23 @@ body.modal-open {
 }
 
 /* ————————————————————————————————
-   RESPONSIVE
+   MOBILE: la griglia diventa verticale
 —————————————————————————————————— */
 
 @media (max-width: 600px) {
+  .partnership {
+    height: auto; /* non forziamo la viewport */
+    overflow: visible;
+  }
+
+  .partnership .collab-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    height: auto;
+  }
+
   .collab-card {
+    aspect-ratio: 4 / 5;
     transform: rotate(-1deg);
   }
 }
