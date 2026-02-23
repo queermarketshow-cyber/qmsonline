@@ -12,21 +12,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuToggle = document.querySelector('.menu-toggle');
   const menuMobile = document.querySelector('.menu-mobile');
 
-/* ===============================
-   ACTIVE LINK BASATO SU HASH
-=============================== */
-function updateActiveLinkFromHash() {
-  const current = window.location.hash.replace('#', '');
-  allLinks.forEach(link => {
-    link.classList.toggle(
-      'active',
-      link.getAttribute('href') === '#' + current
-    );
-  });
-}
+  /* ===============================
+     ACTIVE LINK + SEZIONE ATTIVA BASATI SU HASH
+  =============================== */
+  function updateActiveFromHash() {
+    const current = window.location.hash.replace('#', '');
 
-window.addEventListener('hashchange', updateActiveLinkFromHash);
-updateActiveLinkFromHash();
+    // Aggiorna link attivi
+    allLinks.forEach(link => {
+      link.classList.toggle(
+        'active',
+        link.getAttribute('href') === '#' + current
+      );
+    });
+
+    // Aggiorna sezione attiva
+    sections.forEach(section => {
+      section.classList.toggle('active', section.id === current);
+    });
+  }
+
+  window.addEventListener('hashchange', updateActiveFromHash);
+  updateActiveFromHash();
 
   /* ===============================
      MENU MOBILE
@@ -52,6 +59,8 @@ updateActiveLinkFromHash();
     });
   }
 });
+
+
 /* ===============================
    NAVIGAZIONE A MONDI
 =============================== */
@@ -83,6 +92,7 @@ function activateWorld(id) {
 document.addEventListener("DOMContentLoaded", () => {
   const world = getWorldFromHash();
   activateWorld(world);
+
   if (window.location.hash !== world) {
     window.location.hash = world;
   }

@@ -3346,18 +3346,31 @@ html { scroll-behavior: smooth; }
   margin-bottom: 1.2em;
 }
 /* ===============================
-   PATCH MINIMALE — SEZIONE ATTIVA
-   (scroll-friendly, non invasiva)
+   PATCH MINIMALE — SEZIONI/MONDO
+   (scroll-friendly, non interferisce con categorie)
 =============================== */
 
-/* Tutte le sezioni restano nel flusso e scrollabili */
-section[id] {
-  opacity: 0.45;                 /* le sezioni non attive restano visibili */
+/* Applica SOLO alle sezioni principali della pagina */
+section#home,
+section#manifesto,
+section#calendario,
+section#artist3,
+section#partnership,
+section#gallery,
+section#contatti,
+section#sostienici {
+  opacity: 0.45;
   transition: opacity 0.35s ease;
-  min-height: 100svh;            /* sicurezza morbida: ogni sezione è almeno alta quanto il viewport */
+  min-height: 100svh;
 }
 
-/* La sezione attiva (quella sotto il cursore/viewport) */
-section[id].active {
-  opacity: 1;                    /* la sezione attiva è pienamente visibile */
+section#home.active,
+section#manifesto.active,
+section#calendario.active,
+section#artist3.active,
+section#partnership.active,
+section#gallery.active,
+section#contatti.active,
+section#sostienici.active {
+  opacity: 1;
 }
