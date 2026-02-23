@@ -1365,23 +1365,44 @@ body.modal-open {
 ——————————————— */
 
 .qms-sostienici-section {
-  padding: 6rem 2rem;
   background: #000;
   color: #fff;
   position: relative;
-  overflow: hidden;
+
+  /* FIX: comportamento come Manifesto */
+  min-height: 100dvh;        /* fullscreen quando possibile */
+  height: auto;              /* si espande se serve */
+  padding: 2rem 1.5rem;      /* padding ridotto, non spinge il contenuto fuori */
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* centratura condizionale */
+  align-items: center;
+
+  overflow: visible !important;
+  box-sizing: border-box;
 }
 
 .qms-sostienici-section::before {
   content: none;
 }
 
+/* ——— Wrapper principale ——— */
+
 .qms-sostienici-wrapper {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
+
   display: grid;
   grid-template-columns: 1fr 0.9fr;
   gap: 3rem;
+
+  /* FIX: nessun limite di altezza */
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 
 /* ——— Titolo punk ma leggibile ——— */
@@ -1478,18 +1499,6 @@ body.modal-open {
   border: none;
 }
 
-/* ——— Responsive ——— */
-
-@media (max-width: 900px) {
-  .qms-sostienici-wrapper {
-    grid-template-columns: 1fr;
-  }
-
-  .qms-sostienici-frame {
-    transform: rotate(0deg);
-  }
-}
-
 /* ————————————————
    ACCORDION IBRIDO MANIFESTO
 ——————————————— */
@@ -1499,6 +1508,11 @@ body.modal-open {
   flex-direction: column;
   gap: 1.4rem;
   margin-top: 2rem;
+
+  /* FIX: nessun limite */
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 
 /* ITEM */
@@ -1511,7 +1525,6 @@ body.modal-open {
   box-shadow: 4px 4px 0 #ff2e9a;
 }
 
-/* vibrazione manifesto */
 .qms-acc-item:hover {
   transform: rotate(-0.6deg) scale(1.01);
 }
@@ -1533,7 +1546,6 @@ body.modal-open {
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-/* hover rosa manifesto */
 .qms-acc-header:hover {
   background: #ff2e9a;
   color: #000;
@@ -1555,55 +1567,48 @@ body.modal-open {
   color: #fff;
 }
 
-/* LISTA */
 .qms-acc-content ul li {
   color: #fff;
 }
 
-/* CTA interna */
 .qms-acc-content .qms-sostienici-button {
   margin: 1rem 0 1.5rem 0;
 }
 
 /* STATO ATTIVO */
 .qms-acc-item.active .qms-acc-content {
-  max-height: 700px; /* regolabile */
-  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  max-height: 1000px;
+  padding: 1rem 1.5rem 1.5rem;
 }
 
-/* bordo manifesto più forte quando aperto */
 .qms-acc-item.active {
   box-shadow: 6px 6px 0 #ff2e9a;
   transform: rotate(-0.4deg);
 }
-@media (max-width: 1100px) {
+
+/* ————————————————
+   RESPONSIVE
+——————————————— */
+
+@media (max-width: 900px) {
+  .qms-sostienici-section {
+    justify-content: flex-start;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
   .qms-sostienici-wrapper {
     grid-template-columns: 1fr;
-    max-height: none;
-    height: auto;
   }
 
-  .qms-sostienici-text {
-    max-height: none;
-    overflow: visible;
-    padding-right: 0;
-  }
-
-  .qms-accordion {
-    max-height: none;
-    overflow: visible;
-  }
-
-  .qms-sostienici-widget {
-    margin-top: 3rem;
+  .qms-sostienici-frame {
+    transform: rotate(0deg);
   }
 
   .qms-sostienici-iframe {
-    height: 450px; /* più adatto al tablet */
+    height: 450px;
   }
 }
-
-
 /* ————————————————
    FOOTER + TRASPARENZA (lasciati invariati)
 ——————————————— */
@@ -2251,39 +2256,6 @@ html, body {
   height: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-}
-
-/* ============================================================
-   FIX SPECIFICO SEZIONE “SOSTIENICI”
-============================================================ */
-
-/* Rende nuovamente visibile il contenuto dell’accordion */
-.qms-sostienici-section {
-  display: flex;
-  align-items: stretch; /* non forza altezza ai figli */
-  overflow: visible !important;
-  min-height: calc(100dvh - var(--navbar-height));
-}
-
-/* Evita che wrapper o testo restino bloccati */
-.qms-sostienici-wrapper,
-.qms-sostienici-text,
-.qms-accordion {
-  height: auto !important;
-  max-height: none !important;
-  overflow: visible !important;
-  padding-right: 0 !important;
-}
-
-/* Gli item dell’accordion possono espandersi liberamente */
-.qms-acc-item.active .qms-acc-content {
-  max-height: 1000px; /* apertura ampia e fluida */
-  padding: 1rem 1.5rem 1.5rem;
-}
-
-/* Controllo transizione apertura per fluidità */
-.qms-acc-content {
-  transition: max-height 0.35s ease, padding 0.25s ease;
 }
 
 /* ============================================================
