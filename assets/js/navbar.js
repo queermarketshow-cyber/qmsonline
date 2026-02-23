@@ -19,32 +19,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const hashMap = {
     "home": "home",
     "manifesto": "manifesto",
-    "calendario": "eventi",        // ← FIX
+    "calendario": "eventi",
     "artist3": "artist3",
-    "partnership": "collab-altro", // ← FIX
+    "partnership": "collab-altro",
     "gallery": "gallery",
     "contatti": "contatti",
     "sostienici": "sostienici"
   };
 
-  // mondo di default: HOME
   const defaultWorld = "home";
 
   /* ===============================
-     CLEAN HASH (fix ritorno archivio)
+     CLEAN HASH
   =============================== */
   function cleanHash(raw) {
     if (!raw) return "";
-    return raw
-      .replace("#", "")
-      .split("#")[0]
-      .trim();
+    return raw.replace("#", "").split("#")[0].trim();
   }
 
   /* ===============================
      HASH → ID SEZIONE VALIDO
-     - nessun hash → defaultWorld (home)
-     - hash non mappato → defaultWorld (home)
   =============================== */
   function getCurrentIdFromHash() {
     const cleaned = cleanHash(window.location.hash);
@@ -53,16 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===============================
-     APPLICA STATO ATTIVO A LINK + SEZIONI
+     APPLICA STATO ATTIVO
   =============================== */
   function applyActiveState(currentId) {
-    // link attivi
     allLinks.forEach(link => {
       const href = link.getAttribute("href").replace("#", "");
       link.classList.toggle("active", hashMap[href] === currentId || href === currentId);
     });
 
-    // sezioni attive
     sections.forEach(section => {
       section.classList.toggle("active", section.id === currentId);
     });
@@ -76,10 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
     applyActiveState(currentId);
   }
 
-  window.addEventListener("hashchange", updateFromHash);
+  window.addEventListener("hashchange", () => {
+    updateFromHash();
+    sessionStorage.setItem("lastSectionHash", window.location.hash);
+  });
 
   /* ===============================
-     SCROLL → HASH (attivo solo dopo delay)
+     SCROLL → HASH
   =============================== */
   let scrollActivationEnabled = false;
 
@@ -102,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.hash !== targetHash) {
       history.replaceState(null, "", targetHash);
       applyActiveState(currentId);
+      sessionStorage.setItem("lastSectionHash", targetHash);
     }
   }
 
@@ -131,30 +127,42 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===============================
-     INIZIALIZZAZIONE — FORZA #home SE HASH MANCANTE
+     SESSION HASH MEMORY
+     Ricorda l’ultima section visitata
   =============================== */
 
-  // 1. leggi hash grezzo
+  const savedHash = sessionStorage.getItem("lastSectionHash");
+
+  // Se non c’è hash nell’URL ma esiste un hash salvato → ripristina
+  if (!window.location.hash && savedHash) {
+    history.replaceState(null, "", savedHash);
+  }
+
+  // Salva l’hash anche quando si lascia la pagina
+  window.addEventListener("beforeunload", () => {
+    sessionStorage.setItem("lastSectionHash", window.location.hash);
+  });
+
+  /* ===============================
+     INIZIALIZZAZIONE
+  =============================== */
+
   let rawCleaned = cleanHash(window.location.hash);
 
-  // 2. se non c’è hash → forza #home
+  // Se non c’è hash → usa home
   if (!rawCleaned) {
     history.replaceState(null, "", "#home");
     rawCleaned = "home";
   }
 
-  // 3. mappa hash → id reale (usa defaultWorld se non valido)
   let initialId = hashMap[rawCleaned] || defaultWorld;
 
-  // 4. se l’hash nell’URL non coincide con l’id reale, riallinea
   if (window.location.hash.replace("#", "") !== initialId) {
     history.replaceState(null, "", "#" + initialId);
   }
 
-  // 5. applica stato attivo
   applyActiveState(initialId);
 
-  // 6. attiva logica scroll dopo un attimo
   setTimeout(() => {
     scrollActivationEnabled = true;
   }, 500);
