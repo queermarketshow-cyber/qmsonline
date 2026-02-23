@@ -1497,6 +1497,68 @@ body.modal-open {
 
   pointer-events: none; /* il click rimane sulla card */
 }
+/* ===============================
+   SOSTIENICI — KILLER TABLET
+   Mantiene 2 colonne, riduce font e box per evitare overflow
+=============================== */
+@media (max-width: 900px) {
+
+  .sostienici-grid {
+    grid-template-columns: 0.48fr 0.52fr; /* più strette e bilanciate */
+    gap: 1.8rem;
+    transform: scale(0.96); /* mini compressione globale */
+    transform-origin: top center;
+  }
+
+  /* Titolo */
+  .sostienici-title {
+    font-size: 2.2rem;
+    transform: rotate(-0.5deg);
+  }
+
+  .sostienici-title span {
+    padding: 0.15em 0.3em;
+  }
+
+  /* Colonne */
+  .sostienici-col-left,
+  .sostienici-col-right {
+    gap: 1.2rem;
+  }
+
+  /* Card */
+  .sost-card {
+    padding: 1.1rem;
+    border-width: 2px;
+    box-shadow: 4px 4px 0 #ff2e9a;
+    transform: rotate(-1deg);
+  }
+
+  .sost-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .sost-card p {
+    font-size: 0.95rem;
+  }
+
+  /* CTA */
+  .sost-cta {
+    padding: 1.1rem;
+    border-width: 2px;
+    box-shadow: 4px 4px 0 #000;
+    font-size: 1.1rem;
+    transform: rotate(-1deg);
+  }
+
+  /* Sticker + */
+  .sost-plus {
+    width: 32px;
+    height: 32px;
+    font-size: 1.3rem;
+    box-shadow: 2px 2px 0 #ff00ff;
+  }
+}
 
 /* ————————————————
    FOOTER + TRASPARENZA (lasciati invariati)
