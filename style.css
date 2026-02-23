@@ -1360,217 +1360,144 @@ body.modal-open {
     padding: 1.5rem;
   }
 }
-/* ————————————————
-   SEZIONE SOSTIENICI — versione leggibile FIXATA
-——————————————— */
+/* GRID PRINCIPALE */
+.sostienici-grid {
+  display: grid;
+  grid-template-columns: 0.45fr 0.55fr;
+  gap: 3rem;
+  width: 100%;
+}
 
-.qms-sostienici-section {
-  background: #000;
-  color: #fff;
-  position: relative;
-
-  min-height: 100dvh;   /* fullscreen quando possibile */
-  height: auto;         /* si espande se serve */
-
-  padding: 2rem 1.5rem;
-  margin: 0;
-
+/* COLONNE */
+.sostienici-col-left,
+.sostienici-col-right {
   display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+/* TITOLO */
+.sostienici-title {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  transform: rotate(-1deg);
+}
+
+.sostienici-title span {
+  background: #ff2e9a;
+  padding: 0.2em 0.4em;
+  color: #000;
+  transform: rotate(-1deg);
+}
+
+/* CARD */
+.sost-card {
+  background: #111;
+  border: 3px solid #ff2e9a;
+  padding: 1.5rem;
+  border-radius: 6px;
+  box-shadow: 6px 6px 0 #ff2e9a;
+  transform: rotate(-1.5deg);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.sost-card:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.sost-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.sost-card p {
+  margin: 0;
+  color: #ff2e9a;
+  font-weight: 700;
+}
+
+/* CTA SPECIALE */
+.sost-cta {
+  background: #ff2e9a;
+  color: #000;
+  text-align: center;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3px solid #ff2e9a;
+  box-shadow: 6px 6px 0 #000;
+  transform: rotate(-2deg);
+}
+
+.sost-cta:hover {
+  transform: rotate(1deg) scale(1.05);
+}
+
+/* LIGHTBOX */
+.sost-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
   justify-content: center;
   align-items: center;
-
-  overflow: visible !important;
-  box-sizing: border-box;
+  z-index: 20000;
 }
 
-/* ——— Wrapper principale ——— */
-
-.qms-sostienici-wrapper {
-  max-width: 1400px;
-  width: 100%;
-  margin: 0 auto;
-
-  display: grid;
-  grid-template-columns: 2fr 1fr;   /* 2 colonne: testo + CTA */
-  gap: 3rem;
-
-  height: auto !important;
-  max-height: none !important;
-  overflow: visible !important;
-}
-
-/* ——— Colonna sinistra: titolo + accordion ——— */
-
-.qms-sostienici-text {
+.sost-lightbox.show {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: auto;
 }
 
-/* ——— Titolo sempre in alto a sinistra ——— */
-
-.qms-sostienici-title {
-  font-size: 3rem;
-  font-weight: 800;
-  line-height: 1.1;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-  color: #fff;
-}
-
-.qms-sostienici-title span {
-  background: #ff2e9a;
-  padding: 0.25em 0.45em;
-  display: inline-block;
-  transform: rotate(-1deg);
-  color: #000;
-  font-weight: 900;
-}
-
-/* ——— Testo leggibile ——— */
-
-.qms-sostienici-intro {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  color: #fff;
-}
-
-.qms-sostienici-body p {
-  margin-bottom: 1.2rem;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #fff;
-}
-
-/* ————————————————
-   ACCORDION
-——————————————— */
-
-.qms-accordion {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-  margin-top: 2rem;
-
-  height: auto !important;
-  max-height: none !important;
-  overflow: visible !important;
-}
-
-.qms-acc-item {
-  border: 3px solid #ff2e9a;
-  background: #111;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s ease;
-  box-shadow: 4px 4px 0 #ff2e9a;
-}
-
-.qms-acc-item:hover {
-  transform: rotate(-0.6deg) scale(1.01);
-}
-
-.qms-acc-header {
-  width: 100%;
-  padding: 1.2rem 1.5rem;
-  font-size: clamp(1.2rem, 1.8vw, 1.9rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  text-align: left;
-  background: #111;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  z-index: 2;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.qms-acc-header:hover {
-  background: #ff2e9a;
-  color: #000;
-}
-
-.qms-acc-content {
-  max-height: 0;
-  overflow: hidden;
-  padding: 0 1.5rem;
-  transition: max-height 0.35s ease, padding 0.25s ease;
-}
-
-.qms-acc-content p,
-.qms-acc-content ul {
-  font-size: 1.05rem;
-  line-height: 1.55;
-  margin: 1rem 0;
-  color: #fff;
-}
-
-.qms-acc-item.active .qms-acc-content {
-  max-height: 1000px;
-  padding: 1rem 1.5rem 1.5rem;
-}
-
-.qms-acc-item.active {
-  box-shadow: 6px 6px 0 #ff2e9a;
-  transform: rotate(-0.4deg);
-}
-
-/* ————————————————
-   COLONNA DESTRA: CTA finale
-——————————————— */
-
-.qms-sostienici-cta-column {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;   /* CTA sempre in basso a destra */
-  align-items: flex-end;
-}
-
-/* ——— Bottone punk leggibile ——— */
-
-.qms-sostienici-button {
-  display: inline-block;
-  padding: 1rem 1.6rem;
-  background: #ff2e9a;
-  color: #000;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 3px solid #ff2e9a;
-  transform: rotate(-1.5deg);
-  transition: 0.15s ease;
-}
-
-.qms-sostienici-button:hover {
-  transform: rotate(1deg) scale(1.05);
+.sost-lightbox-content {
   background: #000;
+  border: 3px solid #ff2e9a;
+  padding: 2rem;
+  max-width: 700px;
+  width: 90%;
+  box-shadow: 8px 8px 0 #ff2e9a;
+  transform: rotate(-1deg);
+}
+
+.sost-lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  background: none;
+  border: none;
   color: #ff2e9a;
-  border-color: #ff2e9a;
+  cursor: pointer;
+}
+/* STICKER “+” PER LE CARD SOSTIENICI */
+.sost-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  background: black;
+  color: #ff00ff;
+  font-weight: 900;
+  font-size: 1.6rem;
+  line-height: 1;
+
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #ff00ff;
+  border-radius: 4px;
+
+  transform: rotate(-4deg);
+  margin-top: 0.6rem;
+
+  pointer-events: none; /* il click rimane sulla card */
 }
 
-/* ————————————————
-   RESPONSIVE
-——————————————— */
-
-@media (max-width: 900px) {
-  .qms-sostienici-section {
-    justify-content: flex-start;
-    padding-top: 1.5rem;
-    padding-bottom: 2rem;
-  }
-
-  .qms-sostienici-wrapper {
-    grid-template-columns: 1fr; /* mobile: una colonna */
-  }
-
-  .qms-sostienici-cta-column {
-    align-items: flex-start;
-    margin-top: 2rem;
-  }
-}
 /* ————————————————
    FOOTER + TRASPARENZA (lasciati invariati)
 ——————————————— */
@@ -3276,84 +3203,4 @@ section#gallery.active,
 section#contatti.active,
 section#sostienici.active {
   opacity: 1;
-}
-/* ============================================================
-   SOSTIENICI — LAYOUT A 2 COLONNE NARRATIVE (1/3 + 2/3)
-   Titolo + primi 3 blocchi a sinistra
-   Restanti blocchi + CTA a destra
-============================================================ */
-
-/* wrapper principale → 2 colonne */
-.qms-sostienici-wrapper {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 3rem !important;
-  align-items: start !important;
-}
-
-/* titolo sempre in alto a sinistra */
-.qms-sostienici-title {
-  grid-column: 1 / 2 !important;
-}
-
-/* intro sempre sotto il titolo */
-.qms-sostienici-intro {
-  grid-column: 1 / 2 !important;
-}
-
-/* accordion → i figli diventano elementi della grid */
-.qms-accordion {
-  display: contents !important;
-}
-
-/* ————————————————————————————————
-   COLONNA SINISTRA (1/3)
-   blocchi 1, 2, 3
-—————————————————————————————————— */
-
-.qms-acc-item:nth-child(1),
-.qms-acc-item:nth-child(2),
-.qms-acc-item:nth-child(3) {
-  grid-column: 1 / 2 !important;
-}
-
-/* ————————————————————————————————
-   COLONNA DESTRA (2/3)
-   blocchi 4, 5, 6, 7
-—————————————————————————————————— */
-
-.qms-acc-item:nth-child(4),
-.qms-acc-item:nth-child(5),
-.qms-acc-item:nth-child(6),
-.qms-acc-item:nth-child(7) {
-  grid-column: 2 / 3 !important;
-}
-
-/* CTA finale sempre in basso a destra */
-.qms-sostienici-button:last-of-type {
-  grid-column: 2 / 3 !important;
-  justify-self: end !important;
-  align-self: end !important;
-  margin-top: 2rem !important;
-}
-
-/* ————————————————————————————————
-   MOBILE — torna tutto in una colonna
-—————————————————————————————————— */
-
-@media (max-width: 900px) {
-  .qms-sostienici-wrapper {
-    grid-template-columns: 1fr !important;
-  }
-
-  .qms-sostienici-title,
-  .qms-sostienici-intro,
-  .qms-acc-item,
-  .qms-sostienici-button:last-of-type {
-    grid-column: 1 / 2 !important;
-  }
-
-  .qms-sostienici-button:last-of-type {
-    justify-self: start !important;
-  }
 }
