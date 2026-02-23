@@ -1,11 +1,9 @@
 /* ===============================
-   VARIABILI GLOBALI
+   VARIABILI GLOBALI (solo quelle utili)
 =============================== */
-let galleryData = null;
+let galleryData = [];
 let currentFolder = null;
 let currentIndex = 0;
-let initialDistance = 0;
-let currentScale = 1;
 let visibleFolders = new Set();
 
 /* ===============================
@@ -20,16 +18,25 @@ if (enterBtn) {
 }
 
 /* ===============================
-   CARICAMENTO GALLERIA
+   CARICAMENTO GALLERIA (ottimizzato)
 =============================== */
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('gallery.json')
-    .then(res => res.json())
-    .then(data => {
-      galleryData = data.folders || [];
-      renderFolderPreviews();
-      setupVisibilityObserver();
-      startRandomSlideshow();
-    })
-    .catch(err => console.error('Errore caricamento gallery.json:', err));
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch('gallery.json', { cache: "no-store" });
+    const data = await res.json();
+
+    galleryData = data.folders || [];
+
+    if (galleryData.length === 0) {
+      console.warn("Nessuna cartella trovata in gallery.json");
+      return;
+    }
+
+    renderFolderPreviews?.();
+    setupVisibilityObserver?.();
+    startRandomSlideshow?.();
+
+  } catch (err) {
+    console.error('Errore caricamento gallery.json:', err);
+  }
 });
