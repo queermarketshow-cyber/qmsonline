@@ -1,39 +1,87 @@
 /* ===============================
-   NAVBAR — ACTIVE LINK + MENU MOBILE
+   NAVBAR — ACTIVE LINK + MENU MOBILE + SCROLL LOGIC
 =============================== */
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ELEMENTI */
-  const sections = document.querySelectorAll('section[id]');
-  const desktopLinks = document.querySelectorAll('.navbar a');
-  const mobileLinks = document.querySelectorAll('.menu-mobile a');
+  const sections = Array.from(document.querySelectorAll('section[id]'));
+  const desktopLinks = document.querySelectorAll('.navbar a[href^="#"]');
+  const mobileLinks = document.querySelectorAll('.menu-mobile a[href^="#"]');
   const allLinks = [...desktopLinks, ...mobileLinks];
 
   const menuToggle = document.querySelector('.menu-toggle');
   const menuMobile = document.querySelector('.menu-mobile');
 
-  /* ===============================
-     ACTIVE LINK + SEZIONE ATTIVA BASATI SU HASH
-  =============================== */
-  function updateActiveFromHash() {
-    const current = window.location.hash.replace('#', '');
+  const worlds = [
+    'home',
+    'manifesto',
+    'eventi',
+    'artist3',
+    'collab-altro',
+    'gallery',
+    'contatti',
+    'sostienici'
+  ];
+  const defaultWorld = 'gallery';
 
-    // Aggiorna link attivi
+  /* ===============================
+     UTIL — NORMALIZZA HASH
+  =============================== */
+  function getCurrentIdFromHash() {
+    const raw = window.location.hash.replace('#', '');
+    if (worlds.includes(raw)) return raw;
+    return defaultWorld;
+  }
+
+  /* ===============================
+     APPLICA STATO ATTIVO A LINK + SEZIONI
+  =============================== */
+  function applyActiveState(currentId) {
+    // link attivi
     allLinks.forEach(link => {
-      link.classList.toggle(
-        'active',
-        link.getAttribute('href') === '#' + current
-      );
+      const href = link.getAttribute('href');
+      link.classList.toggle('active', href === '#' + currentId);
     });
 
-    // Aggiorna sezione attiva
+    // sezioni attive
     sections.forEach(section => {
-      section.classList.toggle('active', section.id === current);
+      section.classList.toggle('active', section.id === currentId);
     });
   }
 
-  window.addEventListener('hashchange', updateActiveFromHash);
-  updateActiveFromHash();
+  /* ===============================
+     AGGIORNA DA HASH
+  =============================== */
+  function updateFromHash() {
+    const currentId = getCurrentIdFromHash();
+    applyActiveState(currentId);
+  }
+
+  window.addEventListener('hashchange', updateFromHash);
+
+  /* ===============================
+     AGGIORNA HASH DA SCROLL
+  =============================== */
+  function updateHashFromScroll() {
+    let currentId = null;
+
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= 120 && rect.bottom >= 120) {
+        currentId = section.id;
+      }
+    });
+
+    if (!currentId) return;
+
+    const targetHash = '#' + currentId;
+    if (window.location.hash !== targetHash) {
+      history.replaceState(null, '', targetHash);
+      applyActiveState(currentId);
+    }
+  }
+
+  window.addEventListener('scroll', updateHashFromScroll);
 
   /* ===============================
      MENU MOBILE
@@ -48,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
 
-    /* Chiudi menu al click su un link */
     mobileLinks.forEach(link => {
       link.addEventListener('click', () => {
         menuMobile.classList.remove('show');
@@ -58,46 +105,4 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-});
-
-
-/* ===============================
-   NAVIGAZIONE A MONDI
-=============================== */
-
-const worlds = [
-  "#home",
-  "#manifesto",
-  "#eventi",
-  "#artist3",
-  "#collab-altro",
-  "#gallery",
-  "#contatti",
-  "#sostienici"
-];
-
-const defaultWorld = "#gallery";
-
-function getWorldFromHash() {
-  const h = window.location.hash;
-  return worlds.includes(h) ? h : defaultWorld;
-}
-
-function activateWorld(id) {
-  document.querySelectorAll("section[id]").forEach(sec => {
-    sec.classList.toggle("active", "#" + sec.id === id);
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const world = getWorldFromHash();
-  activateWorld(world);
-
-  if (window.location.hash !== world) {
-    window.location.hash = world;
-  }
-});
-
-window.addEventListener("hashchange", () => {
-  activateWorld(getWorldFromHash());
 });
