@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     "sostienici": "sostienici"
   };
 
-  const defaultWorld = "gallery";
+  // mondo di default: HOME
+  const defaultWorld = "home";
 
   /* ===============================
      CLEAN HASH (fix ritorno archivio)
@@ -42,9 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ===============================
      HASH → ID SEZIONE VALIDO
+     - nessun hash → defaultWorld (home)
+     - hash non mappato → defaultWorld (home)
   =============================== */
   function getCurrentIdFromHash() {
     const cleaned = cleanHash(window.location.hash);
+    if (!cleaned) return defaultWorld;
     return hashMap[cleaned] || defaultWorld;
   }
 
@@ -55,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // link attivi
     allLinks.forEach(link => {
       const href = link.getAttribute("href").replace("#", "");
-      link.classList.toggle("active", hashMap[href] === currentId);
+      link.classList.toggle("active", hashMap[href] === currentId || href === currentId);
     });
 
     // sezioni attive
@@ -127,17 +131,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===============================
-     INIZIALIZZAZIONE
+     INIZIALIZZAZIONE — FORZA #home SE HASH MANCANTE
   =============================== */
-  const initialId = getCurrentIdFromHash();
 
+  // 1. leggi hash grezzo
+  let rawCleaned = cleanHash(window.location.hash);
+
+  // 2. se non c’è hash → forza #home
+  if (!rawCleaned) {
+    history.replaceState(null, "", "#home");
+    rawCleaned = "home";
+  }
+
+  // 3. mappa hash → id reale (usa defaultWorld se non valido)
+  let initialId = hashMap[rawCleaned] || defaultWorld;
+
+  // 4. se l’hash nell’URL non coincide con l’id reale, riallinea
   if (window.location.hash.replace("#", "") !== initialId) {
     history.replaceState(null, "", "#" + initialId);
   }
 
+  // 5. applica stato attivo
   applyActiveState(initialId);
 
-  /* Delay per evitare che lo scroll sovrascriva #gallery all’avvio */
+  // 6. attiva logica scroll dopo un attimo
   setTimeout(() => {
     scrollActivationEnabled = true;
   }, 500);
