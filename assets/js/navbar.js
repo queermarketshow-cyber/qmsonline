@@ -1,6 +1,7 @@
 /* ===============================
    NAVBAR — ACTIVE LINK + MENU MOBILE + SCROLL LOGIC
 =============================== */
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ELEMENTI */
@@ -12,25 +13,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuToggle = document.querySelector('.menu-toggle');
   const menuMobile = document.querySelector('.menu-mobile');
 
-  const worlds = [
-    'home',
-    'manifesto',
-    'eventi',
-    'artist3',
-    'collab-altro',
-    'gallery',
-    'contatti',
-    'sostienici'
-  ];
-  const defaultWorld = 'gallery';
+  /* ===============================
+     MAPPATURA HASH REALI → SEZIONI REALI
+  =============================== */
+  const hashMap = {
+    "home": "home",
+    "manifesto": "manifesto",
+    "calendario": "eventi",        // ← FIX
+    "artist3": "artist3",
+    "partnership": "collab-altro", // ← FIX
+    "gallery": "gallery",
+    "contatti": "contatti",
+    "sostienici": "sostienici"
+  };
+
+  const defaultWorld = "gallery";
 
   /* ===============================
-     UTIL — NORMALIZZA HASH
+     CLEAN HASH (fix ritorno archivio)
+  =============================== */
+  function cleanHash(raw) {
+    if (!raw) return "";
+    return raw
+      .replace("#", "")
+      .split("#")[0]
+      .trim();
+  }
+
+  /* ===============================
+     HASH → ID SEZIONE VALIDO
   =============================== */
   function getCurrentIdFromHash() {
-    const raw = window.location.hash.replace('#', '');
-    if (worlds.includes(raw)) return raw;
-    return defaultWorld;
+    const cleaned = cleanHash(window.location.hash);
+    return hashMap[cleaned] || defaultWorld;
   }
 
   /* ===============================
@@ -39,13 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyActiveState(currentId) {
     // link attivi
     allLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      link.classList.toggle('active', href === '#' + currentId);
+      const href = link.getAttribute("href").replace("#", "");
+      link.classList.toggle("active", hashMap[href] === currentId);
     });
 
     // sezioni attive
     sections.forEach(section => {
-      section.classList.toggle('active', section.id === currentId);
+      section.classList.toggle("active", section.id === currentId);
     });
   }
 
@@ -57,12 +72,16 @@ document.addEventListener('DOMContentLoaded', () => {
     applyActiveState(currentId);
   }
 
-  window.addEventListener('hashchange', updateFromHash);
+  window.addEventListener("hashchange", updateFromHash);
 
   /* ===============================
-     AGGIORNA HASH DA SCROLL
+     SCROLL → HASH (attivo solo dopo delay)
   =============================== */
+  let scrollActivationEnabled = false;
+
   function updateHashFromScroll() {
+    if (!scrollActivationEnabled) return;
+
     let currentId = null;
 
     sections.forEach(section => {
@@ -74,35 +93,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!currentId) return;
 
-    const targetHash = '#' + currentId;
+    const targetHash = "#" + currentId;
+
     if (window.location.hash !== targetHash) {
-      history.replaceState(null, '', targetHash);
+      history.replaceState(null, "", targetHash);
       applyActiveState(currentId);
     }
   }
 
-  window.addEventListener('scroll', updateHashFromScroll);
+  window.addEventListener("scroll", updateHashFromScroll);
 
   /* ===============================
      MENU MOBILE
   =============================== */
   if (menuToggle && menuMobile) {
-    menuToggle.addEventListener('click', () => {
-      const isOpen = menuMobile.classList.toggle('show');
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuMobile.classList.toggle("show");
 
-      menuToggle.classList.toggle('open', isOpen);
-      menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      menuToggle.classList.toggle("open", isOpen);
+      menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
 
-      document.body.style.overflow = isOpen ? 'hidden' : '';
+      document.body.style.overflow = isOpen ? "hidden" : "";
     });
 
     mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        menuMobile.classList.remove('show');
-        menuToggle.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+      link.addEventListener("click", () => {
+        menuMobile.classList.remove("show");
+        menuToggle.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
       });
     });
   }
+
+  /* ===============================
+     INIZIALIZZAZIONE
+  =============================== */
+  const initialId = getCurrentIdFromHash();
+
+  if (window.location.hash.replace("#", "") !== initialId) {
+    history.replaceState(null, "", "#" + initialId);
+  }
+
+  applyActiveState(initialId);
+
+  /* Delay per evitare che lo scroll sovrascriva #gallery all’avvio */
+  setTimeout(() => {
+    scrollActivationEnabled = true;
+  }, 500);
 });
