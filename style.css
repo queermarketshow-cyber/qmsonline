@@ -1361,7 +1361,7 @@ body.modal-open {
   }
 }
 /* ————————————————
-   SEZIONE SOSTIENICI — versione leggibile
+   SEZIONE SOSTIENICI — versione leggibile FIXATA
 ——————————————— */
 
 .qms-sostienici-section {
@@ -1369,43 +1369,46 @@ body.modal-open {
   color: #fff;
   position: relative;
 
-  /* FIX: comportamento come Manifesto */
-  min-height: 100dvh;        /* fullscreen quando possibile */
-  height: auto;              /* si espande se serve */
-  padding: 2rem 1.5rem;      /* padding ridotto, non spinge il contenuto fuori */
+  min-height: 100dvh;   /* fullscreen quando possibile */
+  height: auto;         /* si espande se serve */
+
+  padding: 2rem 1.5rem;
   margin: 0;
 
   display: flex;
-  flex-direction: column;
-  justify-content: center;   /* centratura condizionale */
+  justify-content: center;
   align-items: center;
 
   overflow: visible !important;
   box-sizing: border-box;
 }
 
-.qms-sostienici-section::before {
-  content: none;
-}
-
 /* ——— Wrapper principale ——— */
 
 .qms-sostienici-wrapper {
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
   margin: 0 auto;
 
   display: grid;
-  grid-template-columns: 1fr 0.9fr;
+  grid-template-columns: 2fr 1fr;   /* 2 colonne: testo + CTA */
   gap: 3rem;
 
-  /* FIX: nessun limite di altezza */
   height: auto !important;
   max-height: none !important;
   overflow: visible !important;
 }
 
-/* ——— Titolo punk ma leggibile ——— */
+/* ——— Colonna sinistra: titolo + accordion ——— */
+
+.qms-sostienici-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: auto;
+}
+
+/* ——— Titolo sempre in alto a sinistra ——— */
 
 .qms-sostienici-title {
   font-size: 3rem;
@@ -1441,66 +1444,8 @@ body.modal-open {
   color: #fff;
 }
 
-.qms-sostienici-subtitle {
-  margin-top: 2rem;
-  font-size: 1.3rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-.qms-sostienici-list {
-  margin: 1rem 0 2rem;
-  padding-left: 1.2rem;
-}
-
-.qms-sostienici-list li {
-  margin-bottom: 0.8rem;
-  list-style: square;
-  color: #fff;
-}
-
-/* ——— Bottone punk leggibile ——— */
-
-.qms-sostienici-button {
-  display: inline-block;
-  margin-top: 2rem;
-  padding: 1rem 1.6rem;
-  background: #ff2e9a;
-  color: #000;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 3px solid #ff2e9a;
-  transform: rotate(-1.5deg);
-  transition: 0.15s ease;
-}
-
-.qms-sostienici-button:hover {
-  transform: rotate(1deg) scale(1.05);
-  background: #000;
-  color: #ff2e9a;
-  border-color: #ff2e9a;
-}
-
-/* ——— Widget Chuffed ——— */
-
-.qms-sostienici-frame {
-  border: 3px dashed #ff2e9a;
-  padding: 1rem;
-  background: #111;
-  transform: rotate(1deg);
-  box-shadow: 6px 6px 0 #ff2e9a;
-}
-
-.qms-sostienici-iframe {
-  width: 100%;
-  height: 600px;
-  border: none;
-}
-
 /* ————————————————
-   ACCORDION IBRIDO MANIFESTO
+   ACCORDION
 ——————————————— */
 
 .qms-accordion {
@@ -1509,13 +1454,11 @@ body.modal-open {
   gap: 1.4rem;
   margin-top: 2rem;
 
-  /* FIX: nessun limite */
   height: auto !important;
   max-height: none !important;
   overflow: visible !important;
 }
 
-/* ITEM */
 .qms-acc-item {
   border: 3px solid #ff2e9a;
   background: #111;
@@ -1529,7 +1472,6 @@ body.modal-open {
   transform: rotate(-0.6deg) scale(1.01);
 }
 
-/* HEADER */
 .qms-acc-header {
   width: 100%;
   padding: 1.2rem 1.5rem;
@@ -1551,7 +1493,6 @@ body.modal-open {
   color: #000;
 }
 
-/* CONTENUTO COLLASSABILE */
 .qms-acc-content {
   max-height: 0;
   overflow: hidden;
@@ -1567,15 +1508,6 @@ body.modal-open {
   color: #fff;
 }
 
-.qms-acc-content ul li {
-  color: #fff;
-}
-
-.qms-acc-content .qms-sostienici-button {
-  margin: 1rem 0 1.5rem 0;
-}
-
-/* STATO ATTIVO */
 .qms-acc-item.active .qms-acc-content {
   max-height: 1000px;
   padding: 1rem 1.5rem 1.5rem;
@@ -1584,6 +1516,39 @@ body.modal-open {
 .qms-acc-item.active {
   box-shadow: 6px 6px 0 #ff2e9a;
   transform: rotate(-0.4deg);
+}
+
+/* ————————————————
+   COLONNA DESTRA: CTA finale
+——————————————— */
+
+.qms-sostienici-cta-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;   /* CTA sempre in basso a destra */
+  align-items: flex-end;
+}
+
+/* ——— Bottone punk leggibile ——— */
+
+.qms-sostienici-button {
+  display: inline-block;
+  padding: 1rem 1.6rem;
+  background: #ff2e9a;
+  color: #000;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 3px solid #ff2e9a;
+  transform: rotate(-1.5deg);
+  transition: 0.15s ease;
+}
+
+.qms-sostienici-button:hover {
+  transform: rotate(1deg) scale(1.05);
+  background: #000;
+  color: #ff2e9a;
+  border-color: #ff2e9a;
 }
 
 /* ————————————————
@@ -1598,15 +1563,12 @@ body.modal-open {
   }
 
   .qms-sostienici-wrapper {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* mobile: una colonna */
   }
 
-  .qms-sostienici-frame {
-    transform: rotate(0deg);
-  }
-
-  .qms-sostienici-iframe {
-    height: 450px;
+  .qms-sostienici-cta-column {
+    align-items: flex-start;
+    margin-top: 2rem;
   }
 }
 /* ————————————————
@@ -3314,4 +3276,84 @@ section#gallery.active,
 section#contatti.active,
 section#sostienici.active {
   opacity: 1;
+}
+/* ============================================================
+   SOSTIENICI — LAYOUT A 2 COLONNE NARRATIVE (1/3 + 2/3)
+   Titolo + primi 3 blocchi a sinistra
+   Restanti blocchi + CTA a destra
+============================================================ */
+
+/* wrapper principale → 2 colonne */
+.qms-sostienici-wrapper {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 3rem !important;
+  align-items: start !important;
+}
+
+/* titolo sempre in alto a sinistra */
+.qms-sostienici-title {
+  grid-column: 1 / 2 !important;
+}
+
+/* intro sempre sotto il titolo */
+.qms-sostienici-intro {
+  grid-column: 1 / 2 !important;
+}
+
+/* accordion → i figli diventano elementi della grid */
+.qms-accordion {
+  display: contents !important;
+}
+
+/* ————————————————————————————————
+   COLONNA SINISTRA (1/3)
+   blocchi 1, 2, 3
+—————————————————————————————————— */
+
+.qms-acc-item:nth-child(1),
+.qms-acc-item:nth-child(2),
+.qms-acc-item:nth-child(3) {
+  grid-column: 1 / 2 !important;
+}
+
+/* ————————————————————————————————
+   COLONNA DESTRA (2/3)
+   blocchi 4, 5, 6, 7
+—————————————————————————————————— */
+
+.qms-acc-item:nth-child(4),
+.qms-acc-item:nth-child(5),
+.qms-acc-item:nth-child(6),
+.qms-acc-item:nth-child(7) {
+  grid-column: 2 / 3 !important;
+}
+
+/* CTA finale sempre in basso a destra */
+.qms-sostienici-button:last-of-type {
+  grid-column: 2 / 3 !important;
+  justify-self: end !important;
+  align-self: end !important;
+  margin-top: 2rem !important;
+}
+
+/* ————————————————————————————————
+   MOBILE — torna tutto in una colonna
+—————————————————————————————————— */
+
+@media (max-width: 900px) {
+  .qms-sostienici-wrapper {
+    grid-template-columns: 1fr !important;
+  }
+
+  .qms-sostienici-title,
+  .qms-sostienici-intro,
+  .qms-acc-item,
+  .qms-sostienici-button:last-of-type {
+    grid-column: 1 / 2 !important;
+  }
+
+  .qms-sostienici-button:last-of-type {
+    justify-self: start !important;
+  }
 }
