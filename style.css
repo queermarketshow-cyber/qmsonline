@@ -237,6 +237,7 @@ footer {
     text-decoration: line-through 3px solid #fff;
   }
 }
+
 /* ————————————————————————————————
    HOME — BASE
 —————————————————————————————————— */
@@ -2216,7 +2217,7 @@ body.modal-open {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-6deg);
-  z-index: 9999;
+  z-index: 6000;
   background: #ff2e9a;
   padding: 2vw 4vw;
   font-size: clamp(20px, 5vw, 60px);
@@ -3343,4 +3344,20 @@ html { scroll-behavior: smooth; }
 .manifesto-brief p {
   max-width: 70ch;
   margin-bottom: 1.2em;
+}
+/* ===============================
+   PATCH MINIMALE — SEZIONE ATTIVA
+   (scroll-friendly, non invasiva)
+=============================== */
+
+/* Tutte le sezioni restano nel flusso e scrollabili */
+section[id] {
+  opacity: 0.45;                 /* le sezioni non attive restano visibili */
+  transition: opacity 0.35s ease;
+  min-height: 100svh;            /* sicurezza morbida: ogni sezione è almeno alta quanto il viewport */
+}
+
+/* La sezione attiva (quella sotto il cursore/viewport) */
+section[id].active {
+  opacity: 1;                    /* la sezione attiva è pienamente visibile */
 }

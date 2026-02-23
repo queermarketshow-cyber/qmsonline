@@ -12,29 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuToggle = document.querySelector('.menu-toggle');
   const menuMobile = document.querySelector('.menu-mobile');
 
-  /* ===============================
-     ACTIVE LINK SU SCROLL
-  =============================== */
-  function updateActiveLink() {
-    let current = '';
+/* ===============================
+   ACTIVE LINK BASATO SU HASH
+=============================== */
+function updateActiveLinkFromHash() {
+  const current = window.location.hash.replace('#', '');
+  allLinks.forEach(link => {
+    link.classList.toggle(
+      'active',
+      link.getAttribute('href') === '#' + current
+    );
+  });
+}
 
-    sections.forEach(section => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top <= 120 && rect.bottom >= 120) {
-        current = section.id;
-      }
-    });
-
-    allLinks.forEach(link => {
-      link.classList.toggle(
-        'active',
-        link.getAttribute('href') === '#' + current
-      );
-    });
-  }
-
-  window.addEventListener('scroll', updateActiveLink);
-  updateActiveLink();
+window.addEventListener('hashchange', updateActiveLinkFromHash);
+updateActiveLinkFromHash();
 
   /* ===============================
      MENU MOBILE
@@ -59,4 +51,43 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+});
+/* ===============================
+   NAVIGAZIONE A MONDI
+=============================== */
+
+const worlds = [
+  "#home",
+  "#manifesto",
+  "#eventi",
+  "#artist3",
+  "#collab-altro",
+  "#gallery",
+  "#contatti",
+  "#sostienici"
+];
+
+const defaultWorld = "#gallery";
+
+function getWorldFromHash() {
+  const h = window.location.hash;
+  return worlds.includes(h) ? h : defaultWorld;
+}
+
+function activateWorld(id) {
+  document.querySelectorAll("section[id]").forEach(sec => {
+    sec.classList.toggle("active", "#" + sec.id === id);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const world = getWorldFromHash();
+  activateWorld(world);
+  if (window.location.hash !== world) {
+    window.location.hash = world;
+  }
+});
+
+window.addEventListener("hashchange", () => {
+  activateWorld(getWorldFromHash());
 });
