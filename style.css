@@ -1248,7 +1248,7 @@ body.modal-open {
 .collab-card .ig-thumb {
   width: 100%;
   height: auto;          /* <— LA CHIAVE */
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   flex-shrink: 0;
 }
