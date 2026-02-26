@@ -508,5 +508,16 @@
     "location": "Ecomuseo Palazzo Donno, Cursi (LE)",
     "image": "images/eventi/20260301 spazi celesti.jpg",
     "categories": ["performance", "djset", "talk", "aperitivo"]
+  },
+  {
+    "id": "event-2026-03-07-gaya",
+    "title": "Queer Dreams (are made of this)",
+    "start": "2026-03-07",
+    "end": "2026-03-07",
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "location": "Convitto Palmieri, Lecce",
+    "image": "images/eventi/20260307 gaya.jpg",
+    "categories": ["performance", "djset", "talk"]
   }
 ]
