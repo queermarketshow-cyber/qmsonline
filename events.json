@@ -519,5 +519,16 @@
     "location": "Convitto Palmieri, Lecce",
     "image": "images/eventi/20260307 gaya.jpg",
     "categories": ["performance", "djset", "talk"]
+  },
+  {
+    "id": "event-2026-03-07-queer-panic ",
+    "title": "Queer Panic",
+    "start": "2026-03-07",
+    "end": "2026-03-07",
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "location": "Too Much, Lecce",
+    "image": "images/eventi/20260307 queer panic.jpg",
+    "categories": ["performance", "djset", "talk"]
   }
 ]
