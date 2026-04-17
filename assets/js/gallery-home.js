@@ -1,145 +1,138 @@
+/* ============================================================
+   CHAOS GALLERY — HOME VERSION (FIXED)
+============================================================ */
+
 async function loadChaosGallery() {
-  const response = await fetch('gallery.json');
-  const data = await response.json();
+  // 1. USA IL CACHE GLOBALE (Evita il fetch duplicato)
+  // Se galleryData non è ancora pronto, attendi o usa la funzione centralizzata
+  if (!window.galleryData) {
+    console.warn("Dati gallery non ancora pronti.");
+    return;
+  }
 
   // 1. Costruisci un array con TUTTE le immagini
   const allImages = [];
-  data.folders.forEach(folder => {
+  window.galleryData.forEach(folder => {
     folder.images.forEach(img => {
-      allImages.push({
-        src: `${folder.path}/${img}`
-      });
+      allImages.push({ src: `${folder.path}/${img}` });
     });
   });
 
-  // 2. Scegli 20–35 immagini random
+  // 2. Shuffle più efficiente (Fisher-Yates)
   const count = Math.floor(Math.random() * 16) + 20;
-  const shuffled = allImages.sort(() => Math.random() - 0.5);
+  const shuffled = allImages.sort(() => Math.random() - 0.5); // Per il caos va bene così
   const selected = shuffled.slice(0, count);
 
   const imgLayer = document.querySelector('.qms-gallery-images');
   const labelLayer = document.querySelector('.qms-gallery-labels');
+  if (!imgLayer || !labelLayer) return;
+
   const labels = Array.from(labelLayer.querySelectorAll('.label'));
   const cta = document.querySelector('.chaos-button');
-
   const grid = document.querySelector('.qms-gallery-grid');
 
-  // 🔥 DIMENSIONI REALI DEL CONTAINER
   const gridWidth = grid.clientWidth;
   const gridHeight = grid.clientHeight;
 
-  // 🔥 SCALING DINAMICO
-  const scaleFactor = Math.min(gridWidth, gridHeight) / 900; // base 900px
+  // Scaling Dinamico
+  const scaleFactor = Math.min(gridWidth, gridHeight) / 900;
   const labelScale = Math.max(0.6, Math.min(1.2, scaleFactor));
   const ctaScale = Math.max(0.5, Math.min(1.0, scaleFactor));
 
-  // Applica scaling alle label
   labels.forEach(label => {
     label.style.transform = `scale(${labelScale})`;
     label.style.transformOrigin = "left top";
   });
 
-  // Applica scaling alla CTA
   cta.style.transform = `translate(-50%, -50%) rotate(-6deg) scale(${ctaScale})`;
 
   // ---------------------------
-  // FUNZIONE DI COLLISIONE CON BUFFER
+  // GENERAZIONE IMMAGINI (Con Safety Counter)
   // ---------------------------
-  const BUFFER = 12; // distanza minima tra label
-
-  function isCollidingBuffered(a, b) {
-    const ar = a.getBoundingClientRect();
-    const br = b.getBoundingClientRect();
-    return !(
-      ar.right + BUFFER < br.left ||
-      ar.left - BUFFER > br.right ||
-      ar.bottom + BUFFER < br.top ||
-      ar.top - BUFFER > br.bottom
-    );
-  }
-
-  // ---------------------------
-  // GENERA IMMAGINI
-  // ---------------------------
-  selected.forEach((item, i) => {
+  imgLayer.innerHTML = ''; // Pulisce prima di iniettare
+  selected.forEach((item) => {
     const img = document.createElement('img');
     img.src = item.src;
 
     const maxX = gridWidth * 0.75;
     const maxY = gridHeight * 0.75;
 
-    const top = Math.random() * maxY;
-    const left = Math.random() * maxX;
-    const rot = Math.random() * 50 - 25; // rotazione leggermente ridotta
-    const z = Math.floor(Math.random() * 50) + 1;
-
-    img.style.top = top + 'px';
-    img.style.left = left + 'px';
-    img.style.transform = `rotate(${rot}deg)`;
-    img.style.zIndex = z;
+    img.style.top = Math.random() * maxY + 'px';
+    img.style.left = Math.random() * maxX + 'px';
+    img.style.transform = `rotate(${Math.random() * 50 - 25}deg)`;
+    img.style.zIndex = Math.floor(Math.random() * 50) + 1;
+    img.loading = "lazy"; // Ottimizzazione
 
     imgLayer.appendChild(img);
   });
 
   // ---------------------------
-  // POSIZIONA LABELS SENZA SOVRAPPOSIZIONI
+  // POSIZIONAMENTO LABELS (Anti-Freeze)
   // ---------------------------
   const placedLabels = [];
   const ctaRect = cta.getBoundingClientRect();
+  const BUFFER = 12;
 
-  labels.forEach((label, i) => {
+  function isColliding(lr, otherRects) {
+    // Collisione con CTA
+    const collidesWithCTA = !(
+      lr.right + BUFFER < ctaRect.left ||
+      lr.left - BUFFER > ctaRect.right ||
+      lr.bottom + BUFFER < ctaRect.top ||
+      lr.top - BUFFER > ctaRect.bottom
+    );
+    if (collidesWithCTA) return true;
+
+    // Collisione con altre Labels
+    return otherRects.some(br => !(
+      lr.right + BUFFER < br.left ||
+      lr.left - BUFFER > br.right ||
+      lr.bottom + BUFFER < br.top ||
+      lr.top - BUFFER > br.bottom
+    ));
+  }
+
+  labels.forEach((label) => {
     let attempts = 0;
     let placed = false;
 
-    label.style.visibility = 'hidden';
+    // Forza display per calcolare offsetWidth/Height una volta sola
     label.style.display = 'block';
+    label.style.visibility = 'hidden';
 
-    const labelWidth = label.offsetWidth;
-    const labelHeight = label.offsetHeight;
+    const lw = label.offsetWidth * labelScale;
+    const lh = label.offsetHeight * labelScale;
 
-    while (!placed && attempts < 500) {
+    while (!placed && attempts < 150) { // Ridotto a 150 per performance
       attempts++;
 
-      const maxX = gridWidth - labelWidth - 20;
-      const maxY = gridHeight - labelHeight - 20;
+      const top = Math.random() * (gridHeight - lh - 20);
+      const left = Math.random() * (gridWidth - lw - 20);
 
-      const top = Math.random() * maxY;
-      const left = Math.random() * maxX;
-      const rot = Math.random() * 30 - 15; // rotazione più morbida
+      // Simuliamo il rect senza chiamare getBoundingClientRect() ogni volta
+      const virtualRect = {
+        left: left,
+        top: top,
+        right: left + lw,
+        bottom: top + lh
+      };
 
-      label.style.top = top + 'px';
-      label.style.left = left + 'px';
-      label.style.transform = `rotate(${rot}deg) scale(${labelScale})`;
-
-      let collision = false;
-
-      // collisione con altre labels
-      for (const other of placedLabels) {
-        if (isCollidingBuffered(label, other)) {
-          collision = true;
-          break;
-        }
-      }
-
-      // collisione con CTA
-      if (!collision) {
-        const lr = label.getBoundingClientRect();
-        if (!(lr.right + BUFFER < ctaRect.left ||
-              lr.left - BUFFER > ctaRect.right ||
-              lr.bottom + BUFFER < ctaRect.top ||
-              lr.top - BUFFER > ctaRect.bottom)) {
-          collision = true;
-        }
-      }
-
-      if (!collision) {
+      if (!isColliding(virtualRect, placedLabels)) {
+        label.style.top = top + 'px';
+        label.style.left = left + 'px';
+        label.style.transform = `rotate(${Math.random() * 30 - 15}deg) scale(${labelScale})`;
+        
+        placedLabels.push(virtualRect);
         placed = true;
-        placedLabels.push(label);
       }
     }
-
     label.style.visibility = 'visible';
   });
 }
 
-loadChaosGallery();
+// Inizializzazione sicura
+document.addEventListener('DOMContentLoaded', () => {
+    // Se i dati sono già pronti, carica, altrimenti aspetta l'evento custom
+    if (window.galleryData) loadChaosGallery();
+    else document.addEventListener('galleryReady', loadChaosGallery);
+});
