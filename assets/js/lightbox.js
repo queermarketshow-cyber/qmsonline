@@ -1,11 +1,50 @@
-lightboxImg.src  // Se il mosaico è aperto, deve tornare cliccabile
+// ── State ────────────────────────────────────────────────
+let currentScale    = 1;
+let currentIndex    = 0;
+let currentFolder   = null;
+let initialDistance = 0;
+
+// ── Elements ─────────────────────────────────────────────
+const lightbox    = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+
+if (lightbox) lightbox.classList.remove('lightbox-artist');
+
+// ── OPEN ─────────────────────────────────────────────────
+function openLightbox(src) {
+  if (!lightbox || !lightboxImg) return;
+
+  lightboxImg.src = src;
+  lightbox.classList.remove('hidden');
+  lightbox.classList.add('open');
+
+  currentScale = 1;
+  lightboxImg.style.transform = 'scale(1)';
+
+  document.body.style.overflow = 'hidden';
+}
+
+// ── CLOSE ────────────────────────────────────────────────
+function closeLightbox() {
+  if (!lightbox) return;
+
+  lightbox.classList.remove('open');
+  lightbox.classList.add('hidden');
+
+  document.body.style.overflow = '';
+
+  const galleryModal = document.getElementById('galleryModal');
+  if (galleryModal && galleryModal.classList.contains('open')) {
+    galleryModal.style.pointerEvents = 'auto';
+  }
+
   const mosaic = document.querySelector('.mosaic-gallery');
   if (mosaic && mosaic.classList.contains('open')) {
     mosaic.style.pointerEvents = 'auto';
   }
 }
 
-/* NAVIGAZIONE */
+// ── NAVIGATION ───────────────────────────────────────────
 function prevLightbox() {
   if (!currentFolder) return;
   currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
@@ -18,9 +57,9 @@ function nextLightbox() {
   lightboxImg.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
-/* SWIPE */
+// ── SWIPE ────────────────────────────────────────────────
 let touchStartX = 0;
-let touchEndX = 0;
+let touchEndX   = 0;
 
 lightbox?.addEventListener('touchstart', e => {
   if (e.touches.length === 1) touchStartX = e.touches[0].screenX;
@@ -34,7 +73,7 @@ lightbox?.addEventListener('touchend', e => {
   }
 }, { passive: true });
 
-/* PINCH TO ZOOM */
+// ── PINCH TO ZOOM ────────────────────────────────────────
 lightboxImg?.addEventListener('touchstart', e => {
   if (e.touches.length === 2) {
     const dx = e.touches[0].clientX - e.touches[1].clientX;
