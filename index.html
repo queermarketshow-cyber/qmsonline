@@ -440,32 +440,37 @@
 </section>
 
 <!-- SCRIPT MODULARI -->
-<script src="assets/js/sostienici.js"></script>
 <script src="assets/js/base.js" defer></script>
-<script src="assets/js/navbar.js"></script>
-<script src="assets/js/lightbox.js"></script>
-<script src="assets/js/gallery-folders.js"></script>
-<script src="assets/js/mosaic-gallery.js"></script>
-<script src="assets/js/gallery-modal.js"></script>
-<script src="assets/js/events.js"></script>
+<script src="assets/js/navbar.js" defer></script>
+
+<script src="assets/js/lightbox.js" defer></script>
+<script src="assets/js/form.js" defer></script>
+<script src="assets/js/manifesto.js" defer></script>
+
+<script src="assets/js/gallery-folders.js" defer></script> <script src="assets/js/gallery-modal.js" defer></script>   <script src="assets/js/mosaic-gallery.js" defer></script>  <script src="assets/js/gallery-home.js" defer></script>    <script src="assets/js/events.js" defer></script>
 <script src="assets/js/artists.js" defer></script>
-<script src="assets/js/manifesto.js"></script>
-<script src="assets/js/gallery-home.js"></script>
-<script src="assets/js/form.js"></script>
+<script src="assets/js/sostienici.js" defer></script>
 
 <script>
-  window.addEventListener("load", () => {
-    initArtist3();
+  // Usiamo DOMContentLoaded al posto di load per maggiore velocità
+  document.addEventListener("DOMContentLoaded", () => {
+    // Calcolo altezza navbar immediato
+    updateNavbarHeight();
+    
+    // Init sezioni specifiche
+    if (typeof initArtist3 === "function") {
+      initArtist3();
+    }
   });
-</script>
-<script>
-function updateNavbarHeight() {
-  const nav = document.querySelector('.navbar'); 
-  document.documentElement.style.setProperty('--navbar-height', nav.offsetHeight + 'px');
-}
 
-window.addEventListener('load', updateNavbarHeight);
-window.addEventListener('resize', updateNavbarHeight);
+  function updateNavbarHeight() {
+    const nav = document.querySelector('.navbar'); 
+    if(nav) {
+      document.documentElement.style.setProperty('--navbar-height', nav.offsetHeight + 'px');
+    }
+  }
+
+  window.addEventListener('resize', updateNavbarHeight);
 </script>
 
 
