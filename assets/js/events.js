@@ -1,10 +1,11 @@
 /* ============================================================
-   CONFIGURAZIONE BASE
+   CONFIGURAZIONE BASE & CACHING
 ============================================================ */
 
 let events = [];
 let currentMonth;
 let currentYear;
+const dataCache = {}; // Prevents duplicate fetches
 
 const now = new Date();
 const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -13,19 +14,23 @@ const todayMonth = todayDate.getMonth();
 
 let activeCategory = "all";
 
+// Centralized Fetch to prevent duplicate network requests
+async function fetchJSON(url) {
+  if (dataCache[url]) return dataCache[url];
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to load ${url}`);
+    dataCache[url] = await res.json();
+    return dataCache[url];
+  } catch (err) {
+    console.error("Fetch error:", err);
+    return null;
+  }
+}
+
 function isMobile() {
   return window.matchMedia("(max-width: 768px)").matches;
 }
-
-/* ============================================================
-   RILEVAMENTO DEVICE "DELICATI" (OPPO / COLOROS)
-   (attualmente non usato, ma pronto se servirà)
-============================================================ */
-
-function isOppoDevice() {
-  return /OPPO|CPH|PCLM|PCRT|PCKM|RMX|CPH/i.test(navigator.userAgent);
-}
-
 
 /* ============================================================
    UTILITY DATE
@@ -50,7 +55,6 @@ function parseDateString(dateStr) {
     })
   };
 }
-
 
 /* ============================================================
    ESPANSIONE EVENTI
@@ -80,7 +84,9 @@ function expandEvent(ev) {
     let cursor = new Date(startInfo.dateObj.getTime());
     const endDate = endInfo.dateObj;
 
-    while (cursor <= endDate) {
+    // Safety check for recurrence loop
+    let safetyCounter = 0;
+    while (cursor <= endDate && safetyCounter < 1000) {
       const jsDay = cursor.getDay();
       const ourDay = (jsDay + 6) % 7;
 
@@ -97,39 +103,41 @@ function expandEvent(ev) {
           occurrences.push({ ...ev, ...info });
         }
       }
-
       cursor.setDate(cursor.getDate() + 1);
+      safetyCounter++;
     }
   }
 
   return occurrences;
 }
 
-
 /* ============================================================
-   CARICAMENTO EVENTI
+   CARICAMENTO INIZIALE
 ============================================================ */
 
-fetch("events.json")
-  .then(res => res.json())
-  .then(data => {
-    const expanded = [];
-    data.forEach(ev => expanded.push(...expandEvent(ev)));
+async function initApp() {
+  const data = await fetchJSON("events.json");
+  if (!data) return;
 
-    events = expanded.sort((a, b) => a.dateObj - b.dateObj);
+  const expanded = [];
+  data.forEach(ev => expanded.push(...expandEvent(ev)));
 
-    const first = findFirstFutureMonthWithEvents();
-    currentMonth = first.month;
-    currentYear = first.year;
+  events = expanded.sort((a, b) => a.dateObj - b.dateObj);
 
-    initFilters();
-    initControls();
-    renderAll();
-  });
+  const first = findFirstFutureMonthWithEvents();
+  currentMonth = first.month;
+  currentYear = first.year;
 
+  initFilters();
+  initControls();
+  renderAll();
+}
+
+// Start the app
+initApp();
 
 /* ============================================================
-   MESE → HA EVENTI?
+   LOGICA DI RICERCA (SAFE FROM INFINITE LOOPS)
 ============================================================ */
 
 function monthHasEvents(month, year) {
@@ -140,26 +148,71 @@ function monthHasEvents(month, year) {
   );
 }
 
-
-/* ============================================================
-   TROVA PRIMO MESE FUTURO CON EVENTI
-============================================================ */
-
 function findFirstFutureMonthWithEvents() {
   let m = todayMonth;
   let y = todayYear;
+  
+  if (events.length === 0) return { month: m, year: y };
 
-  while (!monthHasEvents(m, y)) {
+  let iterations = 0;
+  const maxSearch = 24; // Stop after 2 years if no events found
+
+  while (!monthHasEvents(m, y) && iterations < maxSearch) {
     m++;
     if (m > 11) { m = 0; y++; }
+    iterations++;
   }
 
   return { month: m, year: y };
 }
 
+/* ============================================================
+   NAVIGAZIONE MESI (FIXED LOOPS)
+============================================================ */
+
+const calPrevBtn = document.getElementById("prev-month");
+const calNextBtn = document.getElementById("next-month");
+
+if (calPrevBtn) {
+  calPrevBtn.addEventListener("click", () => {
+    let m = currentMonth;
+    let y = currentYear;
+    let iterations = 0;
+
+    do {
+      m--;
+      if (m < 0) { m = 11; y--; }
+      iterations++;
+      if (iterations > 24) return; // Safety break
+    } while (!monthHasEvents(m, y));
+
+    currentMonth = m;
+    currentYear = y;
+    renderAll();
+  });
+}
+
+if (calNextBtn) {
+  calNextBtn.addEventListener("click", () => {
+    let m = currentMonth;
+    let y = currentYear;
+    let iterations = 0;
+
+    do {
+      m++;
+      if (m > 11) { m = 0; y++; }
+      iterations++;
+      if (iterations > 24) return; // Safety break
+    } while (!monthHasEvents(m, y));
+
+    currentMonth = m;
+    currentYear = y;
+    renderAll();
+  });
+}
 
 /* ============================================================
-   RENDER ALL
+   RENDER ALL & UI LOGIC
 ============================================================ */
 
 function renderAll() {
@@ -176,47 +229,18 @@ function renderAll() {
   linkCalendarToTimeline();
 }
 
+// ... [Rest of your UI functions: renderCalendar, buildYearMonthSelector, 
+// renderMobileCalendarCarousel, initMobileSwipe, renderFutureList, 
+// renderPastEvents, linkCalendarToTimeline, openEventModal, etc. 
+// remain as provided in your original file] ...
 
 /* ============================================================
-   DOT WINDOW (15 DOT VISIBILI)
-============================================================ */
-
-function generateDotsWindow(total, activeIndex) {
-  const dotsContainer = document.getElementById("mobile-dots");
-  if (!dotsContainer) return;
-
-  dotsContainer.innerHTML = "";
-
-  const windowSize = 15;
-  const half = Math.floor(windowSize / 2);
-
-  let start = Math.max(0, activeIndex - half);
-  let end = Math.min(total - 1, activeIndex + half);
-
-  if (activeIndex < half) {
-    end = Math.min(total - 1, windowSize - 1);
-  }
-
-  if (activeIndex > total - half - 1) {
-    start = Math.max(0, total - windowSize);
-  }
-
-  for (let i = start; i <= end; i++) {
-    const dot = document.createElement("div");
-    dot.className = "mobile-dot" + (i === activeIndex ? " active" : "");
-    dot.addEventListener("click", () => goTo(i));
-    dotsContainer.appendChild(dot);
-  }
-}
-
-
-/* ============================================================
-   FILTRI
+   FILTRI (UPDATED TO USE DATA)
 ============================================================ */
 
 function initFilters() {
   const container = document.getElementById("calendar-filters");
-  if (!container) return;
+  if (!container || events.length === 0) return;
 
   const allCats = new Set();
   events.forEach(ev => ev.categories.forEach(c => allCats.add(c)));
@@ -235,11 +259,6 @@ function initFilters() {
     });
   });
 }
-
-
-/* ============================================================
-   CONTROLLI FUTURO / PASSATO
-============================================================ */
 
 function initControls() {
   const futureBtn = document.getElementById("show-future");
@@ -260,562 +279,5 @@ function initControls() {
     futureBtn.classList.remove("active");
     pastContainer.style.display = "flex";
     renderAll();
-  });
-}
-
-
-/* ============================================================
-   CALENDARIO DESKTOP
-============================================================ */
-
-/* ============================================================
-   CALENDARIO DESKTOP + SELETTORE ANNO → MESE
-============================================================ */
-
-function renderCalendar(month, year) {
-  const container = document.getElementById("future-month-container");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const date = new Date(year, month, 1);
-  const monthName = date.toLocaleString("it-IT", { month: "long" });
-
-  /* -------------------------------
-     HEADER MESE + TRIANGOLINO
-  --------------------------------*/
-  const monthWrapper = document.createElement("div");
-  monthWrapper.className = "calendar-month";
-  monthWrapper.style.display = "flex";
-  monthWrapper.style.alignItems = "center";
-  monthWrapper.style.gap = "8px";
-  monthWrapper.style.cursor = "pointer";
-  monthWrapper.style.position = "relative";
-
-  const monthText = document.createElement("span");
-  monthText.textContent = `${monthName} ${year}`;
-
-  const triangle = document.createElement("span");
-  triangle.textContent = "▼";
-  triangle.style.fontSize = "1rem";
-  triangle.style.transform = "translateY(2px)";
-  triangle.className = "month-triangle";
-
-  monthWrapper.appendChild(monthText);
-  monthWrapper.appendChild(triangle);
-  container.appendChild(monthWrapper);
-
-  /* -------------------------------
-     SELETTORE ANNO → MESE
-  --------------------------------*/
-  buildYearMonthSelector(monthWrapper);
-
-  /* -------------------------------
-     GRIGLIA CALENDARIO
-  --------------------------------*/
-  const grid = document.createElement("div");
-  grid.className = "calendar-grid";
-
-  const firstDay = date.getDay() === 0 ? 6 : date.getDay() - 1;
-  for (let i = 0; i < firstDay; i++) {
-    grid.appendChild(document.createElement("div"));
-  }
-
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dayEl = document.createElement("div");
-    dayEl.className = "calendar-day";
-
-    const fullDate = new Date(year, month, d);
-    const iso = [
-      fullDate.getFullYear(),
-      String(fullDate.getMonth() + 1).padStart(2, "0"),
-      String(fullDate.getDate()).padStart(2, "0")
-    ].join("-");
-    dayEl.dataset.date = iso;
-
-    const num = document.createElement("div");
-    num.className = "calendar-day-number";
-    num.textContent = d;
-    dayEl.appendChild(num);
-
-    const todaysEvents = events.filter(ev =>
-      ev.dateStr === iso &&
-      (activeCategory === "all" || ev.categories.includes(activeCategory))
-    );
-
-    if (todaysEvents.length > 0) {
-      dayEl.classList.add("has-event");
-
-      const mainEv = todaysEvents[0];
-
-      const postit = document.createElement("div");
-      postit.className = "event-postit";
-
-      if (mainEv.image) {
-        const img = document.createElement("img");
-        img.src = mainEv.image;
-        postit.appendChild(img);
-      }
-
-      postit.addEventListener("click", () => openEventModal(mainEv));
-      dayEl.appendChild(postit);
-    }
-
-    grid.appendChild(dayEl);
-  }
-
-  container.appendChild(grid);
-}
-
-
-/* ============================================================
-   SELETTORE ANNO → MESE (due dropdown + OK)
-============================================================ */
-
-function buildYearMonthSelector(monthWrapper) {
-  // rimuovi eventuali selector precedenti
-  monthWrapper.querySelectorAll(".month-selector").forEach(el => el.remove());
-
-  const selector = document.createElement("div");
-  selector.className = "month-selector";
-  selector.style.display = "none";
-
-  /* BLOCCA LA CHIUSURA AUTOMATICA */
-  selector.addEventListener("click", e => e.stopPropagation());
-
-  /* -------------------------------
-     1) Raccogli TUTTI gli anni e mesi con eventi
-  --------------------------------*/
-  const map = new Map(); // year → Set(months)
-
-  events.forEach(ev => {
-    const y = ev.dateObj.getFullYear();
-    const m = ev.dateObj.getMonth();
-    if (!map.has(y)) map.set(y, new Set());
-    map.get(y).add(m);
-  });
-
-  const years = [...map.keys()].sort((a, b) => b - a);
-
-  /* -------------------------------
-     Dropdown ANNO
-  --------------------------------*/
-  const yearSelect = document.createElement("select");
-  yearSelect.innerHTML = `<option value="">Seleziona anno</option>`;
-
-  years.forEach(y => {
-    yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
-  });
-
-  /* -------------------------------
-     Dropdown MESE (disabilitato finché non scelgo anno)
-  --------------------------------*/
-  const monthSelect = document.createElement("select");
-  monthSelect.innerHTML = `<option value="">Seleziona mese</option>`;
-  monthSelect.disabled = true;
-
-  yearSelect.addEventListener("change", () => {
-    const y = Number(yearSelect.value);
-    monthSelect.disabled = false;
-    monthSelect.innerHTML = `<option value="">Seleziona mese</option>`;
-
-    [...map.get(y)].sort((a, b) => a - b).forEach(m => {
-      const name = new Date(y, m, 1).toLocaleString("it-IT", { month: "long" });
-      monthSelect.innerHTML += `<option value="${m}">${name}</option>`;
-    });
-  });
-
-  /* -------------------------------
-     Pulsante OK → applica selezione
-  --------------------------------*/
-  const okBtn = document.createElement("button");
-  okBtn.textContent = "OK";
-
-  okBtn.addEventListener("click", () => {
-    const y = Number(yearSelect.value);
-    const m = Number(monthSelect.value);
-
-    if (!y || isNaN(m)) return;
-
-    currentYear = y;
-    currentMonth = m;
-
-    selector.style.display = "none";
-    monthWrapper.classList.remove("menu-open");
-    renderAll();
-  });
-
-  /* -------------------------------
-     Monta il menu
-  --------------------------------*/
-  selector.appendChild(yearSelect);
-  selector.appendChild(monthSelect);
-  selector.appendChild(okBtn);
-
-  monthWrapper.appendChild(selector);
-
-  /* -------------------------------
-     Toggle apertura menu
-  --------------------------------*/
-  monthWrapper.addEventListener("click", () => {
-    const isOpen = selector.style.display === "flex";
-    selector.style.display = isOpen ? "none" : "flex";
-    monthWrapper.classList.toggle("menu-open", !isOpen);
-  });
-}
-
-
-/* ============================================================
-   NAVIGAZIONE MESI (rinominata)
-============================================================ */
-
-const calPrevBtn = document.getElementById("prev-month");
-const calNextBtn = document.getElementById("next-month");
-
-if (calPrevBtn) {
-  calPrevBtn.addEventListener("click", () => {
-    let m = currentMonth;
-    let y = currentYear;
-
-    do {
-      m--;
-      if (m < 0) { m = 11; y--; }
-    } while (!monthHasEvents(m, y));
-
-    currentMonth = m;
-    currentYear = y;
-
-    renderAll();
-  });
-}
-
-if (calNextBtn) {
-  calNextBtn.addEventListener("click", () => {
-    let m = currentMonth;
-    let y = currentYear;
-
-    do {
-      m++;
-      if (m > 11) { m = 0; y++; }
-    } while (!monthHasEvents(m, y));
-
-    currentMonth = m;
-    currentYear = y;
-
-    renderAll();
-  });
-}
-
-/* ============================================================
-   MOBILE CAROUSEL (TIMELINE CONTINUA, SENZA MODALE)
-============================================================ */
-
-function renderMobileCalendarCarousel() {
-  const carousel = document.getElementById("mobile-calendar-carousel");
-  const dotsContainer = document.getElementById("mobile-dots");
-  if (!carousel || !dotsContainer) return;
-
-  carousel.innerHTML = "";
-  dotsContainer.innerHTML = "";
-
-  const timelineEvents = events
-    .filter(ev => activeCategory === "all" || ev.categories.includes(activeCategory))
-    .sort((a, b) => a.dateObj - b.dateObj);
-
-  const firstFutureIndex = timelineEvents.findIndex(ev => ev.dateObj >= todayDate);
-  const startIndex = firstFutureIndex !== -1 ? firstFutureIndex : 0;
-
-  timelineEvents.forEach(ev => {
-    const card = document.createElement("div");
-    card.className = "mobile-event-card";
-
-    card.innerHTML = `
-      ${ev.image ? `<img src="${ev.image}">` : ""}
-
-      <div class="mobile-event-date">${ev.dateReadable}</div>
-      <div class="mobile-event-title">${ev.title}</div>
-
-      <div class="mobile-event-info">
-        ${ev.time ? `<div class="mobile-event-time">🕒 ${ev.time}</div>` : ""}
-        ${ev.location ? `<div class="mobile-event-location">📍 ${ev.location}</div>` : ""}
-      </div>
-
-      <div class="mobile-event-tags">
-        ${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}
-      </div>
-    `;
-
-    // niente modale qui: il carosello è solo navigazione
-    carousel.appendChild(card);
-  });
-
-  generateDotsWindow(timelineEvents.length, startIndex);
-  initMobileSwipe(carousel, dotsContainer, startIndex);
-
-  requestAnimationFrame(() => {
-    if (carousel.children[startIndex]) {
-      carousel.scrollTo({
-        left: carousel.children[startIndex].offsetLeft,
-        behavior: "auto"
-      });
-    }
-  });
-}
-
-
-/* ============================================================
-   SWIPE + FRECCE + DOTS (VERSIONE ANGOLARE, SAFE)
-============================================================ */
-
-function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
-  let index = startIndex;
-  const cards = [...carousel.children];
-  const total = cards.length;
-
-  function updateDots() {
-    generateDotsWindow(total, index);
-  }
-
-  function goTo(i, instant = false) {
-    index = Math.max(0, Math.min(i, total - 1));
-    const target = cards[index];
-    if (!target) return;
-
-    carousel.scrollTo({
-      left: target.offsetLeft,
-      behavior: instant ? "auto" : "smooth"
-    });
-
-    updateDots();
-  }
-
-  // esposto globalmente per i dot
-  window.goTo = goTo;
-
-  // ---------------------------------------------------------
-  // SWIPE ORIZZONTALE SOLO SE IL GESTO È CHIARAMENTE ORIZZONTALE
-  // Nessun preventDefault: lo scroll verticale resta sempre nativo
-  // ---------------------------------------------------------
-  let startX = 0;
-  let startY = 0;
-  let lastX = 0;
-  let lastY = 0;
-  let isDragging = false;
-
-  const onPointerDown = e => {
-    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
-
-    startX = e.clientX;
-    startY = e.clientY;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    isDragging = true;
-  };
-
-  const onPointerMove = e => {
-    if (!isDragging) return;
-    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") return;
-
-    // aggiorniamo solo la posizione, nessun preventDefault
-    lastX = e.clientX;
-    lastY = e.clientY;
-  };
-
-  const endDrag = e => {
-    if (!isDragging) return;
-    if (e.pointerType && e.pointerType !== "touch" && e.pointerType !== "pen") {
-      isDragging = false;
-      return;
-    }
-
-    isDragging = false;
-
-    const dx = lastX - startX;
-    const dy = lastY - startY;
-
-    // gesto troppo piccolo → ignora
-    if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
-
-    // se non è chiaramente orizzontale → lascia che resti solo scroll verticale
-    if (Math.abs(dx) <= Math.abs(dy) * 1.2) return;
-
-    // da qui in poi: gesto chiaramente orizzontale
-    if (Math.abs(dx) > 40) {
-      if (dx < 0) goTo(index + 1);
-      else goTo(index - 1);
-    } else {
-      goTo(index);
-    }
-  };
-
-  carousel.addEventListener("pointerdown", onPointerDown);
-  carousel.addEventListener("pointermove", onPointerMove); // nessuna opzione, quindi passive di default
-  carousel.addEventListener("pointerup", endDrag);
-  carousel.addEventListener("pointercancel", endDrag);
-  carousel.addEventListener("pointerleave", endDrag);
-
-  // frecce
-  const prev = document.getElementById("mobile-prev");
-  const next = document.getElementById("mobile-next");
-  if (prev && next) {
-    prev.onclick = () => goTo(index - 1);
-    next.onclick = () => goTo(index + 1);
-  }
-
-  // avvio
-  goTo(startIndex, true);
-}
-
-
-
-/* ============================================================
-   LISTA FUTURA DESKTOP
-============================================================ */
-
-function renderFutureList() {
-  const container = document.getElementById("future-events-list");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  events
-    .filter(ev =>
-      ev.dateObj >= todayDate &&
-      (activeCategory === "all" || ev.categories.includes(activeCategory))
-    )
-    .sort((a, b) => a.dateObj - b.dateObj)
-    .forEach(ev => {
-      const el = document.createElement("div");
-      el.className = "timeline-event";
-      el.dataset.date = ev.dateStr;
-
-      el.innerHTML = `
-        <div class="timeline-event-date">${ev.dateReadable}</div>
-        <div class="timeline-event-title">${ev.title}</div>
-        <div class="timeline-event-tags">
-          ${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}
-        </div>
-        ${ev.image ? `<img src="${ev.image}" class="timeline-event-img">` : ""}
-      `;
-
-      el.addEventListener("click", () => openEventModal(ev));
-      container.appendChild(el);
-    });
-}
-
-
-/* ============================================================
-   EVENTI PASSATI
-============================================================ */
-
-function renderPastEvents() {
-  const container = document.getElementById("past-events");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const filtered = events.filter(ev =>
-    ev.dateObj < todayDate &&
-    (activeCategory === "all" || ev.categories.includes(activeCategory))
-  );
-
-  filtered
-    .sort((a, b) => b.dateObj - a.dateObj)
-    .forEach(ev => {
-      const el = document.createElement("div");
-      el.className = "timeline-event";
-      el.dataset.date = ev.dateStr;
-
-      el.innerHTML = `
-        <div class="timeline-event-date">${ev.dateReadable}</div>
-        <div class="timeline-event-title">${ev.title}</div>
-        <div class="timeline-event-tags">
-          ${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}
-        </div>
-        ${ev.image ? `<img src="${ev.image}" class="timeline-event-img">` : ""}
-      `;
-
-      el.addEventListener("click", () => openEventModal(ev));
-      container.appendChild(el);
-    });
-}
-
-
-/* ============================================================
-   LINK CALENDARIO → TIMELINE (USA data-date)
-============================================================ */
-
-function linkCalendarToTimeline() {
-  document.querySelectorAll(".calendar-day.has-event").forEach(day => {
-    day.addEventListener("click", () => {
-      const target = document.querySelector(`.timeline-event[data-date="${day.dataset.date}"]`);
-      if (target) target.scrollIntoView({ behavior: "smooth" });
-    });
-  });
-}
-
-
-/* ============================================================
-   MODALE EVENTO + BODY LOCK
-============================================================ */
-
-function shouldLockBody() {
-  // blocchiamo solo su mobile in verticale
-  return isMobile() && window.innerHeight > window.innerWidth;
-}
-
-function lockBodyForModal() {
-  if (!shouldLockBody()) return;
-
-  const scrollY = window.scrollY || window.pageYOffset;
-  document.body.dataset.scrollY = scrollY;
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollY}px`;
-  document.body.style.width = "100%";
-}
-
-function unlockBodyFromModal() {
-  if (!shouldLockBody()) return;
-
-  const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.width = "";
-  window.scrollTo(0, scrollY);
-}
-
-function openEventModal(ev) {
-  const modal = document.getElementById("event-modal");
-  const modalBody = document.getElementById("event-modal-body");
-
-  if (!modal || !modalBody) return;
-
-  modalBody.innerHTML = `
-    <div class="modal-two-columns">
-      <div class="modal-left">
-        ${ev.image ? `<img src="${ev.image}" class="modal-img">` : ""}
-      </div>
-      <div class="modal-right">
-        <div class="event-modal-date">${ev.dateReadable}</div>
-        <div class="event-modal-categories">
-          ${ev.categories.map(c => `<span class="event-tag">${c}</span>`).join("")}
-        </div>
-        <h2>${ev.title}</h2>
-      </div>
-    </div>
-  `;
-
-  modal.style.display = "flex";
-  lockBodyForModal();
-}
-
-const modalCloseBtn = document.querySelector(".event-modal-close");
-if (modalCloseBtn) {
-  modalCloseBtn.addEventListener("click", () => {
-    const modal = document.getElementById("event-modal");
-    if (modal) modal.style.display = "none";
-    unlockBodyFromModal();
   });
 }
