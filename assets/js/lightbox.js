@@ -1,40 +1,4 @@
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-const lb = document.getElementById('lightbox');
-if (lb) lb.classList.remove('lightbox-artist');
-
-/* OPEN */
-function openLightbox(src) {
-  if (!lightbox || !lightboxImg) return;
-
-  lightboxImg.src = src;
-
-  lightbox.classList.remove('hidden');
-  lightbox.classList.add('open');
-
-  currentScale = 1;
-  lightboxImg.style.transform = 'scale(1)';
-
-  document.body.style.overflow = 'hidden';
-}
-
-/* CLOSE */
-function closeLightbox() {
-  if (!lightbox) return;
-
-  lightbox.classList.remove('open');
-  lightbox.classList.add('hidden');
-
-  // Riattiva scroll
-  document.body.style.overflow = '';
-
-  // Se la gallery modal è aperta, deve tornare cliccabile
-  const galleryModal = document.getElementById('galleryModal');
-  if (galleryModal && galleryModal.classList.contains('open')) {
-    galleryModal.style.pointerEvents = 'auto';
-  }
-
-  // Se il mosaico è aperto, deve tornare cliccabile
+lightboxImg.src  // Se il mosaico è aperto, deve tornare cliccabile
   const mosaic = document.querySelector('.mosaic-gallery');
   if (mosaic && mosaic.classList.contains('open')) {
     mosaic.style.pointerEvents = 'auto';
