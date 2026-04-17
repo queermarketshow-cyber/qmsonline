@@ -1,3 +1,4 @@
+{
 // ── State ────────────────────────────────────────────────
 let currentScale    = 1;
 let currentIndex    = 0;
@@ -99,3 +100,4 @@ lightboxImg?.addEventListener('touchend', () => {
     lightboxImg.style.transform = 'scale(1)';
   }
 });
+}
