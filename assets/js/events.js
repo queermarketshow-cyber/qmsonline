@@ -15,11 +15,11 @@ const todayMonth = todayDate.getMonth();
 let activeCategory = "all";
 
 // Centralized Fetch to prevent duplicate network requests
-async function fetchJSON(url) {
+async function fetchJSON('events.json') {
   if (dataCache[url]) return dataCache[url];
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Failed to load ${url}`);
+    const res = await fetch('events.json');
+    if (!res.ok) throw new Error(`Failed to load ${'events.json'}`);
     dataCache[url] = await res.json();
     return dataCache[url];
   } catch (err) {
