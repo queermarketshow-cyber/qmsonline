@@ -90,29 +90,12 @@
 <script src="assets/js/base.js"></script>
 <script src="assets/js/navbar.js"></script>
 <script src="assets/js/lightbox.js"></script>
-<script src="gallery-folders.js"></script> <script src="gallery-modal.js"></script>
+<script src="assets/js/gallery-folders.js"></script>
+<script src="assets/js/gallery-modal.js"></script>
+<script src="assets/js/mosaic-gallery.js"></script>
+<script src="assets/js/gallery-folders.js"></script> 
+<script src="gallery-modal.js"></script>
 <script src="mosaic-gallery.js"></script>
-
-<script>
-  // Questa è la "colla" che manca per unire il JSON ai tuoi JS
-  document.addEventListener("DOMContentLoaded", () => {
-    fetch('gallery.json')
-      .then(response => response.json())
-      .then(data => {
-        // Popola la variabile globale attesa dai tuoi script
-        window.galleryData = data.folders;
-        
-        // Avvia le funzioni definite in gallery-folders.js
-        if (typeof renderFolderPreviews === 'function') {
-          renderFolderPreviews();
-        }
-        if (typeof startRandomSlideshow === 'function') {
-          startRandomSlideshow();
-        }
-      })
-      .catch(err => console.error("Errore nel caricamento del database galleria:", err));
-  });
-</script>
 <script src="assets/js/events.js"></script>
 <script src="assets/js/artists.js"></script>
 <script src="assets/js/manifesto.js"></script>
