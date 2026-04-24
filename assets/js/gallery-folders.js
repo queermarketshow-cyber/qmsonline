@@ -1,32 +1,32 @@
 /* ============================================================
-   GALLERY FOLDERS — GESTIONE DATI, ANTEPRIME E SLIDESHOW
+   GALLERY FOLDERS — GESTIONE ANTEPRIME E SLIDESHOW
 ============================================================ */
 
 // Tiene traccia di quali cartelle sono visibili sullo schermo per lo slideshow
 const visibleFolders = new Set();
 
 /**
- * Inizializzazione: Carica il JSON e avvia la galleria
+ * Inizializzazione: Carica i dati dal JSON e avvia la galleria
  */
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('gallery.json')
+  fetch('gallery.json') // Assicurati che il percorso sia corretto rispetto all'HTML
     .then(response => {
-      if (!response.ok) throw new Error("Errore nel caricamento del file gallery.json");
+      if (!response.ok) throw new Error("Errore nel caricamento di gallery.json");
       return response.json();
     })
     .then(data => {
-      // Popola la variabile globale richiesta dalle funzioni
+      // Popola la variabile globale necessaria per le funzioni
       window.galleryData = data.folders;
       
       // Avvia il rendering e lo slideshow
       renderFolderPreviews();
       startRandomSlideshow();
     })
-    .catch(error => console.error("Errore inizializzazione galleria:", error));
+    .catch(error => console.error("Errore inizializzazione:", error));
 });
 
 /**
- * Fisher–Yates shuffle: randomizza l'ordine di un array senza mutare l'originale.
+ * Fisher–Yates shuffle: randomizza l'ordine di un array.
  */
 function shuffleArray(array) {
   const arr = [...array];
@@ -38,7 +38,7 @@ function shuffleArray(array) {
 }
 
 /**
- * Renderizza le anteprime delle cartelle in ordine casuale.
+ * Renderizza le anteprime delle cartelle.
  */
 function renderFolderPreviews() {
   const container = document.querySelector('.gallery-folders');
@@ -46,20 +46,20 @@ function renderFolderPreviews() {
 
   container.innerHTML = '';
 
-  // Randomizza l'ordine delle cartelle al caricamento
+  // Randomizza l'ordine delle cartelle
   const randomizedFolders = shuffleArray(window.galleryData);
 
   randomizedFolders.forEach((folder) => {
     const preview = document.createElement('div');
     preview.className = 'folder-preview';
     
-    // Mantiene l'indice originale per il riferimento corretto ai dati
+    // Mantiene l'indice originale per il riferimento ai dati
     preview.dataset.folderIndex = window.galleryData.indexOf(folder);
 
     const img = document.createElement('img');
     img.src = `${folder.path}/${folder.images[0]}`;
     img.alt = folder.name;
-    img.loading = "lazy"; 
+    img.loading = "lazy";
 
     const overlay = document.createElement('div');
     overlay.className = 'folder-overlay';
@@ -68,7 +68,7 @@ function renderFolderPreviews() {
     preview.appendChild(img);
     preview.appendChild(overlay);
 
-    // Evento click per aprire la modale (definita in gallery-modal.js)
+    // Click per aprire la modale (definita in gallery-modal.js)
     preview.addEventListener('click', () => {
       if (typeof openFolderModal === 'function') {
         openFolderModal(folder);
@@ -81,9 +81,6 @@ function renderFolderPreviews() {
   setupVisibilityObserver();
 }
 
-/**
- * Monitora quali anteprime entrano o escono dal viewport.
- */
 function setupVisibilityObserver() {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -99,9 +96,6 @@ function setupVisibilityObserver() {
   document.querySelectorAll('.folder-preview').forEach(el => observer.observe(el));
 }
 
-/**
- * Avvia il ciclo che cambia le immagini nelle cartelle attualmente visibili.
- */
 function startRandomSlideshow() {
   if (window.gallerySlideshowInterval) {
     clearInterval(window.gallerySlideshowInterval);
@@ -117,9 +111,7 @@ function startRandomSlideshow() {
     const preview = previews.find(p => p.dataset.folderIndex == randomVisibleIndex);
     if (!preview) return;
 
-    const realIndex = preview.dataset.folderIndex;
-    const folder = window.galleryData[realIndex];
-
+    const folder = window.galleryData[preview.dataset.folderIndex];
     const img = preview.querySelector('img');
     if (!img || !folder.images || folder.images.length <= 1) return;
 
@@ -139,5 +131,5 @@ function startRandomSlideshow() {
       preview.classList.remove('glitch-flash');
     }, 120);
     
-  }, 4000); 
+  }, 4000);
 }
