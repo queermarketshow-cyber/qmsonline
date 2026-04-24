@@ -87,27 +87,21 @@
 </div>
 
 <!-- SCRIPT MODULARI -->
-<script src="assets/js/base2.js"></script>
-<script src="assets/js/navbar.js"></script>
+<script type="module" src="assets/js/base2.js"></script>
+<script type="module" src="assets/js/navbar.js"></script>
 
-<script src="assets/js/gallery-folders.js"></script> 
-<script src="assets/js/gallery-modal.js"></script>
+<script type="module" src="assets/js/gallery-folders.js"></script> 
+<script type="module" src="assets/js/gallery-modal.js"></script>
 
-<script src="assets/js/events.js"></script>
-<script src="assets/js/artists.js"></script>
-<script>
+<script type="module" src="assets/js/events.js"></script>
+<script type="module" src="assets/js/artists.js"></script>
+
+<script type="module">
+  // Se initArtist3 è dentro artists.js (modulo), 
+  // devi assicurarti che sia esportata o gestita come modulo
   window.addEventListener("load", () => {
-    initArtist3();
+    if (typeof initArtist3 === 'function') initArtist3();
   });
-</script>
-<script>
-function updateNavbarHeight() {
-  const nav = document.querySelector('.navbar'); 
-  document.documentElement.style.setProperty('--navbar-height', nav.offsetHeight + 'px');
-}
-
-window.addEventListener('load', updateNavbarHeight);
-window.addEventListener('resize', updateNavbarHeight);
 </script>
 
 </body>
