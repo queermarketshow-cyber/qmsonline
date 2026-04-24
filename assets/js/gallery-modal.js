@@ -16,62 +16,69 @@ function openFolderModal(folder) {
   const grid = modal.querySelector('.modal-grid');
   const carousel = modal.querySelector('.carousel');
 
-  /* --- CAPTION ALBUM + FOTOGRAFI --- */
+  /* --- CAPTION ALBUM + FOTOGRAFI (LOGICA AVANZATA) --- */
   const titleEl = modal.querySelector('.modal-album-title');
   const phEl = modal.querySelector('.modal-photographer');
 
   if (titleEl) titleEl.textContent = folder.name || "";
 
   if (phEl) {
+    // Supporta sia folder.photographers (array/oggetto) che folder.photographer (stringa)
     const photographers = folder.photographers || folder.photographer || null;
+
     if (!photographers) {
       phEl.textContent = "";
     } else {
       let html = "pics by ";
+
+      // Caso 1: Stringa singola
       if (typeof photographers === "string") {
         html += photographers;
-      } else if (Array.isArray(photographers)) {
+      } 
+      // Caso 2: Array di fotografi
+      else if (Array.isArray(photographers)) {
         html += photographers
           .map(ph => {
             if (typeof ph === "string") return ph;
             if (typeof ph === "object" && ph.name) {
-              return ph.url ? `<a href="${ph.url}" target="_blank">${ph.name}</a>` : ph.name;
+              return ph.url 
+                ? `<a href="${ph.url}" target="_blank">${ph.name}</a>` 
+                : ph.name;
             }
             return "";
           })
           .filter(Boolean)
           .join(", ");
-      } else if (typeof photographers === "object" && photographers.name) {
-        html += photographers.url ? `<a href="${photographers.url}" target="_blank">${photographers.name}</a>` : photographers.name;
       }
+      // Caso 3: Oggetto singolo {name, url}
+      else if (typeof photographers === "object" && photographers.name) {
+        html += photographers.url 
+          ? `<a href="${photographers.url}" target="_blank">${photographers.name}</a>` 
+          : photographers.name;
+      }
+      
       phEl.innerHTML = html;
     }
   }
 
-  /* --- RESET GRIGLIA + CAROSELLO --- */
-  grid.innerHTML = '';
+  /* --- RENDER GRIGLIA IMMAGINI --- */
+  if (grid) {
+    grid.innerHTML = '';
+    folder.images.forEach((imgSrc, index) => {
+      const img = document.createElement('img');
+      img.src = `${folder.path}/${imgSrc}`;
+      img.loading = "lazy"; // Ottimizzazione caricamento
+      img.addEventListener('click', () => openCarousel(index));
+      grid.appendChild(img);
+    });
+    grid.classList.remove('hidden');
+  }
+
+  // Reset carosello all'apertura di una nuova cartella
   if (carousel) {
     carousel.classList.add('hidden');
     carousel.classList.remove('fullscreen');
   }
-
-  /* --- GENERA GRIGLIA IMMAGINI (Safe Logic) --- */
-  folder.images.forEach((imgName, index) => {
-    const img = document.createElement('img');
-    img.src = `${folder.path}/${imgName}`;
-    img.className = 'grid-img';
-    img.alt = `${folder.name} ${index + 1}`;
-    
-    // PERFORMANCE: Lazy load per le immagini nella griglia modale
-    img.loading = "lazy";
-
-    img.addEventListener('click', () => {
-      // FIX: Chiamiamo openCarousel invece di un inesistente openLightbox
-      openCarousel(index);
-    });
-
-    grid.appendChild(img);
-  });
 
   modal.classList.remove('hidden');
   modal.classList.add('open');
@@ -81,27 +88,28 @@ function openFolderModal(folder) {
 }
 
 /* ============================================================
-   GESTIONE CHIUSURA
+   CHIUSURA MODALE
 ============================================================ */
 function closeGalleryModal() {
   const modal = document.getElementById('galleryModal');
   if (!modal) return;
 
-  const grid = modal.querySelector('.modal-grid');
   const carousel = modal.querySelector('.carousel');
-
-  if (grid) grid.classList.remove('hidden');
+  const grid = modal.querySelector('.modal-grid');
 
   if (carousel) {
     carousel.classList.add('hidden');
     carousel.classList.remove('fullscreen');
   }
+  if (grid) grid.classList.remove('hidden');
 
   modal.classList.remove('open');
   modal.classList.add('hidden');
 
+  // Ripristina lo scroll e pulisce lo stato
   document.body.style.overflow = '';
-  currentFolder = null; // Reset stato
+  currentFolder = null;
+  currentIndex = 0;
 }
 
 /* ============================================================
@@ -135,14 +143,31 @@ function updateCarousel() {
   img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
-/* --- UI CONTROLS --- */
-// Frecce disattivate come da tua richiesta, ma logica pronta per il futuro
-const modalEl = document.getElementById('galleryModal');
-if (modalEl) {
-    const prevBtn = modalEl.querySelector('.prev');
-    const nextBtn = modalEl.querySelector('.next');
-    if (prevBtn) prevBtn.style.display = "none";
-    if (nextBtn) nextBtn.style.display = "none";
+/* ============================================================
+   UI CONTROLS & EVENT LISTENER
+============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  const modalEl = document.getElementById('galleryModal');
+  if (!modalEl) return;
 
-    modalEl.querySelector('.close')?.addEventListener('click', closeGalleryModal);
-}
+  const closeBtn = modalEl.querySelector('.close');
+  const prevBtn = modalEl.querySelector('.prev');
+  const nextBtn = modalEl.querySelector('.next');
+
+  // Gestione chiusura
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeGalleryModal();
+    });
+  }
+
+  // Frecce (Nascondi se non vuoi navigazione nel carosello o riattiva se serve)
+  if (prevBtn) prevBtn.style.display = "none"; 
+  if (nextBtn) nextBtn.style.display = "none";
+
+  // Chiudi cliccando fuori dal contenuto (opzionale)
+  modalEl.addEventListener('click', (e) => {
+    if (e.target === modalEl) closeGalleryModal();
+  });
+});
