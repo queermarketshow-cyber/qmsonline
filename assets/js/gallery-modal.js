@@ -9,53 +9,35 @@ let currentIndex = 0;
 ============================================================ */
 function openFolderModal(folder) {
   currentFolder = folder;
-
   const modal = document.getElementById('galleryModal');
   if (!modal) return;
 
   const grid = modal.querySelector('.modal-grid');
   const carousel = modal.querySelector('.carousel');
-
-  /* --- CAPTION ALBUM + FOTOGRAFI --- */
   const titleEl = modal.querySelector('.modal-album-title');
   const phEl = modal.querySelector('.modal-photographer');
 
   if (titleEl) titleEl.textContent = folder.name || "";
 
+  // Gestione fotografi (stringa o array)
   if (phEl) {
     const photographers = folder.photographers || folder.photographer || null;
-
     if (!photographers) {
       phEl.textContent = "";
     } else {
       let html = "pics by ";
       if (typeof photographers === "string") {
         html += photographers;
-      } 
-      else if (Array.isArray(photographers)) {
+      } else if (Array.isArray(photographers)) {
         html += photographers
-          .map(ph => {
-            if (typeof ph === "string") return ph;
-            if (typeof ph === "object" && ph.name) {
-              return ph.url 
-                ? `<a href="${ph.url}" target="_blank">${ph.name}</a>` 
-                : ph.name;
-            }
-            return "";
-          })
-          .filter(Boolean)
+          .map(ph => (typeof ph === "object" ? (ph.url ? `<a href="${ph.url}" target="_blank">${ph.name}</a>` : ph.name) : ph))
           .join(", ");
-      }
-      else if (typeof photographers === "object" && photographers.name) {
-        html += photographers.url 
-          ? `<a href="${photographers.url}" target="_blank">${photographers.name}</a>` 
-          : photographers.name;
       }
       phEl.innerHTML = html;
     }
   }
 
-  /* --- RENDER GRIGLIA IMMAGINI --- */
+  // Render griglia immagini
   if (grid) {
     grid.innerHTML = '';
     folder.images.forEach((imgSrc, index) => {
@@ -68,38 +50,19 @@ function openFolderModal(folder) {
     grid.classList.remove('hidden');
   }
 
-  if (carousel) {
-    carousel.classList.add('hidden');
-    carousel.classList.remove('fullscreen');
-  }
+  if (carousel) carousel.classList.add('hidden');
 
   modal.classList.remove('hidden');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-/* ============================================================
-   CHIUSURA MODALE
-============================================================ */
 function closeGalleryModal() {
   const modal = document.getElementById('galleryModal');
   if (!modal) return;
-
-  const carousel = modal.querySelector('.carousel');
-  const grid = modal.querySelector('.modal-grid');
-
-  if (carousel) {
-    carousel.classList.add('hidden');
-    carousel.classList.remove('fullscreen');
-  }
-  if (grid) grid.classList.remove('hidden');
-
   modal.classList.remove('open');
   modal.classList.add('hidden');
-
   document.body.style.overflow = '';
-  currentFolder = null;
-  currentIndex = 0;
 }
 
 /* ============================================================
@@ -108,35 +71,46 @@ function closeGalleryModal() {
 function openCarousel(index) {
   currentIndex = index;
   const modal = document.getElementById('galleryModal');
-  if (!modal || !currentFolder) return;
-
   const carousel = modal.querySelector('.carousel');
   const img = modal.querySelector('.carousel-img');
-  if (!carousel || !img) return;
+
+  if (!carousel || !img || !currentFolder) return;
 
   img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
   carousel.classList.remove('hidden');
   carousel.classList.add('fullscreen');
+  if (modal.querySelector('.modal-grid')) modal.querySelector('.modal-grid').classList.add('hidden');
+}
 
-  const grid = modal.querySelector('.modal-grid');
-  if (grid) grid.classList.add('hidden');
+function nextSlide() {
+  if (!currentFolder) return;
+  currentIndex = (currentIndex + 1) % currentFolder.images.length;
+  updateCarousel();
+}
+
+function prevSlide() {
+  if (!currentFolder) return;
+  currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
+  updateCarousel();
+}
+
+function updateCarousel() {
+  const img = document.querySelector('.carousel-img');
+  if (img && currentFolder) {
+    img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
+  }
 }
 
 /* ============================================================
-   UI CONTROLS & EVENT LISTENER
+   CONTROLLI UI
 ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   const modalEl = document.getElementById('galleryModal');
   if (!modalEl) return;
 
-  const closeBtn = modalEl.querySelector('.close');
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeGalleryModal();
-    });
-  }
+  modalEl.querySelector('.close')?.addEventListener('click', closeGalleryModal);
+  modalEl.querySelector('.next')?.addEventListener('click', (e) => { e.stopPropagation(); nextSlide(); });
+  modalEl.querySelector('.prev')?.addEventListener('click', (e) => { e.stopPropagation(); prevSlide(); });
 
   modalEl.addEventListener('click', (e) => {
     if (e.target === modalEl) closeGalleryModal();
