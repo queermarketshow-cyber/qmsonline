@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trasparenza – Queer Market Show APS</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    /* --- STILE PAGINA TRASPARENZA --- */
+
+    body {
+      background: #000;
+      color: #ddd;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .trasparenza-page {
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+
+    .trasparenza-page h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #fff;
+      text-align: left;
+    }
+
+    .trasparenza-intro {
+      color: #aaa;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    .trasparenza-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .trasparenza-list li {
+      margin-bottom: 12px;
+    }
+
+    .trasparenza-list a {
+      color: #888;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .trasparenza-list a:hover {
+      color: #bbb;
+      text-decoration: underline;
+    }
+
+    /* --- FOOTER --- */
+    .qms-footer {
+      width: 100%;
+      background: #000;
+      color: #555;
+      padding: 30px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin-top: 60px;
+    }
+
+    .qms-footer-left {
+      text-align: left;
+      text-align-last: left;
+    }
+
+    .qms-footer-right {
+      text-align: right;
+      text-align-last: right;
+    }
+
+    .qms-footer strong {
+      color: #666;
+      font-weight: 600;
+    }
+
+    .qms-footer a {
+      color: #666;
+      text-decoration: none;
+    }
+
+    .qms-footer a:hover {
+      color: #888;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      .qms-footer {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .qms-footer-left,
+      .qms-footer-right {
+        text-align: center;
+        text-align-last: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  STATUTO  DELL'ASSOCIAZIONE
+“QUEER MARKET SHOW APS”
+
+DENOMINAZIONE, SEDE, DURATA, OGGETTO SOCIALE
+
+Art. 1 Denominazione e sede
+È costituita l’associazione di promozione sociale ai sensi del Codice del Terzo Settore (D.Lgs 117/2017, di seguito indicato come C.T.S.) “QUEER MARKET SHOW A.P.S.” (denominata QMS nel presente testo) con sede legale in Lecce (LE), via Bradano n.1. Il trasferimento della sede legale non comporta modifica statutaria, ma l’obbligo di comunicazione agli uffici competenti.
+
+Art. 2 Assenza scopo di lucro-divieto distribuzione utili
+L’Associazione è un centro di vita associativa, autonomo, pluralista, apartitico, aconfessionale a carattere volontario, democratico ed ha durata illimitata; non persegue finalità di lucro e non è pertanto consentita la distribuzione anche indiretta di proventi, di utili o di avanzi di gestione nonché fondi e riserve durante la vita dell'Associazione, salvo che la destinazione o la distribuzione non siano imposte dalla legge. 
+
+Art. 3 Finalità e Attività
+L’associazione esercita in via esclusiva o principale una o più attività di interesse generale per il perseguimento, senza scopo di lucro, di finalità civiche, solidaristiche e di utilità sociale.
+Lo scopo principale dell’Associazione è promuovere socialità, mutualismo e partecipazione e contribuire alla crescita culturale e civile dei propri soci, come dell’intera comunità. 
+Sono finalità prioritarie dell’Associazione:
+la promozione del benessere delle persone e il riconoscimento del diritto alla felicità;
+la promozione della cultura, delle sue forme espressive, della creatività e delle attitudini creative, degli spazi per l'espressione, la formazione, la creazione, la produzione e fruizione culturale;
+il riconoscimento dei diritti culturali, la promozione dell'accesso universale alla conoscenza, al sapere, all'educazione, alla cultura, all’arte, all'uso delle nuove tecnologie della comunicazione, la promozione dell'inclusione digitale (e-Inclusion);
+promozione della cultura cinematografica, teatrale e audiovisiva, ai sensi della L. 220/2016, attraverso proiezioni, dibattiti, conferenze, corsi, eventi, spettacoli, pubblicazioni e iniziative di formazione del pubblico riferite particolarmente al mondo giovanile e alle comunità marginalizzate;
+la promozione del volontariato inteso come partecipazione democratica alle azioni di solidarietà, di cooperazione e di cittadinanza, sia a livello locale che internazionale;
+la promozione di un approccio intersezionale al genere nell'Associazione e nella società, la piena valorizzazione delle potenzialità tutte le tipologie di identità, delle loro esigenze e del loro ruolo come elemento fondante di una società giusta e migliore per tutti, la lotta a ogni forma di discriminazione e di violenza;
+l'educazione alla responsabilità civile ed alla cittadinanza, la promozione della partecipazione, dell'inclusione e della coesione sociale, della democrazia e dei diritti a livello nazionale, dell'Unione Europea e internazionale;
+la promozione e l'ampliamento dei luoghi, delle occasioni e delle attività ludiche, di socialità, accademiche e artistiche con finalità formative, didattiche, ricreative e culturali, finalizzate alla crescita individuale e collettiva.
+l'affermazione della cultura della legalità e la lotta alle mafie, a tutte le criminalità organizzate, alla corruzione e agli abusi di potere, anche attraverso l'uso sociale dei beni confiscati;
+l’affermazione della cultura democratica antifascista e dei valori della Resistenza, anche perpetuandone la memoria collettiva;
+l'impegno per un movimento di cittadinanza mondiale, la costruzione di pratiche di solidarietà e cooperazione tra comunità, anche a livello internazionale; la costruzione di relazioni e reti a livello europeo e mondiale per l'affermazione della giustizia sociale e la globalizzazione dei diritti umani;
+la promozione di attività educative e formative permanenti lungo l'arco della vita, formali, non formali, anche a carattere professionale; sono comprese in questo punto anche le attività di informazione, formazione e aggiornamento anche professionale rivolte al mondo della scuola, ai/alle docenti e agli/alle studenti/esse di ogni ordine e grado, in collaborazione con i Ministeri, le istituzioni scolastiche territoriali e le istituzioni decentrate di competenza e riferimento. Tali attività sono coerenti con il Quadro Europeo delle Qualifiche (QEQ);
+la promozione di politiche finalizzate alla valorizzazione e messa a disposizione di luoghi e spazi che possano favorire l'autorganizzazione dei/delle cittadini/e, come parte integrante del diritto di associazione;
+la promozione della cultura cinematografica e audiovisiva, ai sensi della L. 220/2016, attraverso proiezioni, dibattiti, conferenze, corsi, pubblicazioni e iniziative di formazione del pubblico riferite particolarmente al mondo giovanile e alle istituzioni scolastiche;
+la promozione del protagonismo delle nuove generazioni e dell'associazionismo giovanile;
+la promozione e la tutela dei diritti dell'infanzia e dell'adolescenza, attraverso il pieno riconoscimento della cittadinanza delle giovani generazioni, per dare sostegno alla loro soggettività positiva, finalizzata alla realizzazione di adeguati spazi di vita e all'attivazione di efficaci strumenti di partecipazione;
+la promozione e la tutela dei diritti delle persone anziane, di percorsi finalizzati a sostenere l'invecchiamento attivo e la piena partecipazione delle persone anziane alla vita familiare, sociale, economica, lavorativa, creativa salvaguardando percorsi di dignità e autonomia e contrastando ogni forma di emarginazione e di esclusione sociale; la tutela delle fragilità ed il sostegno alle relazioni intergenerazionali;
+la promozione della cultura della convivenza civile, delle pari opportunità dei diritti, delle differenze culturali, etniche, religiose, di genere e di identità di genere, della tutela delle diversità linguistiche, nonché della libertà di orientamento sessuale e dell'antiproibizionismo;
+la promozione della laicità, quale fondamento dello stato di Diritto e principio di democrazia, difesa del pari diritto e riconoscimento della libertà di coscienza, rivendicando la separazione tra la sfera politica e quella religiosa e l'autonomia decisionale dello Stato nei confronti di ogni condizionamento ideologico, morale o religioso che ne potrebbe compromettere o limitare l'azione;
+la promozione dei diritti e lo sviluppo di forme di prevenzione e di lotta contro ogni forma di disagio, esclusione, emarginazione, discriminazione, razzismo, xenofobia, omobilesbotransafobia, sessismo, intolleranza, violenza e censura;
+la promozione di una società aperta e multiculturale, dove diversità e interculturalità siano una risorsa. La promozione del protagonismo, dell'autorganizzazione e dell’autodeterminazione dei/delle migranti e delle minoranze;
+il ripudio della guerra e l'impegno per l'affermazione di una cultura nonviolenta e pacifista e della ricerca della soluzione nonviolenta dei conflitti, l'azione politica per il disarmo, la riconversione industriale bellica e la riduzione delle spese militari;
+la promozione e la pratica delle forme di servizio civile universale e regionale e di impiego nei progetti all'estero previste dalla legislazione nazionale, dalle legislazioni regionali e da quella europea;
+la difesa e l'innovazione dello Stato sociale in una prospettiva di crescita del ruolo dell'economia sociale, dei soggetti non profit e del Terzo settore; la promozione della finanza etica, dell'educazione al consumo critico, la valorizzazione della pratica della filiera corta;
+la promozione di politiche di difesa, di sostegno e valorizzazione delle persone con disabilità;
+la tutela e la promozione dei diritti delle persone in esecuzione penale e la promozione del loro reinserimento sociale;
+l'impegno a favore della realizzazione di una società ecosostenibile, che faccia della difesa e della salvaguardia dell'ambiente, dell'ecosistema, dell'economia circolare e della giustizia climatica, l'architrave di una società e di un'economia sostenibile; la promozione delle fonti energetiche rinnovabili e il sostegno alla formazione di una coscienza ambientale;
+l'impegno per la difesa della dignità degli animali, contro ogni forma di violenza esercitata nei loro confronti, dal fenomeno dell'abbandono alle pratiche della vivisezione e dei combattimenti, e per l'attuazione di attività di ricovero e iniziative per l'affidamento e l'adozione;
+la promozione del turismo sociale e sostenibile e dei viaggi a valenza culturale e formativa come forma di approfondimento e arricchimento della conoscenza tra le persone e dei territori in cui vivono, anche attraverso la gestione diretta di servizi e/o strutture ricettive quali, a titolo esemplificativo e non esaustivo, ostelli, case per ferie, campeggi e rifugi;
+la promozione della mobilità e degli scambi soprattutto dei/delle e per i/le giovani, dei campi di lavoro, impegno e conoscenza, della formazione e degli stage, in Italia e all'estero, del Servizio Volontario Europeo e dei programmi promossi dalla Commissione Europea;
+la tutela dei diritti dei lavoratori e delle lavoratrici, la lotta al precariato, alla discriminazione, ad ogni forma di sfruttamento, al caporalato e al traffico degli esseri umani, la promozione del diritto al lavoro, il sostegno e l'assistenza ai/alle lavoratori/trici e alla genitorialità, in particolare ai/alle giovani, alle donne, agli/alle immigrati/e, ai/alle precari/e e ai/alle pensionati/e, in armonia con le iniziative di accoglienza, assistenza, orientamento e sostegno già vive e operanti sul territorio; la promozione della cultura della salute e della sicurezza degli ambienti di lavoro e di vita;
+la promozione di servizi rivolti alla comunità e alle persone, che rappresentino nuove opportunità di inserimento sociale, di affermazione di diritti, di risposta ai bisogni che si esprimono nel territorio;
+la promozione della più ampia partecipazione delle organizzazioni aderenti alla programmazione territoriale delle politiche sociali;
+favorire il corretto mantenimento del benessere psico‐fisico nella sua totalità.
+
+QMS persegue le finalità civiche, solidaristiche e di utilità sociale in favore dei propri associati, di loro familiari o di  terzi,  avvalendosi in modo prevalente dell’attività di volontariato dei propri associati, mediante lo svolgimento delle seguenti attività di interesse generale di cui all’art. 5 del CTS:
+educazione, istruzione e formazione professionale, ai sensi della legge 28 marzo 2003, n. 53, e successive modificazioni, nonché le attività culturali di interesse sociale con finalità educativa;
+interventi e servizi finalizzati alla salvaguardia e al miglioramento delle condizioni dell’ambiente e all’utilizzazione accorta e razionale delle risorse naturali, con esclusione dell’attività, esercitata abitualmente, di raccolta e riciclaggio dei rifiuti urbani, speciali e pericolosi;
+interventi di tutela e valorizzazione del patrimonio culturale e del paesaggio, ai sensi del decreto legislativo 22 gennaio 2004, n. 42, e successive modificazioni;
+organizzazione e gestione di attività culturali, artistiche o ricreative di interesse sociale, incluse attività, anche editoriali, di promozione e diffusione della cultura e della pratica del volontariato e delle attività di interesse generale di cui all'art. 5 CTS;
+organizzazione e gestione di attività turistiche di interesse sociale e culturale;
+formazione extra-scolastica, finalizzata alla prevenzione della dispersione scolastica e al successo scolastico e formativo, alla prevenzione del bullismo e al contrasto della povertà educativa;
+organizzazione e gestione di attività sportive dilettantistiche, anche in collaborazione con enti di promozione sportiva, associazioni e federazioni sportive, ETS, istituzioni pubbliche e private;
+promozione della cultura della legalità, della pace tra i popoli, della nonviolenza e della difesa non armata;
+promozione e tutela dei diritti umani, civili, sociali e politici, nonché dei diritti dei consumatori e degli utenti delle attività di interesse generale di cui all'art. 5 del CTS, promozione delle pari opportunità e delle iniziative di aiuto reciproco, incluse le banche dei tempi di cui all’articolo 27 della legge 8 marzo 2000, n. 53, e i gruppi di acquisto solidale di cui all’articolo 1, comma 266, della legge 24 dicembre 2007, n. 244;
+riqualificazione di beni pubblici inutilizzati o di beni confiscati alla criminalità organizzata.
+L’Associazione, conformemente a quanto stabilito dall’art. 6 del D. Lgs. n. 117/2017 e successive modifiche ed integrazioni, potrà esercitare anche attività diverse da quelle sopra riportate, che siano secondarie e strumentali alle attività di interesse generale esercitate, secondo criteri e limiti stabiliti dal Decreto Ministeriale citato nel suddetto articolo. Il Consiglio Direttivo è delegato ad individuare tali attività diverse da svolgere nei limiti di cui al comma precedente.
+L’Associazione, conformemente a quanto stabilito dall’art. 4 del D. Lgs n. 117/2017, realizza le attività di interesse generale sopra individuate con modalità erogativa, mutualistica, economica, secondo le determinazioni del Consiglio Direttivo.
+L’Associazione può esercitare, a norma dell’art. 7 del Codice del Terzo Settore, anche attività di raccolta fondi, attraverso la richiesta a terzi di donazioni, lasciti e contributi di natura non corrispettiva, al fine di finanziare le proprie attività di interesse generale e nel rispetto dei principi di verità, trasparenza e correttezza nei rapporti con i sostenitori e con il pubblico.
+L'Associazione può svolgere attività di somministrazione ai/lle soci/e di alimenti e bevande come momento ricreativo e di socialità, complementare e strumentale all’attuazione degli scopi istituzionali e delle attività di interesse generale, in conformità della normativa vigente in materia.
+
+ASSOCIATI - VOLONTARI - LAVORO RETRIBUITO
+Art. 4 Ammissione e numero degli associati
+Possono aderire a QMS le persone che approvano le finalità e lo statuto delle strutture di base cui aderiscono, indipendentemente dalla propria identità di genere e orientamento sessuale, nazionalità, appartenenza etnica e religiosa.
+Il numero degli associati è illimitato ma, in ogni caso, non può essere inferiore al minimo stabilito dalla Legge.
+Possono far parte dell’Associazione oltre alle persone fisiche, anche altri enti del terzo settore o senza scopo di lucro, a condizione che il loro numero non sia superiore al cinquanta per cento del numero delle Associazioni di promozione sociale, che intendono contribuire al raggiungimento esclusivo degli scopi previsti dal presente Statuto e che siano in possesso dei seguenti requisiti:
+condividere gli scopi e la finalità dell’Associazione;
+accettare il presente Statuto ed i Regolamenti Interni.
+La partecipazione alla vita associativa non potrà essere temporanea.
+Le organizzazioni private partecipano nella persona di un loro rappresentante.
+
+Art. 5) Diritti e doveri degli associati
+Tra gli associati vige una disciplina uniforme del rapporto associativo e delle modalità associative ed a tutti spetta l’elettorato attivo e passivo.
+Lo status di socio, una volta acquisito, ha carattere permanente, e può venir meno solo nei casi previsti dall’articolo relativo alla perdita di qualifica di socio. Non sono pertanto ammesse iscrizioni che violino tale principio, introducendo criteri di ammissione strumentalmente limitativi di diritti o a termine. 
+I nominativi dei soci sono annotati nel libro soci dell’Associazione. 
+Tutti gli associati regolarmente iscritti nel libro dei soci da almeno tre mesi possono intervenire con diritto di voto nelle Assemblee per l’approvazione e le modificazioni dello statuto e dei regolamenti, e per la nomina degli organi direttivi dell’associazione.
+Gli/le associati/e hanno diritto a:
+concorrere all'elaborazione del programma e partecipare alle attività promosse dall'associazione;
+approvare il documento economico di previsione e il rendiconto economico e finanziario, o il bilancio
+consuntivo, delle diverse articolazioni dell'associazione;
+eleggere gli organismi di direzione, di garanzia e di controllo ed essere eletti/e negli stessi;
+approvare le modifiche allo statuto, nonché l’adozione e la modifica dei regolamenti.
+Gli associati hanno diritto di esaminare i libri sociali.
+Gli/le associati/e sono tenuti/e a:
+osservare lo statuto, i regolamenti, il codice etico, e le delibere degli organismi dirigenti;
+versare alle scadenze stabilite le quote sociali decise dagli organismi dirigenti;
+rimettere la risoluzione di eventuali controversie interne al giudizio degli organismi di garanzia dell'Associazione.
+
+Art. 6) Modalità di ammissione
+Per essere ammessi a socio è necessario presentare al Consiglio Direttivo domanda di adesione all’Associazione con l’osservanza delle seguenti modalità ed indicazioni:
+indicare nome e cognome, o denominazione per le persone giuridiche, luogo e data di nascita, luogo di residenza, indirizzo e-mail cui ricevere tutte le comunicazioni sociali.
+dichiarare di aver preso visione e di attenersi al presente Statuto ed alle deliberazioni degli organi sociali.
+E’ compito del Consiglio Direttivo dell’Associazione deliberare, entro trenta giorni, su tale domanda. Il Consiglio delibera sulla domanda secondo criteri non discriminatori, coerenti con le finalità perseguite e le attività di interesse generale svolte. La deliberazione di ammissione è comunicata all’interessato e annotata nel libro degli associati. 
+In caso di non ammissione il Consiglio Direttivo deve, entro sessanta giorni, motivare la deliberazione di rigetto della domanda di ammissione e comunicarla agli interessati
+In caso di non ammissione l’interessato potrà presentare ricorso, entro i successivi sessanta giorni, all’Assemblea Ordinaria la quale, se non appositamente convocata, nella successiva convocazione, si pronuncerà in modo definitivo.
+
+Art. 7) Quota associativa
+I soci sono tenuti al pagamento della quota annuale di associazione stabilita dal Consiglio Direttivo e rappresenta unicamente un versamento periodico vincolante a sostegno economico dell'Associazione; non costituisce pertanto in alcun modo titolo di proprietà o di partecipazione a proventi e non è in nessun caso rivalutabile, rimborsabile o trasmissibile.
+La quota associativa deve essere versata entro i termini previsti, pena la decadenza dello status di socio per morosità.
+L’adesione all’Associazione non comporta obblighi di finanziamento o di esborso ulteriori rispetto al versamento originario. E’ comunque facoltà degli aderenti all’Associazione di effettuare versamenti ulteriori rispetto a quelli ordinari.
+
+Art. 8) Perdita della qualifica di associato
+Lo status di socio si perde per recesso, morosità, esclusione. 
+L’associato può sempre recedere dall’associazione. Chi intende recedere dall’associazione deve comunicare in forma scritta la sua decisione al Consiglio Direttivo, il quale dovrà adottare una apposita deliberazione da comunicare adeguatamente all’associato. La dichiarazione di recesso ha effetto con lo scadere dell’anno in corso, purché sia fatta almeno 3 mesi prima.
+La decadenza per morosità è deliberata dal Consiglio Direttivo in caso di mancato versamento della quota associativa annuale entro 180 giorni dall’inizio dell’esercizio sociale. Il Consiglio Direttivo comunica tale obbligo a tutti gli associati morosi entro un congruo termine per poter provvedere al versamento. L’associato decaduto può presentare una nuova domanda di ammissione ai sensi dell’art. 6 del presente Statuto.
+I soci sono espulsi per i seguenti motivi:
+quando non ottemperino alle disposizioni del presente Statuto, dei Regolamenti Interni, o alle deliberazioni prese dagli organi sociali;
+quando, in qualunque modo, arrechino danni morali o materiali all’Associazione ovvero assumano comportamenti o iniziative in contrasto con le finalità dell’Associazione o tali da lederne l’onorabilità, il decoro ed il buon nome.
+Le espulsioni sono decise dal Consiglio Direttivo a maggioranza dei suoi membri. Il socio espulso, avverso tale decisione, può presentare ricorso in assemblea dei soci, la quale, se non appositamente convocata, nella successiva convocazione si pronuncerà in maniera definitiva.
+
+Art. 9) Volontari
+L’associazione si avvale prevalentemente delle attività prestate in forma volontaria, libera e gratuita dai propri associati per il perseguimento dei fini istituzionali.
+I volontari sono persone che per loro libera scelta svolgono, per il tramite dell’associazione, attività in favore della comunità e del bene comune, mettendo a disposizione il proprio tempo e le proprie capacità.
+L’attività del volontario non può essere retribuita in alcun modo nemmeno dal beneficiario. Al volontario possono essere rimborsate dall’associazione le spese effettivamente sostenute e documentate per l’attività prestata, entro limiti massimi e alle condizioni preventivamente stabilite da apposito regolamento e/o da delibera dell’Assemblea dei soci. Sono vietati in ogni caso rimborsi di tipo forfetario.
+L’Associazione assicura i propri volontari contro gli infortuni e le malattie connesse allo svolgimento dell’attività di volontariato, nonché per la responsabilità civile verso terzi.
+
+Art. 10) Lavoro retribuito
+L’associazione può assumere lavoratori dipendenti o avvalersi di prestazioni di lavoro autonomo o di altra natura, anche dei propri associati, fatto comunque salvo quanto previsto dall’art 17, comma 5, del D.Lgs. 117 del 03 Luglio 2017, solo quando ciò sia necessario ai fini dello svolgimento dell’attività di interesse generale e al perseguimento delle finalità. 
+In ogni caso, il numero dei lavoratori impiegati nell’attività non può essere superiore al 50% dl numero dei volontari o al 5% del numero degli associati conformemente a quanto stabilito dall’art. 36 del Codice del Terzo Settore.
+
+ORGANI DELL’ASSOCIAZIONE
+Art. 11) Organi dell’associazione
+Gli organi dell’Associazione sono:
+L’Assemblea dei Soci;
+Il Consiglio Direttivo;
+Il Presidente;
+Organo di controllo, solo se obbligatorio per legge (superamento limiti ex art. 30, D. Lgs. n. 117/2017) o se facoltativamente istituito dall’Assemblea dei soci. 
+Tutte le cariche sociali sono assunte a titolo gratuito.
+
+Art. 12) Assemblea dei soci: competenza
+L’Assemblea, ordinaria e straordinaria, è l’organo deliberativo dell’Associazione.
+All’assemblea, ordinaria e straordinaria, hanno diritto di voto tutti gli associati in regola con il pagamento della quota associativa e che siano iscritti da almeno tre mesi nel libro degli associati, conformemente a quanto stabilito dall’art. 24 del D. Lgs. n. 117/2017
+All’assemblea ordinaria dei soci spettano i seguenti compiti:
+discutere e deliberare sui bilanci e sulle relazioni del Consiglio Direttivo;
+eleggere e revocare i membri del consiglio direttivo e degli altri organi dell’associazione;
+approvare le linee generali del programma di attività dell’associazione;
+approvare l’eventuale regolamento dei lavori assembleari
+deliberare sulla responsabilità dei componenti degli organi sociali e promuovere azione di responsabilità nei loro confronti;
+deliberare in merito agli eventuali ricorsi presentati dai Soci espulsi
+deliberare su tutte le questioni attinenti la gestione sociale e su ogni altro argomento ordinario per cui sia chiamata a decidere;
+All’assemblea straordinaria spettano i seguenti compiti:
+deliberare sullo scioglimento, la devoluzione del patrimonio, la trasformazione, la fusione o scissione dell’associazione
+deliberare sulle proposte di modifica dello statuto associativo.
+La comunicazione della convocazione deve essere effettuata in forma scritta con qualunque mezzo (consegna brevi manu, lettera, e-mail, fax) purché vi possa essere un riscontro scritto dell’avvenuta comunicazione, contenente i punti all’ordine del giorno, la data, l’ora ed il luogo dell’Assemblea, nonché la data, l’ora ed il luogo dell’eventuale Assemblea di seconda convocazione.
+
+Art. 13) Convocazione assemblea soci
+L’Assemblea Ordinaria deve essere convocata dal Presidente del Consiglio Direttivo, almeno una volta l’anno per l’approvazione del bilancio consuntivo entro 120 giorni dalla chiusura dell’esercizio. Per motivi particolari il bilancio consuntivo può essere approvato entro sei mesi dalla chiusura dell’esercizio.
+L’Assemblea, ordinaria e straordinaria, è convocata ogni qual volta il Presidente lo ritenga opportuno oppure quando ne sia fatta richiesta motivata al Consiglio Direttivo da almeno 1/10 (un decimo) dei soci regolarmente iscritti o da almeno 1/3 (un terzo) dei Consiglieri oppure dall’Organo di controllo.
+L’Assemblea, sia ordinaria che straordinaria, è presieduta da un Presidente nominato dall’Assemblea stessa il quale nomina a sua volta fra i soci un segretario verbalizzante. Spetta al Presidente dell’Assemblea constatare la regolarità delle deleghe ed, in generale, il diritto di intervenire in Assemblea.
+Il verbale redatto in occasione di ciascuna assemblea verrà firmato dal Presidente, dal Segretario, ed eventualmente dagli scrutatori in caso di votazioni.
+
+Art. 14) Validità e partecipazione assemblea soci
+Per la validità delle delibere assembleari, si fa riferimento all’art. 21 cod. civ.
+Ciascun associato può farsi rappresentare nell’assemblea da altro associato mediante delega scritta, anche in calce all’avviso di convocazione. 
+Ciascun associato può rappresentare, oltre a se stesso, sino ad un massimo di altri due associati.
+Nelle deliberazioni che riguardano la loro responsabilità gli amministratori non hanno diritto di voto. 
+L’Assemblea ordinaria è regolarmente costituita in prima convocazione se è presente la maggioranza degli iscritti aventi diritto di voto; in seconda convocazione, da tenersi almeno con un giorno di distanza dalla prima, è regolarmente costituita qualunque sia il numero di soci intervenuti.
+L’assemblea straordinaria sarà regolarmente costituita con la presenza di almeno i 3/4 (trequarti) degli associati in prima convocazione e con la presenza della metà più uno degli associati in seconda convocazione.
+L’Assemblea ordinaria e straordinaria, sia in prima che in seconda convocazione, delibera a maggioranza dei presenti; per deliberare lo scioglimento dell’associazione e la devoluzione del patrimonio, si rinvia a quanto previsto dal successivo articolo 29 del presente statuto.
+
+Art. 14 bis) Assemblea in videoconferenza
+L'assemblea, sia ordinaria che straordinaria, può riunirsi anche mediante videoconferenza, sempre che tutti i partecipanti siano identificati e sia loro consentito di seguire la discussione in modo simultaneo, di intervenire in tempo reale alla trattazione degli argomenti affrontati e di partecipare alla votazione. L'Assemblea si considera tenuta nel luogo in cui si trova il Presidente, dove pure deve trovarsi il segretario della riunione, onde consentire la stesura e la sottoscrizione del verbale sul relativo libro. Se nel corso della riunione venisse sospeso il collegamento, la stessa verrà dichiarata sospesa dal Presidente o da colui che ne fa le veci, e le decisioni prese fino alla sospensione saranno valide.
+
+Art. 15) Principio del voto singolo
+Le votazioni possono avvenire per alzata di mano o a scrutinio segreto, quando ne faccia richiesta almeno un decimo dei presenti. Per l’elezione delle cariche sociali, la votazione avviene a scrutinio segreto.
+Le votazioni avvengono sempre sulla base del principio del voto singolo di cui all’articolo 2538, secondo comma, del codice civile.
+
+Art. 16) Consiglio direttivo
+Il Consiglio Direttivo è composto da un numero dispari di membri (minimo tre), eletti dall’Assemblea fra i soci, e resta in carica per tre esercizi.
+I membri del Consiglio sono rieleggibili. In caso di dimissioni di un componente del Consiglio Direttivo, viene cooptato il primo dei non eletti; il consigliere così eletto rimane in carica fino alla successiva assemblea che può ratificare la nomina.
+Nel caso in cui l’Assemblea dei soci non abbia provveduto ad individuare le relative cariche al momento delle elezioni, nella sua prima seduta il Consiglio Direttivo elegge fra i suoi membri il Presidente, il VicePresidente, il Segretario e il Tesoriere.
+
+Art. 17) Riunioni del consiglio direttivo
+Il Consiglio Direttivo si riunisce ogni qualvolta il Presidente o la maggioranza dei propri componenti lo ritengano necessario, ed è presieduto dal Presidente o, in sua assenza, dal Vicepresidente.
+Le riunioni sono valide con la presenza della maggioranza dei componenti; le deliberazioni si adottano a maggioranza semplice. Nel caso in cui sia composto da soli tre membri esso è validamente costituito e delibera quando sono presenti tutti i tre componenti.
+Il Consiglio Direttivo può attribuire ad uno o più dei suoi membri il potere di compiere determinati atti o categorie di atti in nome e per conto dell’Associazione.
+
+Art. 18) Consiglio direttivo: competenze
+Il Consiglio Direttivo : 
+redige i programmi di attività sociale previsti dallo Statuto sulla base delle linee approvate dall’Assemblea dei soci; 
+cura l’esecuzione delle deliberazioni dell’Assemblea; 
+redige i bilanci da sottoporre all’approvazione dell’Assemblea; 
+stipula tutti gli atti e i contratti di ogni genere inerenti all’attività sociale; 
+nomina e revoca dirigenti, collaboratori, consulenti, dipendenti, personale ed emana ogni provvedimento riguardante il personale in genere; 
+delibera circa l’ammissione e l’espulsione dei soci (salvo ricorso dell’interessato all’assemblea dei soci);
+determina l’ammontare delle quote annue associative e le modalità di versamento;
+delibera l’eventuale svolgimento di attività diverse, e ne documenta il carattere secondario e strumentale rispetto alle attività di interesse generale;
+ratifica o respinge i provvedimenti di urgenza adottati dal Presidente;
+svolge tutte le altre attività necessarie e funzionali alla gestione sociale.
+
+Art. 19) Convocazioni consiglio direttivo
+Il Consiglio si riunisce tutte le volte che il Presidente lo ritenga necessario oppure quando ne sia fatta richiesta da almeno 2/3 (due terzi) dei membri e comunque almeno una volta ogni tre mesi.
+La convocazione avverrà nelle forme che il Consiglio Direttivo riterrà opportuno rispettando nei casi ordinari un preavviso di almeno otto giorni; in caso di urgenza potrà essere convocato anche telefonicamente.
+Il Consiglio è presieduto dal Presidente, ed in sua assenza, dal Vice Presidente.
+
+Art. 20) Presidente -rappresentanza legale
+Al Presidente del Consiglio Direttivo compete la legale rappresentanza dell’Associazione e la firma sociale. Egli presiede e convoca il Consiglio Direttivo; sovrintende alla gestione amministrativa ed economica dell’Associazione. In caso di assenza o di impedimento del Presidente tutte le sue mansioni spettano al Vicepresidente.
+Al Presidente dell’Associazione compete, sulla base delle direttive emanate dall’Assemblea e dal Consiglio Direttivo, al quale comunque il Presidente riferisce circa l’attività compiuta, l’ordinaria amministrazione dell’Associazione; in casi eccezionali di necessità e urgenza il Presidente può anche compiere atti di straordinaria amministrazione ma in tal caso deve contestualmente convocare il Consiglio Direttivo per la ratifica del suo operato.
+Il Presidente convoca l’Assemblea e il Consiglio Direttivo, ne cura l’esecuzione delle relative deliberazioni, sorveglia il buon andamento amministrativo dell’Associazione, verifica l’osservanza dello statuto e dei regolamenti, ne promuove la riforma ove se ne presenti la necessità.
+
+Art. 21) il segretario e il tesoriere
+Il Segretario cura l’attività amministrativa dell’associazione. Tiene aggiornati i libri sociali (verbali assemblee, consiglio direttivo, registro degli associati) e cura la corrispondenza dell’associazione.
+Il Tesoriere tiene aggiornata la contabilità e cura la conservazione della relativa documentazione, tiene i registri contabili, cura gli incassi ed i pagamenti dell’associazione in conformità alle decisioni del Consiglio Direttivo.
+
+Art. 22) L’organo di controllo
+L’Organo di Controllo, anche monocratico, è nominato al ricorrere dei requisiti previsti dalla legge o se facoltativamente istituito dall’assemblea. Nel caso di organo collegiale esso si compone di tre membri effettivi e due supplenti eletti dall’Assemblea anche tra persone non socie. 
+L’Organo di Controllo elegge, nella sua prima riunione, nel suo seno un Presidente che convoca e presiede le riunioni.
+L’Organo di Controllo potrà essere anche monocratico conformemente a quanto stabilito dall’art. 30, comma 2 del D.Lgs. n. 117/2017.
+I componenti dell’Organo di controllo, ai quali si applica l’art. 2399 del Codice Civile, devono essere scelti tra le categorie di soggetti di cui al co. 2, art. 2397 del Codice Civile. Nel caso di organo collegiale i predetti requisiti devono essere posseduti da almeno uno dei componenti. 
+L’Organo di Controllo: 
+vigila sull’osservanza della legge e dello statuto e sul rispetto dei principi di corretta amministrazione, anche con riferimento alle disposizioni del D. Lgs. n 231/2001, qualora applicabili, nonché sull’assetto organizzativo, amministrativo e contabile e sul suo concreto funzionamento; 
+esercita il controllo contabile nel caso in cui non sia nominato un soggetto incaricato della revisione legale dei conti o nel caso in cui un suo componente sia un revisore legale iscritto nell’apposito registro; 
+esercita compiti di monitoraggio dell’osservanza delle finalità civiche, solidaristiche e di utilità sociale. 
+L’Organo di Controllo può, nell’ambito delle sue funzioni, assistere alle riunioni del Consiglio Direttivo.
+L’Organo di controllo, dura in carica tre esercizi ed i relativi membri sono rieleggibili.
+Per quanto non espressamente previsto nel presente statuto si rimanda alla disciplina di cui agli artt. 30 e 31 del D. Lgs. n. 117/2017
+
+PATRIMONIO DELL’ASSOCIAZIONE
+Art. 23) Il patrimonio e le risorse economiche
+Il fondo patrimoniale dell’Associazione è indivisibile ed è costituito: 
+dal patrimonio mobiliare ed immobiliare di proprietà dell’Associazione;
+eventuali fondi di riserva costituiti con l’eccedenza di bilancio;
+Le risorse economiche dell’Associazione sono costituite da:
+dalle quote associative, dai contributi annuali e straordinari degli associati;
+dai contributi dei privati, erogazioni e lasciti diversi;
+dai contributi dell’Unione Europea o di organismi internazionali, dello Stato, degli enti o istituzioni pubbliche, finalizzati al sostegno di specifiche e documentate attività o progetti;
+dalle rendite del patrimonio mobiliare ed immobiliare di proprietà dell’Associazione;
+da rimborsi derivanti da convenzioni con Enti Pubblici;
+contributi, rimborsi, proventi delle cessioni di beni e servizi agli associati e ai terzi, nello svolgimento di attività di interesse generale, accessorie e diverse che siano conformi a quanto previsto dal Codice sul Terzo Settore e successive modifiche e integrazioni.
+entrate derivante da iniziative promozionali finalizzate al proprio finanziamento, quali feste e sottoscrizioni anche a premi;
+altre entrate compatibili con le finalità sociali dell’associazionismo sociale;
+proventi derivanti da raccolte fondi continuative o occasionali
+
+Art. 24) Intrasmissibilità quota associativa
+Le somme versate per la tessera sociale e le quote annuali di adesione all’Associazione, e le quote straordinarie, rappresentano unicamente un versamento periodico vincolante a sostegno economico del sodalizio. Non costituiscono pertanto in alcun modo titolo di proprietà o di partecipazione a proventi, e non sono in alcun caso rimborsabili o trasmissibili.
+
+SCRITTURE CONTABILI E BILANCIO
+Art. 25) I libri sociali e diritto consultazione dei soci
+Oltre alla tenuta dei libri e scritture contabili prescritti dagli artt. 13 e ss. del Codice del Terzo Settore, l’Associazione tiene i seguenti libri sociali: 
+Libro degli associati
+Registro dei volontari che svolgono la loro attività in modo non occasionale
+Libro delle adunanze e delle deliberazioni dell’Assemblea degli associati
+Libro delle adunanze e delle deliberazioni del Consiglio Direttivo
+Libro delle adunanze e delle deliberazioni degli eventuali altri Organi associativi, tenuto a cura dello stesso organo
+Gli associati hanno diritto di ottenere informazioni dal Consiglio Direttivo sulle questioni riguardanti l’Associazione.
+I libri dell’Associazione sono consultabili al socio che ne faccia motivata istanza da presentare all’organo che ne cura la tenuta. La richiesta degli associati deve essere formulata con un preavviso di almeno quindici giorni.
+
+Art. 26) Pubblicità e trasparenza 
+Il Consiglio direttivo assicura la sostanziale pubblicità e trasparenza degli atti relativi all’attività dell’associazione, con particolare riferimento ai bilanci o rendiconti annuali ed ai libri sociali obbligatori, ossia il libro soci, il libro delle adunanze e deliberazioni dell’assemblea dei soci, del Consiglio direttivo e, qualora eletto, dell’Organo di controllo. Tali documenti sociali devono essere messi a disposizione dei soci per la consultazione anche nel caso in cui siano conservati presso professionisti di cui l’associazione si avvale. Le richieste di acceso alla documentazione vengono indirizzate al Presidente dell’associazione.
+
+Art. 27) Il bilancio/rendiconto annuale
+Il bilancio dell’Associazione, comprendente l’esercizio sociale che va dal primo gennaio al trentuno dicembre di ogni anno, deve essere approvato dal Consiglio Direttivo entro il trentuno marzo dell’anno successivo, e approvato dall’Assemblea ordinaria dei soci entro il 120 giorni dalla chiusura dell’esercizio.
+Il Bilancio di esercizio è formato dallo Stato Patrimoniale, dal rendiconto gestionale, con l’indicazione dei proventi e degli oneri dell’ente, e dalla relazione di missione che illustra le poste di bilancio, l’andamento economico e finanziario dell’ente con le modalità di perseguimento delle finalità statutarie. Qualora i ricavi, rendite, proventi entrate siano inferiori a 220.000 euro il bilancio può essere redatto nella forma del rendiconto per cassa. Il bilancio deve comunque contenere una sintetica descrizione dei beni, contributi e lasciti ricevuti e prevedere un inventario delle immobilizzazioni materiali, immateriali, finanziarie.
+Il bilancio sarà depositato presso il Registro Unico Nazionale del Terzo Settore.
+
+Art. 28) Bilancio sociale e informativa sociale
+Se ricavi, rendite, proventi o entrate comunque denominate, sono superiori a 100 mila euro annui, l’Associazione dovrà pubblicare annualmente e tenere aggiornati nel proprio sito internet o nel sito internet della rete associativa cui eventualmente aderisce (c. 2, art. 14 D. Lgs. 117/2017) gli eventuali emolumenti, compensi o corrispettivi a qualsiasi titolo attribuiti ai componenti degli organi di controllo e ai dirigenti.
+
+Art. 29) Il rendiconto della raccolta fondi
+Indipendentemente dalla redazione del bilancio annuale, l’Associazione, per ogni attività occasionale di raccolta pubblica di fondi eseguita in concomitanza di celebrazioni, ricorrenze, o campagne di sensibilizzazione, redige entro quattro mesi dalla chiusura dell’esercizio un apposito e separato rendiconto dal quale devono risultare, anche a mezzo di relazione illustrativa, in modo chiaro e trasparente, le entrate e le spese relative a ciascuna di detta celebrazione, ricorrenza o campagna di sensibilizzazione.
+
+SCIOGLIMENTO DELL’ASSOCIAZIONE
+Art. 30) Lo scioglimento
+Lo scioglimento dell’Associazione deve essere deliberato dall’Assemblea dei soci con il voto favorevole di almeno i ¾ (tre quarti) degli associati.
+
+Art. 31) devoluzione del patrimonio ad altri ETS
+In caso di scioglimento l’Assemblea provvede alla nomina di uno o più liquidatori, anche non soci, determinandone gli eventuali compensi.
+Il patrimonio residuo che risulterà dalla liquidazione è devoluto, salva diversa destinazione imposta dalla legge, ad altri enti del Terzo Settore, acquisito il parere positivo dell’Ufficio di cui all’art 45, comma 1, del citato D.Lgs. 117/2017.
+
+DISPOSIZIONI FINALI
+Art. 32) Rinvio alle leggi in materia di terzo settore
+Per tutto quanto non previsto espressamente dal presente Statuto si rimanda alla normativa vigente in materia con particolare riferimento al Codice sul Terzo Settore e successive modifiche e integrazioni.
+
+
+  <footer class="qms-footer">
+    <div class="qms-footer-left">
+      <strong>Queer Market Show APS</strong><br>
+      Via Bradano 1<br>
+      73100, Lecce (LE)<br>
+      CF. 93170860758<br>
+      Codice ATECO 949920<br>
+      Repertorio RUNTS 143747
+    </div>
+
+    <div class="qms-footer-right">
+      <a href="/trasparenza.html" target="_blank" rel="noopener noreferrer">Trasparenza</a>
+    </div>
+  </footer>
+
+</body>
+</html>
