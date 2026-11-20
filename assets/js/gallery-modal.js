@@ -1,4 +1,3 @@
-
 /* ============================================================
    STATO GLOBALE
 ============================================================ */
@@ -14,17 +13,22 @@ function openFolderModal(folder) {
 
   galleryCurrentFolder = folder;
 
-  const modal = document.getElementById("galleryModal");
+  const modal =
+    document.getElementById("galleryModal");
 
-  if (!modal) {
-    console.error("galleryModal non trovato");
-    return;
-  }
+  if (!modal) return;
 
-  const title = modal.querySelector(".modal-album-title");
-  const photographer = modal.querySelector(".modal-photographer");
-  const grid = modal.querySelector(".modal-grid");
-  const carousel = modal.querySelector(".carousel");
+  const title =
+    modal.querySelector(".modal-album-title");
+
+  const photographer =
+    modal.querySelector(".modal-photographer");
+
+  const grid =
+    modal.querySelector(".modal-grid");
+
+  const carousel =
+    modal.querySelector(".carousel");
 
   if (title) {
     title.textContent = folder.name || "";
@@ -41,12 +45,17 @@ function openFolderModal(folder) {
 
       photographer.textContent =
         photographers
-          .map(p => typeof p === "object" ? p.name : p)
+          .map(p =>
+            typeof p === "object"
+              ? p.name
+              : p
+          )
           .join(", ");
 
     } else {
 
-      photographer.textContent = photographers;
+      photographer.textContent =
+        photographers;
 
     }
 
@@ -56,42 +65,51 @@ function openFolderModal(folder) {
 
   grid.innerHTML = "";
 
-  if (folder.images && folder.images.length) {
+  if (
+    folder.images &&
+    folder.images.length
+  ) {
 
-    folder.images.forEach((image, index) => {
+    folder.images.forEach(
+      (image, index) => {
 
-      const img = document.createElement("img");
+        const img =
+          document.createElement("img");
 
-      img.src = `${folder.path}/${image}`;
-      img.alt = image;
-      img.loading = "lazy";
+        img.src =
+          `${folder.path}/${image}`;
 
-      img.addEventListener("click", () => {
-        openCarousel(index);
-      });
+        img.alt = image;
 
-      grid.appendChild(img);
+        img.loading = "lazy";
 
-    });
+        img.addEventListener(
+          "click",
+          () => openCarousel(index)
+        );
+
+        grid.appendChild(img);
+
+      }
+    );
 
   }
 
-  grid.style.display = "";
   grid.classList.remove("hidden");
 
   if (carousel) {
-    carousel.style.display = "none";
     carousel.classList.add("hidden");
   }
 
   modal.classList.remove("hidden");
   modal.classList.add("open");
 
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow =
+    "hidden";
 }
 
 /* ============================================================
-   CAROSELLO
+   APERTURA CAROSELLO
 ============================================================ */
 
 function openCarousel(index) {
@@ -100,13 +118,19 @@ function openCarousel(index) {
 
   galleryCurrentIndex = index;
 
-  const modal = document.getElementById("galleryModal");
+  const modal =
+    document.getElementById("galleryModal");
 
   if (!modal) return;
 
-  const grid = modal.querySelector(".modal-grid");
-  const carousel = modal.querySelector(".carousel");
-  const image = modal.querySelector(".carousel-img");
+  const grid =
+    modal.querySelector(".modal-grid");
+
+  const carousel =
+    modal.querySelector(".carousel");
+
+  const image =
+    modal.querySelector(".carousel-img");
 
   if (!carousel || !image) return;
 
@@ -114,23 +138,60 @@ function openCarousel(index) {
     `${galleryCurrentFolder.path}/${galleryCurrentFolder.images[galleryCurrentIndex]}`;
 
   if (grid) {
-    grid.style.display = "none";
+    grid.classList.add("hidden");
   }
 
-  carousel.style.display = "flex";
   carousel.classList.remove("hidden");
 }
+
+/* ============================================================
+   CHIUSURA SOLO CAROSELLO
+============================================================ */
+
+function closeCarousel() {
+
+  const modal =
+    document.getElementById("galleryModal");
+
+  if (!modal) return;
+
+  const grid =
+    modal.querySelector(".modal-grid");
+
+  const carousel =
+    modal.querySelector(".carousel");
+
+  if (carousel) {
+    carousel.classList.add("hidden");
+  }
+
+  if (grid) {
+    grid.classList.remove("hidden");
+  }
+
+}
+
+/* ============================================================
+   AGGIORNA IMMAGINE
+============================================================ */
 
 function updateCarousel() {
 
   const image =
     document.querySelector(".carousel-img");
 
-  if (!image || !galleryCurrentFolder) return;
+  if (
+    !image ||
+    !galleryCurrentFolder
+  ) return;
 
   image.src =
     `${galleryCurrentFolder.path}/${galleryCurrentFolder.images[galleryCurrentIndex]}`;
 }
+
+/* ============================================================
+   NAVIGAZIONE
+============================================================ */
 
 function nextSlide() {
 
@@ -148,7 +209,8 @@ function prevSlide() {
   if (!galleryCurrentFolder) return;
 
   galleryCurrentIndex =
-    (galleryCurrentIndex - 1 + galleryCurrentFolder.images.length) %
+    (galleryCurrentIndex - 1 +
+      galleryCurrentFolder.images.length) %
     galleryCurrentFolder.images.length;
 
   updateCarousel();
@@ -160,20 +222,23 @@ function prevSlide() {
 
 function closeGalleryModal() {
 
-  const modal = document.getElementById("galleryModal");
+  const modal =
+    document.getElementById("galleryModal");
 
   if (!modal) return;
 
-  const grid = modal.querySelector(".modal-grid");
-  const carousel = modal.querySelector(".carousel");
+  const grid =
+    modal.querySelector(".modal-grid");
 
-  if (grid) {
-    grid.style.display = "";
-  }
+  const carousel =
+    modal.querySelector(".carousel");
 
   if (carousel) {
-    carousel.style.display = "none";
     carousel.classList.add("hidden");
+  }
+
+  if (grid) {
+    grid.classList.remove("hidden");
   }
 
   modal.classList.remove("open");
@@ -183,67 +248,82 @@ function closeGalleryModal() {
 }
 
 /* ============================================================
-   EVENTI
+   EVENTI UI
 ============================================================ */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-  const modal =
-    document.getElementById("galleryModal");
+    const modal =
+      document.getElementById(
+        "galleryModal"
+      );
 
-  if (!modal) return;
+    if (!modal) return;
 
-  modal
-    .querySelector(".close")
-    ?.addEventListener("click", closeGalleryModal);
+    modal
+      .querySelector(".close")
+      ?.addEventListener(
+        "click",
+        closeGalleryModal
+      );
 
-  modal
-    .querySelector(".next")
-    ?.addEventListener("click", (e) => {
+    modal
+      .querySelector(".carousel-close")
+      ?.addEventListener(
+        "click",
+        closeCarousel
+      );
 
-      e.stopPropagation();
-      nextSlide();
+    modal
+      .querySelector(".next")
+      ?.addEventListener(
+        "click",
+        event => {
 
-    });
+          event.stopPropagation();
+          nextSlide();
 
-  modal
-    .querySelector(".prev")
-    ?.addEventListener("click", (e) => {
+        }
+      );
 
-      e.stopPropagation();
-      prevSlide();
+    modal
+      .querySelector(".prev")
+      ?.addEventListener(
+        "click",
+        event => {
 
-    });
+          event.stopPropagation();
+          prevSlide();
 
-  modal.addEventListener("click", (e) => {
+        }
+      );
 
-    if (e.target === modal) {
-      closeGalleryModal();
-    }
+    modal.addEventListener(
+      "click",
+      event => {
 
-  });
+        if (event.target === modal) {
+          closeGalleryModal();
+        }
 
-  const carousel =
-    modal.querySelector(".carousel");
-
-  if (carousel) {
-
-    carousel.style.display = "none";
-    carousel.classList.add("hidden");
+      }
+    );
 
   }
-
-});
+);
 
 /* ============================================================
    ESPOSIZIONE GLOBALE
 ============================================================ */
 
-window.openFolderModal = openFolderModal;
-window.closeGalleryModal = closeGalleryModal;
+window.openFolderModal =
+  openFolderModal;
 
-console.log("gallery-modal.js caricato");
+window.closeGalleryModal =
+  closeGalleryModal;
+
 console.log(
-  "openFolderModal:",
-  typeof window.openFolderModal
+  "gallery-modal.js caricato"
 );
