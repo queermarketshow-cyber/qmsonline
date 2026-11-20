@@ -103,14 +103,14 @@ function openCarousel(index) {
   img.src =
     `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 
-  /* NASCONDE TOTALMENTE LA GRIGLIA */
+  /* Nasconde completamente la griglia */
   if (grid) {
-    grid.style.display = "none";
+    grid.classList.add("hidden");
   }
 
-  /* MOSTRA IL CAROSELLO */
-  carousel.style.display = "flex";
+  /* Mostra il carosello */
   carousel.classList.remove("hidden");
+
 }
 
 function updateCarousel() {
@@ -154,13 +154,13 @@ function closeGalleryModal() {
   const grid = modal.querySelector(".modal-grid");
   const carousel = modal.querySelector(".carousel");
 
+  /* Ripristina la griglia */
   if (grid) {
-    grid.style.display = "";
     grid.classList.remove("hidden");
   }
 
+  /* Nasconde il carosello */
   if (carousel) {
-    carousel.style.display = "";
     carousel.classList.add("hidden");
   }
 
