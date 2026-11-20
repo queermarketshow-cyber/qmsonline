@@ -3,8 +3,8 @@
    STATO GLOBALE
 ============================================================ */
 
-let currentFolder = null;
-let currentIndex = 0;
+let galleryCurrentFolder = null;
+let galleryCurrentIndex = 0;
 
 /* ============================================================
    APERTURA CARTELLA
@@ -12,7 +12,7 @@ let currentIndex = 0;
 
 function openFolderModal(folder) {
 
-  currentFolder = folder;
+  galleryCurrentFolder = folder;
 
   const modal = document.getElementById("galleryModal");
 
@@ -96,9 +96,9 @@ function openFolderModal(folder) {
 
 function openCarousel(index) {
 
-  if (!currentFolder) return;
+  if (!galleryCurrentFolder) return;
 
-  currentIndex = index;
+  galleryCurrentIndex = index;
 
   const modal = document.getElementById("galleryModal");
 
@@ -111,7 +111,7 @@ function openCarousel(index) {
   if (!carousel || !image) return;
 
   image.src =
-    `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
+    `${galleryCurrentFolder.path}/${galleryCurrentFolder.images[galleryCurrentIndex]}`;
 
   if (grid) {
     grid.style.display = "none";
@@ -126,30 +126,30 @@ function updateCarousel() {
   const image =
     document.querySelector(".carousel-img");
 
-  if (!image || !currentFolder) return;
+  if (!image || !galleryCurrentFolder) return;
 
   image.src =
-    `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
+    `${galleryCurrentFolder.path}/${galleryCurrentFolder.images[galleryCurrentIndex]}`;
 }
 
 function nextSlide() {
 
-  if (!currentFolder) return;
+  if (!galleryCurrentFolder) return;
 
-  currentIndex =
-    (currentIndex + 1) %
-    currentFolder.images.length;
+  galleryCurrentIndex =
+    (galleryCurrentIndex + 1) %
+    galleryCurrentFolder.images.length;
 
   updateCarousel();
 }
 
 function prevSlide() {
 
-  if (!currentFolder) return;
+  if (!galleryCurrentFolder) return;
 
-  currentIndex =
-    (currentIndex - 1 + currentFolder.images.length) %
-    currentFolder.images.length;
+  galleryCurrentIndex =
+    (galleryCurrentIndex - 1 + galleryCurrentFolder.images.length) %
+    galleryCurrentFolder.images.length;
 
   updateCarousel();
 }
