@@ -31,31 +31,24 @@ function openFolderModal(folder) {
 
     grid.innerHTML = "";
 
-    if (folder.images && folder.images.length) {
+   if (folder.images && folder.images.length) {
 
-      folder.images.forEach((image, index) => {
+  folder.images.forEach((image, index) => {
 
-        const img = document.createElement("img");
+    const img = document.createElement("img");
 
-        img.src = `${folder.path}/${image}`;
-        img.loading = "lazy";
+    img.src = `${folder.path}/${image}`;
+    img.loading = "lazy";
 
-img.addEventListener("click", () => {
+    img.addEventListener("click", () => {
+      openCarousel(index);
+    });
 
-  const lightbox =
-    document.getElementById("lightbox");
+    grid.appendChild(img);
 
-  const lightboxImg =
-    document.getElementById("lightbox-img");
+  });
 
-  currentIndex = index;
-
-  lightboxImg.src =
-    `${folder.path}/${folder.images[index]}`;
-
-  lightbox.classList.remove("hidden");
-
-});
+}
 
     }
 
