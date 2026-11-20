@@ -104,6 +104,28 @@ function updateCarousel() {
 /* ============================================================
    CONTROLLI UI
 ============================================================ */
+function nextSlide() {
+  if (!currentFolder) return;
+  currentIndex = (currentIndex + 1) % currentFolder.images.length;
+  updateCarousel();
+}
+
+function prevSlide() {
+  if (!currentFolder) return;
+  currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
+  updateCarousel();
+}
+
+function updateCarousel() {
+  const img = document.querySelector('.carousel-img');
+  if (img && currentFolder) {
+    img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
+  }
+}
+
+/* ============================================================
+   CONTROLLI UI
+============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   const modalEl = document.getElementById('galleryModal');
   if (!modalEl) return;
