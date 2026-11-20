@@ -2,12 +2,12 @@
 <html lang="it">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Queer Market Show APS</title>
 
-  <link rel="icon" href="images/logo-qms.ico" type="image/x-icon" />
+  <link rel="icon" href="images/logo-qms.ico" type="image/x-icon">
 
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap"
         rel="stylesheet">
@@ -15,15 +15,15 @@
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+        referrerpolicy="no-referrer">
 
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="fix.css" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="fix.css">
 </head>
 
 <body>
 
-  <!-- SFONDO LOGO -->
+  <!-- SFONDO -->
   <div class="logo-background"></div>
 
   <!-- NAVBAR -->
@@ -48,9 +48,9 @@
 
   </div>
 
-  <!-- =======================================================
+  <!-- =====================================================
        ARCHIVIO
-  ======================================================== -->
+  ====================================================== -->
 
   <section id="archivio" class="scroll-section qms-archive-page">
 
@@ -60,7 +60,7 @@
       Tutte le immagini del Queer Market Show.
     </p>
 
-    <!-- Cartelle generate da gallery-folders.js -->
+    <!-- Cartelle generate da JS -->
     <div class="gallery-folders"></div>
 
     <!-- Mosaico -->
@@ -71,15 +71,16 @@
 
   </section>
 
-  <!-- =======================================================
+  <!-- =====================================================
        MODALE GALLERIA
-  ======================================================== -->
+  ====================================================== -->
 
   <div id="galleryModal" class="modal hidden">
 
     <div class="modal-content">
 
-      <button class="close">&times;</button>
+      <!-- CHIUDE LA CARTELLA E TORNA ALLE CARTELLE -->
+      <button class="close">×</button>
 
       <div class="modal-caption">
 
@@ -92,14 +93,21 @@
       <!-- GRIGLIA FOTO -->
       <div class="modal-grid"></div>
 
-      <!-- CAROSELLO -->
+      <!-- =================================================
+           CAROSELLO FULLSCREEN
+      ================================================== -->
+
       <div class="carousel hidden">
+
+        <!-- CHIUDE SOLO IL CAROSELLO -->
+        <button class="carousel-close">×</button>
 
         <span class="prev">❮</span>
 
-        <img class="carousel-img"
-             src=""
-             alt="Immagine galleria">
+        <img
+          class="carousel-img"
+          src=""
+          alt="Immagine galleria">
 
         <span class="next">❯</span>
 
@@ -109,19 +117,17 @@
 
   </div>
 
-  <!-- =======================================================
-       SCRIPT BASE
-  ======================================================== -->
+  <!-- =====================================================
+       SCRIPT
+  ====================================================== -->
 
   <script src="assets/js/base2.js"></script>
   <script src="assets/js/navbar.js"></script>
 
-  <!-- GALLERIA -->
   <script src="assets/js/gallery-modal.js"></script>
   <script src="assets/js/gallery-folders.js"></script>
   <script src="assets/js/mosaic-gallery.js"></script>
 
-  <!-- ALTRI MODULI -->
   <script src="assets/js/events.js"></script>
   <script src="assets/js/artists.js"></script>
 
