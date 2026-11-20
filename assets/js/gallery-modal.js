@@ -40,13 +40,22 @@ function openFolderModal(folder) {
         img.src = `${folder.path}/${image}`;
         img.loading = "lazy";
 
-        img.addEventListener("click", () => {
-          openCarousel(index);
-        });
+img.addEventListener("click", () => {
 
-        grid.appendChild(img);
+  const lightbox =
+    document.getElementById("lightbox");
 
-      });
+  const lightboxImg =
+    document.getElementById("lightbox-img");
+
+  currentIndex = index;
+
+  lightboxImg.src =
+    `${folder.path}/${folder.images[index]}`;
+
+  lightbox.classList.remove("hidden");
+
+});
 
     }
 
