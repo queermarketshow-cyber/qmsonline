@@ -103,14 +103,14 @@ function openCarousel(index) {
   img.src =
     `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 
-  /* Nasconde completamente la griglia */
+  /* nasconde completamente la griglia */
   if (grid) {
-    grid.classList.add("hidden");
+    grid.style.display = "none";
   }
 
-  /* Mostra il carosello */
+  /* mostra il carosello */
+  carousel.style.display = "flex";
   carousel.classList.remove("hidden");
-
 }
 
 function updateCarousel() {
@@ -154,13 +154,14 @@ function closeGalleryModal() {
   const grid = modal.querySelector(".modal-grid");
   const carousel = modal.querySelector(".carousel");
 
-  /* Ripristina la griglia */
+  /* ripristina la griglia */
   if (grid) {
-    grid.classList.remove("hidden");
+    grid.style.display = "";
   }
 
-  /* Nasconde il carosello */
+  /* nasconde il carosello */
   if (carousel) {
+    carousel.style.display = "none";
     carousel.classList.add("hidden");
   }
 
@@ -200,7 +201,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  /* all'avvio il carosello deve essere nascosto */
+  const carousel = modal.querySelector(".carousel");
+  if (carousel) {
+    carousel.style.display = "none";
+  }
+
 });
+
+window.openFolderModal = openFolderModal;
+window.closeGalleryModal = closeGalleryModal;
+
+console.log("gallery-modal.js caricato");
+console.log(typeof window.openFolderModal);
 
 window.openFolderModal = openFolderModal;
 window.closeGalleryModal = closeGalleryModal;
