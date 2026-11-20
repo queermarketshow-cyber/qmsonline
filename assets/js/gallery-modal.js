@@ -138,3 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === modalEl) closeGalleryModal();
   });
 });
+/* ============================================================
+   ESPOSIZIONE GLOBALE
+============================================================ */
+window.openFolderModal = openFolderModal;
+window.closeGalleryModal = closeGalleryModal;
