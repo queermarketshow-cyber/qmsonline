@@ -103,11 +103,14 @@ function openCarousel(index) {
   img.src =
     `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 
-  carousel.classList.remove("hidden");
-
+  /* NASCONDE TOTALMENTE LA GRIGLIA */
   if (grid) {
-    grid.classList.add("hidden");
+    grid.style.display = "none";
   }
+
+  /* MOSTRA IL CAROSELLO */
+  carousel.style.display = "flex";
+  carousel.classList.remove("hidden");
 }
 
 function updateCarousel() {
@@ -140,6 +143,31 @@ function prevSlide() {
     currentFolder.images.length;
 
   updateCarousel();
+}
+
+function closeGalleryModal() {
+
+  const modal = document.getElementById("galleryModal");
+
+  if (!modal) return;
+
+  const grid = modal.querySelector(".modal-grid");
+  const carousel = modal.querySelector(".carousel");
+
+  if (grid) {
+    grid.style.display = "";
+    grid.classList.remove("hidden");
+  }
+
+  if (carousel) {
+    carousel.style.display = "";
+    carousel.classList.add("hidden");
+  }
+
+  modal.classList.remove("open");
+  modal.classList.add("hidden");
+
+  document.body.style.overflow = "";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
