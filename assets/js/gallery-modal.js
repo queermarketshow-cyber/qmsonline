@@ -24,8 +24,26 @@ function openFolderModal(folder) {
   }
 
   if (photographer) {
-    photographer.textContent = folder.photographer || "";
+
+  const photographers =
+    folder.photographers ||
+    folder.photographer ||
+    "";
+
+  if (Array.isArray(photographers)) {
+
+    photographer.textContent =
+      photographers
+        .map(p => typeof p === "object" ? p.name : p)
+        .join(", ");
+
+  } else {
+
+    photographer.textContent = photographers;
+
   }
+
+}
 
   if (grid) {
 
@@ -202,11 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-window.openFolderModal = openFolderModal;
-window.closeGalleryModal = closeGalleryModal;
-
-console.log("gallery-modal.js caricato");
-console.log(typeof window.openFolderModal);
 
 window.openFolderModal = openFolderModal;
 window.closeGalleryModal = closeGalleryModal;
