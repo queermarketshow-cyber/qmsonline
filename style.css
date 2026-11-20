@@ -3379,16 +3379,20 @@ section#sostienici.active {
 ========================================================== */
 
 #galleryModal .carousel {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background: rgba(0, 0, 0, 0.97);
+  background: rgba(0,0,0,.97);
 
-  z-index: 99999;
+  z-index: 500;
 }
 
 #galleryModal .carousel.hidden {
@@ -3400,15 +3404,13 @@ section#sostienici.active {
 ========================================================== */
 
 #galleryModal .carousel-img {
-  max-width: 92vw;
-  max-height: 92vh;
+  max-width: 95%;
+  max-height: 95%;
 
   width: auto;
   height: auto;
 
   object-fit: contain;
-
-  display: block;
 }
 
 /* ==========================================================
@@ -3453,31 +3455,29 @@ section#sostienici.active {
 ========================================================== */
 
 #galleryModal .carousel-close {
-  position: fixed !important;
+  position: absolute;
 
-  top: 20px !important;
-  right: 20px !important;
+  top: 20px;
+  right: 20px;
 
-  width: 60px !important;
-  height: 60px !important;
+  width: 56px;
+  height: 56px;
 
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  background: rgba(0,0,0,.8) !important;
-  border: 2px solid #fff !important;
-  border-radius: 50% !important;
+  border: 2px solid #fff;
+  border-radius: 50%;
 
-  color: #fff !important;
+  background: rgba(0,0,0,.8);
 
-  font-size: 2.5rem !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
+  color: #fff;
+  font-size: 2rem;
 
-  cursor: pointer !important;
+  cursor: pointer;
 
-  z-index: 999999 !important;
+  z-index: 1000;
 }
 
 #galleryModal .carousel-close:hover {
@@ -3490,15 +3490,18 @@ section#sostienici.active {
 
 @media (max-width: 768px) {
 
-  #galleryModal .modal-content {
-    width: 100vw;
-    max-height: 100vh;
+ #galleryModal .modal-content {
+  position: relative;
 
-    border-radius: 0;
-    border: none;
+  width: min(1400px, 95vw);
+  height: calc(100vh - 90px);
 
-    padding: 1rem;
-  }
+  overflow: hidden;
+
+  background: #111;
+  border: 2px solid #fff;
+  border-radius: 12px;
+}
 
   #galleryModal .modal-grid {
     grid-template-columns: repeat(2, 1fr);
