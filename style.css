@@ -3317,3 +3317,51 @@ section#sostienici.active {
 #galleryModal .next{
   right:20px;
 }
+/* ==========================================
+   CAROSELLO GALLERIA
+========================================== */
+
+#galleryModal .modal-content {
+  position: relative;
+}
+
+#galleryModal .carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0,0,0,.97);
+}
+
+#galleryModal .carousel.hidden {
+  display: none;
+}
+
+#galleryModal .carousel-img {
+  max-width: 95%;
+  max-height: 95%;
+  object-fit: contain;
+}
+
+#galleryModal .prev,
+#galleryModal .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+#galleryModal .prev {
+  left: 20px;
+}
+
+#galleryModal .next {
+  right: 20px;
+}
