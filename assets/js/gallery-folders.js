@@ -2,205 +2,314 @@
    GALLERY FOLDERS — GESTIONE ANTEPRIME E SLIDESHOW
 ============================================================ */
 
-const archiveVisibleFolders = new Set();
+/* evita errori di doppia dichiarazione */
+window.archiveVisibleFolders =
+  window.archiveVisibleFolders || new Set();
 
 /**
- * Inizializzazione: Carica i dati dal JSON e avvia la galleria
+ * Inizializzazione
  */
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('gallery.json')
+document.addEventListener("DOMContentLoaded", () => {
+
+  fetch("gallery.json")
+
     .then(response => {
+
       if (!response.ok) {
-        throw new Error(`Errore nel caricamento di gallery.json (${response.status})`);
+        throw new Error(
+          `Errore nel caricamento di gallery.json (${response.status})`
+        );
       }
+
       return response.json();
+
     })
+
     .then(data => {
+
       window.galleryData = data.folders || [];
 
-      console.log('Gallery caricata:', window.galleryData);
+      console.log(
+        "Gallery caricata:",
+        window.galleryData
+      );
 
       renderFolderPreviews();
       startRandomSlideshow();
+
     })
+
     .catch(error => {
-      console.error('Errore inizializzazione:', error);
+
+      console.error(
+        "Errore inizializzazione:",
+        error
+      );
+
     });
+
 });
 
 /**
- * Fisher–Yates shuffle
+ * Shuffle
  */
 function shuffleArray(array) {
+
   const arr = [...array];
 
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+    [arr[i], arr[j]] =
+      [arr[j], arr[i]];
+
   }
 
   return arr;
 }
 
 /**
- * Renderizza le anteprime delle cartelle
+ * Render cartelle
  */
 function renderFolderPreviews() {
-  const container = document.querySelector('.gallery-folders');
+
+  const container =
+    document.querySelector(".gallery-folders");
 
   if (!container || !window.galleryData) return;
 
-  container.innerHTML = '';
+  container.innerHTML = "";
 
-  const randomizedFolders = shuffleArray(window.galleryData);
+  const randomizedFolders =
+    shuffleArray(window.galleryData);
 
   randomizedFolders.forEach(folder => {
-    const preview = document.createElement('div');
-    preview.className = 'folder-preview';
+
+    const preview =
+      document.createElement("div");
+
+    preview.className =
+      "folder-preview";
 
     preview.dataset.folderIndex =
       window.galleryData.indexOf(folder);
 
-    const img = document.createElement('img');
+    const img =
+      document.createElement("img");
 
     if (
       folder.images &&
       folder.images.length > 0
     ) {
-      img.src = `${folder.path}/${folder.images[0]}`;
+
+      img.src =
+        `${folder.path}/${folder.images[0]}`;
+
     }
 
-    img.alt = folder.name || '';
-    img.loading = 'lazy';
+    img.alt =
+      folder.name || "";
 
-    const overlay = document.createElement('div');
-    overlay.className = 'folder-overlay';
-    overlay.textContent = folder.name || '';
+    img.loading = "lazy";
+
+    const overlay =
+      document.createElement("div");
+
+    overlay.className =
+      "folder-overlay";
+
+    overlay.textContent =
+      folder.name || "";
 
     preview.appendChild(img);
     preview.appendChild(overlay);
 
-    /* ============================================================
-       APERTURA MODALE
-    ============================================================ */
-    preview.addEventListener('click', () => {
+    /* click cartella */
+    preview.addEventListener("click", () => {
 
-      if (typeof window.openFolderModal !== 'function') {
+      console.log(
+        "CLICK CARTELLA",
+        folder.name
+      );
+
+      if (
+        typeof window.openFolderModal !==
+        "function"
+      ) {
+
         console.error(
-          'openFolderModal non trovata. Verifica gallery-modal.js'
+          "openFolderModal non disponibile"
         );
+
         return;
       }
 
       window.openFolderModal(folder);
+
     });
 
     container.appendChild(preview);
+
   });
 
   setupVisibilityObserver();
 }
 
 /**
- * Observer per slideshow
+ * Observer
  */
 function setupVisibilityObserver() {
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        const index = entry.target.dataset.folderIndex;
 
-        if (entry.isIntersecting) {
-          archiveVisibleFolders.add(index);
-        } else {
-          archiveVisibleFolders.delete(index);
-        }
-      });
-    },
-    {
-      threshold: 0.4
-    }
-  );
+  const observer =
+    new IntersectionObserver(
+      entries => {
+
+        entries.forEach(entry => {
+
+          const index =
+            entry.target.dataset.folderIndex;
+
+          if (entry.isIntersecting) {
+
+            window.archiveVisibleFolders
+              .add(index);
+
+          } else {
+
+            window.archiveVisibleFolders
+              .delete(index);
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0.4
+      }
+    );
 
   document
-    .querySelectorAll('.folder-preview')
-    .forEach(el => observer.observe(el));
+    .querySelectorAll(".folder-preview")
+    .forEach(el =>
+      observer.observe(el)
+    );
+
 }
 
 /**
- * Slideshow casuale delle anteprime
+ * Slideshow
  */
 function startRandomSlideshow() {
 
   if (window.gallerySlideshowInterval) {
-    clearInterval(window.gallerySlideshowInterval);
+
+    clearInterval(
+      window.gallerySlideshowInterval
+    );
+
   }
 
-  window.gallerySlideshowInterval = setInterval(() => {
+  window.gallerySlideshowInterval =
+    setInterval(() => {
 
-    const previews = Array.from(
-      document.querySelectorAll('.folder-preview')
-    );
+      const previews =
+        Array.from(
+          document.querySelectorAll(
+            ".folder-preview"
+          )
+        );
 
-    if (
-      !window.galleryData ||
-      archiveVisibleFolders.size === 0 ||
-      previews.length === 0
-    ) {
-      return;
-    }
+      if (
+        !window.galleryData ||
+        window.archiveVisibleFolders.size === 0 ||
+        previews.length === 0
+      ) {
+        return;
+      }
 
-    const visibleArray = Array.from(archiveVisibleFolders);
+      const visibleArray =
+        Array.from(
+          window.archiveVisibleFolders
+        );
 
-    const randomVisibleIndex =
-      visibleArray[
-        Math.floor(Math.random() * visibleArray.length)
-      ];
-
-    const preview = previews.find(
-      p => p.dataset.folderIndex == randomVisibleIndex
-    );
-
-    if (!preview) return;
-
-    const folder =
-      window.galleryData[preview.dataset.folderIndex];
-
-    const img = preview.querySelector('img');
-
-    if (
-      !img ||
-      !folder.images ||
-      folder.images.length <= 1
-    ) {
-      return;
-    }
-
-    const currentSrc = img.src.split('/').pop();
-
-    let nextImg = currentSrc;
-    let safetyCounter = 0;
-
-    while (
-      nextImg === currentSrc &&
-      safetyCounter < 10
-    ) {
-      nextImg =
-        folder.images[
+      const randomVisibleIndex =
+        visibleArray[
           Math.floor(
-            Math.random() * folder.images.length
+            Math.random() *
+            visibleArray.length
           )
         ];
 
-      safetyCounter++;
-    }
+      const preview =
+        previews.find(
+          p =>
+            p.dataset.folderIndex ==
+            randomVisibleIndex
+        );
 
-    preview.classList.add('glitch-flash');
+      if (!preview) return;
 
-    setTimeout(() => {
-      img.src = `${folder.path}/${nextImg}`;
-      preview.classList.remove('glitch-flash');
-    }, 120);
+      const folder =
+        window.galleryData[
+          preview.dataset.folderIndex
+        ];
 
-  }, 4000);
+      const img =
+        preview.querySelector("img");
+
+      if (
+        !img ||
+        !folder.images ||
+        folder.images.length <= 1
+      ) {
+        return;
+      }
+
+      const currentSrc =
+        img.src.split("/").pop();
+
+      let nextImg =
+        currentSrc;
+
+      let safetyCounter = 0;
+
+      while (
+        nextImg === currentSrc &&
+        safetyCounter < 10
+      ) {
+
+        nextImg =
+          folder.images[
+            Math.floor(
+              Math.random() *
+              folder.images.length
+            )
+          ];
+
+        safetyCounter++;
+
+      }
+
+      preview.classList.add(
+        "glitch-flash"
+      );
+
+      setTimeout(() => {
+
+        img.src =
+          `${folder.path}/${nextImg}`;
+
+        preview.classList.remove(
+          "glitch-flash"
+        );
+
+      }, 120);
+
+    }, 4000);
+
 }
