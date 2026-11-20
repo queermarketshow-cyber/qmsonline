@@ -1,146 +1,216 @@
 /* ============================================================
    STATO GLOBALE MODALE
 ============================================================ */
+
 let currentFolder = null;
 let currentIndex = 0;
 
 /* ============================================================
    APERTURA MODALE CARTELLA
 ============================================================ */
+
 function openFolderModal(folder) {
+
+  console.log("MODALE APERTA", folder);
+
   currentFolder = folder;
-  const modal = document.getElementById('galleryModal');
-  if (!modal) return;
 
-  const grid = modal.querySelector('.modal-grid');
-  const carousel = modal.querySelector('.carousel');
-  const titleEl = modal.querySelector('.modal-album-title');
-  const phEl = modal.querySelector('.modal-photographer');
+  const modal = document.getElementById("galleryModal");
 
-  if (titleEl) titleEl.textContent = folder.name || "";
+  if (!modal) {
+    console.error("galleryModal non trovato");
+    return;
+  }
 
-  // Gestione fotografi (stringa o array)
+  const grid = modal.querySelector(".modal-grid");
+  const carousel = modal.querySelector(".carousel");
+  const titleEl = modal.querySelector(".modal-album-title");
+  const phEl = modal.querySelector(".modal-photographer");
+
+  if (titleEl) {
+    titleEl.textContent = folder.name || "";
+  }
+
   if (phEl) {
-    const photographers = folder.photographers || folder.photographer || null;
+    const photographers =
+      folder.photographers ||
+      folder.photographer ||
+      null;
+
     if (!photographers) {
       phEl.textContent = "";
-    } else {
-      let html = "pics by ";
-      if (typeof photographers === "string") {
-        html += photographers;
-      } else if (Array.isArray(photographers)) {
-        html += photographers
-          .map(ph => (typeof ph === "object" ? (ph.url ? `<a href="${ph.url}" target="_blank">${ph.name}</a>` : ph.name) : ph))
+    } else if (typeof photographers === "string") {
+      phEl.textContent = "pics by " + photographers;
+    } else if (Array.isArray(photographers)) {
+      phEl.textContent =
+        "pics by " +
+        photographers
+          .map(p => typeof p === "object" ? p.name : p)
           .join(", ");
-      }
-      phEl.innerHTML = html;
     }
   }
 
-  // Render griglia immagini
   if (grid) {
-    grid.innerHTML = '';
-    folder.images.forEach((imgSrc, index) => {
-      const img = document.createElement('img');
-      img.src = `${folder.path}/${imgSrc}`;
-      img.loading = "lazy";
-      img.addEventListener('click', () => openCarousel(index));
-      grid.appendChild(img);
-    });
-    grid.classList.remove('hidden');
+
+    grid.innerHTML = "";
+
+    if (folder.images && folder.images.length) {
+
+      folder.images.forEach((image, index) => {
+
+        const img = document.createElement("img");
+
+        img.src = `${folder.path}/${image}`;
+        img.loading = "lazy";
+
+        img.addEventListener("click", () => {
+          openCarousel(index);
+        });
+
+        grid.appendChild(img);
+
+      });
+
+    }
+
+    grid.classList.remove("hidden");
   }
 
-  if (carousel) carousel.classList.add('hidden');
+  if (carousel) {
+    carousel.classList.add("hidden");
+  }
 
-  modal.classList.remove('hidden');
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  modal.classList.remove("hidden");
+  modal.classList.add("open");
+
+  document.body.style.overflow = "hidden";
 }
+
+/* ============================================================
+   CHIUSURA MODALE
+============================================================ */
 
 function closeGalleryModal() {
-  const modal = document.getElementById('galleryModal');
+
+  const modal = document.getElementById("galleryModal");
+
   if (!modal) return;
-  modal.classList.remove('open');
-  modal.classList.add('hidden');
-  document.body.style.overflow = '';
+
+  modal.classList.remove("open");
+  modal.classList.add("hidden");
+
+  document.body.style.overflow = "";
 }
 
 /* ============================================================
-   CAROSELLO (LIGHTBOX)
+   CAROSELLO
 ============================================================ */
+
 function openCarousel(index) {
+
+  if (!currentFolder) return;
+
   currentIndex = index;
-  const modal = document.getElementById('galleryModal');
-  const carousel = modal.querySelector('.carousel');
-  const img = modal.querySelector('.carousel-img');
 
-  if (!carousel || !img || !currentFolder) return;
+  const modal = document.getElementById("galleryModal");
 
-  img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
-  carousel.classList.remove('hidden');
-  carousel.classList.add('fullscreen');
-  if (modal.querySelector('.modal-grid')) modal.querySelector('.modal-grid').classList.add('hidden');
+  if (!modal) return;
+
+  const carousel = modal.querySelector(".carousel");
+  const img = modal.querySelector(".carousel-img");
+  const grid = modal.querySelector(".modal-grid");
+
+  if (!carousel || !img) return;
+
+  img.src =
+    `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
+
+  carousel.classList.remove("hidden");
+
+  if (grid) {
+    grid.classList.add("hidden");
+  }
+}
+
+function updateCarousel() {
+
+  const img = document.querySelector(".carousel-img");
+
+  if (!img || !currentFolder) return;
+
+  img.src =
+    `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
 }
 
 function nextSlide() {
+
   if (!currentFolder) return;
-  currentIndex = (currentIndex + 1) % currentFolder.images.length;
+
+  currentIndex =
+    (currentIndex + 1) %
+    currentFolder.images.length;
+
   updateCarousel();
 }
 
 function prevSlide() {
-  if (!currentFolder) return;
-  currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
-  updateCarousel();
-}
 
-function updateCarousel() {
-  const img = document.querySelector('.carousel-img');
-  if (img && currentFolder) {
-    img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
-  }
+  if (!currentFolder) return;
+
+  currentIndex =
+    (currentIndex - 1 + currentFolder.images.length) %
+    currentFolder.images.length;
+
+  updateCarousel();
 }
 
 /* ============================================================
-   CONTROLLI UI
+   EVENTI UI
 ============================================================ */
-function nextSlide() {
-  if (!currentFolder) return;
-  currentIndex = (currentIndex + 1) % currentFolder.images.length;
-  updateCarousel();
-}
 
-function prevSlide() {
-  if (!currentFolder) return;
-  currentIndex = (currentIndex - 1 + currentFolder.images.length) % currentFolder.images.length;
-  updateCarousel();
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-function updateCarousel() {
-  const img = document.querySelector('.carousel-img');
-  if (img && currentFolder) {
-    img.src = `${currentFolder.path}/${currentFolder.images[currentIndex]}`;
+  const modal = document.getElementById("galleryModal");
+
+  if (!modal) {
+    console.error("galleryModal non trovato");
+    return;
   }
-}
 
-/* ============================================================
-   CONTROLLI UI
-============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  const modalEl = document.getElementById('galleryModal');
-  if (!modalEl) return;
+  modal
+    .querySelector(".close")
+    ?.addEventListener("click", closeGalleryModal);
 
-  modalEl.querySelector('.close')?.addEventListener('click', closeGalleryModal);
-  modalEl.querySelector('.next')?.addEventListener('click', (e) => { e.stopPropagation(); nextSlide(); });
-  modalEl.querySelector('.prev')?.addEventListener('click', (e) => { e.stopPropagation(); prevSlide(); });
+  modal
+    .querySelector(".next")
+    ?.addEventListener("click", e => {
+      e.stopPropagation();
+      nextSlide();
+    });
 
-  modalEl.addEventListener('click', (e) => {
-    if (e.target === modalEl) closeGalleryModal();
+  modal
+    .querySelector(".prev")
+    ?.addEventListener("click", e => {
+      e.stopPropagation();
+      prevSlide();
+    });
+
+  modal.addEventListener("click", e => {
+
+    if (e.target === modal) {
+      closeGalleryModal();
+    }
+
   });
+
+  console.log("gallery-modal.js CARICATO");
 });
+
 /* ============================================================
    ESPOSIZIONE GLOBALE
 ============================================================ */
+
 window.openFolderModal = openFolderModal;
 window.closeGalleryModal = closeGalleryModal;
-console.log("gallery-modal.js CARICATO");
+
+console.log("openFolderModal registrata:", typeof window.openFolderModal);
