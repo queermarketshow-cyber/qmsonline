@@ -143,3 +143,4 @@ document.addEventListener('DOMContentLoaded', () => {
 ============================================================ */
 window.openFolderModal = openFolderModal;
 window.closeGalleryModal = closeGalleryModal;
+console.log("gallery-modal.js CARICATO");
