@@ -3292,6 +3292,7 @@ section#sostienici.active {
   position: relative;
 
   width: min(1400px, 95vw);
+  height: 90vh;
   max-height: 90vh;
 
   overflow-y: auto;
@@ -3301,6 +3302,7 @@ section#sostienici.active {
   background: #111;
   border: 2px solid #fff;
   border-radius: 12px;
+  box-sizing: border-box;
 }
 
 /* ==========================================================
@@ -3375,22 +3377,25 @@ section#sostienici.active {
 }
 
 /* ==========================================================
-   CAROSELLO
+   CAROSELLO (MISURA FISSA DELLA MODALE)
 ========================================================== */
 
 #galleryModal .carousel {
-  position: absolute;
-
-  top: 0;
+  position: sticky;
+  top: -2rem;
   left: 0;
-  right: 0;
-  bottom: 0;
+
+  width: calc(100% + 4rem);
+  height: calc(100% + 4rem);
+  margin: -2rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background: rgba(0,0,0,.97);
+  background: rgba(0, 0, 0, .97);
+  border-radius: 10px;
+  box-sizing: border-box;
 
   z-index: 500;
 }
@@ -3470,7 +3475,7 @@ section#sostienici.active {
   border: 2px solid #fff;
   border-radius: 50%;
 
-  background: rgba(0,0,0,.8);
+  background: rgba(0, 0, 0, .8);
 
   color: #fff;
   font-size: 2rem;
@@ -3490,18 +3495,27 @@ section#sostienici.active {
 
 @media (max-width: 768px) {
 
- #galleryModal .modal-content {
-  position: relative;
+  #galleryModal .modal-content {
+    position: relative;
 
-  width: min(1400px, 95vw);
-  height: calc(100vh - 90px);
+    width: min(1400px, 95vw);
+    height: calc(100vh - 90px);
+    max-height: calc(100vh - 90px);
 
-  overflow: hidden;
+    overflow-y: auto;
+    padding: 1.5rem;
 
-  background: #111;
-  border: 2px solid #fff;
-  border-radius: 12px;
-}
+    background: #111;
+    border: 2px solid #fff;
+    border-radius: 12px;
+  }
+
+  #galleryModal .carousel {
+    top: -1.5rem;
+    width: calc(100% + 3rem);
+    height: calc(100% + 3rem);
+    margin: -1.5rem;
+  }
 
   #galleryModal .modal-grid {
     grid-template-columns: repeat(2, 1fr);
