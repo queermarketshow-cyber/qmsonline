@@ -3266,3 +3266,54 @@ section#contatti.active,
 section#sostienici.active {
   opacity: 1;
 }
+/* ==========================================================
+   CAROSELLO GALLERIA
+========================================================== */
+
+#galleryModal .modal-content{
+  position:relative;
+}
+
+#galleryModal .carousel{
+  position:absolute;
+  inset:0;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:rgba(0,0,0,.96);
+
+  z-index:9999;
+}
+
+#galleryModal .carousel.hidden{
+  display:none;
+}
+
+#galleryModal .carousel-img{
+  max-width:95%;
+  max-height:95%;
+  object-fit:contain;
+}
+
+#galleryModal .prev,
+#galleryModal .next{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+
+  font-size:3rem;
+  color:white;
+  cursor:pointer;
+  user-select:none;
+  z-index:10000;
+}
+
+#galleryModal .prev{
+  left:20px;
+}
+
+#galleryModal .next{
+  right:20px;
+}
