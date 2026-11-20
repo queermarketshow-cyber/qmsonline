@@ -2,7 +2,7 @@
    GALLERY FOLDERS — GESTIONE ANTEPRIME E SLIDESHOW
 ============================================================ */
 
-const visibleFolders = new Set();
+const archiveVisibleFolders = new Set();
 
 /**
  * Inizializzazione: Carica i dati dal JSON e avvia la galleria
@@ -111,9 +111,9 @@ function setupVisibilityObserver() {
         const index = entry.target.dataset.folderIndex;
 
         if (entry.isIntersecting) {
-          visibleFolders.add(index);
+          archiveVisibleFolders.add(index);
         } else {
-          visibleFolders.delete(index);
+          archiveVisibleFolders.delete(index);
         }
       });
     },
@@ -144,13 +144,13 @@ function startRandomSlideshow() {
 
     if (
       !window.galleryData ||
-      visibleFolders.size === 0 ||
+      archiveVisibleFolders.size === 0 ||
       previews.length === 0
     ) {
       return;
     }
 
-    const visibleArray = Array.from(visibleFolders);
+    const visibleArray = Array.from(archiveVisibleFolders);
 
     const randomVisibleIndex =
       visibleArray[
