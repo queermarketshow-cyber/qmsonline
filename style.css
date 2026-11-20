@@ -3288,26 +3288,24 @@ section#sostienici.active {
   display: none !important;
 }
 
-/* ----------------------------------------------------------
-   CONTENUTO MODALE
----------------------------------------------------------- */
-
 #galleryModal .modal-content {
   position: relative;
 
   width: min(1400px, 95vw);
-  max-height: 92vh;
+  max-height: 90vh;
 
   overflow-y: auto;
 
-  background: #111;
   padding: 2rem;
-  border-radius: 16px;
+
+  background: #111;
+  border: 2px solid #fff;
+  border-radius: 12px;
 }
 
-/* ----------------------------------------------------------
-   TITOLO ALBUM
----------------------------------------------------------- */
+/* ==========================================================
+   CAPTION
+========================================================== */
 
 #galleryModal .modal-caption {
   margin-bottom: 1.5rem;
@@ -3319,13 +3317,33 @@ section#sostienici.active {
 }
 
 #galleryModal .modal-photographer {
-  margin-top: 0.5rem;
-  opacity: .7;
+  margin-top: .5rem;
+  opacity: .8;
 }
 
-/* ----------------------------------------------------------
+/* ==========================================================
+   PULSANTE CHIUSURA MODALE
+========================================================== */
+
+#galleryModal > .modal-content > .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+  background: none;
+  border: none;
+
+  color: white;
+  font-size: 2rem;
+
+  cursor: pointer;
+
+  z-index: 1000;
+}
+
+/* ==========================================================
    GRIGLIA FOTO
----------------------------------------------------------- */
+========================================================== */
 
 #galleryModal .modal-grid {
   display: grid;
@@ -3345,6 +3363,8 @@ section#sostienici.active {
 
   cursor: pointer;
 
+  border-radius: 6px;
+
   transition:
     transform .25s ease,
     opacity .25s ease;
@@ -3354,28 +3374,8 @@ section#sostienici.active {
   transform: scale(1.03);
 }
 
-/* ----------------------------------------------------------
-   CHIUSURA MODALE
----------------------------------------------------------- */
-
-#galleryModal > .modal-content > .close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-
-  z-index: 10000;
-
-  background: none;
-  border: none;
-
-  color: #fff;
-  font-size: 2rem;
-
-  cursor: pointer;
-}
-
 /* ==========================================================
-   CAROSELLO FULLSCREEN
+   CAROSELLO
 ========================================================== */
 
 #galleryModal .carousel {
@@ -3395,9 +3395,9 @@ section#sostienici.active {
   display: none !important;
 }
 
-/* ----------------------------------------------------------
-   IMMAGINE
----------------------------------------------------------- */
+/* ==========================================================
+   IMMAGINE CAROSELLO
+========================================================== */
 
 #galleryModal .carousel-img {
   max-width: 92vw;
@@ -3407,11 +3407,13 @@ section#sostienici.active {
   height: auto;
 
   object-fit: contain;
+
+  display: block;
 }
 
-/* ----------------------------------------------------------
+/* ==========================================================
    FRECCE
----------------------------------------------------------- */
+========================================================== */
 
 #galleryModal .prev,
 #galleryModal .next {
@@ -3420,6 +3422,8 @@ section#sostienici.active {
 
   transform: translateY(-50%);
 
+  padding: 1rem;
+
   font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 900;
 
@@ -3427,8 +3431,6 @@ section#sostienici.active {
 
   cursor: pointer;
   user-select: none;
-
-  padding: 1rem;
 
   z-index: 100000;
 }
@@ -3446,9 +3448,9 @@ section#sostienici.active {
   opacity: .7;
 }
 
-/* ----------------------------------------------------------
+/* ==========================================================
    X DEL CAROSELLO
----------------------------------------------------------- */
+========================================================== */
 
 #galleryModal .carousel-close {
   position: absolute;
@@ -3460,9 +3462,43 @@ section#sostienici.active {
 
   color: white;
   font-size: 3rem;
+  line-height: 1;
 
   cursor: pointer;
 
   z-index: 100001;
 }
 
+#galleryModal .carousel-close:hover {
+  opacity: .7;
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width: 768px) {
+
+  #galleryModal .modal-content {
+    width: 100vw;
+    max-height: 100vh;
+
+    border-radius: 0;
+    border: none;
+
+    padding: 1rem;
+  }
+
+  #galleryModal .modal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #galleryModal .modal-grid img {
+    height: 180px;
+  }
+
+  #galleryModal .prev,
+  #galleryModal .next {
+    font-size: 2.5rem;
+  }
+}
