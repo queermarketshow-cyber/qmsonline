@@ -2,7 +2,6 @@
   "use strict";
 
   const CONFIG = {
-    // Ordine di tentativo: modifica o metti il tuo percorso esatto al primo posto
     candidateUrls: [
       "./event.json",
       "event.json",
@@ -182,7 +181,6 @@
     if (Array.isArray(payload)) return payload;
     if (Array.isArray(payload?.events)) return payload.events;
     if (Array.isArray(payload?.data)) return payload.data;
-    // Se il JSON contiene un singolo oggetto evento invece di un array
     if (payload && typeof payload === "object" && (payload.start || payload.date) && payload.title) {
       return [payload];
     }
@@ -288,7 +286,6 @@
         return data;
       } catch (err) {
         lastError = err;
-        // Se il file esiste ma ha un errore di sintassi JSON, fermati e mostra l'errore esatto
         if (err.message && err.message.startsWith("JSON non valido")) {
           throw err;
         }
@@ -305,11 +302,10 @@
     const past = [];
 
     events.forEach((evt) => {
-      const hasSpecific = evt.specificDates.length > 0;
-      const hasRecurring = evt.recurringWeekdays.length > 0;
+      const hasSpecific = Array.isArray(evt.specificDates) && evt.specificDates.length > 0;
+      const hasRecurring = Array.isArray(evt.recurringWeekdays) && evt.recurringWeekdays.length > 0;
 
       if (hasSpecific) {
-        let hasFuture = false;
         let latestPastDate = null;
         let earliestFutureDate = null;
 
@@ -317,17 +313,17 @@
           const d = parseLocalDate(iso);
           if (!d) return;
           if (d >= today) {
-            hasFuture = true;
             if (!earliestFutureDate || d < earliestFutureDate) earliestFutureDate = d;
           } else if (!latestPastDate || d > latestPastDate) {
             latestPastDate = d;
           }
         });
 
-        if (hasFuture) {
+        if (earliestFutureDate) {
           const iso = toISODateLocal(earliestFutureDate);
           upcoming.push({ ...evt, start: iso, end: iso, _dateObj: earliestFutureDate });
-        } else if (latestPastDate) {
+        }
+        if (latestPastDate) {
           const iso = toISODateLocal(latestPastDate);
           past.push({ ...evt, start: iso, end: iso, _dateObj: latestPastDate });
         }
@@ -336,9 +332,10 @@
 
       if (hasRecurring) {
         const rangeStart = evt._startObj > today ? evt._startObj : today;
-        const rangeEnd = evt._endObj > rangeStart && evt._endObj < horizonEnd
-          ? evt._endObj
-          : horizonEnd;
+        const rangeEnd =
+          evt._endObj > rangeStart && evt._endObj < horizonEnd
+            ? evt._endObj
+            : horizonEnd;
 
         let nextOccurrence = null;
         for (let cursor = new Date(rangeStart); cursor <= rangeEnd; cursor = addDays(cursor, 1)) {
@@ -351,8 +348,11 @@
         if (nextOccurrence) {
           const iso = toISODateLocal(nextOccurrence);
           upcoming.push({ ...evt, start: iso, end: iso, _dateObj: nextOccurrence });
-        } else if (evt._endObj < today) {
-          past.push({ ...evt, _dateObj: evt._endObj });
+        }
+
+        if (evt._startObj < today) {
+          const pastEnd = evt._endObj < today ? evt._endObj : addDays(today, -1);
+          past.push({ ...evt, _dateObj: pastEnd });
         }
         return;
       }
@@ -366,6 +366,10 @@
 
     upcoming.sort((a, b) => a._dateObj - b._dateObj);
     past.sort((a, b) => b._dateObj - a._dateObj);
+
+    console.info(
+      `[events.js] Totale: ${events.length} | Futuri/Prossimi: ${upcoming.length} | Archivio: ${past.length}`
+    );
 
     return { upcoming, past };
   }
