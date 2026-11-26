@@ -21,6 +21,9 @@
 
 <section id="home" class="home-collage">
 
+  <!-- MURO DI RITAGLI OPACHI (POPOLATO DA homebackdrop.js DA images/home/) -->
+  <div class="home-wall-layers" id="home-wall-layers" aria-hidden="true"></div>
+
   <!-- INTRO EDITORIALE (PUNTO DI FUOCO) -->
   <div class="home-intro">
     <span class="home-kicker">EVENTI · ARTE · QUEERNESS</span>
@@ -38,16 +41,7 @@
     </div>
   </div>
 
-  <!-- POSTER NON-LINK AGGIUNTIVI (RITAGLI DI TAGLIE DIVERSE) -->
-  <div class="poster poster-M poster-soldi" aria-hidden="true">
-    <img src="images/soldi.png" alt="">
-  </div>
-
-  <div class="poster poster-L poster-homegallery" aria-hidden="true">
-    <img src="images/homegallery.jpeg" alt="">
-  </div>
-
-  <!-- POSTER CLICCABILI (EVENTI, MANIFESTO, COLLAGE/ARTISTƏ) -->
+  <!-- POSTER CLICCABILI -->
   <a href="#calendario" class="poster poster-XS poster-eventi" aria-label="Vai agli eventi">
     <img src="images/MANI nere QMS.png" alt="Prossimi eventi Queer Market Show">
     <span class="sticker">EVENTI</span>
@@ -503,6 +497,7 @@
 <script src="assets/js/events.js" ></script>
 <script src="assets/js/artists.js" ></script>
 <script src="assets/js/sostienici.js" ></script>
+<script src="assets/js/homebackdrop.js" ></script>
 
 <script>
   // Usiamo DOMContentLoaded al posto di load per maggiore velocità

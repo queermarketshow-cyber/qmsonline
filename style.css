@@ -365,7 +365,7 @@ section[id] {
 }
 
 /* ============================================================
-   HOME COLLAGE — MURO VISSUTO SUI NON-LINK, MORSO SUI LINK
+   HOME COLLAGE — SOVRAPPOSIZIONI REALI OPACHE + MORSO PULITO
 ============================================================ */
 
 .home-collage,
@@ -404,15 +404,8 @@ section[id] {
   display: block;
   object-fit: cover;
   object-position: center;
-  opacity: 0.72;
-  filter: grayscale(22%) contrast(1.48) brightness(0.8);
-  transition: opacity 0.14s ease, filter 0.14s ease;
-}
-
-.poster-XXL:hover img,
-.poster-XXL:focus-visible img {
-  opacity: 0.85;
-  filter: grayscale(8%) contrast(1.55) brightness(0.9);
+  opacity: 1;
+  filter: grayscale(25%) contrast(1.45) brightness(0.78);
 }
 
 .poster-XXL:focus-visible {
@@ -420,66 +413,39 @@ section[id] {
   outline-offset: -4px;
 }
 
-/* ------------------------------------------------------------
-   POSTER NON-LINK: RIEMPIONO LO SFONDO COME UN MURO VISSUTO
-   (niente cornici uguali, niente box chiusi, zero blocco click)
------------------------------------------------------------- */
-.poster:not(a):not(.poster-XXL) {
+/* Contenitore dei ritagli opachi pescati da images/home/ */
+.home-wall-layers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.home-wall-patch {
   position: absolute;
   display: block;
   pointer-events: none;
-  border: none;
-  box-shadow: none;
-  background: transparent;
-  overflow: visible;
+  opacity: 1;
+  mix-blend-mode: normal;
+  background: #090909;
+  border: 3px solid #fff;
+  box-shadow: 6px 6px 0 #000;
+  overflow: hidden;
   transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
 }
 
-.poster:not(a):not(.poster-XXL) img {
+.home-wall-patch img {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
   object-position: center;
+  opacity: 1;
+  filter: contrast(1.35) saturate(1.2);
 }
 
-/* Strato 1: homegallery.jpeg — ampia fascia/manifesto sul fondo */
-.poster-L.poster-homegallery {
-  width: clamp(320px, 52vw, 720px);
-  height: clamp(170px, 30vh, 310px);
-  bottom: 2%;
-  right: -3%;
-  --tilt: -2.5deg;
-  z-index: 2;
-  opacity: 0.56;
-  mix-blend-mode: lighten;
-}
-
-.poster-L.poster-homegallery img {
-  filter: grayscale(35%) contrast(1.55) brightness(0.92);
-}
-
-/* Strato 2: soldi.png — ritaglio grande e sfrontato fuso sulla parete */
-.poster-M.poster-soldi {
-  width: clamp(220px, 34vw, 460px);
-  height: clamp(150px, 24vh, 250px);
-  bottom: 7%;
-  left: 4%;
-  --tilt: 4deg;
-  z-index: 2;
-  opacity: 0.62;
-  mix-blend-mode: screen;
-}
-
-.poster-M.poster-soldi img {
-  object-fit: contain;
-  filter: contrast(1.45) saturate(1.35) brightness(0.95);
-}
-
-/* ------------------------------------------------------------
-   POSTER CLICCABILI: RITAGLI PUNK CHE MORDONO E TORNANO A POSTO
------------------------------------------------------------- */
+/* Poster cliccabili: sopra il muro opaco, mordono all'hover e tornano subito a posto */
 a.poster:not(.poster-XXL) {
   position: absolute;
   display: block;
@@ -488,6 +454,7 @@ a.poster:not(.poster-XXL) {
   border: 3px solid #fff;
   background: #070707;
   box-shadow: 7px 7px 0 #000;
+  opacity: 1;
   transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
   overflow: hidden;
@@ -504,6 +471,7 @@ a.poster:not(.poster-XXL) img {
   display: block;
   object-fit: cover;
   object-position: center;
+  opacity: 1;
   filter: contrast(1.38) saturate(1.28);
   transition: filter 0.14s ease;
 }
@@ -533,7 +501,7 @@ a.poster:not(.poster-XXL):focus-visible img {
   top: 7%;
   left: 3%;
   --tilt: -4.5deg;
-  z-index: 4;
+  z-index: 5;
 }
 
 .poster-XL {
@@ -542,7 +510,7 @@ a.poster:not(.poster-XXL):focus-visible img {
   top: 6%;
   right: 3%;
   --tilt: 3.5deg;
-  z-index: 4;
+  z-index: 5;
 }
 
 .poster-eventi {
@@ -686,10 +654,6 @@ a.poster:focus-visible .sticker {
   outline: none;
 }
 
-/* ============================================================
-   MOBILE: MURO VISSUTO DI FONDO + RITAGLI AI BORDI
-============================================================ */
-
 @media (max-width: 768px) {
   .home-collage,
   .collage-home {
@@ -701,52 +665,12 @@ a.poster:focus-visible .sticker {
     overflow: hidden;
   }
 
-  .poster-XXL {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+  .home-wall-patch {
+    border-width: 2px;
+    box-shadow: 4px 4px 0 #000;
   }
 
-  .poster-XXL img {
-    opacity: 0.65;
-    filter: grayscale(25%) contrast(1.5) brightness(0.75);
-  }
-
-  /* Su mobile i non-link si allargano e si fondono nella parete, senza cornici */
-  .poster:not(a):not(.poster-XXL) {
-    position: absolute;
-    border: none;
-    box-shadow: none;
-    background: transparent;
-    z-index: 2;
-  }
-
-  .poster-L.poster-homegallery {
-    width: 115%;
-    height: 165px;
-    bottom: -10px;
-    left: -8%;
-    right: auto;
-    --tilt: -3deg;
-    opacity: 0.52;
-  }
-
-  .poster-M.poster-soldi {
-    width: 240px;
-    height: 140px;
-    top: 14%;
-    left: -25px;
-    bottom: auto;
-    --tilt: 6deg;
-    opacity: 0.48;
-  }
-
-  /* I poster cliccabili restano ritagli netti ai bordi */
   a.poster:not(.poster-XXL) {
-    position: absolute;
-    z-index: 4;
     border-width: 2px;
     box-shadow: 4px 4px 0 #000;
   }
@@ -775,8 +699,6 @@ a.poster:focus-visible .sticker {
   }
 
   .home-intro {
-    position: relative;
-    z-index: 12;
     width: 100%;
     max-width: 420px;
     padding: 0.25rem;
