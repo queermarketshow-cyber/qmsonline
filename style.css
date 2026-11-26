@@ -365,7 +365,7 @@ section[id] {
 }
 
 /* ============================================================
-   HOME COLLAGE — CRUDA, PUNK, MA LEGGIBILE
+   HOME COLLAGE — MORSO PUNK + RITORNO PULITO IN NAVIGAZIONE
 ============================================================ */
 
 .home-collage,
@@ -383,41 +383,37 @@ section[id] {
   z-index: 1;
 }
 
-/* Leggero scudo scuro solo al centro per far reggere il testo sul collage */
-.home-collage::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0.78) 0%,
-    rgba(0, 0, 0, 0.42) 55%,
-    rgba(0, 0, 0, 0.15) 100%
-  );
-  z-index: 6;
-  pointer-events: none;
-}
-
 .poster {
   position: absolute;
   display: block;
   color: #fff;
   text-decoration: none;
-  border: 2px solid #fff;
-  background: #090909;
-  box-shadow: 6px 6px 0 #000;
-  transform: rotate(var(--tilt, 0deg));
+  border: 3px solid #fff;
+  background: #080808;
+  box-shadow: 7px 7px 0 #000;
+  transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
   overflow: hidden;
-  transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+  /* Ritorno fluido ma scattante allo stato di partenza */
+  transition:
+    transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.14s ease,
+    box-shadow 0.16s ease,
+    z-index 0s linear 0.16s;
 }
 
+/* Quando passa in primo piano, sale subito (z-index immediato) ma resta sotto .home-intro (z-index: 12) */
 .poster:hover,
 .poster:focus-visible {
-  transform: rotate(0deg) scale(1.03);
+  transform: rotate(0deg) scale(1.06) translateZ(0);
   border-color: var(--primary-color);
-  box-shadow: 8px 8px 0 var(--primary-color);
-  z-index: 8;
+  box-shadow: 10px 10px 0 var(--primary-color);
+  z-index: 9;
+  transition:
+    transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.12s ease,
+    box-shadow 0.14s ease,
+    z-index 0s linear 0s;
   outline: none;
 }
 
@@ -427,9 +423,16 @@ section[id] {
   display: block;
   object-fit: cover;
   object-position: center;
-  filter: contrast(1.22) saturate(1.15);
+  filter: contrast(1.32) saturate(1.22);
+  transition: filter 0.16s ease;
 }
 
+.poster:hover img,
+.poster:focus-visible img {
+  filter: contrast(1.42) saturate(1.35) brightness(1.05);
+}
+
+/* Base collage a tutta scena */
 .poster-XXL {
   inset: 0;
   width: 100%;
@@ -440,44 +443,52 @@ section[id] {
   box-shadow: none;
 }
 
-.poster-XXL img {
-  opacity: 0.62;
-  filter: grayscale(35%) contrast(1.35) brightness(0.85);
+.poster-XXL:hover,
+.poster-XXL:focus-visible {
+  transform: none;
+  box-shadow: none;
+  z-index: 1;
 }
 
+.poster-XXL img {
+  opacity: 0.72;
+  filter: grayscale(25%) contrast(1.45) brightness(0.82);
+}
+
+/* Poster ai lati: sfacciati e inclinati, ma con corridoio centrale libero per la navigazione/lettura */
 .poster-XL {
-  width: clamp(160px, 20vw, 270px);
-  height: clamp(230px, 42vh, 390px);
-  top: 7%;
-  right: 3%;
-  --tilt: 3.5deg;
+  width: clamp(165px, 21vw, 290px);
+  height: clamp(240px, 44vh, 410px);
+  top: 6%;
+  right: 2.5%;
+  --tilt: 4deg;
   z-index: 2;
 }
 
 .poster-L {
-  width: clamp(200px, 28vw, 360px);
-  height: clamp(105px, 16vh, 165px);
-  bottom: 6%;
-  left: 3%;
-  --tilt: -3.5deg;
+  width: clamp(210px, 29vw, 380px);
+  height: clamp(110px, 16vh, 170px);
+  bottom: 5%;
+  left: 2.5%;
+  --tilt: -4deg;
   z-index: 3;
 }
 
 .poster-S {
-  width: clamp(150px, 19vw, 250px);
-  height: clamp(150px, 19vw, 250px);
-  bottom: 8%;
-  right: 5%;
-  --tilt: -3deg;
+  width: clamp(155px, 20vw, 265px);
+  height: clamp(155px, 20vw, 265px);
+  bottom: 6%;
+  right: 4%;
+  --tilt: -3.5deg;
   z-index: 4;
 }
 
 .poster-XS {
-  width: clamp(135px, 16vw, 220px);
-  height: clamp(170px, 22vw, 280px);
-  top: 8%;
-  left: 3%;
-  --tilt: 4.5deg;
+  width: clamp(140px, 17vw, 235px);
+  height: clamp(175px, 23vw, 295px);
+  top: 7%;
+  left: 2.5%;
+  --tilt: 5deg;
   z-index: 4;
 }
 
@@ -493,8 +504,8 @@ section[id] {
 }
 
 .poster-galleria {
-  background: #1a1a1a;
-  border: 2px solid #fff;
+  background: #181818;
+  border: 3px solid #fff;
 }
 
 .poster-artist3 {
@@ -504,97 +515,101 @@ section[id] {
 .sticker {
   background: var(--primary-color);
   color: #000;
-  padding: 4px 9px;
+  padding: 4px 10px;
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
   position: absolute;
   bottom: 8px;
   right: 8px;
-  transform: rotate(3deg);
+  transform: rotate(3.5deg);
   border: 2px solid #000;
   box-shadow: 3px 3px 0 #000;
   pointer-events: none;
 }
 
-/* Testo libero sul collage, zero scatola grigia */
+/* Blocco centrale: sempre sopra i poster (z-index: 12), zero scatole morbide */
 .home-intro {
   position: relative;
-  z-index: 10;
-  width: min(92vw, 720px);
+  z-index: 12;
+  width: min(92vw, 740px);
   padding: 0.5rem;
   text-align: center;
   background: none;
   border: none;
   box-shadow: none;
   backdrop-filter: none;
+  pointer-events: none;
 }
 
 .home-kicker {
   display: inline-block;
-  margin-bottom: 0.95rem;
-  padding: 0.38rem 0.9rem;
-  background: #fff;
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.95rem;
+  background: var(--primary-color);
   color: #000;
   border: 2px solid #000;
-  box-shadow: 4px 4px 0 var(--primary-color);
-  font-size: 0.75rem;
+  box-shadow: 4px 4px 0 #fff;
+  font-size: 0.76rem;
   font-weight: 900;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  transform: rotate(-2.5deg);
+  transform: rotate(-3deg);
+  pointer-events: auto;
 }
 
 .home-intro h1 {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: clamp(2.6rem, 7.6vw, 5.6rem);
+  font-size: clamp(2.7rem, 8vw, 5.9rem);
   font-weight: 900;
-  line-height: 0.88;
+  line-height: 0.86;
   text-transform: uppercase;
   color: #fff;
-  transform: rotate(-1deg);
+  transform: rotate(-1.5deg);
   text-shadow:
-    4px 4px 0 #000,
+    5px 5px 0 #000,
     -2px -2px 0 #000,
     2px -2px 0 #000,
-    -2px 2px 0 #000,
-    0 0 24px rgba(0, 0, 0, 0.9);
+    -2px 2px 0 #000;
 }
 
 .home-description {
-  max-width: 50ch;
-  margin: 1.15rem auto 0;
-  font-size: clamp(0.98rem, 1.55vw, 1.15rem);
-  font-weight: 700;
-  line-height: 1.4;
+  max-width: 48ch;
+  margin: 1.2rem auto 0;
+  padding: 0.45rem 0.75rem;
+  display: inline-block;
+  background: #000;
   color: #fff;
-  text-shadow:
-    2px 2px 0 #000,
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000;
+  border: 2px solid #fff;
+  box-shadow: 4px 4px 0 var(--primary-color);
+  transform: rotate(0.8deg);
+  font-size: clamp(0.95rem, 1.45vw, 1.1rem);
+  font-weight: 800;
+  line-height: 1.35;
 }
 
 .home-cta {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1.55rem;
+  gap: 1.1rem;
+  margin-top: 1.6rem;
+  pointer-events: auto;
 }
 
 .home-cta a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.9rem 1.45rem;
+  padding: 0.92rem 1.5rem;
   font-size: 0.9rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-decoration: none;
-  border: 2px solid #000;
+  border: 3px solid #000;
   box-shadow: 5px 5px 0 #000;
   transition: transform 0.14s ease, background-color 0.14s ease, color 0.14s ease, box-shadow 0.14s ease;
 }
@@ -602,20 +617,20 @@ section[id] {
 .cta-primary {
   background: var(--primary-color);
   color: #000;
-  transform: rotate(-1.5deg);
+  transform: rotate(-2deg);
 }
 
 .cta-secondary {
-  background: #000;
-  color: #fff;
-  border-color: #fff;
+  background: #fff;
+  color: #000;
   box-shadow: 5px 5px 0 var(--primary-color);
-  transform: rotate(1.5deg);
+  transform: rotate(2deg);
 }
 
 .home-cta a:hover,
 .home-cta a:focus-visible {
   transform: rotate(0deg) translateY(-3px);
+  box-shadow: 7px 7px 0 var(--primary-color);
   outline: none;
 }
 
@@ -625,7 +640,7 @@ section[id] {
     min-height: auto;
     padding: 1.75rem 1rem 2.5rem;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.1rem;
   }
 
   .poster {
@@ -633,7 +648,13 @@ section[id] {
     inset: auto;
     width: min(88vw, 320px);
     height: 135px;
-    transform: rotate(var(--tilt, 0deg));
+    transform: rotate(var(--tilt, 0deg)) translateZ(0);
+  }
+
+  .poster:hover,
+  .poster:focus-visible {
+    transform: rotate(0deg) scale(1.03) translateZ(0);
+    box-shadow: 6px 6px 0 var(--primary-color);
   }
 
   .poster-XXL {
@@ -662,6 +683,11 @@ section[id] {
   }
 
   .home-intro h1 {
+    transform: rotate(-1deg);
+  }
+
+  .home-description {
+    display: block;
     transform: none;
   }
 
