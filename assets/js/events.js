@@ -1,22 +1,25 @@
 (() => {
   "use strict";
 
-  // 1. Configurazione sorgente dati
   const CONFIG = {
-    sourceUrl: "events.json",
+    // Ordine di tentativo: modifica o metti il tuo percorso esatto al primo posto
+    candidateUrls: [
+      "./event.json",
+      "event.json",
+      "/event.json",
+      "./data/event.json"
+    ],
     fetchOptions: {
       method: "GET",
       headers: {
-        Accept: "application/json"
+        Accept: "application/json, text/plain, */*"
       },
       cache: "no-store"
     },
     timeoutMs: 8000,
-    // Finestra in giorni per espandere eventuali eventi ricorrenti (recurringWeekdays)
     recurringHorizonDays: 180
   };
 
-  // 2. Riferimenti DOM
   const dom = {
     featuredContent: document.getElementById("featured-event-content"),
     filters: document.getElementById("calendar-filters"),
@@ -31,7 +34,6 @@
     pastEvents: document.getElementById("past-events")
   };
 
-  // 3. Stato applicativo
   const state = {
     events: [],
     selectedCategory: "Tutti",
@@ -42,7 +44,6 @@
     listenersBound: false
   };
 
-  // --- Utility date e stringhe ---
   function parseLocalDate(dateStr) {
     if (typeof dateStr !== "string" || !dateStr.trim()) return null;
     const clean = dateStr.trim().split("T")[0];
@@ -177,21 +178,24 @@
     return ["Generale"];
   }
 
-  // --- Normalizzazione e caricamento asincrono ---
-  function normalizeEventsPayload(payload) {
-    const rawList = Array.isArray(payload)
-      ? payload
-      : Array.isArray(payload?.events)
-        ? payload.events
-        : Array.isArray(payload?.data)
-          ? payload.data
-          : null;
+  function extractRawList(payload) {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.events)) return payload.events;
+    if (Array.isArray(payload?.data)) return payload.data;
+    // Se il JSON contiene un singolo oggetto evento invece di un array
+    if (payload && typeof payload === "object" && (payload.start || payload.date) && payload.title) {
+      return [payload];
+    }
+    return null;
+  }
 
+  function normalizeEventsPayload(payload) {
+    const rawList = extractRawList(payload);
     if (!rawList) {
-      throw new Error("Formato JSON non valido: atteso un array di eventi.");
+      throw new Error("Struttura JSON non riconosciuta: serve un array di eventi o un oggetto con 'start' e 'title'.");
     }
 
-    return rawList
+    const parsed = rawList
       .map((item, index) => {
         if (!item || typeof item !== "object") return null;
 
@@ -228,9 +232,15 @@
         };
       })
       .filter(Boolean);
+
+    if (rawList.length > 0 && parsed.length === 0) {
+      throw new Error("Eventi trovati nel JSON, ma nessuno ha 'title' e una data 'start' valida (YYYY-MM-DD).");
+    }
+
+    return parsed;
   }
 
-  async function fetchEvents(url = CONFIG.sourceUrl, timeoutMs = CONFIG.timeoutMs) {
+  async function fetchSingleUrl(url, timeoutMs) {
     const controller = new AbortController();
     const timerId = window.setTimeout(() => controller.abort(), timeoutMs);
 
@@ -241,26 +251,20 @@
       });
 
       if (!response.ok) {
-        throw new Error(`Errore HTTP ${response.status} durante il caricamento degli eventi.`);
+        const err = new Error(`HTTP ${response.status} su ${url}`);
+        err.status = response.status;
+        throw err;
       }
 
-      const contentType = response.headers.get("content-type") || "";
-      if (!contentType.includes("application/json") && !url.endsWith(".json")) {
-        const text = await response.text();
-        try {
-          return JSON.parse(text);
-        } catch {
-          throw new Error("La risposta del server non è in formato JSON valido.");
-        }
+      const text = await response.text();
+      try {
+        return JSON.parse(text);
+      } catch (parseErr) {
+        throw new Error(`JSON non valido in ${url}: ${parseErr.message}`);
       }
-
-      return await response.json();
     } catch (err) {
       if (err.name === "AbortError") {
-        throw new Error("Il caricamento degli eventi ha superato il tempo massimo consentito.");
-      }
-      if (err instanceof TypeError) {
-        throw new Error("Impossibile raggiungere la sorgente eventi. Verifica la connessione o il percorso del file.");
+        throw new Error(`Timeout durante il caricamento di ${url}`);
       }
       throw err;
     } finally {
@@ -268,7 +272,32 @@
     }
   }
 
-  // --- Suddivisione Futuri / Passati (inclusi specificDates e recurringWeekdays) ---
+  async function fetchEventsFromCandidates() {
+    if (window.location.protocol === "file:") {
+      throw new Error(
+        "Stai aprendo la pagina tramite file://. Avvia un server locale (es. Live Server o 'python -m http.server') per permettere a fetch() di leggere event.json."
+      );
+    }
+
+    let lastError = null;
+
+    for (const url of CONFIG.candidateUrls) {
+      try {
+        const data = await fetchSingleUrl(url, CONFIG.timeoutMs);
+        console.info("[events.js] Caricato con successo da:", url);
+        return data;
+      } catch (err) {
+        lastError = err;
+        // Se il file esiste ma ha un errore di sintassi JSON, fermati e mostra l'errore esatto
+        if (err.message && err.message.startsWith("JSON non valido")) {
+          throw err;
+        }
+      }
+    }
+
+    throw lastError || new Error("Impossibile trovare event.json nei percorsi configurati.");
+  }
+
   function splitEvents(events) {
     const today = startOfToday();
     const horizonEnd = addDays(today, CONFIG.recurringHorizonDays);
@@ -279,7 +308,6 @@
       const hasSpecific = evt.specificDates.length > 0;
       const hasRecurring = evt.recurringWeekdays.length > 0;
 
-      // Caso A: evento con date puntuali esplicite
       if (hasSpecific) {
         let hasFuture = false;
         let latestPastDate = null;
@@ -298,25 +326,14 @@
 
         if (hasFuture) {
           const iso = toISODateLocal(earliestFutureDate);
-          upcoming.push({
-            ...evt,
-            start: iso,
-            end: iso,
-            _dateObj: earliestFutureDate
-          });
+          upcoming.push({ ...evt, start: iso, end: iso, _dateObj: earliestFutureDate });
         } else if (latestPastDate) {
           const iso = toISODateLocal(latestPastDate);
-          past.push({
-            ...evt,
-            start: iso,
-            end: iso,
-            _dateObj: latestPastDate
-          });
+          past.push({ ...evt, start: iso, end: iso, _dateObj: latestPastDate });
         }
         return;
       }
 
-      // Caso B: evento ricorrente nei giorni della settimana indicati
       if (hasRecurring) {
         const rangeStart = evt._startObj > today ? evt._startObj : today;
         const rangeEnd = evt._endObj > rangeStart && evt._endObj < horizonEnd
@@ -333,33 +350,17 @@
 
         if (nextOccurrence) {
           const iso = toISODateLocal(nextOccurrence);
-          upcoming.push({
-            ...evt,
-            start: iso,
-            end: iso,
-            _dateObj: nextOccurrence
-          });
+          upcoming.push({ ...evt, start: iso, end: iso, _dateObj: nextOccurrence });
         } else if (evt._endObj < today) {
-          past.push({
-            ...evt,
-            _dateObj: evt._endObj
-          });
+          past.push({ ...evt, _dateObj: evt._endObj });
         }
         return;
       }
 
-      // Caso C: evento singolo o multi-giorno (start -> end)
-      // Resta nei prossimi finché end >= oggi
       if (evt._endObj >= today) {
-        upcoming.push({
-          ...evt,
-          _dateObj: evt._startObj
-        });
+        upcoming.push({ ...evt, _dateObj: evt._startObj });
       } else {
-        past.push({
-          ...evt,
-          _dateObj: evt._endObj
-        });
+        past.push({ ...evt, _dateObj: evt._endObj });
       }
     });
 
@@ -369,7 +370,6 @@
     return { upcoming, past };
   }
 
-  // --- Stati Loading ed Errore ---
   function renderLoadingState() {
     const loadingMarkup = `<p class="loading-state" role="status">Caricamento eventi in corso...</p>`;
     if (dom.featuredContent) dom.featuredContent.innerHTML = loadingMarkup;
@@ -385,6 +385,7 @@
   }
 
   function renderErrorState(message) {
+    console.error("[events.js]", message);
     const safeMsg = escapeHTML(message);
     const errorMarkup = `
       <div class="error-state" role="alert">
@@ -411,7 +412,6 @@
     });
   }
 
-  // --- Helper blocchi comuni ---
   function renderCategoriesHTML(categories) {
     return categories
       .map((cat) => `<span class="event-category">${escapeHTML(cat)}</span>`)
@@ -439,7 +439,6 @@
     return `<div class="event-actions">${parts.join("")}</div>`;
   }
 
-  // --- 1. Prossimo Evento (#featured-event-content) ---
   function renderFeaturedEvent(upcomingEvents) {
     if (!dom.featuredContent) return;
 
@@ -468,7 +467,6 @@
     `;
   }
 
-  // --- 2. Filtri (#calendar-filters) ---
   function getFilteredUpcoming(upcomingEvents) {
     if (state.selectedCategory === "Tutti") return upcomingEvents;
     return upcomingEvents.filter((evt) => evt.categories.includes(state.selectedCategory));
@@ -501,7 +499,6 @@
       .join("");
   }
 
-  // --- Raggruppamento per mese ---
   function groupEventsByMonth(events) {
     const map = new Map();
 
@@ -537,7 +534,6 @@
     `;
   }
 
-  // --- 3. Calendario Desktop (#future-month-container, #prev-month, #next-month) ---
   function renderDesktopCalendar(monthGroups) {
     if (!dom.monthContainer) return;
 
@@ -564,7 +560,6 @@
     if (dom.nextMonthBtn) dom.nextMonthBtn.disabled = state.activeMonthIndex === monthGroups.length - 1;
   }
 
-  // --- 4. Carosello Mobile (#mobile-calendar-carousel, #mobile-dots, #mobile-prev, #mobile-next) ---
   function renderMobileCarousel(monthGroups) {
     if (!dom.mobileCarousel) return;
 
@@ -609,7 +604,6 @@
     if (dom.mobileNextBtn) dom.mobileNextBtn.disabled = state.mobileSlideIndex === monthGroups.length - 1;
   }
 
-  // --- 5. Archivio Eventi (#past-events) ---
   function renderArchive(pastEvents) {
     if (!dom.pastEvents) return;
 
@@ -636,7 +630,6 @@
       .join("");
   }
 
-  // --- Eventi UI e Rendering principale ---
   function getCurrentGroups() {
     const { upcoming } = splitEvents(state.events);
     return groupEventsByMonth(getFilteredUpcoming(upcoming));
@@ -734,7 +727,7 @@
     renderLoadingState();
 
     try {
-      const rawPayload = await fetchEvents(CONFIG.sourceUrl, CONFIG.timeoutMs);
+      const rawPayload = await fetchEventsFromCandidates();
       state.events = normalizeEventsPayload(rawPayload);
       renderAll(state.events);
     } catch (err) {
