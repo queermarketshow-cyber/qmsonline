@@ -12,6 +12,7 @@
     timeoutMs: 8000
   };
 
+  // Elenco predefinito: usato se artists.json non esiste o è vuoto
   const FALLBACK_ARTISTS = [
     {
       id: "artist-1",
@@ -39,15 +40,21 @@
     }
   ];
 
-  const dom = {
-    btnResident: document.getElementById("btn-resident"),
-    btnGuest: document.getElementById("btn-guest"),
-    residentGallery: document.getElementById("artists-resident"),
-    guestGallery: document.getElementById("artists-guest"),
-    allGallery: document.getElementById("artists-all"),
-    allFilters: document.getElementById("all-artists-filters"),
-    modalsContainer: document.getElementById("artist-modals")
-  };
+  function getDom() {
+    return {
+      sectionHome:
+        document.getElementById("artistə") ||
+        document.getElementById("artist3") ||
+        document.querySelector(".home-artists-section"),
+      btnResident: document.getElementById("btn-resident"),
+      btnGuest: document.getElementById("btn-guest"),
+      residentGallery: document.getElementById("artists-resident"),
+      guestGallery: document.getElementById("artists-guest"),
+      allGallery: document.getElementById("artists-all"),
+      allFilters: document.getElementById("all-artists-filters"),
+      modalsContainer: document.getElementById("artist-modals")
+    };
+  }
 
   const state = {
     artists: [],
@@ -88,10 +95,20 @@
   }
 
   function normalizeRole(artist) {
-    const raw = String(artist.role ?? artist.type ?? artist.category ?? "")
+    const raw = String(
+      artist.role ?? artist.ruolo ?? artist.type ?? artist.tipo ?? artist.category ?? ""
+    )
       .trim()
       .toLowerCase();
-    if (raw === "guest" || raw === "ospite" || raw === "ospiti") return "guest";
+
+    if (
+      raw === "guest" ||
+      raw === "ospite" ||
+      raw === "ospiti" ||
+      raw === "guests"
+    ) {
+      return "guest";
+    }
     return "resident";
   }
 
@@ -106,17 +123,25 @@
 
     return list
       .map((item, idx) => {
-        if (!item || typeof item !== "object" || !item.name) return null;
-        const gallery = Array.isArray(item.gallery)
-          ? item.gallery.map((g) => sanitizeUrl(g)).filter(Boolean)
-          : [];
+        if (!item || typeof item !== "object") return null;
+        const rawName = item.name ?? item.nome ?? item.title;
+        if (!rawName || !String(rawName).trim()) return null;
+
+        const rawImage = item.image ?? item.img ?? item.foto ?? item.avatar ?? "";
+        const rawBio = item.bio ?? item.description ?? item.descrizione ?? "";
+        const rawGallery = Array.isArray(item.gallery)
+          ? item.gallery
+          : Array.isArray(item.immagini)
+            ? item.immagini
+            : [];
+
         return {
           id: String(item.id ?? `artist-${idx + 1}`),
-          name: String(item.name).trim(),
+          name: String(rawName).trim(),
           role: normalizeRole(item),
-          image: sanitizeUrl(item.image),
-          bio: item.bio ? String(item.bio).trim() : "",
-          gallery
+          image: sanitizeUrl(rawImage),
+          bio: String(rawBio).trim(),
+          gallery: rawGallery.map((g) => sanitizeUrl(g)).filter(Boolean)
         };
       })
       .filter(Boolean);
@@ -148,7 +173,7 @@
         const data = await fetchSingle(url);
         const normalized = normalizeArtists(data);
         if (normalized.length > 0) {
-          console.info("[artists.js] Caricato da:", url);
+          console.info("[artists.js] Caricato da:", url, "Totale:", normalized.length);
           return normalized;
         }
       } catch {
@@ -156,7 +181,7 @@
       }
     }
 
-    console.info("[artists.js] Uso elenco di esempio predefinito.");
+    console.info("[artists.js] Nessun artists.json trovato, uso dati predefiniti.");
     return normalizeArtists(FALLBACK_ARTISTS);
   }
 
@@ -170,8 +195,8 @@
       <article class="artist-card" data-artist-id="${safeId}" tabindex="0" role="button" aria-label="Apri scheda di ${safeName}">
         ${
           safeImg
-            ? `<img src="${safeImg}" alt="${safeName}" loading="lazy">`
-            : `<div class="artist-card-placeholder">${safeName}</div>`
+            ? `<img src="${safeImg}" alt="${safeName}" loading="lazy" onerror="this.style.display='none'">`
+            : ""
         }
         <div class="artista-info">
           <span class="artista-name">${safeName}</span>
@@ -181,9 +206,17 @@
     `;
   }
 
-  function renderHomeGalleries() {
+  function renderHomeGalleries(dom) {
+    if (dom.sectionHome) {
+      dom.sectionHome.style.opacity = "1";
+    }
+
     const residents = state.artists.filter((a) => a.role === "resident");
     const guests = state.artists.filter((a) => a.role === "guest");
+
+    console.info(
+      `[artists.js] Residenti: ${residents.length} | Ospiti: ${guests.length}`
+    );
 
     if (dom.residentGallery) {
       dom.residentGallery.innerHTML = residents.length
@@ -198,7 +231,7 @@
     }
   }
 
-  function renderAllArtistsPage() {
+  function renderAllArtistsPage(dom) {
     if (!dom.allGallery) return;
 
     const filtered =
@@ -211,7 +244,7 @@
       : `<p class="empty-state">Nessuna artista trovata per questo filtro.</p>`;
   }
 
-  function openArtistModal(artistId) {
+  function openArtistModal(artistId, dom) {
     const artist = state.artists.find((a) => a.id === artistId);
     if (!artist || !dom.modalsContainer) return;
 
@@ -244,7 +277,7 @@
     document.body.classList.add("modal-open");
   }
 
-  function closeArtistModal() {
+  function closeArtistModal(dom) {
     state.activeArtistId = null;
     if (dom.modalsContainer) {
       dom.modalsContainer.innerHTML = "";
@@ -255,6 +288,8 @@
   function bindEventsOnce() {
     if (state.listenersBound) return;
     state.listenersBound = true;
+
+    const dom = getDom();
 
     if (dom.btnResident && dom.btnGuest && dom.residentGallery && dom.guestGallery) {
       dom.btnResident.addEventListener("click", () => {
@@ -280,47 +315,51 @@
         dom.allFilters.querySelectorAll("[data-artist-filter]").forEach((el) => {
           el.classList.toggle("active", el === btn);
         });
-        renderAllArtistsPage();
+        renderAllArtistsPage(getDom());
       });
     }
 
     document.addEventListener("click", (e) => {
+      const currentDom = getDom();
+
       if (e.target.closest('[data-action="close-artist-modal"]')) {
-        closeArtistModal();
+        closeArtistModal(currentDom);
         return;
       }
 
       const modalBackdrop = e.target.closest(".artist-modal");
       if (modalBackdrop && e.target === modalBackdrop) {
-        closeArtistModal();
+        closeArtistModal(currentDom);
         return;
       }
 
       const card = e.target.closest(".artist-card[data-artist-id]");
       if (card) {
-        openArtistModal(card.dataset.artistId);
+        openArtistModal(card.dataset.artistId, currentDom);
       }
     });
 
     document.addEventListener("keydown", (e) => {
+      const currentDom = getDom();
       if (e.key === "Escape" && state.activeArtistId) {
-        closeArtistModal();
+        closeArtistModal(currentDom);
       }
       if (e.key === "Enter") {
         const card = document.activeElement?.closest(".artist-card[data-artist-id]");
         if (card) {
           e.preventDefault();
-          openArtistModal(card.dataset.artistId);
+          openArtistModal(card.dataset.artistId, currentDom);
         }
       }
     });
   }
 
   async function init() {
+    const dom = getDom();
     bindEventsOnce();
     state.artists = await loadArtistsData();
-    renderHomeGalleries();
-    renderAllArtistsPage();
+    renderHomeGalleries(dom);
+    renderAllArtistsPage(dom);
   }
 
   if (document.readyState === "loading") {
