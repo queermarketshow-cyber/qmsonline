@@ -216,6 +216,9 @@ if (calNextBtn) {
 ============================================================ */
 
 function renderAll() {
+
+  renderFeaturedEventHome();
+
   const pastBtn = document.getElementById("show-past");
   const showingPast = pastBtn && pastBtn.classList.contains("active");
 
@@ -228,6 +231,7 @@ function renderAll() {
   renderPastEvents();
   linkCalendarToTimeline();
 }
+
 
 /* ============================================================
    CALENDARIO DESKTOP + SELETTORE
@@ -596,7 +600,143 @@ function linkCalendarToTimeline() {
     });
   });
 }
+/* ============================================================
+   PROSSIMO EVENTO HOME
+============================================================ */
 
+function renderFeaturedEventHome() {
+
+  const container = document.getElementById("featured-event-home");
+
+  if (!container) return;
+
+  const futureEvents = events
+    .filter(ev => ev.dateObj >= todayDate)
+    .sort((a, b) => a.dateObj - b.dateObj);
+
+  if (!futureEvents.length) {
+
+    container.innerHTML = `
+      <div class="featured-event-empty">
+        Nessun evento in programma.
+      </div>
+    `;
+
+    return;
+  }
+
+  const ev = futureEvents[0];
+
+  const ticketButton = ev.ticketUrl
+    ? `
+      <a
+        href="${ev.ticketUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="event-primary-btn">
+
+        Prenota / Acquista
+
+      </a>
+    `
+    : `
+      <span class="event-free-entry">
+        ${ev.freeEntry === false
+          ? "Biglietti presto disponibili"
+          : "Ingresso gratuito"}
+      </span>
+    `;
+
+  const locationMarkup = ev.venueUrl
+    ? `
+      <a
+        href="${ev.venueUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="event-location">
+
+        📍 ${ev.location}
+
+      </a>
+    `
+    : `
+      <span class="event-location">
+        📍 ${ev.location}
+      </span>
+    `;
+
+  container.innerHTML = `
+
+    <div class="featured-event-wrapper">
+
+      <div class="featured-event-image">
+
+        ${
+          ev.image
+            ? `
+              <img
+                src="${ev.image}"
+                alt="${ev.title}">
+            `
+            : ""
+        }
+
+      </div>
+
+      <div class="featured-event-content">
+
+        <span class="event-label">
+          PROSSIMO EVENTO
+        </span>
+
+        <h2 class="event-title">
+          ${ev.title}
+        </h2>
+
+        <div class="event-meta">
+
+          <p>
+            📅 ${ev.dateReadable}
+          </p>
+
+          ${
+            ev.time
+              ? `
+                <p>
+                  🕒 ${ev.time}
+                </p>
+              `
+              : ""
+          }
+
+          <p>
+            ${locationMarkup}
+          </p>
+
+        </div>
+
+        ${
+          ev.description
+            ? `
+              <p class="event-description">
+                ${ev.description}
+              </p>
+            `
+            : ""
+        }
+
+        <div class="event-actions">
+
+          ${ticketButton}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
 /* ============================================================
    MODALE EVENTO + BODY LOCK
 ============================================================ */
