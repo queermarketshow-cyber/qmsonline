@@ -3,10 +3,10 @@
 
   const CONFIG = {
     candidateUrls: [
-      "./event.json",
-      "event.json",
-      "/event.json",
-      "./data/event.json"
+      "./events.json",
+      "events.json",
+      "/events.json",
+      "./data/events.json"
     ],
     fetchOptions: {
       method: "GET",
