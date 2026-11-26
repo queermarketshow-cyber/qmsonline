@@ -81,7 +81,9 @@
     }
 
     const cleanDir = String(basePath || "").trim().replace(/^\/+|\/+$/g, "");
-    const combined = cleanDir ? `${cleanDir}/${cleanFile.replace(/^\/+/, "")}` : cleanFile;
+    const combined = cleanDir
+      ? `${cleanDir}/${cleanFile.replace(/^\/+/, "")}`
+      : cleanFile;
     return sanitizeUrl(combined);
   }
 
@@ -116,8 +118,10 @@
         const rawName = item.name ?? item.nome ?? item.title;
         if (!rawName || !String(rawName).trim()) return null;
 
-        const basePath = item.path ?? item.folder ?? "";
-        const rawCover = item.cover ?? item.image ?? item.img ?? item.foto ?? "";
+        const basePath =
+          item.path ?? item.folder ?? item.dir ?? item.basePath ?? "";
+        const rawCover =
+          item.cover ?? item.image ?? item.img ?? item.foto ?? "";
         const coverUrl = joinAssetPath(basePath, rawCover);
 
         const rawImages = Array.isArray(item.images)
@@ -178,7 +182,14 @@
         const data = await fetchSingle(url);
         const normalized = normalizeArtists(data);
         if (normalized.length > 0) {
-          console.info("[artists.js] Caricato da:", url, "Totale:", normalized.length);
+          console.info(
+            "[artists.js] Caricato da:",
+            url,
+            "Totale:",
+            normalized.length,
+            "| Esempio cover:",
+            normalized[0]?.cover || "(vuota)"
+          );
           return normalized;
         }
       } catch {
@@ -195,7 +206,9 @@
     const safeName = escapeHTML(artist.name);
     const safeCover = escapeHTML(artist.cover);
     const typeLabel = artist.type === "guest" ? "Ospite" : "Resident";
-    const roleTag = artist.role ? `<span class="artista-role-tag">${escapeHTML(artist.role)}</span>` : "";
+    const roleTag = artist.role
+      ? `<span class="artista-role-tag">${escapeHTML(artist.role)}</span>`
+      : "";
 
     return `
       <article class="artist-card" data-artist-id="${safeId}" tabindex="0" role="button" aria-label="Apri scheda di ${safeName}">
@@ -270,7 +283,9 @@
       : "";
 
     const bioHTML = [
-      artist.bioShort ? `<p class="artist-modal-lead"><strong>${escapeHTML(artist.bioShort)}</strong></p>` : "",
+      artist.bioShort
+        ? `<p class="artist-modal-lead"><strong>${escapeHTML(artist.bioShort)}</strong></p>`
+        : "",
       artist.bioLong ? `<p>${escapeHTML(artist.bioLong)}</p>` : ""
     ]
       .filter(Boolean)
