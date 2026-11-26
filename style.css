@@ -365,7 +365,7 @@ section[id] {
 }
 
 /* ============================================================
-   HOME COLLAGE — STRAPPI, BORDI FRASTAGLIATI & TAGLIE SBILANCIATE
+   HOME COLLAGE — CARTA STRAPPATA ORGANICA, 5 TAGLIE OPPOSTE, MORSO PULITO
 ============================================================ */
 
 .home-collage,
@@ -405,7 +405,7 @@ section[id] {
   object-fit: cover;
   object-position: center;
   opacity: 1;
-  filter: grayscale(28%) contrast(1.52) brightness(0.76);
+  filter: grayscale(25%) contrast(1.45) brightness(0.76);
 }
 
 .poster-XXL:focus-visible {
@@ -413,7 +413,7 @@ section[id] {
   outline-offset: -4px;
 }
 
-/* Contenitore dei ritagli opachi strappati da images/home/ */
+/* Contenitore dei 5 ritagli di carta strappata */
 .home-wall-layers {
   position: absolute;
   inset: 0;
@@ -434,7 +434,7 @@ section[id] {
   overflow: visible;
   transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
-  filter: drop-shadow(5px 5px 0 #000) drop-shadow(-1px -1px 0 #fff);
+  filter: drop-shadow(6px 6px 0 #000);
 }
 
 .home-wall-patch img {
@@ -444,56 +444,48 @@ section[id] {
   object-fit: cover;
   object-position: center;
   opacity: 1;
-  filter: contrast(1.42) saturate(1.25);
+  filter: contrast(1.38) saturate(1.22);
 }
 
-/* Profili frastagliati / strappati (zero bordi dritti o angoli pari) */
-.home-wall-patch.torn-a img {
-  clip-path: polygon(
-    0% 14%, 12% 3%, 27% 18%, 44% 2%, 61% 15%, 79% 4%, 93% 16%, 100% 7%,
-    97% 84%, 84% 96%, 68% 82%, 51% 98%, 33% 83%, 17% 97%, 3% 85%
-  );
+/* Profili curvi e organici da carta strappata (niente zig-zag geometrici) */
+.home-wall-patch.tear-1 img {
+  clip-path: url(#paper-tear-1);
 }
 
-.home-wall-patch.torn-b img {
-  clip-path: polygon(
-    8% 0%, 89% 4%, 100% 19%, 91% 37%, 98% 58%, 88% 76%, 95% 100%,
-    14% 95%, 2% 79%, 11% 61%, 0% 42%, 9% 21%
-  );
+.home-wall-patch.tear-2 img {
+  clip-path: url(#paper-tear-2);
 }
 
-.home-wall-patch.torn-c img {
-  clip-path: polygon(
-    0% 9%, 19% 0%, 38% 12%, 57% 2%, 76% 14%, 100% 4%,
-    95% 88%, 77% 100%, 58% 86%, 39% 99%, 20% 87%, 4% 96%
-  );
+.home-wall-patch.tear-3 img {
+  clip-path: url(#paper-tear-3);
 }
 
-.home-wall-patch.torn-d img {
-  clip-path: polygon(
-    4% 11%, 23% 2%, 41% 16%, 63% 3%, 82% 15%, 100% 6%,
-    98% 82%, 81% 97%, 62% 84%, 42% 98%, 21% 85%, 0% 93%
-  );
+.home-wall-patch.tear-4 img {
+  clip-path: url(#paper-tear-4);
 }
 
-/* Poster cliccabili: anch'essi con taglio irregolare, mordono all'hover e tornano subito a posto */
+.home-wall-patch.tear-5 img {
+  clip-path: url(#paper-tear-5);
+}
+
+/* Poster cliccabili: mordono su hover/focus e tornano subito a posto */
 a.poster:not(.poster-XXL) {
   position: absolute;
   display: block;
   color: #fff;
   text-decoration: none;
-  border: none;
+  border: 3px solid #fff;
   border-radius: 0;
-  box-shadow: none;
-  background: transparent;
+  box-shadow: 7px 7px 0 #000;
+  background: #070707;
   opacity: 1;
-  overflow: visible;
+  overflow: hidden;
   transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
-  filter: drop-shadow(6px 6px 0 #000) drop-shadow(-1px -1px 0 #fff);
   transition:
     transform 0.14s cubic-bezier(0.2, 0.9, 0.3, 1),
-    filter 0.14s ease,
+    border-color 0.12s ease,
+    box-shadow 0.14s ease,
     z-index 0s linear 0.14s;
 }
 
@@ -504,57 +496,44 @@ a.poster:not(.poster-XXL) img {
   object-fit: cover;
   object-position: center;
   opacity: 1;
-  filter: contrast(1.42) saturate(1.3);
+  filter: contrast(1.4) saturate(1.28);
   transition: filter 0.14s ease;
-}
-
-.poster-eventi img {
-  clip-path: polygon(
-    0% 8%, 22% 0%, 48% 11%, 74% 1%, 100% 9%,
-    94% 89%, 70% 100%, 44% 88%, 19% 99%, 4% 87%
-  );
-}
-
-.poster-manifesto img {
-  clip-path: polygon(
-    6% 0%, 95% 3%, 100% 24%, 92% 51%, 99% 77%, 91% 100%,
-    9% 96%, 0% 73%, 8% 48%, 1% 22%
-  );
 }
 
 a.poster:not(.poster-XXL):hover,
 a.poster:not(.poster-XXL):focus-visible {
-  transform: rotate(calc(var(--tilt, 0deg) * -0.45)) scale(1.09) translateZ(0);
-  filter: drop-shadow(9px 9px 0 var(--primary-color)) drop-shadow(-2px -2px 0 #fff);
+  transform: rotate(calc(var(--tilt, 0deg) * -0.45)) scale(1.08) translateZ(0);
+  border-color: var(--primary-color);
+  box-shadow: 10px 10px 0 var(--primary-color);
   z-index: 9;
   transition:
     transform 0.12s cubic-bezier(0.2, 0.9, 0.3, 1),
-    filter 0.12s ease,
+    border-color 0.1s ease,
+    box-shadow 0.12s ease,
     z-index 0s linear 0s;
   outline: none;
 }
 
 a.poster:not(.poster-XXL):hover img,
 a.poster:not(.poster-XXL):focus-visible img {
-  filter: contrast(1.52) saturate(1.45) brightness(1.06);
+  filter: contrast(1.5) saturate(1.42) brightness(1.06);
 }
 
-/* Dimensioni e proporzioni ben differenziate */
 .poster-XS {
-  width: clamp(130px, 15vw, 200px);
-  height: clamp(185px, 27vh, 320px);
-  top: 6%;
-  left: 2.5%;
-  --tilt: -5deg;
+  width: clamp(135px, 16vw, 220px);
+  height: clamp(165px, 23vh, 285px);
+  top: 7%;
+  left: 3%;
+  --tilt: -4.5deg;
   z-index: 5;
 }
 
 .poster-XL {
-  width: clamp(185px, 24vw, 340px);
-  height: clamp(220px, 39vh, 380px);
+  width: clamp(175px, 22vw, 315px);
+  height: clamp(235px, 42vh, 400px);
   top: 6%;
-  right: 2.5%;
-  --tilt: 4deg;
+  right: 3%;
+  --tilt: 3.5deg;
   z-index: 5;
 }
 
@@ -567,13 +546,12 @@ a.poster:not(.poster-XXL):focus-visible img {
   text-transform: uppercase;
   letter-spacing: 0.07em;
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  transform: rotate(-3.5deg);
+  bottom: 8px;
+  right: 8px;
+  transform: rotate(-3deg);
   border: 2px solid #000;
   box-shadow: 3px 3px 0 #fff;
   pointer-events: none;
-  z-index: 2;
   transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease;
 }
 
@@ -581,7 +559,7 @@ a.poster:hover .sticker,
 a.poster:focus-visible .sticker {
   background: #fff;
   color: #000;
-  transform: rotate(2.5deg) scale(1.1);
+  transform: rotate(2deg) scale(1.08);
   box-shadow: 3px 3px 0 var(--primary-color);
 }
 
@@ -702,26 +680,26 @@ a.poster:focus-visible .sticker {
   }
 
   .poster-XS {
-    width: 96px;
-    height: 136px;
+    width: 104px;
+    height: 124px;
     top: 3%;
-    left: -14px;
-    --tilt: -7deg;
+    left: -12px;
+    --tilt: -5.5deg;
   }
 
   .poster-XL {
-    width: 132px;
-    height: 124px;
+    width: 122px;
+    height: 148px;
     top: 4%;
-    right: -16px;
-    --tilt: 6.5deg;
+    right: -14px;
+    --tilt: 5.5deg;
   }
 
   a.poster:not(.poster-XXL) .sticker {
     font-size: 0.58rem;
     padding: 2px 5px;
-    bottom: 6px;
-    right: 6px;
+    bottom: 5px;
+    right: 5px;
   }
 
   .home-intro {

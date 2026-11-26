@@ -13,27 +13,30 @@
     'images/home/398305568_326402376660831_151121864657075626.webp'
   ];
 
-  // 6 slot desktop: dimensioni molto diverse, sovrapposizioni reali, corridoio centrale leggibile
+  // 5 slot desktop: dimensioni nettamente diverse e ampie per riempire il muro
   const DESKTOP_SLOTS = [
-    { top: '2%',     left: '11%',  w: 'clamp(240px, 31vw, 440px)', h: 'clamp(88px, 13vh, 145px)',  tilt: '-5.5deg', z: 2, tear: 'torn-a' },
-    { top: '7%',     right: '14%', w: 'clamp(118px, 14vw, 185px)', h: 'clamp(215px, 35vh, 335px)', tilt: '6.5deg',  z: 2, tear: 'torn-b' },
-    { bottom: '3%',  left: '12%',  w: 'clamp(138px, 17vw, 225px)', h: 'clamp(170px, 26vh, 260px)', tilt: '-4deg',   z: 3, tear: 'torn-c' },
-    { bottom: '4%',  right: '18%', w: 'clamp(270px, 36vw, 520px)', h: 'clamp(102px, 15vh, 170px)', tilt: '4.5deg',  z: 3, tear: 'torn-d' },
-    { top: '37%',    left: '-3%',  w: 'clamp(102px, 12vw, 160px)', h: 'clamp(190px, 28vh, 290px)', tilt: '-7deg',   z: 2, tear: 'torn-b' },
-    { top: '41%',    right: '-2%', w: 'clamp(148px, 18vw, 245px)', h: 'clamp(92px, 13vh, 148px)',  tilt: '7.5deg',  z: 2, tear: 'torn-a' }
+    // 1. Enorme fascia-muro bassa/larga
+    { top: '54%',   left: '8%',   w: 'clamp(420px, 56vw, 820px)', h: 'clamp(190px, 34vh, 330px)', tilt: '-2.5deg', z: 2, tear: 'tear-1' },
+    // 2. Blocco alto-largo che taglia la parte superiore
+    { top: '-2%',   left: '20%',  w: 'clamp(360px, 48vw, 700px)', h: 'clamp(140px, 23vh, 230px)', tilt: '2deg',    z: 2, tear: 'tear-2' },
+    // 3. Ritaglio alto e stretto sul lato sinistro
+    { top: '12%',   left: '-2%',  w: 'clamp(150px, 18vw, 260px)', h: 'clamp(280px, 48vh, 460px)', tilt: '-4deg',   z: 3, tear: 'tear-3' },
+    // 4. Ritaglio medio-grande a destra
+    { top: '18%',   right: '-2%', w: 'clamp(210px, 27vw, 390px)', h: 'clamp(230px, 39vh, 370px)', tilt: '3.5deg',  z: 2, tear: 'tear-4' },
+    // 5. Pezzo compatto ma denso in basso a destra
+    { bottom: '2%', right: '10%', w: 'clamp(160px, 20vw, 280px)', h: 'clamp(120px, 19vh, 185px)', tilt: '-5deg',   z: 3, tear: 'tear-5' }
   ];
 
-  // 6 slot mobile: almeno 5-6 ritagli strappati sui bordi, senza schiacciare il centro
+  // 5 slot mobile: 5 dimensioni diverse che coprono molta parete senza impilarsi in lista
   const MOBILE_SLOTS = [
-    { top: '1%',     left: '12%',  w: '165px', h: '64px',  tilt: '-5.5deg', z: 2, tear: 'torn-a' },
-    { top: '12%',    right: '-14px',w: '88px',  h: '126px', tilt: '6.5deg',  z: 2, tear: 'torn-b' },
-    { top: '34%',    left: '-16px', w: '84px',  h: '112px', tilt: '-6deg',   z: 2, tear: 'torn-c' },
-    { bottom: '18%', right: '-14px',w: '94px',  h: '114px', tilt: '5.5deg',  z: 2, tear: 'torn-d' },
-    { bottom: '5%',  left: '6%',   w: '124px', h: '76px',  tilt: '-4deg',   z: 2, tear: 'torn-a' },
-    { bottom: '1%',  right: '10%', w: '180px', h: '68px',  tilt: '4.5deg',  z: 2, tear: 'torn-c' }
+    { top: '-1%',    left: '6%',   w: '280px', h: '105px', tilt: '-3deg', z: 2, tear: 'tear-1' },
+    { top: '14%',    right: '-18px',w: '115px', h: '210px', tilt: '4deg',  z: 2, tear: 'tear-2' },
+    { top: '36%',    left: '-16px', w: '105px', h: '165px', tilt: '-4.5deg',z: 2, tear: 'tear-3' },
+    { bottom: '14%', right: '-10px',w: '230px', h: '115px', tilt: '3deg',  z: 2, tear: 'tear-4' },
+    { bottom: '-1%', left: '8%',   w: '145px', h: '88px',  tilt: '-4deg', z: 2, tear: 'tear-5' }
   ];
 
-  const TEARS = ['torn-a', 'torn-b', 'torn-c', 'torn-d'];
+  const TEARS = ['tear-1', 'tear-2', 'tear-3', 'tear-4', 'tear-5'];
 
   function shuffle(arr) {
     const copy = arr.slice();
@@ -44,14 +47,12 @@
     return copy;
   }
 
-  // Seleziona almeno minCount immagini (ripetendo se l'array avesse meno elementi)
-  function pickImages(pool, count) {
-    const minCount = Math.max(5, count);
+  function pickFiveImages(pool) {
     const result = [];
-    while (result.length < minCount) {
+    while (result.length < 5) {
       result.push(...shuffle(pool));
     }
-    return result.slice(0, minCount);
+    return result.slice(0, 5);
   }
 
   function renderWall() {
@@ -59,15 +60,14 @@
 
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const slots = isMobile ? MOBILE_SLOTS : DESKTOP_SLOTS;
-    const targetCount = Math.max(5, slots.length);
-    const pickedImages = pickImages(HOME_WALL_IMAGES, targetCount);
+    const pickedImages = pickFiveImages(HOME_WALL_IMAGES);
 
     wallContainer.innerHTML = '';
 
     pickedImages.forEach((src, idx) => {
-      const slot = slots[idx] || slots[idx % slots.length];
+      const slot = slots[idx];
       const tearClass = TEARS[(idx + Math.floor(Math.random() * TEARS.length)) % TEARS.length];
-      const randomTiltOffset = (Math.random() * 4 - 2).toFixed(1);
+      const randomTiltOffset = (Math.random() * 3 - 1.5).toFixed(1);
 
       const patch = document.createElement('div');
       patch.className = `home-wall-patch ${tearClass}`;
@@ -86,8 +86,6 @@
       img.alt = '';
       img.loading = 'eager';
       img.decoding = 'async';
-
-      img.addEventListener('error', () => patch.remove(), { once: true });
 
       patch.appendChild(img);
       wallContainer.appendChild(patch);
