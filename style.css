@@ -3719,3 +3719,228 @@ section#sostienici.active {
   }
 
 }
+/* ==================================================
+   MANIFESTO EXTENDED
+================================================== */
+
+#manifesto-extended{
+  padding:
+    calc(var(--navbar-height) + 4rem)
+    1.5rem
+    5rem;
+}
+
+#manifesto-extended .manifesto-container{
+  max-width:1000px;
+  margin:0 auto;
+}
+
+/* ==================================================
+   HERO MANIFESTO
+================================================== */
+
+.manifesto-title{
+  margin:0 0 1rem;
+
+  font-size:clamp(2.5rem,6vw,5rem);
+  font-weight:900;
+  line-height:.9;
+  text-transform:uppercase;
+
+  color:#fff;
+}
+
+.manifesto-subtitle{
+  max-width:760px;
+
+  margin:0 0 2rem;
+
+  font-size:clamp(1.05rem,2vw,1.3rem);
+  line-height:1.5;
+
+  color:rgba(255,255,255,.9);
+}
+
+.manifesto-lead{
+  margin:2rem 0 3rem;
+
+  font-size:clamp(1.2rem,3vw,2rem);
+  line-height:1.3;
+}
+
+/* ==================================================
+   OVERVIEW
+================================================== */
+
+.manifesto-overview{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+
+  gap:1.5rem;
+
+  margin:3rem 0 4rem;
+}
+
+.overview-item{
+  padding:1.5rem;
+
+  background:rgba(255,255,255,.06);
+
+  border:2px solid rgba(255,255,255,.15);
+
+  backdrop-filter:blur(6px);
+}
+
+.overview-item h3{
+  margin:0 0 1rem;
+
+  font-size:1.1rem;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.overview-item p{
+  margin:0;
+
+  line-height:1.6;
+  font-size:.95rem;
+}
+
+/* ==================================================
+   TESTO MANIFESTO
+================================================== */
+
+.manifesto-body{
+  max-width:760px;
+}
+
+.manifesto-body p{
+  margin:0 0 1.8rem;
+
+  font-size:1.05rem;
+  line-height:1.9;
+}
+
+.manifesto-body strong{
+  color:var(--primary-color);
+}
+
+/* ==================================================
+   CTA FINALI
+================================================== */
+
+.manifesto-actions{
+  margin-top:5rem;
+
+  padding-top:3rem;
+
+  border-top:2px dashed rgba(255,255,255,.2);
+}
+
+.manifesto-actions h2{
+  margin-bottom:2rem;
+
+  font-size:clamp(1.8rem,4vw,3rem);
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.manifesto-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1rem;
+}
+
+.manifesto-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:56px;
+
+  padding:1rem 1.5rem;
+
+  text-decoration:none;
+
+  font-weight:900;
+  text-transform:uppercase;
+
+  background:#fff;
+  color:#000;
+
+  border:2px solid #000;
+
+  transition:.25s ease;
+}
+
+.manifesto-action:hover{
+  transform:
+    translateY(-4px)
+    rotate(-1deg);
+
+  background:var(--primary-color);
+}
+
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width:900px){
+
+  .manifesto-overview{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width:768px){
+
+  #manifesto-extended{
+    padding:
+      calc(var(--navbar-height) + 2rem)
+      1rem
+      4rem;
+  }
+
+  .manifesto-title{
+    font-size:clamp(2rem,10vw,3.5rem);
+  }
+
+  .manifesto-subtitle{
+    font-size:1rem;
+  }
+
+  .manifesto-body p{
+    font-size:1rem;
+    line-height:1.8;
+  }
+
+  .manifesto-buttons{
+    flex-direction:column;
+  }
+
+  .manifesto-action{
+    width:100%;
+  }
+
+}
+
+/* ==================================================
+   SMALL MOBILE
+================================================== */
+
+@media (max-width:480px){
+
+  .manifesto-lead{
+    font-size:1.15rem;
+  }
+
+  .overview-item{
+    padding:1.2rem;
+  }
+
+}
