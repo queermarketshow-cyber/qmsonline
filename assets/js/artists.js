@@ -20,10 +20,7 @@
         document.getElementById("artistə") ||
         document.getElementById("artist3") ||
         document.querySelector(".home-artists-section"),
-      btnResident: document.getElementById("btn-resident"),
-      btnGuest: document.getElementById("btn-guest"),
       residentGallery: document.getElementById("artists-resident"),
-      guestGallery: document.getElementById("artists-guest"),
       allGallery: document.getElementById("artists-all"),
       allFilters: document.getElementById("all-artists-filters"),
       modalsContainer: document.getElementById("artist-modals")
@@ -34,6 +31,8 @@
     artists: [],
     allFilter: "all",
     activeArtistId: null,
+    lastFocusedCard: null,
+    savedScrollY: null,
     loadError: "",
     listenersBound: false
   };
@@ -64,14 +63,11 @@
         window.location.origin && window.location.origin !== "null"
           ? window.location.origin
           : window.location.href;
-      const parsed = new URL(trimmed, base);
-      if (parsed.protocol === "https:" || parsed.protocol === "http:") {
-        return trimmed;
-      }
+      new URL(trimmed, base);
+      return trimmed;
     } catch {
       return trimmed;
     }
-    return trimmed;
   }
 
   function joinAssetPath(basePath, fileOrUrl) {
@@ -200,9 +196,7 @@
             "[artists.js] Caricato da:",
             url,
             "Totale:",
-            normalized.length,
-            "| Esempio cover:",
-            normalized[0]?.cover || "(vuota)"
+            normalized.length
           );
           return normalized;
         }
@@ -241,29 +235,31 @@
     `;
   }
 
-  function renderHomeGalleries(dom) {
+  function renderHomeResidents(dom) {
     if (dom.sectionHome) {
       dom.sectionHome.style.opacity = "1";
     }
+    if (!dom.residentGallery) return;
 
     const residents = state.artists.filter((a) => a.type === "resident");
-    const guests = state.artists.filter((a) => a.type === "guest");
+    dom.residentGallery.innerHTML = residents.length
+      ? residents.map(renderArtistCard).join("")
+      : `<p class="empty-state">${escapeHTML(state.loadError || "Nessuna artista resident disponibile al momento.")}</p>`;
+  }
 
-    if (dom.residentGallery) {
-      dom.residentGallery.innerHTML = residents.length
-        ? residents.map(renderArtistCard).join("")
-        : `<p class="empty-state">${escapeHTML(state.loadError || "Nessuna artista resident disponibile al momento.")}</p>`;
-    }
-
-    if (dom.guestGallery) {
-      dom.guestGallery.innerHTML = guests.length
-        ? guests.map(renderArtistCard).join("")
-        : `<p class="empty-state">${escapeHTML(state.loadError || "Nessuna artista ospite al momento.")}</p>`;
-    }
+  function syncAllFilterButtons(dom) {
+    if (!dom.allFilters) return;
+    dom.allFilters.querySelectorAll("[data-artist-filter]").forEach((btn) => {
+      const isActive = btn.dataset.artistFilter === state.allFilter;
+      btn.classList.toggle("active", isActive);
+      btn.classList.toggle("is-active", isActive);
+      btn.setAttribute("aria-pressed", String(isActive));
+    });
   }
 
   function renderAllArtistsPage(dom) {
     if (!dom.allGallery) return;
+    syncAllFilterButtons(dom);
 
     const filtered =
       state.allFilter === "all"
@@ -281,11 +277,16 @@
     dom.allGallery.innerHTML = filtered.map(renderArtistCard).join("");
   }
 
-  function openArtistModal(artistId, dom) {
+  function openArtistModal(artistId, dom, triggerCard = null) {
     const artist = state.artists.find((a) => a.id === artistId);
     if (!artist || !dom.modalsContainer) return;
 
     state.activeArtistId = artist.id;
+    state.savedScrollY = window.scrollY;
+    state.lastFocusedCard =
+      triggerCard ||
+      document.querySelector(`.artist-card[data-artist-id="${CSS.escape(artistId)}"]`) ||
+      null;
 
     const modalGalleryItems = artist.gallery.length
       ? artist.gallery
@@ -336,51 +337,49 @@
   }
 
   function closeArtistModal(dom) {
+    const targetCard = state.lastFocusedCard;
+    const targetScrollY = state.savedScrollY;
+
     state.activeArtistId = null;
+    state.lastFocusedCard = null;
+    state.savedScrollY = null;
+
     if (dom.modalsContainer) {
       dom.modalsContainer.innerHTML = "";
     }
     document.body.classList.remove("modal-open");
+
+    if (typeof targetScrollY === "number") {
+      window.scrollTo({ top: targetScrollY, behavior: "instant" });
+    }
+
+    if (targetCard && targetCard.isConnected) {
+      try {
+        targetCard.focus({ preventScroll: true });
+      } catch {
+        targetCard.focus();
+      }
+    } else if (dom.sectionHome) {
+      dom.sectionHome.scrollIntoView({ behavior: "instant", block: "nearest" });
+    }
   }
 
   function bindEventsOnce() {
     if (state.listenersBound) return;
     state.listenersBound = true;
 
-    const dom = getDom();
-
-    if (dom.btnResident && dom.btnGuest && dom.residentGallery && dom.guestGallery) {
-      dom.btnResident.addEventListener("click", () => {
-        dom.btnResident.classList.add("active");
-        dom.btnGuest.classList.remove("active");
-        dom.residentGallery.style.display = "";
-        dom.guestGallery.style.display = "none";
-      });
-
-      dom.btnGuest.addEventListener("click", () => {
-        dom.btnGuest.classList.add("active");
-        dom.btnResident.classList.remove("active");
-        dom.guestGallery.style.display = "";
-        dom.residentGallery.style.display = "none";
-      });
-    }
-
-    if (dom.allFilters) {
-      dom.allFilters.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-artist-filter]");
-        if (!btn) return;
-        state.allFilter = btn.dataset.artistFilter;
-        dom.allFilters.querySelectorAll("[data-artist-filter]").forEach((el) => {
-          el.classList.toggle("active", el === btn);
-        });
-        renderAllArtistsPage(getDom());
-      });
-    }
-
     document.addEventListener("click", (e) => {
       const currentDom = getDom();
 
+      const filterBtn = e.target.closest("#all-artists-filters [data-artist-filter]");
+      if (filterBtn) {
+        state.allFilter = filterBtn.dataset.artistFilter;
+        renderAllArtistsPage(currentDom);
+        return;
+      }
+
       if (e.target.closest('[data-action="close-artist-modal"]')) {
+        e.preventDefault();
         closeArtistModal(currentDom);
         return;
       }
@@ -393,20 +392,23 @@
 
       const card = e.target.closest(".artist-card[data-artist-id]");
       if (card) {
-        openArtistModal(card.dataset.artistId, currentDom);
+        e.preventDefault();
+        openArtistModal(card.dataset.artistId, currentDom, card);
       }
     });
 
     document.addEventListener("keydown", (e) => {
       const currentDom = getDom();
       if (e.key === "Escape" && state.activeArtistId) {
+        e.preventDefault();
         closeArtistModal(currentDom);
+        return;
       }
       if (e.key === "Enter") {
         const card = document.activeElement?.closest(".artist-card[data-artist-id]");
         if (card) {
           e.preventDefault();
-          openArtistModal(card.dataset.artistId, currentDom);
+          openArtistModal(card.dataset.artistId, currentDom, card);
         }
       }
     });
@@ -416,7 +418,7 @@
     const dom = getDom();
     bindEventsOnce();
     state.artists = await loadArtistsData();
-    renderHomeGalleries(dom);
+    renderHomeResidents(dom);
     renderAllArtistsPage(dom);
   }
 
