@@ -365,7 +365,7 @@ section[id] {
 }
 
 /* ============================================================
-   HOME COLLAGE — TUTTI I POSTER VISIBILI, MORSO PUNK & RITORNO PULITO
+   HOME COLLAGE — COLLAGE GRANDE SUL FONDO, TAGLIE DIVERSE, MORSO PULITO
 ============================================================ */
 
 .home-collage,
@@ -383,13 +383,51 @@ section[id] {
   z-index: 1;
 }
 
-.poster {
+/* Base del collage: resta grande a tutta scena sullo sfondo */
+.poster-XXL {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: block;
+  overflow: hidden;
+  border: none;
+  box-shadow: none;
+  background: #000;
+  transform: none;
+}
+
+.poster-XXL img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.72;
+  filter: grayscale(22%) contrast(1.42) brightness(0.84);
+  transition: opacity 0.16s ease, filter 0.16s ease;
+}
+
+.poster-XXL:hover img,
+.poster-XXL:focus-visible img {
+  opacity: 0.84;
+  filter: grayscale(10%) contrast(1.5) brightness(0.92);
+}
+
+.poster-XXL:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: -4px;
+}
+
+/* Tutti gli altri poster (ritagli non-link + poster cliccabili manifesto/eventi) */
+.poster:not(.poster-XXL) {
   position: absolute;
   display: block;
   color: #fff;
   text-decoration: none;
   border: 3px solid #fff;
-  background: #080808;
+  background: #090909;
   box-shadow: 7px 7px 0 #000;
   transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
@@ -401,11 +439,25 @@ section[id] {
     z-index 0s linear 0.16s;
 }
 
-/* I poster link salgono in primo piano su hover/focus e tornano a posto appena esci,
-   restando sempre sotto .home-intro (z-index: 12) */
-a.poster:hover,
-a.poster:focus-visible {
-  transform: rotate(0deg) scale(1.06) translateZ(0);
+.poster:not(.poster-XXL) img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  filter: contrast(1.34) saturate(1.25);
+  transition: filter 0.16s ease;
+}
+
+/* Poster non-link: non intercettano il puntatore e non intralciano mai la navigazione */
+.poster:not(.poster-XXL):not(a) {
+  pointer-events: none;
+}
+
+/* Poster cliccabili (eventi, manifesto): mordono su hover/focus, poi tornano a posto subito */
+a.poster:not(.poster-XXL):hover,
+a.poster:not(.poster-XXL):focus-visible {
+  transform: rotate(0deg) scale(1.08) translateZ(0);
   border-color: var(--primary-color);
   box-shadow: 10px 10px 0 var(--primary-color);
   z-index: 9;
@@ -417,144 +469,53 @@ a.poster:focus-visible {
   outline: none;
 }
 
-/* Poster puramente decorativi / collage senza link: non rubano click né bloccano la navigazione */
-.poster:not(a) {
-  pointer-events: none;
-  border-color: rgba(255, 255, 255, 0.88);
+a.poster:not(.poster-XXL):hover img,
+a.poster:not(.poster-XXL):focus-visible img {
+  filter: contrast(1.45) saturate(1.38) brightness(1.06);
 }
 
-.poster img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center;
-  filter: contrast(1.32) saturate(1.22);
-  transition: filter 0.16s ease;
-}
-
-a.poster:hover img,
-a.poster:focus-visible img {
-  filter: contrast(1.42) saturate(1.35) brightness(1.05);
-}
-
-/* Sfondo base a tutta scena */
-.poster-XXL {
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  --tilt: 0deg;
-  z-index: 1;
-  border: none;
-  box-shadow: none;
-  pointer-events: none;
-}
-
-.poster-XXL:hover,
-.poster-XXL:focus-visible {
-  transform: none;
-  box-shadow: none;
-  z-index: 1;
-}
-
-.poster-XXL img {
-  opacity: 0.72;
-  filter: grayscale(25%) contrast(1.45) brightness(0.82);
-}
-
-/* Ritagli e poster principali */
-.poster-XL {
-  width: clamp(160px, 20vw, 280px);
-  height: clamp(220px, 38vh, 370px);
-  top: 6%;
-  right: 2.5%;
-  --tilt: 4deg;
-  z-index: 2;
-}
-
-.poster-L {
-  width: clamp(200px, 27vw, 350px);
-  height: clamp(105px, 16vh, 165px);
-  bottom: 5%;
-  left: 2.5%;
-  --tilt: -4deg;
-  z-index: 3;
-}
-
-.poster-M {
-  width: clamp(165px, 21vw, 285px);
-  height: clamp(120px, 18vh, 200px);
-  top: 52%;
-  left: 4%;
-  --tilt: -2.5deg;
-  z-index: 3;
-}
-
-.poster-S {
-  width: clamp(150px, 19vw, 255px);
-  height: clamp(150px, 19vw, 255px);
-  bottom: 6%;
-  right: 4%;
-  --tilt: -3.5deg;
-  z-index: 4;
-}
-
+/* Taglie e posizioni diversificate */
 .poster-XS {
-  width: clamp(135px, 16vw, 230px);
-  height: clamp(170px, 22vw, 285px);
+  width: clamp(135px, 16vw, 225px);
+  height: clamp(175px, 23vh, 290px);
   top: 7%;
-  left: 2.5%;
+  left: 3%;
   --tilt: 5deg;
   z-index: 4;
 }
 
-/* Poster non-link dedicati: collage.jpg, soldi.png, homegallery.jpeg */
-.poster-collage,
-.poster:has(img[src*="collage.jpg"]) {
-  width: clamp(155px, 20vw, 275px);
-  height: clamp(115px, 17vh, 190px);
-  top: 14%;
-  right: 21%;
-  --tilt: -4.5deg;
-  z-index: 2;
+.poster-XL {
+  width: clamp(165px, 21vw, 295px);
+  height: clamp(235px, 42vh, 395px);
+  top: 6%;
+  right: 3%;
+  --tilt: -4deg;
+  z-index: 3;
 }
 
-.poster-soldi,
-.poster:has(img[src*="soldi.png"]) {
-  width: clamp(130px, 16vw, 215px);
-  height: clamp(95px, 14vh, 150px);
-  bottom: 18%;
-  left: 20%;
-  --tilt: 4deg;
+.poster-M.poster-soldi {
+  width: clamp(140px, 17vw, 220px);
+  height: clamp(100px, 14vh, 155px);
+  bottom: 11%;
+  left: 19%;
+  --tilt: 4.5deg;
   z-index: 3;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.85);
   border-color: var(--primary-color);
 }
 
-.poster-soldi img,
-.poster:has(img[src*="soldi.png"]) img {
+.poster-M.poster-soldi img {
   object-fit: contain;
-  background: rgba(0, 0, 0, 0.75);
+  padding: 0.35rem;
 }
 
-.poster-homegallery,
-.poster:has(img[src*="homegallery.jpeg"]) {
-  width: clamp(150px, 19vw, 260px);
-  height: clamp(120px, 17vh, 185px);
-  bottom: 22%;
-  right: 21%;
-  --tilt: 3deg;
-  z-index: 3;
-}
-
-/* Eventuali poster aggiuntivi senza classe di taglia specifica */
-.poster:not(.poster-XXL):not(.poster-XL):not(.poster-L):not(.poster-M):not(.poster-S):not(.poster-XS):not(.poster-collage):not(.poster-soldi):not(.poster-homegallery):not(:has(img[src*="collage.jpg"])):not(:has(img[src*="soldi.png"])):not(:has(img[src*="homegallery.jpeg"])) {
-  width: clamp(145px, 18vw, 240px);
-  height: clamp(125px, 18vh, 210px);
-  top: 34%;
-  right: 5%;
-  --tilt: -3deg;
-  z-index: 3;
+.poster-L.poster-homegallery {
+  width: clamp(210px, 29vw, 370px);
+  height: clamp(120px, 19vh, 210px);
+  bottom: 6%;
+  right: 4%;
+  --tilt: -3.5deg;
+  z-index: 4;
 }
 
 .poster-eventi {
@@ -568,15 +529,6 @@ a.poster:focus-visible img {
   border: 3px dashed var(--primary-color);
 }
 
-.poster-galleria {
-  background: #181818;
-  border: 3px solid #fff;
-}
-
-.poster-artist3 {
-  background: #050505;
-}
-
 .sticker {
   background: var(--primary-color);
   color: #000;
@@ -584,7 +536,7 @@ a.poster:focus-visible img {
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   position: absolute;
   bottom: 8px;
   right: 8px;
@@ -594,7 +546,14 @@ a.poster:focus-visible img {
   pointer-events: none;
 }
 
-/* Blocco centrale: sempre sopra i poster (z-index: 12) */
+a.poster:hover .sticker,
+a.poster:focus-visible .sticker {
+  background: #fff;
+  color: #000;
+  transform: rotate(-2deg) scale(1.05);
+}
+
+/* Blocco centrale: sempre sopra i poster (z-index: 12), zero scatole morbide */
 .home-intro {
   position: relative;
   z-index: 12;
@@ -708,43 +667,41 @@ a.poster:focus-visible img {
     gap: 1.1rem;
   }
 
-  .poster {
-    position: relative;
-    inset: auto;
-    width: min(88vw, 320px);
-    height: 135px;
-    transform: rotate(var(--tilt, 0deg)) translateZ(0);
-  }
-
-  a.poster:hover,
-  a.poster:focus-visible {
-    transform: rotate(0deg) scale(1.03) translateZ(0);
-    box-shadow: 6px 6px 0 var(--primary-color);
-  }
-
   .poster-XXL {
     position: absolute;
     inset: 0;
     width: 100%;
-    max-width: none;
     height: 100%;
     z-index: 1;
   }
 
-  .poster-XL,
-  .poster-L,
-  .poster-M,
-  .poster-S,
-  .poster-XS,
-  .poster-collage,
-  .poster-soldi,
-  .poster-homegallery,
   .poster:not(.poster-XXL) {
+    position: relative;
+    inset: auto;
     top: auto;
     left: auto;
     right: auto;
     bottom: auto;
+    width: min(88vw, 320px);
+    height: 135px;
     z-index: 3;
+    transform: rotate(var(--tilt, 0deg)) translateZ(0);
+  }
+
+  .poster-M.poster-soldi {
+    width: min(74vw, 240px);
+    height: 105px;
+  }
+
+  .poster-L.poster-homegallery {
+    width: min(90vw, 330px);
+    height: 150px;
+  }
+
+  a.poster:not(.poster-XXL):hover,
+  a.poster:not(.poster-XXL):focus-visible {
+    transform: rotate(0deg) scale(1.03) translateZ(0);
+    box-shadow: 6px 6px 0 var(--primary-color);
   }
 
   .home-intro {
