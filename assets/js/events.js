@@ -2,9 +2,8 @@
   "use strict";
 
   // 1. Configurazione sorgente dati
-  // Puoi puntare a un file JSON locale ("./events.json") o a un endpoint API ("https://tuodominio.it/api/events")
   const CONFIG = {
-    sourceUrl: "./events.json",
+    sourceUrl: "./event.json",
     fetchOptions: {
       method: "GET",
       headers: {
@@ -12,7 +11,9 @@
       },
       cache: "no-store"
     },
-    timeoutMs: 8000
+    timeoutMs: 8000,
+    // Finestra in giorni per espandere eventuali eventi ricorrenti (recurringWeekdays)
+    recurringHorizonDays: 180
   };
 
   // 2. Riferimenti DOM
@@ -60,6 +61,21 @@
     return date;
   }
 
+  function toISODateLocal(dateObj) {
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const d = String(dateObj.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function addDays(dateObj, days) {
+    return new Date(
+      dateObj.getFullYear(),
+      dateObj.getMonth(),
+      dateObj.getDate() + days
+    );
+  }
+
   function startOfToday() {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -73,6 +89,12 @@
       month: "long",
       year: "numeric"
     }).format(date);
+  }
+
+  function formatDateRangeIT(startStr, endStr) {
+    const startFormatted = formatDateIT(startStr);
+    if (!endStr || endStr === startStr) return startFormatted;
+    return `${startFormatted} – ${formatDateIT(endStr)}`;
   }
 
   function formatMonthYearIT(dateObj) {
@@ -117,9 +139,46 @@
     return "";
   }
 
+  function normalizeWeekdays(rawWeekdays) {
+    if (!Array.isArray(rawWeekdays)) return [];
+    const dayMap = {
+      sun: 0, sunday: 0, dom: 0, domenica: 0,
+      mon: 1, monday: 1, lun: 1, lunedì: 1, lunedi: 1,
+      tue: 2, tuesday: 2, mar: 2, martedì: 2, martedi: 2,
+      wed: 3, wednesday: 3, mer: 3, mercoledì: 3, mercoledi: 3,
+      thu: 4, thursday: 4, gio: 4, giovedì: 4, giovedi: 4,
+      fri: 5, friday: 5, ven: 5, venerdì: 5, venerdi: 5,
+      sat: 6, saturday: 6, sab: 6, sabato: 6
+    };
+
+    return rawWeekdays
+      .map((val) => {
+        if (typeof val === "number" && val >= 0 && val <= 6) return val;
+        if (typeof val === "string") {
+          const clean = val.trim().toLowerCase();
+          if (/^[0-6]$/.test(clean)) return Number(clean);
+          if (clean in dayMap) return dayMap[clean];
+        }
+        return null;
+      })
+      .filter((v) => v !== null);
+  }
+
+  function normalizeCategories(item) {
+    if (Array.isArray(item.categories)) {
+      const cleaned = item.categories
+        .map((c) => String(c || "").trim())
+        .filter(Boolean);
+      if (cleaned.length) return [...new Set(cleaned)];
+    }
+    if (typeof item.category === "string" && item.category.trim()) {
+      return [item.category.trim()];
+    }
+    return ["Generale"];
+  }
+
   // --- Normalizzazione e caricamento asincrono ---
   function normalizeEventsPayload(payload) {
-    // Supporta sia un array diretto [...] sia oggetti wrapper comuni ({ events: [...] } o { data: [...] })
     const rawList = Array.isArray(payload)
       ? payload
       : Array.isArray(payload?.events)
@@ -135,20 +194,37 @@
     return rawList
       .map((item, index) => {
         if (!item || typeof item !== "object") return null;
-        const parsedDate = parseLocalDate(item.date);
-        if (!parsedDate || !item.title) return null;
+
+        const startDateObj = parseLocalDate(item.start ?? item.date);
+        if (!startDateObj || !item.title) return null;
+
+        const endDateObj = parseLocalDate(item.end) || startDateObj;
+        const safeEndDateObj = endDateObj < startDateObj ? startDateObj : endDateObj;
+
+        const specificDates = Array.isArray(item.specificDates)
+          ? item.specificDates
+              .map((d) => parseLocalDate(d))
+              .filter(Boolean)
+              .map((d) => toISODateLocal(d))
+          : [];
 
         return {
           id: String(item.id ?? `evt-${index + 1}`),
           title: String(item.title).trim(),
-          date: String(item.date).trim(),
+          start: toISODateLocal(startDateObj),
+          end: toISODateLocal(safeEndDateObj),
           time: item.time ? String(item.time).trim() : "",
-          category: item.category ? String(item.category).trim() : "Generale",
-          location: item.location ? String(item.location).trim() : "",
           description: item.description ? String(item.description).trim() : "",
+          location: item.location ? String(item.location).trim() : "",
+          venueUrl: sanitizeUrl(item.venueUrl),
           image: sanitizeUrl(item.image),
-          url: sanitizeUrl(item.url),
-          _dateObj: parsedDate
+          ticketUrl: sanitizeUrl(item.ticketUrl),
+          freeEntry: Boolean(item.freeEntry),
+          recurringWeekdays: normalizeWeekdays(item.recurringWeekdays),
+          specificDates,
+          categories: normalizeCategories(item),
+          _startObj: startDateObj,
+          _endObj: safeEndDateObj
         };
       })
       .filter(Boolean);
@@ -170,7 +246,6 @@
 
       const contentType = response.headers.get("content-type") || "";
       if (!contentType.includes("application/json") && !url.endsWith(".json")) {
-        // Prova comunque a leggere come JSON ma segnala risposte malformate
         const text = await response.text();
         try {
           return JSON.parse(text);
@@ -193,21 +268,98 @@
     }
   }
 
-  // --- Suddivisione Futuri / Passati ---
+  // --- Suddivisione Futuri / Passati (inclusi specificDates e recurringWeekdays) ---
   function splitEvents(events) {
     const today = startOfToday();
+    const horizonEnd = addDays(today, CONFIG.recurringHorizonDays);
     const upcoming = [];
     const past = [];
 
     events.forEach((evt) => {
-      const evtDate = evt._dateObj || parseLocalDate(evt.date);
-      if (!evtDate) return;
+      const hasSpecific = evt.specificDates.length > 0;
+      const hasRecurring = evt.recurringWeekdays.length > 0;
 
-      const normalized = { ...evt, _dateObj: evtDate };
-      if (evtDate >= today) {
-        upcoming.push(normalized);
+      // Caso A: evento con date puntuali esplicite
+      if (hasSpecific) {
+        let hasFuture = false;
+        let latestPastDate = null;
+        let earliestFutureDate = null;
+
+        evt.specificDates.forEach((iso) => {
+          const d = parseLocalDate(iso);
+          if (!d) return;
+          if (d >= today) {
+            hasFuture = true;
+            if (!earliestFutureDate || d < earliestFutureDate) earliestFutureDate = d;
+          } else if (!latestPastDate || d > latestPastDate) {
+            latestPastDate = d;
+          }
+        });
+
+        if (hasFuture) {
+          const iso = toISODateLocal(earliestFutureDate);
+          upcoming.push({
+            ...evt,
+            start: iso,
+            end: iso,
+            _dateObj: earliestFutureDate
+          });
+        } else if (latestPastDate) {
+          const iso = toISODateLocal(latestPastDate);
+          past.push({
+            ...evt,
+            start: iso,
+            end: iso,
+            _dateObj: latestPastDate
+          });
+        }
+        return;
+      }
+
+      // Caso B: evento ricorrente nei giorni della settimana indicati
+      if (hasRecurring) {
+        const rangeStart = evt._startObj > today ? evt._startObj : today;
+        const rangeEnd = evt._endObj > rangeStart && evt._endObj < horizonEnd
+          ? evt._endObj
+          : horizonEnd;
+
+        let nextOccurrence = null;
+        for (let cursor = new Date(rangeStart); cursor <= rangeEnd; cursor = addDays(cursor, 1)) {
+          if (evt.recurringWeekdays.includes(cursor.getDay())) {
+            nextOccurrence = new Date(cursor);
+            break;
+          }
+        }
+
+        if (nextOccurrence) {
+          const iso = toISODateLocal(nextOccurrence);
+          upcoming.push({
+            ...evt,
+            start: iso,
+            end: iso,
+            _dateObj: nextOccurrence
+          });
+        } else if (evt._endObj < today) {
+          past.push({
+            ...evt,
+            _dateObj: evt._endObj
+          });
+        }
+        return;
+      }
+
+      // Caso C: evento singolo o multi-giorno (start -> end)
+      // Resta nei prossimi finché end >= oggi
+      if (evt._endObj >= today) {
+        upcoming.push({
+          ...evt,
+          _dateObj: evt._startObj
+        });
       } else {
-        past.push(normalized);
+        past.push({
+          ...evt,
+          _dateObj: evt._endObj
+        });
       }
     });
 
@@ -259,6 +411,34 @@
     });
   }
 
+  // --- Helper blocchi comuni ---
+  function renderCategoriesHTML(categories) {
+    return categories
+      .map((cat) => `<span class="event-category">${escapeHTML(cat)}</span>`)
+      .join("");
+  }
+
+  function renderLocationHTML(evt) {
+    if (!evt.location) return "";
+    const text = escapeHTML(evt.location);
+    if (evt.venueUrl) {
+      return `<p class="event-location"><a href="${escapeHTML(evt.venueUrl)}" target="_blank" rel="noopener noreferrer">${text}</a></p>`;
+    }
+    return `<p class="event-location">${text}</p>`;
+  }
+
+  function renderEntryAndTicketHTML(evt) {
+    const parts = [];
+    if (evt.freeEntry) {
+      parts.push(`<span class="event-free-entry">Ingresso gratuito</span>`);
+    }
+    if (evt.ticketUrl) {
+      parts.push(`<a class="event-ticket-link" href="${escapeHTML(evt.ticketUrl)}" target="_blank" rel="noopener noreferrer">Biglietti / Info</a>`);
+    }
+    if (!parts.length) return "";
+    return `<div class="event-actions">${parts.join("")}</div>`;
+  }
+
   // --- 1. Prossimo Evento (#featured-event-content) ---
   function renderFeaturedEvent(upcomingEvents) {
     if (!dom.featuredContent) return;
@@ -269,18 +449,20 @@
       return;
     }
 
+    const dateLabel = formatDateRangeIT(nextEvent.start, nextEvent.end);
+
     dom.featuredContent.innerHTML = `
       <article class="featured-event-card" data-event-id="${escapeHTML(nextEvent.id)}">
         ${nextEvent.image ? `<img class="featured-event-image" src="${escapeHTML(nextEvent.image)}" alt="${escapeHTML(nextEvent.title)}" loading="lazy">` : ""}
         <div class="featured-event-body">
-          <span class="event-category">${escapeHTML(nextEvent.category)}</span>
-          <time class="event-date" datetime="${escapeHTML(nextEvent.date)}">
-            ${escapeHTML(formatDateIT(nextEvent.date))}${nextEvent.time ? ` · ${escapeHTML(nextEvent.time)}` : ""}
+          <div class="event-categories">${renderCategoriesHTML(nextEvent.categories)}</div>
+          <time class="event-date" datetime="${escapeHTML(nextEvent.start)}">
+            ${escapeHTML(dateLabel)}${nextEvent.time ? ` · ${escapeHTML(nextEvent.time)}` : ""}
           </time>
           <h3 class="event-title">${escapeHTML(nextEvent.title)}</h3>
-          ${nextEvent.location ? `<p class="event-location">${escapeHTML(nextEvent.location)}</p>` : ""}
+          ${renderLocationHTML(nextEvent)}
           ${nextEvent.description ? `<p class="event-description">${escapeHTML(nextEvent.description)}</p>` : ""}
-          ${nextEvent.url ? `<a class="event-link" href="${escapeHTML(nextEvent.url)}">Dettagli</a>` : ""}
+          ${renderEntryAndTicketHTML(nextEvent)}
         </div>
       </article>
     `;
@@ -289,13 +471,15 @@
   // --- 2. Filtri (#calendar-filters) ---
   function getFilteredUpcoming(upcomingEvents) {
     if (state.selectedCategory === "Tutti") return upcomingEvents;
-    return upcomingEvents.filter((evt) => evt.category === state.selectedCategory);
+    return upcomingEvents.filter((evt) => evt.categories.includes(state.selectedCategory));
   }
 
   function renderFilters(upcomingEvents) {
     if (!dom.filters) return;
 
-    const categories = ["Tutti", ...new Set(upcomingEvents.map((e) => e.category).filter(Boolean))];
+    const allCats = upcomingEvents.flatMap((e) => e.categories || []).filter(Boolean);
+    const categories = ["Tutti", ...new Set(allCats)];
+
     if (!categories.includes(state.selectedCategory)) {
       state.selectedCategory = "Tutti";
     }
@@ -337,16 +521,18 @@
   }
 
   function renderEventItemHTML(evt) {
+    const dateLabel = formatDateRangeIT(evt.start, evt.end);
     return `
       <article class="calendar-event-item" data-event-id="${escapeHTML(evt.id)}">
         <div class="calendar-event-meta">
-          <time datetime="${escapeHTML(evt.date)}">${escapeHTML(formatDateIT(evt.date))}</time>
-          ${evt.time ? `<span>${escapeHTML(evt.time)}</span>` : ""}
-          <span class="event-category">${escapeHTML(evt.category)}</span>
+          <time datetime="${escapeHTML(evt.start)}">${escapeHTML(dateLabel)}</time>
+          ${evt.time ? `<span class="event-time">${escapeHTML(evt.time)}</span>` : ""}
+          <div class="event-categories">${renderCategoriesHTML(evt.categories)}</div>
         </div>
         <h4 class="event-title">${escapeHTML(evt.title)}</h4>
-        ${evt.location ? `<p class="event-location">${escapeHTML(evt.location)}</p>` : ""}
+        ${renderLocationHTML(evt)}
         ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
+        ${renderEntryAndTicketHTML(evt)}
       </article>
     `;
   }
@@ -433,19 +619,20 @@
     }
 
     dom.pastEvents.innerHTML = pastEvents
-      .map(
-        (evt) => `
-        <article class="archive-event-card" data-event-id="${escapeHTML(evt.id)}">
-          <div class="archive-event-meta">
-            <time datetime="${escapeHTML(evt.date)}">${escapeHTML(formatDateIT(evt.date))}</time>
-            <span class="event-category">${escapeHTML(evt.category)}</span>
-          </div>
-          <h3 class="event-title">${escapeHTML(evt.title)}</h3>
-          ${evt.location ? `<p class="event-location">${escapeHTML(evt.location)}</p>` : ""}
-          ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
-        </article>
-      `
-      )
+      .map((evt) => {
+        const dateLabel = formatDateRangeIT(evt.start, evt.end);
+        return `
+          <article class="archive-event-card" data-event-id="${escapeHTML(evt.id)}">
+            <div class="archive-event-meta">
+              <time datetime="${escapeHTML(evt.start)}">${escapeHTML(dateLabel)}</time>
+              <div class="event-categories">${renderCategoriesHTML(evt.categories)}</div>
+            </div>
+            <h3 class="event-title">${escapeHTML(evt.title)}</h3>
+            ${renderLocationHTML(evt)}
+            ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
+          </article>
+        `;
+      })
       .join("");
   }
 
@@ -473,7 +660,6 @@
     if (state.listenersBound) return;
     state.listenersBound = true;
 
-    // Delegazione per pulsante "Riprova" in caso di errore di rete/JSON
     document.addEventListener("click", (e) => {
       const retryBtn = e.target.closest('[data-action="retry-events"]');
       if (retryBtn) {
