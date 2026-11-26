@@ -133,6 +133,12 @@ async function initApp() {
   });
 
   events = expanded.sort((a, b) => a.dateObj - b.dateObj);
+  let firstUpcomingIndex =
+  events.findIndex(ev => ev.dateObj >= realToday);
+
+if (firstUpcomingIndex === -1) {
+  firstUpcomingIndex = events.length - 1;
+}
 
   /* ==========================================
      FALLBACK SE NON ESISTONO EVENTI FUTURI
@@ -171,14 +177,32 @@ async function initApp() {
 initApp();
 
 /* ============================================================
+   HELPER EVENTI
+============================================================ */
+
+function getFutureEvents() {
+
+  if (!events.length) return [];
+
+  return events.slice(firstUpcomingIndex);
+
+}
+
+function getPastEvents() {
+
+  if (!events.length) return [];
+
+  return events.slice(0, firstUpcomingIndex);
+
+}
+
+/* ============================================================
    LOGICA DI RICERCA MESE (SAFE)
 ============================================================ */
 
 function monthHasEvents(month, year) {
 
-  return events.some(ev =>
-
-    ev.dateObj >= todayDate &&
+  return getFutureEvents().some(ev =>
 
     ev.dateObj.getFullYear() === year &&
     ev.dateObj.getMonth() === month &&
@@ -220,14 +244,15 @@ function findFirstFutureMonthWithEvents() {
     }
 
     iterations++;
+
   }
 
   return {
     month: m,
     year: y
   };
-}
 
+}
 /* ============================================================
    NAVIGAZIONE MESI
 ============================================================ */
@@ -405,58 +430,52 @@ function renderCalendar(month, year) {
 
     dayEl.appendChild(num);
 
-    const todaysEvents = events.filter(ev =>
+const todaysEvents = getFutureEvents().filter(ev =>
 
-      ev.dateStr === iso &&
+  ev.dateStr === iso &&
 
-      (
-        activeCategory === "all" ||
-        ev.categories.includes(activeCategory)
-      )
+  (
+    activeCategory === "all" ||
+    ev.categories.includes(activeCategory)
+  )
 
-    );
+);
 
-    if (todaysEvents.length > 0) {
+if (todaysEvents.length > 0) {
 
-      dayEl.classList.add("has-event");
+  dayEl.classList.add("has-event");
 
-      const mainEv = todaysEvents[0];
+  const mainEv = todaysEvents[0];
 
-      const postit =
-        document.createElement("div");
+  const postit =
+    document.createElement("div");
 
-      postit.className = "event-postit";
+  postit.className = "event-postit";
 
-      if (mainEv.image) {
+  if (mainEv.image) {
 
-        const img =
-          document.createElement("img");
+    const img =
+      document.createElement("img");
 
-        img.src = mainEv.image;
+    img.src = mainEv.image;
 
-        postit.appendChild(img);
-
-      }
-
-      postit.addEventListener("click", e => {
-
-        e.stopPropagation();
-
-        openEventModal(mainEv);
-
-      });
-
-      dayEl.appendChild(postit);
-
-    }
-
-    grid.appendChild(dayEl);
+    postit.appendChild(img);
 
   }
 
-  container.appendChild(grid);
+  postit.addEventListener("click", e => {
+
+    e.stopPropagation();
+
+    openEventModal(mainEv);
+
+  });
+
+  dayEl.appendChild(postit);
 
 }
+
+grid.appendChild(dayEl);
 
 function buildYearMonthSelector(monthWrapper) {
 
