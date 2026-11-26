@@ -8,9 +8,15 @@ let currentYear;
 const dataCache = {}; // Previene fetch duplicati
 
 const now = new Date();
-const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-const todayYear = todayDate.getFullYear();
-const todayMonth = todayDate.getMonth();
+
+let todayDate = new Date(
+  now.getFullYear(),
+  now.getMonth(),
+  now.getDate()
+);
+
+let todayYear = todayDate.getFullYear();
+let todayMonth = todayDate.getMonth();
 
 let activeCategory = "all";
 
@@ -116,15 +122,42 @@ function expandEvent(ev) {
 ============================================================ */
 
 async function initApp() {
+
   const data = await fetchJSON("events.json");
   if (!data) return;
 
   const expanded = [];
-  data.forEach(ev => expanded.push(...expandEvent(ev)));
+
+  data.forEach(ev => {
+    expanded.push(...expandEvent(ev));
+  });
 
   events = expanded.sort((a, b) => a.dateObj - b.dateObj);
 
+  /* ==========================================
+     FALLBACK SE NON ESISTONO EVENTI FUTURI
+  ========================================== */
+
+  const hasFutureEvents =
+    events.some(ev => ev.dateObj >= todayDate);
+
+  if (!hasFutureEvents && events.length > 0) {
+
+    const latestEvent =
+      events[events.length - 1];
+
+    todayDate = new Date(
+      latestEvent.dateObj.getFullYear(),
+      0,
+      1
+    );
+
+    todayYear = todayDate.getFullYear();
+    todayMonth = todayDate.getMonth();
+  }
+
   const first = findFirstFutureMonthWithEvents();
+
   currentMonth = first.month;
   currentYear = first.year;
 
@@ -133,7 +166,8 @@ async function initApp() {
   renderAll();
 }
 
-// Avvio applicazione
+/* Avvio applicazione */
+
 initApp();
 
 /* ============================================================
@@ -141,84 +175,132 @@ initApp();
 ============================================================ */
 
 function monthHasEvents(month, year) {
+
   return events.some(ev =>
 
-  ev.dateObj >= todayDate &&
+    ev.dateObj >= todayDate &&
 
-  ev.dateObj.getFullYear() === year &&
-  ev.dateObj.getMonth() === month &&
+    ev.dateObj.getFullYear() === year &&
+    ev.dateObj.getMonth() === month &&
 
-  (
-    activeCategory === "all" ||
-    ev.categories.includes(activeCategory)
-  )
+    (
+      activeCategory === "all" ||
+      ev.categories.includes(activeCategory)
+    )
 
-);
+  );
+
 }
 
 function findFirstFutureMonthWithEvents() {
+
   let m = todayMonth;
   let y = todayYear;
-  
-  if (events.length === 0) return { month: m, year: y };
+
+  if (events.length === 0) {
+    return {
+      month: m,
+      year: y
+    };
+  }
 
   let iterations = 0;
-  const maxSearch = 24; // Smette di cercare dopo 2 anni se non trova nulla
+  const maxSearch = 24;
 
-  while (!monthHasEvents(m, y) && iterations < maxSearch) {
+  while (
+    !monthHasEvents(m, y) &&
+    iterations < maxSearch
+  ) {
+
     m++;
-    if (m > 11) { m = 0; y++; }
+
+    if (m > 11) {
+      m = 0;
+      y++;
+    }
+
     iterations++;
   }
 
-  return { month: m, year: y };
+  return {
+    month: m,
+    year: y
+  };
 }
 
 /* ============================================================
-   NAVIGAZIONE MESI (FIXED LOOPS)
+   NAVIGAZIONE MESI
 ============================================================ */
 
-const calPrevBtn = document.getElementById("prev-month");
-const calNextBtn = document.getElementById("next-month");
+const calPrevBtn =
+  document.getElementById("prev-month");
+
+const calNextBtn =
+  document.getElementById("next-month");
 
 if (calPrevBtn) {
+
   calPrevBtn.addEventListener("click", () => {
+
     let m = currentMonth;
     let y = currentYear;
     let iterations = 0;
 
     do {
+
       m--;
-      if (m < 0) { m = 11; y--; }
+
+      if (m < 0) {
+        m = 11;
+        y--;
+      }
+
       iterations++;
-      if (iterations > 24) return; // Break di sicurezza
+
+      if (iterations > 24) return;
+
     } while (!monthHasEvents(m, y));
 
     currentMonth = m;
     currentYear = y;
+
     renderAll();
+
   });
+
 }
 
 if (calNextBtn) {
+
   calNextBtn.addEventListener("click", () => {
+
     let m = currentMonth;
     let y = currentYear;
     let iterations = 0;
 
     do {
+
       m++;
-      if (m > 11) { m = 0; y++; }
+
+      if (m > 11) {
+        m = 0;
+        y++;
+      }
+
       iterations++;
-      if (iterations > 24) return; // Break di sicurezza
+
+      if (iterations > 24) return;
+
     } while (!monthHasEvents(m, y));
 
     currentMonth = m;
     currentYear = y;
-    renderAll();
-  });
-}
 
+    renderAll();
+
+  });
+
+}
 /* ============================================================
    RENDER ALL
 ============================================================ */
@@ -231,30 +313,34 @@ function renderAll() {
   const showingPast = pastBtn && pastBtn.classList.contains("active");
 
   if (!showingPast) {
+
     renderCalendar(currentMonth, currentYear);
     renderMobileCalendarCarousel();
-    renderFutureList();
+
   }
 
   renderPastEvents();
   linkCalendarToTimeline();
+
 }
-
-
 /* ============================================================
    CALENDARIO DESKTOP + SELETTORE
 ============================================================ */
 
 function renderCalendar(month, year) {
+
   const container = document.getElementById("future-month-container");
   if (!container) return;
 
   container.innerHTML = "";
 
   const date = new Date(year, month, 1);
-  const monthName = date.toLocaleString("it-IT", { month: "long" });
+  const monthName = date.toLocaleString("it-IT", {
+    month: "long"
+  });
 
   const monthWrapper = document.createElement("div");
+
   monthWrapper.className = "calendar-month";
   monthWrapper.style.display = "flex";
   monthWrapper.style.alignItems = "center";
@@ -273,6 +359,7 @@ function renderCalendar(month, year) {
 
   monthWrapper.appendChild(monthText);
   monthWrapper.appendChild(triangle);
+
   container.appendChild(monthWrapper);
 
   buildYearMonthSelector(monthWrapper);
@@ -280,341 +367,692 @@ function renderCalendar(month, year) {
   const grid = document.createElement("div");
   grid.className = "calendar-grid";
 
-  const firstDay = date.getDay() === 0 ? 6 : date.getDay() - 1;
+  const firstDay =
+    date.getDay() === 0
+      ? 6
+      : date.getDay() - 1;
+
   for (let i = 0; i < firstDay; i++) {
     grid.appendChild(document.createElement("div"));
   }
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInMonth =
+    new Date(year, month + 1, 0).getDate();
 
   for (let d = 1; d <= daysInMonth; d++) {
+
     const dayEl = document.createElement("div");
     dayEl.className = "calendar-day";
 
-    const fullDate = new Date(year, month, d);
+    const fullDate =
+      new Date(year, month, d);
+
     const iso = [
       fullDate.getFullYear(),
       String(fullDate.getMonth() + 1).padStart(2, "0"),
       String(fullDate.getDate()).padStart(2, "0")
     ].join("-");
+
     dayEl.dataset.date = iso;
 
-    const num = document.createElement("div");
-    num.className = "calendar-day-number";
+    const num =
+      document.createElement("div");
+
+    num.className =
+      "calendar-day-number";
+
     num.textContent = d;
+
     dayEl.appendChild(num);
 
     const todaysEvents = events.filter(ev =>
 
-  ev.dateObj >= todayDate &&
+      ev.dateStr === iso &&
 
-  ev.dateStr === iso &&
+      (
+        activeCategory === "all" ||
+        ev.categories.includes(activeCategory)
+      )
 
-  (
-    activeCategory === "all" ||
-    ev.categories.includes(activeCategory)
-  )
-
-);
+    );
 
     if (todaysEvents.length > 0) {
+
       dayEl.classList.add("has-event");
+
       const mainEv = todaysEvents[0];
 
-      const postit = document.createElement("div");
+      const postit =
+        document.createElement("div");
+
       postit.className = "event-postit";
 
       if (mainEv.image) {
-        const img = document.createElement("img");
+
+        const img =
+          document.createElement("img");
+
         img.src = mainEv.image;
+
         postit.appendChild(img);
+
       }
 
-      postit.addEventListener("click", (e) => {
+      postit.addEventListener("click", e => {
+
         e.stopPropagation();
+
         openEventModal(mainEv);
+
       });
+
       dayEl.appendChild(postit);
+
     }
 
     grid.appendChild(dayEl);
+
   }
 
   container.appendChild(grid);
+
 }
 
 function buildYearMonthSelector(monthWrapper) {
-  monthWrapper.querySelectorAll(".month-selector").forEach(el => el.remove());
 
-  const selector = document.createElement("div");
+  monthWrapper
+    .querySelectorAll(".month-selector")
+    .forEach(el => el.remove());
+
+  const selector =
+    document.createElement("div");
+
   selector.className = "month-selector";
   selector.style.display = "none";
 
-  selector.addEventListener("click", e => e.stopPropagation());
-
-  const map = new Map();
-  events.forEach(ev => {
-    const y = ev.dateObj.getFullYear();
-    const m = ev.dateObj.getMonth();
-    if (!map.has(y)) map.set(y, new Set());
-    map.get(y).add(m);
+  selector.addEventListener("click", e => {
+    e.stopPropagation();
   });
 
-  const years = [...map.keys()].sort((a, b) => b - a);
+  const map = new Map();
 
-  const yearSelect = document.createElement("select");
-  yearSelect.innerHTML = `<option value="">Anno</option>`;
-  years.forEach(y => { yearSelect.innerHTML += `<option value="${y}">${y}</option>`; });
+  events
+    .filter(ev => ev.dateObj >= todayDate)
+    .forEach(ev => {
 
-  const monthSelect = document.createElement("select");
-  monthSelect.innerHTML = `<option value="">Mese</option>`;
+      const y =
+        ev.dateObj.getFullYear();
+
+      const m =
+        ev.dateObj.getMonth();
+
+      if (!map.has(y)) {
+        map.set(y, new Set());
+      }
+
+      map.get(y).add(m);
+
+    });
+
+  const years =
+    [...map.keys()]
+      .sort((a, b) => a - b);
+
+  const yearSelect =
+    document.createElement("select");
+
+  yearSelect.innerHTML =
+    `<option value="">Anno</option>`;
+
+  years.forEach(y => {
+
+    yearSelect.innerHTML +=
+      `<option value="${y}">
+        ${y}
+      </option>`;
+
+  });
+
+  const monthSelect =
+    document.createElement("select");
+
+  monthSelect.innerHTML =
+    `<option value="">Mese</option>`;
+
   monthSelect.disabled = true;
 
   yearSelect.addEventListener("change", () => {
-    const y = Number(yearSelect.value);
+
+    const y =
+      Number(yearSelect.value);
+
     monthSelect.disabled = false;
-    monthSelect.innerHTML = `<option value="">Mese</option>`;
+
+    monthSelect.innerHTML =
+      `<option value="">Mese</option>`;
+
     if (map.has(y)) {
-      [...map.get(y)].sort((a, b) => a - b).forEach(m => {
-        const name = new Date(y, m, 1).toLocaleString("it-IT", { month: "long" });
-        monthSelect.innerHTML += `<option value="${m}">${name}</option>`;
-      });
+
+      [...map.get(y)]
+        .sort((a, b) => a - b)
+        .forEach(m => {
+
+          const name =
+            new Date(y, m, 1)
+            .toLocaleString("it-IT", {
+              month: "long"
+            });
+
+          monthSelect.innerHTML +=
+            `<option value="${m}">
+              ${name}
+            </option>`;
+
+        });
+
     }
+
   });
 
-  const okBtn = document.createElement("button");
+  const okBtn =
+    document.createElement("button");
+
   okBtn.textContent = "OK";
+
   okBtn.addEventListener("click", () => {
-    const y = Number(yearSelect.value);
-    const m = Number(monthSelect.value);
+
+    const y =
+      Number(yearSelect.value);
+
+    const m =
+      Number(monthSelect.value);
+
     if (!y || isNaN(m)) return;
-    currentYear = y; currentMonth = m;
+
+    currentYear = y;
+    currentMonth = m;
+
     selector.style.display = "none";
-    monthWrapper.classList.remove("menu-open");
+
+    monthWrapper.classList.remove(
+      "menu-open"
+    );
+
     renderAll();
+
   });
 
   selector.appendChild(yearSelect);
   selector.appendChild(monthSelect);
   selector.appendChild(okBtn);
+
   monthWrapper.appendChild(selector);
 
-  monthWrapper.addEventListener("click", () => {
-    const isOpen = selector.style.display === "flex";
-    selector.style.display = isOpen ? "none" : "flex";
-    monthWrapper.classList.toggle("menu-open", !isOpen);
-  });
-}
+  monthWrapper.addEventListener(
+    "click",
+    () => {
 
+      const isOpen =
+        selector.style.display === "flex";
+
+      selector.style.display =
+        isOpen ? "none" : "flex";
+
+      monthWrapper.classList.toggle(
+        "menu-open",
+        !isOpen
+      );
+
+    }
+  );
+
+}
 /* ============================================================
    MOBILE CAROUSEL & SWIPE
 ============================================================ */
 
 function generateDotsWindow(total, activeIndex) {
-  const dotsContainer = document.getElementById("mobile-dots");
+
+  const dotsContainer =
+    document.getElementById("mobile-dots");
+
   if (!dotsContainer) return;
+
   dotsContainer.innerHTML = "";
 
   const windowSize = 15;
   const half = Math.floor(windowSize / 2);
-  let start = Math.max(0, activeIndex - half);
-  let end = Math.min(total - 1, activeIndex + half);
 
-  if (activeIndex < half) end = Math.min(total - 1, windowSize - 1);
-  if (activeIndex > total - half - 1) start = Math.max(0, total - windowSize);
+  let start =
+    Math.max(0, activeIndex - half);
+
+  let end =
+    Math.min(total - 1, activeIndex + half);
+
+  if (activeIndex < half) {
+    end = Math.min(total - 1, windowSize - 1);
+  }
+
+  if (activeIndex > total - half - 1) {
+    start = Math.max(0, total - windowSize);
+  }
 
   for (let i = start; i <= end; i++) {
-    const dot = document.createElement("div");
-    dot.className = "mobile-dot" + (i === activeIndex ? " active" : "");
-    dot.addEventListener("click", () => window.goTo(i));
+
+    const dot =
+      document.createElement("div");
+
+    dot.className =
+      "mobile-dot" +
+      (i === activeIndex ? " active" : "");
+
+    dot.addEventListener("click", () => {
+      window.goTo(i);
+    });
+
     dotsContainer.appendChild(dot);
+
   }
+
 }
 
 function renderMobileCalendarCarousel() {
-  const carousel = document.getElementById("mobile-calendar-carousel");
-  const dotsContainer = document.getElementById("mobile-dots");
+
+  const carousel =
+    document.getElementById("mobile-calendar-carousel");
+
+  const dotsContainer =
+    document.getElementById("mobile-dots");
+
   if (!carousel || !dotsContainer) return;
 
   carousel.innerHTML = "";
+
   const timelineEvents = events
-    .filter(ev => activeCategory === "all" || ev.categories.includes(activeCategory))
+
+    .filter(ev =>
+
+      ev.dateObj >= todayDate &&
+
+      (
+        activeCategory === "all" ||
+        ev.categories.includes(activeCategory)
+      )
+
+    )
+
     .sort((a, b) => a.dateObj - b.dateObj);
 
   if (timelineEvents.length === 0) return;
 
-  const firstFutureIndex = timelineEvents.findIndex(ev => ev.dateObj >= todayDate);
-  const startIndex = firstFutureIndex !== -1 ? firstFutureIndex : 0;
+  const startIndex = 0;
 
   timelineEvents.forEach(ev => {
+
     const card = document.createElement("div");
+
     card.className = "mobile-event-card";
+
     card.innerHTML = `
+
       ${ev.image ? `<img src="${ev.image}">` : ""}
-      <div class="mobile-event-date">${ev.dateReadable}</div>
-      <div class="mobile-event-title">${ev.title}</div>
+
+      <div class="mobile-event-date">
+        ${ev.dateReadable}
+      </div>
+
+      <div class="mobile-event-title">
+        ${ev.title}
+      </div>
+
       <div class="mobile-event-info">
-        ${ev.time ? `<div class="mobile-event-time">🕒 ${ev.time}</div>` : ""}
-        ${ev.location ? `<div class="mobile-event-location">📍 ${ev.location}</div>` : ""}
+
+        ${
+          ev.time
+            ? `
+              <div class="mobile-event-time">
+                🕒 ${ev.time}
+              </div>
+            `
+            : ""
+        }
+
+        ${
+          ev.location
+            ? `
+              <div class="mobile-event-location">
+                📍 ${ev.location}
+              </div>
+            `
+            : ""
+        }
+
       </div>
+
       <div class="mobile-event-tags">
-        ${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}
+
+        ${ev.categories
+          .map(c =>
+            `<span class="timeline-event-tag">${c}</span>`
+          )
+          .join("")}
+
       </div>
+
     `;
+
+    card.addEventListener("click", () => {
+      openEventModal(ev);
+    });
+
     carousel.appendChild(card);
+
   });
 
-  generateDotsWindow(timelineEvents.length, startIndex);
-  initMobileSwipe(carousel, dotsContainer, startIndex);
+  generateDotsWindow(
+    timelineEvents.length,
+    startIndex
+  );
+
+  initMobileSwipe(
+    carousel,
+    dotsContainer,
+    startIndex
+  );
+
 }
 
-function initMobileSwipe(carousel, dotsContainer, startIndex = 0) {
+function initMobileSwipe(
+  carousel,
+  dotsContainer,
+  startIndex = 0
+) {
+
   let index = startIndex;
+
   const cards = [...carousel.children];
   const total = cards.length;
 
-  window.goTo = function(i, instant = false) {
-    index = Math.max(0, Math.min(i, total - 1));
+  window.goTo = function(
+    i,
+    instant = false
+  ) {
+
+    index =
+      Math.max(
+        0,
+        Math.min(i, total - 1)
+      );
+
     const target = cards[index];
+
     if (!target) return;
-    carousel.scrollTo({ left: target.offsetLeft, behavior: instant ? "auto" : "smooth" });
+
+    carousel.scrollTo({
+      left: target.offsetLeft,
+      behavior: instant ? "auto" : "smooth"
+    });
+
     generateDotsWindow(total, index);
+
   };
 
-  let startX = 0, startY = 0, lastX = 0, lastY = 0, isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let lastX = 0;
+  let lastY = 0;
+  let isDragging = false;
 
   carousel.addEventListener("pointerdown", e => {
+
     if (e.pointerType === "mouse") return;
-    startX = e.clientX; startY = e.clientY;
-    lastX = e.clientX; lastY = e.clientY;
+
+    startX = e.clientX;
+    startY = e.clientY;
+
+    lastX = e.clientX;
+    lastY = e.clientY;
+
     isDragging = true;
+
   });
 
   carousel.addEventListener("pointermove", e => {
+
     if (!isDragging) return;
-    lastX = e.clientX; lastY = e.clientY;
+
+    lastX = e.clientX;
+    lastY = e.clientY;
+
   });
 
   const endDrag = () => {
+
     if (!isDragging) return;
+
     isDragging = false;
+
     const dx = lastX - startX;
     const dy = lastY - startY;
-    if (Math.abs(dx) <= Math.abs(dy) * 1.2 || Math.abs(dx) < 40) return;
-    dx < 0 ? window.goTo(index + 1) : window.goTo(index - 1);
+
+    if (
+      Math.abs(dx) <= Math.abs(dy) * 1.2 ||
+      Math.abs(dx) < 40
+    ) {
+      return;
+    }
+
+    dx < 0
+      ? window.goTo(index + 1)
+      : window.goTo(index - 1);
+
   };
 
-  carousel.addEventListener("pointerup", endDrag);
-  carousel.addEventListener("pointercancel", endDrag);
+  carousel.addEventListener(
+    "pointerup",
+    endDrag
+  );
 
-  const prev = document.getElementById("mobile-prev");
-  const next = document.getElementById("mobile-next");
-  if (prev) prev.onclick = () => window.goTo(index - 1);
-  if (next) next.onclick = () => window.goTo(index + 1);
+  carousel.addEventListener(
+    "pointercancel",
+    endDrag
+  );
+
+  const prev =
+    document.getElementById("mobile-prev");
+
+  const next =
+    document.getElementById("mobile-next");
+
+  if (prev) {
+    prev.onclick = () => window.goTo(index - 1);
+  }
+
+  if (next) {
+    next.onclick = () => window.goTo(index + 1);
+  }
 
   window.goTo(startIndex, true);
-}
 
+}
 /* ============================================================
-   FILTRI E LISTE
+   FILTRI E ARCHIVIO
 ============================================================ */
 
 function initFilters() {
-  const container = document.getElementById("calendar-filters");
+
+  const container =
+    document.getElementById("calendar-filters");
+
   if (!container || events.length === 0) return;
 
   const allCats = new Set();
-  events.forEach(ev => ev.categories.forEach(c => allCats.add(c)));
+
+  events.forEach(ev => {
+    ev.categories.forEach(c => {
+      allCats.add(c);
+    });
+  });
 
   container.innerHTML = `
-    <button data-cat="all" class="active">Tutti</button>
-    ${[...allCats].map(c => `<button data-cat="${c}">${c}</button>`).join("")}
+    <button data-cat="all" class="active">
+      Tutti
+    </button>
+
+    ${[...allCats]
+      .map(c => `
+        <button data-cat="${c}">
+          ${c}
+        </button>
+      `)
+      .join("")}
   `;
 
-  container.querySelectorAll("button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      container.querySelectorAll("button").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      activeCategory = btn.dataset.cat;
-      renderAll();
+  container
+    .querySelectorAll("button")
+    .forEach(btn => {
+
+      btn.addEventListener("click", () => {
+
+        container
+          .querySelectorAll("button")
+          .forEach(b =>
+            b.classList.remove("active")
+          );
+
+        btn.classList.add("active");
+
+        activeCategory =
+          btn.dataset.cat;
+
+        renderAll();
+
+      });
+
     });
-  });
+
 }
+
+/* ============================================================
+   CONTROLLI
+============================================================ */
 
 function initControls() {
-  const futureBtn = document.getElementById("show-future");
-  const pastBtn = document.getElementById("show-past");
-  const pastContainer = document.getElementById("past-events");
-
-  if (!futureBtn || !pastBtn || !pastContainer) return;
-
-  futureBtn.addEventListener("click", () => {
-    futureBtn.classList.add("active");
-    pastBtn.classList.remove("active");
-    pastContainer.style.display = "none";
-    renderAll();
-  });
-
-  pastBtn.addEventListener("click", () => {
-    pastBtn.classList.add("active");
-    futureBtn.classList.remove("active");
-    pastContainer.style.display = "flex";
-    renderAll();
-  });
+  /* non più necessari */
 }
 
-function renderFutureList() {
-  const container = document.getElementById("future-events-list");
-  if (!container) return;
-  container.innerHTML = "";
-
-  events
-    .filter(ev => ev.dateObj >= todayDate && (activeCategory === "all" || ev.categories.includes(activeCategory)))
-    .forEach(ev => {
-      const el = document.createElement("div");
-      el.className = "timeline-event";
-      el.dataset.date = ev.dateStr;
-      el.innerHTML = `
-        <div class="timeline-event-date">${ev.dateReadable}</div>
-        <div class="timeline-event-title">${ev.title}</div>
-        <div class="timeline-event-tags">${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}</div>
-        ${ev.image ? `<img src="${ev.image}" class="timeline-event-img">` : ""}
-      `;
-      el.addEventListener("click", () => openEventModal(ev));
-      container.appendChild(el);
-    });
-}
+/* ============================================================
+   ARCHIVIO EVENTI
+============================================================ */
 
 function renderPastEvents() {
-  const container = document.getElementById("past-events");
+
+  const container =
+    document.getElementById("past-events");
+
   if (!container) return;
+
   container.innerHTML = "";
 
   events
-    .filter(ev => ev.dateObj < todayDate && (activeCategory === "all" || ev.categories.includes(activeCategory)))
-    .sort((a, b) => b.dateObj - a.dateObj)
+
+    .filter(ev =>
+
+      ev.dateObj < todayDate &&
+
+      (
+        activeCategory === "all" ||
+        ev.categories.includes(activeCategory)
+      )
+
+    )
+
+    .sort((a, b) =>
+      b.dateObj - a.dateObj
+    )
+
     .forEach(ev => {
-      const el = document.createElement("div");
+
+      const el =
+        document.createElement("div");
+
       el.className = "timeline-event";
-      el.dataset.date = ev.dateStr;
+
+      el.dataset.date =
+        ev.dateStr;
+
       el.innerHTML = `
-        <div class="timeline-event-date">${ev.dateReadable}</div>
-        <div class="timeline-event-title">${ev.title}</div>
-        <div class="timeline-event-tags">${ev.categories.map(c => `<span class="timeline-event-tag">${c}</span>`).join("")}</div>
-        ${ev.image ? `<img src="${ev.image}" class="timeline-event-img">` : ""}
+
+        <div class="timeline-event-date">
+          ${ev.dateReadable}
+        </div>
+
+        <div class="timeline-event-title">
+          ${ev.title}
+        </div>
+
+        <div class="timeline-event-tags">
+
+          ${ev.categories
+            .map(c =>
+              `<span class="timeline-event-tag">${c}</span>`
+            )
+            .join("")}
+
+        </div>
+
+        ${
+          ev.image
+            ? `
+              <img
+                src="${ev.image}"
+                class="timeline-event-img">
+            `
+            : ""
+        }
+
       `;
-      el.addEventListener("click", () => openEventModal(ev));
+
+      el.addEventListener("click", () => {
+        openEventModal(ev);
+      });
+
       container.appendChild(el);
+
     });
+
 }
 
+/* ============================================================
+   LINK CALENDARIO → ARCHIVIO
+============================================================ */
+
 function linkCalendarToTimeline() {
-  document.querySelectorAll(".calendar-day.has-event").forEach(day => {
-    day.addEventListener("click", () => {
-      const target = document.querySelector(`.timeline-event[data-date="${day.dataset.date}"]`);
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  document
+    .querySelectorAll(".calendar-day.has-event")
+    .forEach(day => {
+
+      day.addEventListener("click", () => {
+
+        const target =
+          document.querySelector(
+            `.timeline-event[data-date="${day.dataset.date}"]`
+          );
+
+        if (target) {
+
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+
+        }
+
+      });
+
     });
-  });
+
 }
 /* ============================================================
    PROSSIMO EVENTO (HOME + EVENTI.HTML)
@@ -628,11 +1066,14 @@ function renderFeaturedEvent() {
 
   if (!container) return;
 
-  const futureEvents = events
-    .filter(ev => ev.dateObj >= todayDate)
+  let availableEvents = events
+    .filter(ev =>
+      activeCategory === "all" ||
+      ev.categories.includes(activeCategory)
+    )
     .sort((a, b) => a.dateObj - b.dateObj);
 
-  if (!futureEvents.length) {
+  if (!availableEvents.length) {
 
     container.innerHTML = `
       <div class="featured-event-empty">
@@ -643,7 +1084,10 @@ function renderFeaturedEvent() {
     return;
   }
 
-  const ev = futureEvents[0];
+  let ev =
+    availableEvents.find(
+      e => e.dateObj >= todayDate
+    ) || availableEvents[0];
 
   const isHome =
     !!document.getElementById("featured-event-home");
@@ -777,46 +1221,201 @@ function renderFeaturedEvent() {
 ============================================================ */
 
 function lockBodyForModal() {
-  if (!(isMobile() && window.innerHeight > window.innerWidth)) return;
+
+  if (
+    !(
+      isMobile() &&
+      window.innerHeight > window.innerWidth
+    )
+  ) {
+    return;
+  }
+
   const scrollY = window.scrollY;
+
   document.body.dataset.scrollY = scrollY;
+
   document.body.style.position = "fixed";
   document.body.style.top = `-${scrollY}px`;
   document.body.style.width = "100%";
+
 }
 
 function unlockBodyFromModal() {
-  if (document.body.style.position !== "fixed") return;
-  const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
+
+  if (
+    document.body.style.position !== "fixed"
+  ) {
+    return;
+  }
+
+  const scrollY = parseInt(
+    document.body.dataset.scrollY || "0",
+    10
+  );
+
   document.body.style.position = "";
   document.body.style.top = "";
   document.body.style.width = "";
+
   window.scrollTo(0, scrollY);
+
 }
 
 function openEventModal(ev) {
-  const modal = document.getElementById("event-modal");
-  const modalBody = document.getElementById("event-modal-body");
+
+  const modal =
+    document.getElementById("event-modal");
+
+  const modalBody =
+    document.getElementById("event-modal-body");
+
   if (!modal || !modalBody) return;
 
+  const locationMarkup = ev.venueUrl
+
+    ? `
+      <a
+        href="${ev.venueUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="event-location-link">
+
+        📍 ${ev.location}
+
+      </a>
+    `
+
+    : `
+      <span class="event-location-link">
+        📍 ${ev.location || ""}
+      </span>
+    `;
+
+  const ticketMarkup = ev.ticketUrl
+
+    ? `
+      <a
+        href="${ev.ticketUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="event-primary-btn">
+
+        Prenota / Acquista
+
+      </a>
+    `
+
+    : `
+      <span class="event-free-entry">
+
+        ${ev.freeEntry === false
+          ? "Biglietti presto disponibili"
+          : "Ingresso gratuito"}
+
+      </span>
+    `;
+
   modalBody.innerHTML = `
+
     <div class="modal-two-columns">
-      <div class="modal-left">${ev.image ? `<img src="${ev.image}" class="modal-img">` : ""}</div>
-      <div class="modal-right">
-        <div class="event-modal-date">${ev.dateReadable}</div>
-        <div class="event-modal-categories">${ev.categories.map(c => `<span class="event-tag">${c}</span>`).join("")}</div>
-        <h2>${ev.title}</h2>
+
+      <div class="modal-left">
+
+        ${
+          ev.image
+            ? `
+              <img
+                src="${ev.image}"
+                class="modal-img"
+                alt="${ev.title}">
+            `
+            : ""
+        }
+
       </div>
+
+      <div class="modal-right">
+
+        <div class="event-modal-date">
+          ${ev.dateReadable}
+        </div>
+
+        ${
+          ev.time
+            ? `
+              <div class="event-modal-time">
+                🕒 ${ev.time}
+              </div>
+            `
+            : ""
+        }
+
+        <div class="event-modal-categories">
+
+          ${ev.categories
+            .map(c =>
+              `<span class="event-tag">${c}</span>`
+            )
+            .join("")}
+
+        </div>
+
+        <h2>
+          ${ev.title}
+        </h2>
+
+        ${
+          ev.description
+            ? `
+              <p class="event-modal-description">
+                ${ev.description}
+              </p>
+            `
+            : ""
+        }
+
+        ${
+          ev.location
+            ? `
+              <div class="event-modal-location">
+                ${locationMarkup}
+              </div>
+            `
+            : ""
+        }
+
+        <div class="event-modal-actions">
+
+          ${ticketMarkup}
+
+        </div>
+
+      </div>
+
     </div>
+
   `;
+
   modal.style.display = "flex";
+
   lockBodyForModal();
+
 }
 
-const modalCloseBtn = document.querySelector(".event-modal-close");
+const modalCloseBtn =
+  document.querySelector(".event-modal-close");
+
 if (modalCloseBtn) {
+
   modalCloseBtn.addEventListener("click", () => {
-    document.getElementById("event-modal").style.display = "none";
+
+    document.getElementById(
+      "event-modal"
+    ).style.display = "none";
+
     unlockBodyFromModal();
+
   });
+
 }
