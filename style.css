@@ -1,6 +1,7 @@
-/* ————————————————————————————————
-   VARIABILI GLOBALI
-—————————————————————————————————— */
+/* ============================================================
+   QUEER MARKET SHOW — FOGLIO DI STILE UNIFICATO E PULITO
+============================================================ */
+
 :root {
   --bg-color: #000;
   --primary-color: #ff00ff;
@@ -8,12 +9,11 @@
   --font-sans: 'Lexend', Arial, sans-serif;
 
   --z-navbar: 10000;
-  --z-modal: 20000;
-  --z-lightbox: 21000;
-  --z-gallery: 20000;
   --z-overlay: 15000;
+  --z-modal: 20000;
+  --z-gallery: 20000;
+  --z-lightbox: 21000;
 
-  /* Altezza navbar (desktop/mobile) */
   --navbar-height: 80px;
 }
 
@@ -23,30 +23,47 @@
   }
 }
 
-/* ————————————————————————————————
-   BASE
-—————————————————————————————————— */
+/* ============================================================
+   BASE & SFONDO
+============================================================ */
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
   max-width: 100%;
+  min-height: 100dvh;
   overflow-x: hidden;
-  scroll-behavior: smooth;
   font-family: var(--font-sans);
   background-color: var(--bg-color);
   color: var(--secondary-color);
   position: relative;
-  min-height: 100dvh;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* sfondo mani */
+@supports (-webkit-touch-callout: none) {
+  html,
+  body {
+    min-height: -webkit-fill-available;
+  }
+}
+
+body.modal-open {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
 .logo-background {
   position: fixed;
   inset: 0;
@@ -56,55 +73,76 @@ body {
   background-size: 170%;
   opacity: 0.09;
   z-index: -1;
+  pointer-events: none;
 }
 
-/* sezioni principali base (la home avrà override suoi) */
-.hero-section,
-.home-section {
-  min-height: calc(100dvh - var(--navbar-height));
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+section[id] {
+  scroll-margin-top: calc(var(--navbar-height) + 10px);
 }
 
-/* sezioni “a scorrimento” con bordo superiore */
 .scroll-section {
   padding: 4rem 2rem;
   border-top: 1px solid var(--primary-color);
 }
 
-/* offset delle ancore rispetto alla navbar fissa */
-section[id] {
-  scroll-margin-top: var(--navbar-height);
-}
-
-/* pulsanti generici */
-.button,
-.enter-button,
-.contact-form button,
-.event-modal-close,
-.event-modal-qms-close {
-  font-family: var(--font-sans);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-}
-
-/* footer generico */
-footer {
-  text-align: center;
-  padding: 2rem;
+footer,
+.qms-footer {
+  width: 100%;
+  background: #000;
+  color: #666;
+  padding: 30px 40px;
   border-top: 1px solid var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-top: 60px;
 }
 
-/* ————————————————————————————————
-   NAVBAR + MENU
-—————————————————————————————————— */
+.qms-footer-left {
+  text-align: left;
+}
 
-/* NAVBAR UNICA E DEFINITIVA */
+.qms-footer-right {
+  text-align: right;
+}
+
+.qms-footer strong {
+  color: #777;
+  font-weight: 600;
+}
+
+.qms-footer a {
+  color: #777;
+  text-decoration: none;
+}
+
+.qms-footer a:hover {
+  color: #aaa;
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  footer,
+  .qms-footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px 20px;
+  }
+
+  .qms-footer-left,
+  .qms-footer-right {
+    text-align: center;
+  }
+}
+
+/* ============================================================
+   NAVBAR & MENU
+============================================================ */
+
 .navbar {
   position: fixed;
   top: 0;
@@ -120,7 +158,6 @@ footer {
   box-shadow: 0 0 0 2px #000 inset;
 }
 
-/* logo */
 .logo {
   font-weight: 900;
   font-size: 1.1rem;
@@ -128,11 +165,9 @@ footer {
   text-transform: uppercase;
   letter-spacing: 1px;
   white-space: nowrap;
-  position: relative;
-  overflow: hidden;
+  text-decoration: none;
 }
 
-/* link navbar */
 .navbar a {
   font-family: var(--font-sans);
   font-weight: 900;
@@ -140,7 +175,6 @@ footer {
   letter-spacing: 1px;
   color: #000;
   text-decoration: none;
-  position: relative;
   transition: color 0.2s ease;
 }
 
@@ -154,7 +188,6 @@ footer {
   text-decoration: line-through 3px solid #fff;
 }
 
-/* hamburger */
 .menu-toggle {
   width: 28px;
   height: 22px;
@@ -165,6 +198,7 @@ footer {
   padding: 0;
   background: none;
   border: none;
+  touch-action: manipulation;
 }
 
 .menu-toggle .bar {
@@ -174,28 +208,25 @@ footer {
   transition: all 0.2s ease;
 }
 
-/* menu desktop */
 .menu-desktop {
   display: none;
 }
 
-/* menu mobile */
 .menu-mobile {
   display: none;
 }
 
-/* DESKTOP */
 @media (min-width: 769px) {
   .menu-desktop {
     display: flex;
     gap: 1.2rem;
   }
+
   .menu-toggle {
     display: none;
   }
 }
 
-/* MOBILE */
 @media (max-width: 768px) {
   .menu-mobile {
     position: fixed;
@@ -206,9 +237,10 @@ footer {
     padding: 1.5rem;
     flex-direction: column;
     gap: 1.2rem;
-    z-index: 9999;
+    z-index: calc(var(--z-navbar) - 1);
     transform: translateY(-100%);
     transition: transform 0.25s ease;
+    touch-action: pan-y;
   }
 
   .menu-mobile.show {
@@ -224,7 +256,8 @@ footer {
     color: #000;
     text-decoration: none;
     font-size: 1.2rem;
-    transition: color 0.2s ease;
+    padding: 10px 0;
+    display: block;
   }
 
   .menu-mobile a:hover {
@@ -238,15 +271,75 @@ footer {
   }
 }
 
-/* ————————————————————————————————
-   HOME — BASE
-—————————————————————————————————— */
+/* ============================================================
+   STICKER BUTTONS & ANIMAZIONI
+============================================================ */
 
+.sticker-button {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 10px 18px;
+  background: #ff2bb5;
+  color: #000;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #000;
+  border-radius: 6px;
+  transform: rotate(-2deg);
+  box-shadow: 3px 3px 0 #000;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sticker-button:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 4px 4px 0 #000;
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.9) rotate(-1deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes glitchFlash {
+  0% {
+    filter: hue-rotate(45deg) saturate(3);
+    transform: scale(1.02);
+  }
+  50% {
+    filter: hue-rotate(-45deg) saturate(5);
+    transform: scale(0.98);
+  }
+  100% {
+    filter: none;
+    transform: scale(1);
+  }
+}
+
+.glitch-hover:hover,
+.artist-card:hover img,
+.folder-preview:hover,
+.qms-item:hover {
+  animation: glitchFlash 0.12s linear;
+}
+
+/* ============================================================
+   HOME COLLAGE & HERO EDITORIALE
+============================================================ */
+
+.hero-section,
 .home-section {
+  min-height: calc(100dvh - var(--navbar-height));
   width: 100%;
-  margin: 0;
-  padding: 0;
-  text-align: left;
+  position: relative;
 }
 
 .home-collage,
@@ -258,32 +351,17 @@ footer {
   padding: var(--navbar-height) 1rem 0;
   overflow: hidden;
   z-index: 1;
+  pointer-events: none;
 }
 
-.home-content { display: none !important; }
-
-/* ————————————————————————————————
-   MASONRY (fallback)
-—————————————————————————————————— */
-
-.masonry-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  grid-auto-rows: 10px;
-  gap: 1rem;
-  content-visibility: auto;
+.home-collage .poster,
+.collage-home .poster {
+  pointer-events: auto;
 }
 
-@media (max-width: 600px) {
-  .masonry-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 12px;
-  }
+.home-content {
+  display: none !important;
 }
-
-/* ————————————————————————————————
-   POSTER — BASE
-—————————————————————————————————— */
 
 .poster {
   position: absolute;
@@ -292,17 +370,18 @@ footer {
   color: #fff;
   text-decoration: none;
   border: 2px solid #fff;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 0 0 2px #000 inset;
+  transform: rotate(var(--tilt, 0deg));
   transform-origin: center;
   overflow: hidden;
 }
 
-/* overlay cliccabile */
 .poster-link {
   position: absolute;
   inset: 0;
   z-index: 20;
+  display: block;
   pointer-events: auto;
 }
 
@@ -312,7 +391,6 @@ footer {
   pointer-events: none;
 }
 
-/* immagini */
 .poster img {
   width: 100%;
   height: 100%;
@@ -320,7 +398,6 @@ footer {
   object-fit: contain;
 }
 
-/* varianti crop */
 .poster-L img,
 .poster-XL img,
 .poster-XXL img,
@@ -329,9 +406,10 @@ footer {
   object-position: center;
 }
 
-.poster-XS img { padding-top: 30%; }
+.poster-XS img {
+  padding-top: 30%;
+}
 
-/* titolo */
 .poster h2 {
   font-family: var(--font-sans);
   font-size: 1.8rem;
@@ -340,45 +418,89 @@ footer {
   margin: 0 0 0.5rem;
 }
 
-.poster::before{
-  display:none;
+.poster-XXL {
+  width: 100vw;
+  height: calc(100dvh - var(--navbar-height));
+  top: 0;
+  left: 0;
+  --tilt: -1.5deg;
 }
-/* ————————————————————————————————
-   TAGLIE POSTER (DESKTOP)
-—————————————————————————————————— */
 
-.poster-XXL { width: 100vw; height: calc(100dvh - var(--navbar-height)); top: 0; left: 0; }
-.poster-L   { width: 100vw; height: 18vh; }
-.poster-XL  { width: 18vw; height: calc(100dvh - var(--navbar-height)); }
-.poster-M   { width: 34vw; height: calc(34vw * 0.66); }
-.poster-S   { width: 34vw; height: 34vw; }
-.poster-XS  { width: 20vw; height: calc(20vw * 1.33); }
+.poster-L {
+  width: 100vw;
+  height: 18vh;
+  --tilt: -3deg;
+}
 
-/* Z-index */
-.p-xxl { z-index: 0; }
-.p-l   { z-index: 1; }
-.p-xl  { z-index: 2; }
-.p-m   { z-index: 3; }
-.p-s   { z-index: 4; }
-.p-xs  { z-index: 5; }
+.poster-XL {
+  width: 18vw;
+  height: calc(100dvh - var(--navbar-height));
+  --tilt: 2.5deg;
+}
 
-/* POSIZIONI ANARCHICHE */
-.p-xxl        { top: 0; left: 0; }
+.poster-M {
+  width: 34vw;
+  height: calc(34vw * 0.66);
+  --tilt: 1.8deg;
+}
+
+.poster-S {
+  width: 34vw;
+  height: 34vw;
+  --tilt: -2.2deg;
+}
+
+.poster-XS {
+  width: 20vw;
+  height: calc(20vw * 1.33);
+  --tilt: 4deg;
+}
+
+.p-xxl { z-index: 0; top: 0; left: 0; }
+.p-l { z-index: 1; }
+.p-xl { z-index: 2; }
+.p-m { z-index: 3; }
+.p-s { z-index: 4; }
+.p-xs { z-index: 5; }
 .p-sostienici { bottom: 17%; left: 0; }
-.p-manifesto  { top: 0; left: 80%; }
-.p-artist3    { top: 8%; left: 1%; }
-.p-   { top: 18%; right: 10%; }
-.p-eventi     { top: 6%; left: 20%; }
+.p-manifesto { top: 0; left: 80%; }
+.p-artist3 { top: 8%; left: 1%; }
+.p-eventi { top: 6%; left: 20%; }
 
-/* ————————————————————————————————
-   PALETTE + STICKER
-—————————————————————————————————— */
+.poster-eventi {
+  background: var(--primary-color);
+  color: #000;
+  border-color: #000;
+  animation: eventPulse 5s infinite;
+}
 
-.poster-eventi     { background: var(--primary-color); color: #000; border-color: #000; }
-.poster-manifesto  { background: #111; border: 3px dashed var(--primary-color); }
-.poster-galleria   { background: #222; border-color: #fff; }
-.poster-artist3    { background: #fff; color: #000; border-color: #000; }
-.poster-sostienici { background: #000; color: var(--primary-color); border: 3px solid var(--primary-color); }
+@keyframes eventPulse {
+  0% { box-shadow: 0 0 0 2px #000 inset; }
+  50% { box-shadow: 0 0 0 2px #000 inset, 0 0 20px rgba(255, 255, 0, 0.45); }
+  100% { box-shadow: 0 0 0 2px #000 inset; }
+}
+
+.poster-manifesto {
+  background: #111;
+  border: 3px dashed var(--primary-color);
+}
+
+.poster-galleria {
+  background: #222;
+  border-color: #fff;
+}
+
+.poster-artist3 {
+  background: #fff;
+  color: #000;
+  border-color: #000;
+}
+
+.poster-sostienici {
+  background: #000;
+  color: var(--primary-color);
+  border: 3px solid var(--primary-color);
+}
 
 .sticker {
   background: var(--primary-color);
@@ -387,16 +509,16 @@ footer {
   font-size: 0.75rem;
   font-weight: 900;
   position: absolute;
-  bottom: 10px; right: 10px;
+  bottom: 10px;
+  right: 10px;
   transform: rotate(3deg);
   box-shadow: 0 0 0 2px #000 inset;
   pointer-events: none;
 }
-.sticker.small { font-size: 0.65rem; }
 
-/* ————————————————————————————————
-   COLLAGE INTERNO
-—————————————————————————————————— */
+.sticker.small {
+  font-size: 0.65rem;
+}
 
 .poster-collage {
   position: absolute;
@@ -404,6 +526,8 @@ footer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
+  z-index: 5;
+  pointer-events: none;
 }
 
 .collage-img,
@@ -426,14 +550,13 @@ footer {
 }
 
 @keyframes glitchIn {
-  0%   { clip-path: inset(0 0 80% 0);  transform: translate(-2px, 1px); }
-  25%  { clip-path: inset(20% 0 40% 0); transform: translate(2px, -1px); }
-  50%  { clip-path: inset(40% 0 20% 0); transform: translate(-1px, 2px); }
-  75%  { clip-path: inset(10% 0 60% 0); transform: translate(1px, -2px); }
-  100% { clip-path: inset(0 0 0 0);     transform: none; }
+  0% { clip-path: inset(0 0 80% 0); transform: translate(-2px, 1px); }
+  25% { clip-path: inset(20% 0 40% 0); transform: translate(2px, -1px); }
+  50% { clip-path: inset(40% 0 20% 0); transform: translate(-1px, 2px); }
+  75% { clip-path: inset(10% 0 60% 0); transform: translate(1px, -2px); }
+  100% { clip-path: inset(0 0 0 0); transform: none; }
 }
 
-/* POSTER XS — COLLAGE ARTIST3 */
 .poster-artist3.poster-XS {
   padding: 0;
   background: #fff;
@@ -449,6 +572,8 @@ footer {
   gap: 2px;
   padding: 4px;
   background: #000;
+  z-index: 5;
+  pointer-events: none;
 }
 
 .poster-collage-xs .cell {
@@ -456,12 +581,87 @@ footer {
   transform: rotate(calc(-1deg + (var(--i) * 0.15deg)));
 }
 
-/* ————————————————————————————————
-   MOBILE — COLLAGE ANARCHICO
-—————————————————————————————————— */
+.home-intro {
+  position: absolute;
+  z-index: 15;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(90vw, 700px);
+  text-align: center;
+  pointer-events: none;
+}
+
+.home-kicker {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.9rem;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  box-shadow: 0 0 0 2px #fff inset;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  transform: rotate(-2deg);
+}
+
+.home-intro h1 {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 0.85;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+}
+
+.home-description {
+  max-width: 540px;
+  margin: 1.25rem auto 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.9);
+}
+
+.home-cta {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  pointer-events: auto;
+}
+
+.home-cta a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid #000;
+  transition: transform 0.25s ease;
+}
+
+.cta-primary {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.cta-secondary {
+  background: #000;
+  color: #fff;
+}
+
+.home-cta a:hover {
+  transform: translateY(-3px) rotate(-1deg);
+}
 
 @media (max-width: 768px) {
-
   .home-collage,
   .collage-home {
     height: auto;
@@ -470,7 +670,6 @@ footer {
   }
 
   .poster {
-    transform: rotate(var(--tilt, 0deg));
     width: var(--poster-width, 50vw);
     height: var(--poster-height, auto);
     z-index: var(--z, 1);
@@ -478,54 +677,109 @@ footer {
   }
 
   .poster-XXL { --poster-width: 90vw; --poster-height: calc(100dvh - var(--navbar-height)); --tilt: -2deg; --z: 1; top: 0; left: 0; }
-  .poster-XL  { --poster-width: 80vw; --poster-height: calc(100dvh - var(--navbar-height)); --tilt: 3deg;  --z: 2; top: 0; left: 50%; }
-  .poster-L   { --poster-width: 70vw; --poster-height: 14vh; --tilt: -4deg; --z: 3; top: 80%; left: 0; }
-  .poster-M   { --poster-width: 48vw; --poster-height: calc(48vw * 0.66); --tilt: 2deg; --z: 4; top: 30%; left: 50vw; }
-  .poster-S   { --poster-width: 40vw; --poster-height: 40vw; --tilt: -1deg; --z: 5; top: 30%; left: 50%; }
-  .poster-XS  { --poster-width: 28vw; --poster-height: calc(28vw * 1.33); --tilt: 5deg; --z: 6; top: 15vh; left: 10%; }
+  .poster-XL { --poster-width: 80vw; --poster-height: calc(100dvh - var(--navbar-height)); --tilt: 3deg; --z: 2; top: 0; left: 50%; }
+  .poster-L { --poster-width: 70vw; --poster-height: 14vh; --tilt: -4deg; --z: 3; top: 80%; left: 0; }
+  .poster-M { --poster-width: 48vw; --poster-height: calc(48vw * 0.66); --tilt: 2deg; --z: 4; top: 30%; left: 50vw; }
+  .poster-S { --poster-width: 40vw; --poster-height: 40vw; --tilt: -1deg; --z: 5; top: 30%; left: 50%; }
+  .poster-XS { --poster-width: 28vw; --poster-height: calc(28vw * 1.33); --tilt: 5deg; --z: 6; top: 15vh; left: 10%; }
 
-  .poster::before {
-    font-size: 1rem;
-    padding: 4px 6px;
+  .home-intro {
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85vw;
+  }
+
+  .home-kicker {
+    font-size: 0.65rem;
+  }
+
+  .home-intro h1 {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+  }
+
+  .home-description {
+    display: none;
+  }
+
+  .home-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home-cta a {
+    width: min(260px, 80vw);
   }
 }
-/* ————————————————————————————————
-   ROTAZIONI ANARCHICHE — DESKTOP
-—————————————————————————————————— */
 
-.poster {
-  transform: rotate(var(--tilt, 0deg));
+@media (max-width: 480px) {
+  .home-intro {
+    top: 5%;
+  }
+
+  .home-kicker {
+    display: none;
+  }
+
+  .home-cta {
+    margin-top: 0.75rem;
+  }
 }
 
-/* Rotazioni per taglia */
-.poster-XXL { --tilt: -1.5deg; }
-.poster-XL  { --tilt:  2.5deg; }
-.poster-L   { --tilt: -3deg; }
-.poster-M   { --tilt:  1.8deg; }
-.poster-S   { --tilt: -2.2deg; }
-.poster-XS  { --tilt:  4deg; }
+/* ============================================================
+   MANIFESTO & MANIFESTO EXTENDED
+============================================================ */
 
-/* ————————————————————————————————
-   TITOLI
-—————————————————————————————————— */
+.manifesto-section {
+  min-height: 100dvh;
+  padding: 2rem 1.5rem;
+  background: #000;
+  color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.manifesto-container {
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+#manifesto-extended {
+  padding: calc(var(--navbar-height) + 4rem) 1.5rem 5rem;
+}
+
+#manifesto-extended .manifesto-container {
+  max-width: 1000px;
+}
 
 .manifesto-title {
+  margin: 0 0 1.5rem;
   font-family: var(--font-sans);
-  font-size: 3rem;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
   font-weight: 900;
+  line-height: 0.95;
   text-transform: uppercase;
-  margin: 0 0 2rem 0;
+  color: #fff;
   transform: rotate(-1.5deg);
 }
 
-/* ————————————————————————————————
-   LEAD
-—————————————————————————————————— */
+.manifesto-subtitle {
+  max-width: 760px;
+  margin: 0 0 2rem;
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
 
 .manifesto-lead {
-  font-size: 1.6rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
   font-weight: 800;
-  margin: 0 0 2.5rem 0;
+  margin: 0 0 2.5rem;
   line-height: 1.3;
   transform: rotate(-1deg);
   background: var(--primary-color);
@@ -535,25 +789,45 @@ footer {
   box-shadow: 0 0 0 3px #fff inset;
 }
 
-/* ————————————————————————————————
-   CORPO
-—————————————————————————————————— */
-
-.manifesto-body p {
-  font-size: 1.2rem;
-  line-height: 1.55;
-  margin: 0 0 1.6rem 0;
-  opacity: 0;
-  transform: translateY(10px) rotate(-0.3deg);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+.manifesto-overview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin: 3rem 0 4rem;
 }
 
-.manifesto-body p.visible {
-  opacity: 1;
-  transform: translateY(0) rotate(var(--tilt, -0.3deg));
+.overview-item {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
 }
 
-/* Frasi-chiave */
+.overview-item h3 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.overview-item p {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.manifesto-body {
+  max-width: 760px;
+}
+
+.manifesto-body p,
+.manifesto-brief p {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  margin: 0 0 1.6rem;
+  max-width: 70ch;
+}
+
 .manifesto-body strong {
   display: inline-block;
   background: #fff;
@@ -568,3811 +842,168 @@ footer {
   color: #000;
 }
 
-/* ————————————————————————————————
-   MOBILE
-—————————————————————————————————— */
-
-@media (max-width: 600px) {
-  .manifesto-title { font-size: 2.4rem; }
-  .manifesto-lead { font-size: 1.3rem; }
-  .manifesto-body p { font-size: 1.05rem; }
+.manifesto-actions {
+  margin-top: 5rem;
+  padding-top: 3rem;
+  border-top: 2px dashed rgba(255, 255, 255, 0.2);
 }
 
-body.modal-open {
-  overflow: hidden;
-  height: 100dvh;
-  touch-action: none;
-}
-
-/* ============================
-   MANIFESTO — SEZIONE RESPONSIVE
-============================ */
-
-.manifesto-section {
-  min-height: 100dvh; /* fullscreen quando possibile */
-  padding: 0 !important;
-  margin: 0 !important;
-
-  background: #000;
-  color: #fff;
-  position: relative;
-  box-sizing: border-box;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* centratura solo se c’è spazio */
-  align-items: center;
-
-  overflow: visible; /* evita accavallamenti */
-}
-
-/* contenitore centrato in larghezza */
-.manifesto-container {
-  max-width: 760px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 2rem 1.5rem; /* padding laterale + respiro verticale */
-  box-sizing: border-box;
-}
-
-/* titolo */
-.manifesto-title {
-  margin-top: 0 !important;
-}
-
-/* lead */
-.manifesto-lead {
-  margin-top: 0 !important;
-}
-
-/* corpo testo */
-.manifesto-body p {
-  margin-top: 0 !important;
-}
-
-/* mobile: niente centratura verticale forzata */
-@media (max-width: 600px) {
-  .manifesto-section {
-    justify-content: flex-start;
-    padding-top: 1.5rem;
-    padding-bottom: 2rem;
-  }
-
-  .manifesto-title { font-size: 2.4rem; }
-  .manifesto-lead { font-size: 1.3rem; }
-  .manifesto-body p { font-size: 1.05rem; }
-}
-/* ————————————————————————————————
-   FIX DEFINITIVO POSTER GALLERIA + ARTIST3
-—————————————————————————————————— */
-
-/* Overlay cliccabile */
-.poster-link {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  display: block;
-  pointer-events: auto;
-}
-
-/* Tutto il resto non deve bloccare i click */
-.poster *:not(.poster-link) {
-  position: relative;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* COLLAGE GALLERIA */
-.poster-collage {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-}
-
-.poster-collage .collage-img {
-  z-index: 5;
-}
-
-/* COLLAGE ARTIST3 */
-.poster-collage-xs {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-}
-
-.poster-collage-xs .cell {
-  z-index: 5;
-}
-
-/* Etichetta sezione */
-.poster::before {
-  z-index: 10;
-}
-
-/* ————————————————————————————————
-   CONTATTI A SCHERMATA INTERA (SX/DX)
-—————————————————————————————————— */
-
-.contact-section {
-  height: 100dvh;
-  width: 100%;
-  padding: 4vw;
-  box-sizing: border-box;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4vw;
-
-  overflow: hidden;
-}
-
-/* COLONNE */
-.contact-left,
-.contact-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2vw;
-}
-
-/* MANIFESTO (SINISTRA) */
-.contact-intro {
-  font-size: clamp(18px, 2.8vw, 32px);
+.manifesto-actions h2 {
+  margin-bottom: 2rem;
+  font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 900;
-  line-height: 1.15;
   text-transform: uppercase;
-  background: #ff2e9a;
-  color: #fff;
-  padding: 2vw 3vw;
-  border: 0.6vw solid #fff;
-  box-shadow: 1vw 1vw 0 #000;
-  transform: rotate(-2deg);
-  max-width: 90%;
 }
 
-/* SOCIAL ICONS */
-.social-links {
+.manifesto-buttons {
   display: flex;
-  gap: 1.6vw;
-}
-
-.social-links a {
-  text-decoration: none; /* elimina la sottolineatura */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(40px, 6vw, 70px);
-  height: clamp(40px, 6vw, 70px);
-  background: #000;
-  color: #fff;
-  border: 0.4vw solid #fff;
-  box-shadow: 0.6vw 0.6vw 0 #ff2e9a;
-  transform: rotate(-4deg);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.social-links a:visited,
-.social-links a:active,
-.social-links a:focus {
-  text-decoration: none;
-}
-
-.social-links a i {
-  font-size: clamp(18px, 3vw, 28px);
-}
-
-.social-links a:hover {
-  transform: rotate(4deg) scale(1.1);
-  box-shadow: 1vw 1vw 0 #ff2e9a;
-}
-
-/* FORM (DESTRA) */
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4vw;
-  max-width: 90%;
-}
-
-.contact-form input,
-.contact-form textarea {
-  padding: 1vw;
-  border: 0.4vw solid #000;
-  background: #fff;
-  font-family: var(--font-sans);
-  font-size: clamp(14px, 2vw, 18px);
-  box-shadow: 0.6vw 0.6vw 0 #000;
-}
-
-.contact-form textarea {
-  min-height: 120px;
-  max-height: 25dvh; /* evita overflow verticale */
-}
-
-.contact-form button {
-  padding: 1vw 2vw;
-  background-color: #ff2e9a;
-  color: #fff;
-  border: 0.6vw solid #fff;
-  box-shadow: 1vw 1vw 0 #000;
-  font-weight: 900;
-  font-size: clamp(14px, 2.4vw, 22px);
-  text-transform: uppercase;
-  cursor: pointer;
-  transform: rotate(-2deg);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.contact-form button:hover {
-  transform: rotate(2deg) scale(1.05);
-  box-shadow: 1.4vw 1.4vw 0 #000;
-}
-
-/* MOBILE — STACK VERTICALE */
-@media (max-width: 800px) {
-  .contact-section {
-    flex-direction: column;
-    justify-content: center;
-    gap: 4vw;
-  }
-
-  .contact-left,
-  .contact-right {
-    width: 100%;
-    align-items: center;
-    text-align: center;
-  }
-
-  .contact-form textarea {
-    max-height: 20dvh;
-  }
-}
-/* ————————————————————————————————
-   MOBILE VERSION (max-width: 800px)
-—————————————————————————————————— */
-
-@media (max-width: 800px) {
-
-  .contact-section {
-    height: 100dvh;
-    padding: 4vw 5vw;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    gap: 4vw;
-  }
-
-  /* BLOCCO SINISTRA/DESKTOP → diventa TOP */
-  .contact-left,
-  .contact-right {
-    width: 100%;
-    align-items: center;
-    text-align: center;
-    flex: unset;
-  }
-
-  /* MANIFESTO COMPATTO */
-  .contact-intro {
-    font-size: clamp(16px, 4vw, 22px);
-    padding: 3vw 4vw;
-    max-width: 100%;
-    transform: rotate(-1deg);
-    box-shadow: 0.8vw 0.8vw 0 #000;
-  }
-
-  /* SOCIAL ICONS CENTRALI */
-  .social-links {
-    justify-content: center;
-    gap: 4vw;
-  }
-
-  .social-links a {
-    width: clamp(40px, 12vw, 60px);
-    height: clamp(40px, 12vw, 60px);
-    transform: rotate(-3deg);
-  }
-
-  .social-links a i {
-    font-size: clamp(18px, 6vw, 28px);
-  }
-
-  /* FORM COMPATTO SENZA SCROLL */
-  .contact-form {
-    max-width: 100%;
-    width: 100%;
-    padding: 4vw;
-    gap: 3vw;
-    transform: rotate(1deg);
-    box-shadow: 1vw 1vw 0 #000;
-
-    /* NIENTE SCROLL INTERNO */
-    max-height: none;
-    overflow: visible;
-  }
-
-  .contact-form textarea {
-    min-height: 18dvh; /* abbastanza grande da scrivere */
-    max-height: 22dvh; /* ma non esplode */
-  }
-
-  .contact-form button {
-    font-size: clamp(14px, 4vw, 20px);
-    padding: 2.5vw 4vw;
-  }
-}
-
-
-/* ————————————————————————————————
-   ARTIST GALLERY → COERENTE CON CARTELLE
-—————————————————————————————————— */
-
-/* ————————————————————————————————
-   SWITCH ARTIST3
-—————————————————————————————————— */
-
-.artist-controls {
-  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
-  margin: 1.5rem 0;
 }
 
-.artist-controls button {
-  padding: 0.6rem 1.2rem;
-  border: 2px solid var(--primary-color);
-  background: transparent;
-  color: var(--primary-color);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.25s ease;
-}
-
-.artist-controls button:hover,
-.artist-controls button.active {
-  background: var(--primary-color);
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 0 12px rgba(255,0,255,0.3);
-}
-
-/* ————————————————————————————————
-   GALLERY ADATTIVA (RESIDENT + GUEST)
-—————————————————————————————————— */
-
-.artist-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  width: 100%;
-  padding-bottom: 2rem;
-}
-
-/* ————————————————————————————————
-   CARD STABILE CON ASPECT-RATIO
-   + estetica QMS (rotazioni, bordi, shadow)
-—————————————————————————————————— */
-
-.artist-card {
-  position: relative;
-  overflow: hidden;
-  border: 3px solid var(--primary-color);
-  background: #000;
-  cursor: pointer;
-  border-radius: 6px;
-  transform: rotate(-1.5deg);
-  transition: transform 0.25s ease;
-  box-shadow: 0 0 0 3px #000 inset, 0 0 12px rgba(255,0,255,0.25);
-
-  /* DIMENSIONI STABILI */
-  aspect-ratio: 4 / 5;
-  min-width: 260px;
-  min-height: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.artist-card:hover {
-  transform: rotate(0deg) scale(1.03);
-}
-
-/* ————————————————————————————————
-   IMMAGINE PERFETTAMENTE ADATTATA
-—————————————————————————————————— */
-
-.artist-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  flex: 1;
-  filter: contrast(1.1) brightness(0.9);
-  display: block;
-  border-bottom: 2px solid #000;
-}
-
-/* ————————————————————————————————
-   OVERLAY NOME ARTISTA (stile cartelle)
-—————————————————————————————————— */
-
-.artista-info {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  background: #000;
-  color: var(--primary-color);
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: clamp(0.75rem, 1.8vw, 1rem);
-  letter-spacing: 1px;
-  text-align: center;
-  padding: 0.8rem;
-  opacity: 0;
-  transform: translateY(100%) rotate(-1deg);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-  box-shadow: 0 0 0 2px #fff inset;
-}
-
-.artist-card:hover .artista-info {
-  opacity: 1;
-  transform: translateY(0) rotate(0deg);
-}
-
-/* MOBILE: overlay sempre visibile */
-@media (hover: none) and (pointer: coarse) {
-  .artist-card .artista-info {
-    opacity: 1 !important;
-    transform: translateY(0) rotate(0deg) !important;
-  }
-}
-
-/* ————————————————————————————————
-   MODALE ARTISTA (coerente con modali QMS)
-—————————————————————————————————— */
-
-.artist-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.88);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: var(--z-modal);
-  padding: 2rem;
-}
-
-.artist-modal.hidden {
-  display: none;
-}
-
-.artist-modal-content {
-  max-width: 900px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 2rem;
-  background: #000;
-  border-radius: 12px;
-  position: relative;
-  border: 3px solid var(--primary-color);
-  box-shadow: 0 0 0 3px #000 inset, 0 0 20px rgba(255,0,255,0.3);
-}
-
-/* ————————————————————————————————
-   CLOSE BUTTON
-—————————————————————————————————— */
-
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 2rem;
-  cursor: pointer;
-  color: var(--primary-color);
-  background: #000;
-  border: 2px solid var(--primary-color);
-  padding: 0.2rem 0.6rem;
-  transform: rotate(3deg);
-}
-
-/* ————————————————————————————————
-   HEADER ARTISTA
-—————————————————————————————————— */
-
-.artist-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 1rem;
-}
-
-.artist-header h3 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: var(--primary-color);
-  text-transform: uppercase;
-  font-weight: 900;
-  transform: rotate(-1deg);
-}
-
-/* ————————————————————————————————
-   LAYOUT MODALE
-—————————————————————————————————— */
-
-.artist-modal-layout {
-  display: flex;
-  gap: 2rem;
-}
-
-.artist-modal-text {
-  flex: 1;
-  color: #fff;
-  line-height: 1.5;
-}
-
-/* ————————————————————————————————
-   GALLERIA INTERNA (masonry)
-—————————————————————————————————— */
-
-.artist-modal-gallery {
-  flex: 1;
-  column-count: 2;
-  column-gap: 1rem;
-}
-
-.artist-modal-gallery img {
-  width: 100%;
-  margin-bottom: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 2px solid var(--primary-color);
-  box-shadow: 0 0 0 3px #000 inset;
-  transform: rotate(-1deg);
-  transition: transform 0.25s ease;
-}
-
-.artist-modal-gallery img:hover {
-  transform: rotate(0deg) scale(1.03);
-}
-
-/* ————————————————————————————————
-   RESPONSIVE
-—————————————————————————————————— */
-
-@media (max-width: 768px) {
-  .artist-modal-layout {
-    flex-direction: column;
-  }
-  .artist-modal-gallery {
-    column-count: 2;
-  }
-}
-
-@media (max-width: 500px) {
-  .artist-modal-gallery {
-    column-count: 1;
-  }
-}
-/* ————————————————————————————————
-   PARTNERSHIP — GRID FISSA A 3 COLONNE
-   LE CARD SI ADATTANO AL CONTENUTO IMG
-—————————————————————————————————— */
-
-#partnership {
-  background: #000;
-  color: #fff;
-
-  height: 100dvh;          /* la sezione è fissa */
-  padding: 2rem 1.5rem;
-  box-sizing: border-box;
-
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;        /* niente scroll interno */
-}
-
-/* ————————————————————————————————
-   GRID: 3 COLONNE FISSE, ALTEZZA FISSA
-—————————————————————————————————— */
-
-#partnership .collab-grid {
-  display: grid;
-
-  /* 3 colonne fisse */
-  grid-template-columns: repeat(3, 1fr);
-
-  /* la grid occupa tutto lo spazio disponibile */
-  flex: 1;
-  height: 100%;
-  width: 100%;
-
-  gap: 1.2rem;
-  box-sizing: border-box;
-
-  /* impedisce overflow */
-  overflow: hidden;
-}
-
-/* ————————————————————————————————
-   CARD: SI ADATTANO AL CONTENUTO IMG
-—————————————————————————————————— */
-
-.collab-card {
-  width: 100%;
-  height: 100%;
-
-  /* NIENTE aspect-ratio */
-  /* l’altezza dipende dall’immagine */
-
-  border: 3px solid var(--primary-color);
-  background: #000;
-  border-radius: 6px;
-
-  transform: rotate(-1.5deg);
-  transition: transform 0.25s ease;
-
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.collab-card:hover {
-  transform: rotate(0deg) scale(1.03);
-}
-
-/* ————————————————————————————————
-   IMMAGINI: determinano la forma della card
-—————————————————————————————————— */
-
-.collab-card img,
-.collab-card .ig-thumb {
-  width: 100%;
-  height: auto;          /* <— LA CHIAVE */
-  object-fit: contain;
-  display: block;
-  flex-shrink: 0;
-}
-
-/* ————————————————————————————————
-   OVERLAY
-—————————————————————————————————— */
-
-.collab-card .artista-info {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  background: #000;
-  color: var(--primary-color);
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: clamp(0.75rem, 1.8vw, 1rem);
-  text-align: center;
-  padding: 0.8rem;
-  opacity: 0;
-  transform: translateY(100%) rotate(-1deg);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-}
-
-.collab-card:hover .artista-info {
-  opacity: 1;
-  transform: translateY(0) rotate(0deg);
-}
-
-/* MOBILE: la grid diventa verticale */
-@media (max-width: 600px) {
-  #partnership {
-    height: auto;
-    overflow: visible;
-  }
-
-  #partnership .collab-grid {
-    grid-template-columns: 1fr;
-    height: auto;
-  }
-
-  .collab-card {
-    transform: rotate(-1deg);
-  }
-}
-
-/* ————————————————————————————————
-   OVERFLOW KILLER
-—————————————————————————————————— */
-.gallery,
-.artist-gallery,
-.qms-masonry,
-.modal-gallery,
-.gallery-folders,
-.event-gallery {
-  max-width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-.item,
-.artist-card,
-.qms-item,
-.folder-preview,
-.event-card-visual {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* ————————————————————————————————
-   ANIMAZIONI / GLITCH
-—————————————————————————————————— */
-@keyframes modalPop {
-  from { transform: scale(0.9) rotate(-1deg); opacity: 0; }
-  to   { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-
-@keyframes glitchFlash {
-  0%   { filter: hue-rotate(45deg) saturate(3); transform: scale(1.02); }
-  50%  { filter: hue-rotate(-45deg) saturate(5); transform: scale(0.98); }
-  100% { filter: none; transform: scale(1); }
-}
-
-.glitch-hover:hover,
-.menu a:hover,
-.artist-card:hover img,
-.folder-preview:hover,
-.qms-item:hover {
-  animation: glitchFlash 0.12s linear;
-}
-
-/* ————————————————————————————————
-   RESPONSIVE GLOBAL
-—————————————————————————————————— */
-@media (max-width: 768px) {
-  .qms-masonry {
-    column-count: 1;
-  }
-
-  .event-gallery {
-    justify-content: center;
-  }
-
-  #galleryModal .modal-content,
-  .artist-modal-content,
-  #event-modal .event-modal-content {
-    max-width: 100%;
-    padding: 1.5rem;
-  }
-}
-/* GRID PRINCIPALE */
-.sostienici-grid {
-  display: grid;
-  grid-template-columns: 0.45fr 0.55fr;
-  gap: 3rem;
-  width: 100%;
-}
-
-/* COLONNE */
-.sostienici-col-left,
-.sostienici-col-right {
-  display: flex;
-  flex-direction: column;
-  gap: 1.8rem;
-}
-
-/* TITOLO */
-.sostienici-title {
-  font-size: 3rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  color: #fff;
-  transform: rotate(-1deg);
-}
-
-.sostienici-title span {
-  background: #ff2e9a;
-  padding: 0.2em 0.4em;
-  color: #000;
-  transform: rotate(-1deg);
-}
-
-/* CARD */
-.sost-card {
-  background: #111;
-  border: 3px solid #ff2e9a;
-  padding: 1.5rem;
-  border-radius: 6px;
-  box-shadow: 6px 6px 0 #ff2e9a;
-  transform: rotate(-1.5deg);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.sost-card:hover {
-  transform: rotate(0deg) scale(1.02);
-}
-
-.sost-card h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.4rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-.sost-card p {
-  margin: 0;
-  color: #ff2e9a;
-  font-weight: 700;
-}
-
-/* CTA SPECIALE */
-.sost-cta {
-  background: #ff2e9a;
-  color: #000;
-  text-align: center;
-  font-weight: 900;
-  text-transform: uppercase;
-  border: 3px solid #ff2e9a;
-  box-shadow: 6px 6px 0 #000;
-  transform: rotate(-2deg);
-}
-
-.sost-cta:hover {
-  transform: rotate(1deg) scale(1.05);
-}
-
-/* LIGHTBOX */
-.sost-lightbox {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 20000;
-}
-
-.sost-lightbox.show {
-  display: flex;
-}
-
-.sost-lightbox-content {
-  background: #000;
-  border: 3px solid #ff2e9a;
-  padding: 2rem;
-  max-width: 700px;
-  width: 90%;
-  box-shadow: 8px 8px 0 #ff2e9a;
-  transform: rotate(-1deg);
-}
-
-.sost-lightbox-close {
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: #ff2e9a;
-  cursor: pointer;
-}
-/* STICKER “+” PER LE CARD SOSTIENICI */
-.sost-plus {
+.manifesto-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  width: 38px;
-  height: 38px;
-
-  background: black;
-  color: #ff00ff;
+  min-height: 56px;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
   font-weight: 900;
-  font-size: 1.6rem;
-  line-height: 1;
-
-  border: 3px solid #000;
-  box-shadow: 3px 3px 0 #ff00ff;
-  border-radius: 4px;
-
-  transform: rotate(-4deg);
-  margin-top: 0.6rem;
-
-  pointer-events: none; /* il click rimane sulla card */
+  text-transform: uppercase;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  transition: transform 0.25s ease, background 0.25s ease;
 }
-/* ===============================
-   SOSTIENICI — KILLER TABLET
-   Mantiene 2 colonne, riduce font e box per evitare overflow
-=============================== */
+
+.manifesto-action:hover {
+  transform: translateY(-4px) rotate(-1deg);
+  background: var(--primary-color);
+}
+
 @media (max-width: 900px) {
-
-  .sostienici-grid {
-    grid-template-columns: 0.48fr 0.52fr; /* più strette e bilanciate */
-    gap: 1.8rem;
-    transform: scale(0.96); /* mini compressione globale */
-    transform-origin: top center;
-  }
-
-  /* Titolo */
-  .sostienici-title {
-    font-size: 2.2rem;
-    transform: rotate(-0.5deg);
-  }
-
-  .sostienici-title span {
-    padding: 0.15em 0.3em;
-  }
-
-  /* Colonne */
-  .sostienici-col-left,
-  .sostienici-col-right {
-    gap: 1.2rem;
-  }
-
-  /* Card */
-  .sost-card {
-    padding: 1.1rem;
-    border-width: 2px;
-    box-shadow: 4px 4px 0 #ff2e9a;
-    transform: rotate(-1deg);
-  }
-
-  .sost-card h3 {
-    font-size: 1.2rem;
-  }
-
-  .sost-card p {
-    font-size: 0.95rem;
-  }
-
-  /* CTA */
-  .sost-cta {
-    padding: 1.1rem;
-    border-width: 2px;
-    box-shadow: 4px 4px 0 #000;
-    font-size: 1.1rem;
-    transform: rotate(-1deg);
-  }
-
-  /* Sticker + */
-  .sost-plus {
-    width: 32px;
-    height: 32px;
-    font-size: 1.3rem;
-    box-shadow: 2px 2px 0 #ff00ff;
-  }
-}
-
-/* ————————————————
-   FOOTER + TRASPARENZA (lasciati invariati)
-——————————————— */
-
-.modal-photographer a {
-  color: #ff4fa8;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.modal-photographer a:hover {
-  color: #ff7fc4;
-  text-decoration: underline;
-}
-
-.qms-footer {
-  width: 100%;
-  background: #000;
-  color: #555;
-  padding: 30px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  margin-top: 60px;
-}
-
-.qms-footer-left {
-  text-align: left;
-  text-align-last: left;
-}
-
-.qms-footer-right {
-  text-align: right;
-  text-align-last: right;
-}
-
-.qms-footer strong {
-  color: #666;
-  font-weight: 600;
-}
-
-.qms-footer a {
-  color: #666;
-  text-decoration: none;
-}
-
-.qms-footer a:hover {
-  color: #888;
-  text-decoration: underline;
-}
-
-@media (max-width: 700px) {
-  .qms-footer {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
-
-  .qms-footer-left,
-  .qms-footer-right {
-    text-align: center;
-    text-align-last: center;
-  }
-}
-
-.trasparenza-page {
-  max-width: 800px;
-  margin: 80px auto;
-  padding: 0 20px;
-  color: #ddd;
-}
-
-.trasparenza-page h1 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #fff;
-  text-align: left;
-}
-
-.trasparenza-intro {
-  color: #aaa;
-  margin-bottom: 30px;
-  line-height: 1.5;
-}
-
-.trasparenza-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.trasparenza-list li {
-  margin-bottom: 12px;
-}
-
-.trasparenza-list a {
-  color: #888;
-  text-decoration: none;
-  font-size: 1rem;
-}
-
-.trasparenza-list a:hover {
-  color: #bbb;
-  text-decoration: underline;
-}
-.qms-sostienici-section {
-  min-height: 100dvh;
-  display: flex;
-  align-items: center;
-}
-.qms-sostienici-wrapper {
-  height: 100%;
-  max-height: 100dvh;
-  display: grid;
-  grid-template-columns: 1fr 0.9fr;
-  gap: 3rem;
-}
-.qms-sostienici-text {
-  overflow-y: auto;
-  padding-right: 1rem;
-  scrollbar-width: none; /* Firefox */
-}
-
-.qms-sostienici-text::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
-}
-.qms-sostienici-widget {
-  overflow: hidden;
-  display: flex;
-  align-items: flex-start;
-}
-.qms-accordion {
-  max-height: calc(100dvh - 260px); /* titolo + intro + CTA finale */
-  overflow-y: auto;
-  padding-right: 0.5rem;
-  scrollbar-width: none;
-}
-
-.qms-accordion::-webkit-scrollbar {
-  display: none;
-}
-
-/* ————————————————————————————————
-   BODY LOCK PER MODALI (TOUCH FIX)
-—————————————————————————————————— */
-body.modal-open {
-  overflow: hidden !important;
-  height: 100dvh !important;
-  touch-action: none !important;
-  position: fixed !important;
-  width: 100% !important;
-}
-/* ————————————————————————————————
-   TOUCH-ACTION FIX PER CAROSELLO E GALLERIE
-—————————————————————————————————— */
-.artist-gallery,
-.modal-grid,
-.mosaic-grid,
-#mobile-calendar-carousel {
-  display: flex;
-  width: 100%;
-  overflow-x: hidden;   /* niente scroll orizzontale nativo */
-  overflow-y: visible;  /* lascia passare lo scroll verticale */
-  touch-action: pan-y;  /* verticale prioritario */
-}
-
-/* ————————————————————————————————
-   HITBOX MIGLIORATE PER MOBILE
-—————————————————————————————————— */
-@media (max-width: 768px) {
-  a, button, .clickable, .calendar-day, .event-postit {
-    min-height: 48px;
-    padding: 12px 14px;
-  }
-
-  .navbar a,
-  .menu-mobile a {
-    padding: 12px 0;
-    display: block;
-  }
-}
-/* ————————————————————————————————
-   CALENDARIO MOBILE — TAP PIÙ GRANDI
-—————————————————————————————————— */
-@media (max-width: 768px) {
-  .calendar-day {
-    padding: 1rem !important;
-    font-size: 1rem !important;
-  }
-
-  .event-postit {
-    width: 70px !important;
-    height: 70px !important;
-  }
-}
-/* ————————————————————————————————
-   NAVBAR MOBILE — TOUCH FIX
-—————————————————————————————————— */
-@media (max-width: 768px) {
-  .menu-mobile {
-    touch-action: pan-y !important;
-  }
-
-  .menu-toggle {
-    touch-action: manipulation !important;
-  }
-}
-/* ————————————————————————————————
-   MODALI — SCROLL INTERNO FLUIDO
-—————————————————————————————————— */
-.artist-modal-content,
-#galleryModal .modal-content,
-.event-modal-content,
-.mosaic-gallery {
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-}
-/* ————————————————————————————————
-   DOT INDICATOR — EVENTI MOBILE
-—————————————————————————————————— */
-#mobile-dots {
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 50;
-}
-
-/* stato base: piccoli, discreti */
-.mobile-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 2px solid #000;
-  background: #ff2fa8;
-  opacity: 0.25;
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease,
-    filter 0.25s ease,
-    box-shadow 0.25s ease;
-  cursor: pointer;
-}
-
-/* DOT ATTIVO: neon + glow + saturazione */
-.mobile-dot.active {
-  opacity: 1;
-  transform: scale(1.6) rotate(-3deg);
-  filter: saturate(2) brightness(1.4);
-  box-shadow:
-    0 0 6px #ff2fa8,
-    0 0 12px #ff2fa8,
-    0 0 18px #ff2fa8;
-  animation: dotPulse 1.2s infinite alternate ease-in-out;
-}
-
-/* pulsazione glitch */
-@keyframes dotPulse {
-  0% {
-    transform: scale(1.5) rotate(-2deg);
-    box-shadow:
-      0 0 6px #ff2fa8,
-      0 0 12px #ff2fa8;
-  }
-  100% {
-    transform: scale(1.7) rotate(2deg);
-    box-shadow:
-      0 0 10px #ff2fa8,
-      0 0 20px #ff2fa8,
-      0 0 30px #ff2fa8;
-  }
-}
-.mobile-event-info {
-  font-size: 0.85rem;
-  opacity: 0.8;
-  margin-top: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.mobile-event-time,
-.mobile-event-location {
-  line-height: 1.2;
-}
-/* ============================================================
-   MOBILE CALENDAR — VERSIONE PULITA E COMPATIBILE
-============================================================ */
-
-/* Wrapper del carosello */
-#mobile-calendar-wrapper {
-  display: none;                 /* attivato solo via media query */
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;              /* impedisce overflow orizzontale */
-  width: 100%;
-  max-width: 100vw;
-  margin-top: 2rem;
-}
-
-/* Carosello: scroll verticale libero, swipe orizzontale gestito dal JS */
-#mobile-calendar-carousel {
-  display: flex;
-  width: 100%;
-  overflow-x: hidden;   /* niente scroll orizzontale nativo */
-  overflow-y: visible;  /* lascia passare lo scroll verticale */
-  touch-action: pan-y;  /* verticale prioritario */
-}
-
-
-/* Card: larghezza piena, nessun blocco allo scroll verticale */
-.mobile-event-card {
-  flex: 0 0 100%;
-  min-width: 100%;
-  touch-action: pan-y;  /* lascia passare lo scroll verticale */
-}
-
-
-.mobile-event-card img {
-  width: 100%;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  border: 2px solid #000;
-  box-shadow: 6px 6px 0 #000;
-}
-
-/* Frecce */
-.mobile-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 20;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  border: 2px solid #000;
-  padding: 8px 12px;
-  font-size: 22px;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 3px 3px 0 #000;
-}
-
-#mobile-prev { left: 10px; }
-#mobile-next { right: 10px; }
-
-/* Dots */
-#mobile-dots {
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-  z-index: 25;
-}
-
-.mobile-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 2px solid #000;
-  background: #ff2fa8;
-  opacity: 0.4;
-  transition: 0.15s;
-}
-
-.mobile-dot.active {
-  opacity: 1;
-  transform: scale(1.2);
-}
-
-/* ============================================================
-   RESPONSIVE SWITCH
-============================================================ */
-
-/* MOBILE */
-@media (max-width: 768px) {
-  #future-calendar { display: none !important; }
-  #mobile-calendar-wrapper { display: flex !important; }
-  .mobile-timeline { display: none !important; }
-  #past-events { display: none !important; }
-}
-
-/* DESKTOP */
-@media (min-width: 769px) {
-  #future-calendar { display: flex !important; }
-  #mobile-calendar-wrapper { display: none !important; }
-  .mobile-timeline { display: none !important; }
-  #past-events { display: none; }
-}
-/* ————————————————————————————————
-   PATCH POSTER — FIX TAGLI SU MOBILE
-—————————————————————————————————— */
-
-/* 1. Il wrapper deve poter crescere */
-.poster-grid,
-.poster-collage {
-  overflow: visible !important;
-}
-
-/* 2. Ogni poster deve avere un aspect-ratio stabile */
-.poster-card,
-.poster-item {
-  aspect-ratio: 3 / 4 !important; /* o 4/5 se preferisci */
-  height: auto !important;
-}
-
-/* 3. Le immagini devono riempire senza tagliarsi */
-.poster-card img,
-.poster-item img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  display: block !important;
-}
-
-/* 4. Le rotazioni non devono essere clippate */
-.poster-card,
-.poster-item {
-  overflow: visible !important;
-}
-
-/* 5. Su mobile niente rotazioni estreme */
-@media (max-width: 600px) {
-  .poster-card,
-  .poster-item {
-    transform: rotate(0deg) !important;
-    box-shadow: 4px 4px 0 #ff00ff !important;
-  }
-}
-/* ————————————————————————————————
-   PATCH LAZY LOAD — FORZA IL CARICAMENTO
-—————————————————————————————————— */
-
-/* Chrome/Safari fix: gli elementi trasformati non triggerano lazy load */
-.poster-card,
-.poster-item {
-  will-change: transform;
-  contain: paint;
-}
-
-/* Forza il browser a considerare i poster “visibili” */
-.poster-grid,
-.poster-collage {
-  min-height: 1px;
-}
-/* Fix scroll verticale immediato nelle card artista */
-.artist-card,
-.artist-card * {
-  touch-action: pan-y !important;
-}
-/* ============================================================
-   FIX GLOBALE: scroll verticale immediato su TUTTE le card cliccabili
-============================================================ */
-
-.card,
-.timeline-event,
-.mobile-event-card,
-.artist-card,
-.folder-preview,
-.qms-item,
-.gallery-item,
-.event-postit,
-.mosaic-grid img,
-.artist-modal-gallery img {
-  touch-action: pan-y !important;
-}
-/* Anche i figli non devono bloccare il pan verticale */
-.card *,
-.timeline-event *,
-.mobile-event-card *,
-.artist-card *,
-.folder-preview *,
-.qms-item *,
-.gallery-item *,
-.event-postit *,
-.mosaic-grid img *,
-.artist-modal-gallery img * {
-  touch-action: pan-y !important;
-}
-
-
-
-/* ============================
-   OFFSET NAVBAR
-============================= */
-
-:root {
-  --navbar-height: 80px;
-}
-
-.home-collage {
-  position: relative;
-  width: 100%;
-  height: calc(100dvh - var(--navbar-height));
-  padding-top: var(--navbar-height);
-  overflow: hidden;
-
-  /* FIX: la navbar non deve bloccare i click sui poster */
-  pointer-events: none;
-}
-
-.home-collage .poster {
-  pointer-events: auto;
-}
-
-
-
-/* SEZIONE: contenitore principale */
-.qms-gallery-narrativa.chaos {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* GRIGLIA PRINCIPALE: deve leggere il viewport reale */
-.qms-gallery-grid {
-  position: relative;
-  width: 100%;
-  height: 100dvh; /* più affidabile di 100vh su mobile */
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
-/* LAYER IMMAGINI */
-.qms-gallery-images {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* IMMAGINI — più piccole, più dense, ma responsive */
-.qms-gallery-images img {
-  position: absolute;
-  width: min(28vw, 38vh); /* evita immagini troppo grandi in orizzontale */
-  height: min(28vw, 38vh);
-  object-fit: cover;
-  border: 0.6vw solid #fff;
-  box-shadow: 1vw 1vw 0 #000;
-  filter: contrast(1.4) brightness(0.9) saturate(1.2) grayscale(0.15);
-  box-sizing: border-box;
-}
-
-/* LAYER ETICHETTE */
-.qms-gallery-labels {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5000;
-}
-
-/* LABEL — ora non escono più dal riquadro */
-.qms-gallery-labels .label {
-  position: absolute;
-  background: #ff2e9a;
-  padding: 1vw 2vw;
-  font-size: clamp(14px, 3vw, 32px); /* responsive, non esplode su mobile */
-  font-weight: 900;
-  text-transform: uppercase;
-  color: #fff;
-  box-shadow: 1vw 1vw 0 #000;
-  white-space: normal; /* prima era nowrap → rompeva tutto */
-  max-width: 40vw; /* evita overflow orizzontale */
-  overflow-wrap: break-word;
-  transform-origin: left top;
-  z-index: 5001;
-}
-
-/* CTA — via di fuga dal caos */
-.chaos-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-6deg);
-  z-index: 6000;
-  background: #ff2e9a;
-  padding: 2vw 4vw;
-  font-size: clamp(20px, 5vw, 60px);
-  font-weight: 900;
-  color: #fff;
-  text-transform: uppercase;
-  border: 1vw solid #fff;
-  box-shadow: 2vw 2vw 0 #000;
-  filter: contrast(1.4);
-  white-space: nowrap;
-}
-/* ============================================================
-   PATCH COMPLETA E COMPATIBILE – NAVBAR FIX + SOSTIENICI FIX
-   (rispetta il comportamento originale del sito)
-============================================================ */
-
-/* Altezza dinamica della navbar */
-:root {
-  --navbar-height: 80px;
-}
-@media (max-width: 768px) {
-  :root {
-    --navbar-height: 70px;
-  }
-}
-
-/* Navbar corretta */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--navbar-height);
-  z-index: var(--z-navbar, 10000);
-}
-
-/* Ancore corrette */
-section[id] {
-  scroll-margin-top: calc(var(--navbar-height) + 10px);
-}
-
-/* Sezioni fullscreen reali (compensano la navbar) */
-.hero-section,
-.home-section,
-.manifesto-section,
-.contact-section,
-.qms-sostienici-section {
-  min-height: calc(100dvh - var(--navbar-height));
-  box-sizing: border-box;
-  position: relative;
-}
-
-/* Home collage mantiene padding — perfetta com’è */
-.home-collage,
-.collage-home {
-  padding-top: var(--navbar-height);
-}
-
-/* BODY & HTML (compatibilità mobile Safari + overflow) */
-html, body {
-  min-height: 100dvh;
-  height: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ============================================================
-   FIX iOS Safari visual height (stabilità vh)
-============================================================ */
-
-@supports (-webkit-touch-callout: none) {
-  html, body {
-    height: -webkit-fill-available;
-  }
-}
-
-/* Scroll fluido */
-html { scroll-behavior: smooth; }
-/* ============================================================
-   CONTACT FORM — stato invio e "GRAZIE!"
-============================================================ */
-
-.contact-form.sending button {
-  background: #000;
-  color: var(--primary-color);
-  cursor: progress;
-}
-
-.contact-form .form-status {
-  text-align: center;
-  margin-top: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-.contact-form.sent {
-  text-align: center;
-  color: #fff;
-}
-
-.form-thanks {
-  padding: 3rem 1rem;
-  border: 0.6vw solid #fff;
-  background: #000;
-  box-shadow: 1vw 1vw 0 #ff2e9a;
-  transition: all 0.4s ease-out;
-  transform: rotate(-1.5deg);
-}
-
-.form-thanks h2 {
-  font-size: clamp(24px, 4vw, 48px);
-  font-weight: 900;
-  color: #ff2e9a;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-.form-thanks p {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-}
-/* ————————————————————————————————
-   GALLERIA A CARTELLE — PREVIEW
-—————————————————————————————————— */
-
-.gallery-folders {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
-  padding: 20px 0;
-}
-
-.folder-preview {
-  position: relative;
-  overflow: hidden;
-  border: 3px solid var(--primary-color);
-  background: #000;
-  cursor: pointer;
-  border-radius: 6px;
-  transform: rotate(-1.5deg);
-  transition: transform 0.25s ease;
-  box-shadow: 0 0 0 3px #000 inset;
-}
-
-.folder-preview:hover {
-  transform: rotate(0deg) scale(1.03);
-}
-
-.folder-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: contrast(1.1) brightness(0.9);
-}
-
-.folder-overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 12px;
-  background: #000;
-  color: var(--primary-color);
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  text-align: center;
-  box-shadow: 0 -3px 0 #000 inset;
-}
-
-@media (max-width: 768px) {
-  .gallery-folders {
+  .manifesto-overview {
     grid-template-columns: 1fr;
   }
 }
 
-/* ————————————————————————————————
-   MODALE GALLERIA (CARTELLE)
-—————————————————————————————————— */
-
-#galleryModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.88);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: var(--z-gallery);
-  padding: 2rem;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-#galleryModal.open {
-  display: flex;
-}
-
-#galleryModal .modal-content {
-  background: #000;
-  border: 3px solid var(--primary-color);
-  padding: 1.5rem;
-  border-radius: 10px;
-  max-width: 95%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 0 20px rgba(255,0,255,0.4);
-}
-
-.modal-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
-  margin-top: 1rem;
-}
-
-.modal-grid img {
-  width: 100%;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 2px solid var(--primary-color);
-  transition: transform 0.2s ease;
-  transform: rotate(-1deg);
-}
-
-.modal-grid img:hover {
-  transform: rotate(0deg) scale(1.03);
-}
-
-#galleryModal .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 2rem;
-  color: var(--primary-color);
-  cursor: pointer;
-  font-weight: bold;
-  background: none;
-  border: none;
-}
-
-/* ————————————————————————————————
-   LIGHTBOX FULLSCREEN + THUMBNAILS
-—————————————————————————————————— */
-
-.lightbox {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.92);
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
-  z-index: var(--z-lightbox);
-}
-
-.lightbox.open {
-  display: flex;
-}
-
-.lightbox-inner {
-  position: relative;
-  max-width: 90vw;
-  max-height: 80vh;
-  pointer-events: auto;
-}
-
-#lightbox-img {
-  max-width: 90vw;
-  max-height: 70vh;
-  object-fit: contain;
-  border: 3px solid #fff;
-  box-shadow: 0 0 0 4px #000 inset;
-  transform: rotate(-1deg);
-}
-
-/* Frecce */
-.lightbox-prev,
-.lightbox-next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 3rem;
-  color: #fff;
-  cursor: pointer;
-  user-select: none;
-  padding: 0 0.5rem;
-  z-index: 100000;
-}
-
-.lightbox-prev { left: -3rem; }
-.lightbox-next { right: -3rem; }
-
 @media (max-width: 768px) {
-  .lightbox-prev { left: 10px; }
-  .lightbox-next { right: 10px; }
-}
+  #manifesto-extended {
+    padding: calc(var(--navbar-height) + 2rem) 1rem 4rem;
+  }
 
-/* Close */
-.lightbox-close {
-  position: absolute;
-  top: -1rem;
-  right: -1rem;
-  background: var(--primary-color);
-  color: #000;
-  border: 3px solid #000;
-  font-size: 2rem;
-  font-weight: 900;
-  padding: 0.2rem 0.6rem;
-  cursor: pointer;
-  transform: rotate(3deg);
-}
+  .manifesto-buttons {
+    flex-direction: column;
+  }
 
-/* ————————————————————————————————
-   THUMBNAIL STRIP
-—————————————————————————————————— */
-
-.lightbox-thumbs {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding: 0.5rem;
-  width: 100%;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-.lightbox-thumbs img {
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  border: 2px solid #fff;
-  cursor: pointer;
-  opacity: 0.6;
-  transform: rotate(-2deg);
-}
-
-.lightbox-thumbs img.active {
-  opacity: 1;
-  border-color: var(--primary-color);
-  transform: rotate(0deg) scale(1.05);
-}
-
-/* ————————————————————————————————
-   MOSAICO FULLSCREEN
-—————————————————————————————————— */
-
-.mosaic-gallery {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.88);
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  z-index: calc(var(--z-gallery) - 1);
-  overflow-y: auto;
-  padding: 2rem;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-.mosaic-gallery.open {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.mosaic-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
-}
-
-.mosaic-grid img {
-  width: 100%;
-  border-radius: 6px;
-  border: 2px solid var(--primary-color);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  transform: rotate(-1deg);
-}
-
-.mosaic-grid img:hover {
-  transform: rotate(0deg) scale(1.03);
-}
-
-.mosaic-close {
-  position: absolute;
-  top: 20px;
-  right: 25px;
-  font-size: 3rem;
-  color: var(--primary-color);
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-  font-weight: bold;
-  text-shadow: 0 0 10px rgba(255,0,255,0.5);
-}
-
-@media (max-width: 600px) {
-  .mosaic-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  .manifesto-action {
+    width: 100%;
   }
 }
 
-/* ————————————————————————————————
-   QMS MASONRY (ALTRE GALLERIE / MEDIA)
-—————————————————————————————————— */
-
-.qms-masonry {
-  column-count: 3;
-  column-gap: 1.2rem;
-}
-
-.qms-item {
-  break-inside: avoid;
-  margin-bottom: 1.2rem;
-  background: #000;
-  color: #fff;
-  padding: 0.5rem;
-  border: 1px solid var(--primary-color);
-  border-radius: 4px;
-  transition: transform 0.3s ease;
-}
-
-.qms-item:hover {
-  transform: scale(1.02);
-}
-
-.qms-item img,
-.qms-item iframe {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 4px;
-}
-
-.qms-item.ig span {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--primary-color);
-}
-
-.video-preview {
-  width: 100%;
-  padding-top: 56.25%;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  border-radius: 4px;
-  border: 1px solid var(--primary-color);
-}
-
-.play-icon {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  color: var(--primary-color);
-  background: rgba(0,0,0,0.6);
-  padding: 0.5rem 1rem;
-  border-radius: 50%;
-}
-/* ————————————————————————————————
-   SCROLLBAR INVISIBILI — VERSIONE DEFINITIVA
-—————————————————————————————————— */
-
-/* Chrome / Safari / Edge */
-*::-webkit-scrollbar {
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
-}
-
-/* Firefox */
-* {
-  scrollbar-width: none !important;
-}
-
-/* Per sicurezza, rimuoviamo anche eventuali track */
-*::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-
-/* E i thumb */
-*::-webkit-scrollbar-thumb {
-  background: transparent !important;
-  border: none !important;
-}
-
 /* ============================================================
-   SEZIONE EVENTI — WRAPPER FULL-VIEWPORT
+   EVENTI, PROSSIMO EVENTO, CALENDARIO, FILTRI ARCHIVIO & MODALE
 ============================================================ */
+
+.section-header {
+  margin-bottom: 2rem;
+}
+
+.section-header h1,
+.section-header h2 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.section-header p {
+  opacity: 0.85;
+  line-height: 1.6;
+}
+
+.eventi-hero {
+  padding: calc(var(--navbar-height) + 4rem) 2rem 5rem;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.eventi-hero-content {
+  max-width: 900px;
+}
+
+.eventi-kicker {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.9rem;
+  background: #fff;
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 2px solid #000;
+  transform: rotate(-2deg);
+}
+
+.eventi-hero h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.85;
+  color: #fff;
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+}
+
+.eventi-hero p {
+  max-width: 700px;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #fff;
+}
+
+.hero-event-button,
+.artists-call-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: var(--primary-color);
+  color: #000;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 900;
+  border: 2px solid #000;
+  transition: transform 0.25s ease;
+}
+
+.hero-event-button:hover,
+.artists-call-button:hover {
+  transform: translateY(-4px) rotate(-1deg);
+}
+
+.featured-event-section,
+.events-section,
+.archive-section,
+.artists-call-section {
+  padding: 5rem 2rem;
+}
 
 #calendario {
   position: relative;
   width: 100%;
   min-height: calc(100dvh - var(--navbar-height));
   padding: calc(var(--navbar-height) + 1.5rem) 1.5rem 2.5rem;
-  box-sizing: border-box;
   background: #000;
   color: var(--secondary-color);
   border-top: 3px solid var(--primary-color);
-  overflow-y: auto;
   overflow-x: hidden;
-  scroll-margin-top: var(--navbar-height);
 }
 
-.calendar-layout {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-/* ============================================================
-   FILTRI CATEGORIE
-============================================================ */
-
-.calendar-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
-}
-
-.calendar-filters button {
-  padding: 0.4rem 0.9rem;
-  border: 2px solid #000;
-  background: #ff2fa8;
-  color: #000;
-  cursor: pointer;
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  box-shadow: 3px 3px 0 #000;
-  transition: transform 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
-}
-
-.calendar-filters button:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 #000;
-}
-
-.calendar-filters button.active {
-  background: #000;
-  color: #ff2fa8;
-}
-
-/* ============================================================
-   CONTROLLI FUTURO / PASSATO (SE USATI)
-============================================================ */
-
-.calendar-controls {
-  display: flex;
-  gap: 0.6rem;
-  margin: 0.5rem 0 1rem;
-}
-
-.calendar-controls button {
-  padding: 0.4rem 0.9rem;
-  border: 2px solid #000;
-  background: #ff2fa8;
-  cursor: pointer;
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  box-shadow: 3px 3px 0 #000;
-  transition: 0.15s;
-}
-
-.calendar-controls button.active {
-  background: #000;
-  color: #ff2fa8;
-}
-
-/* ============================================================
-   CALENDARIO FUTURO (DESKTOP)
-============================================================ */
-
-#future-calendar {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 1.5rem;
-  width: 100%;
-}
-
-#future-calendar button {
-  border: 2px solid #000;
-  background: #ff2fa8;
-  color: #000;
-  font-weight: 900;
-  font-size: 1.4rem;
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 3px 3px 0 #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-
-#future-calendar button:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 #000;
-}
-
-#future-month-container {
-  width: min(100%, 900px);
-}
-
-.calendar-month {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  font-weight: 900;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-  color: #fff;
-  letter-spacing: 1px;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.6rem;
-}
-
-.calendar-day {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border: 2px solid #333;
-  background: #111;
-  padding: 0.4rem;
-  font-size: 0.8rem;
-  color: #aaa;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.calendar-day-number {
-  font-weight: 700;
-  color: #eee;
-  z-index: 1;
-  position: relative;
-}
-
-/* Giorni con evento in fuxia + post-it */
-.calendar-day.has-event {
-  background: #ff2fa8;
-  border-color: #000;
-}
-
-.calendar-day.has-event .calendar-day-number {
-  color: #000;
-  font-weight: 900;
-}
-
-/* Post-it locandina */
-.event-postit {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  width: clamp(55px, 9vw, 80px);
-  height: clamp(55px, 9vw, 80px);
-  background: #fff;
-  border: 2px solid #000;
-  box-shadow: 4px 4px 0 #000;
-  transform: rotate(-6deg);
-  overflow: hidden;
-  cursor: pointer;
-  z-index: 2;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-
-.event-postit:hover {
-  transform: rotate(-6deg) translate(-3px, -3px);
-  box-shadow: 6px 6px 0 #000;
-}
-
-.event-postit img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: rotate(-4deg);
-}
-
-/* ============================================================
-   LISTA FUTURA / EVENTI PASSATI (DESKTOP)
-============================================================ */
-
-#future-events-list,
-#past-events {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-  margin-top: 1.5rem;
-}
-
-.timeline-event {
-  background: #ff2fa8;
-  border: 3px solid #000;
-  box-shadow: 6px 6px 0 #000;
-  padding: 1rem;
-  transform: rotate(-1deg);
-  position: relative;
-  cursor: pointer;
-}
-
-.timeline-event-date {
-  font-size: 1rem;
-  font-weight: 900;
-  color: #000;
-  margin-bottom: 0.3rem;
-  text-transform: uppercase;
-}
-
-.timeline-event-title {
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: #000;
-  margin-bottom: 0.4rem;
-}
-
-.timeline-event-tags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 0.6rem;
-}
-
-.timeline-event-tag {
-  background: #000;
-  color: #ff2fa8;
-  padding: 2px 8px;
-  border: 2px solid #000;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.timeline-event-img {
-  width: 100%;
-  height: auto;
-  margin-top: 0.8rem;
-  border: 2px solid #000;
-  box-shadow: 4px 4px 0 #000;
-}
-
-/* ============================================================
-   MOBILE CAROUSEL
-============================================================ */
-
-#mobile-calendar-wrapper {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: 100vw;
-  margin-top: 1.5rem;
-}
-
-#mobile-calendar-carousel {
-  display: flex;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: visible;
-  touch-action: pan-y;
-  scroll-behavior: smooth;
-}
-
-.mobile-event-card {
-  flex: 0 0 100%;
-  min-width: 100%;
-  box-sizing: border-box;
-  padding: 1rem 0.5rem 1.5rem;
-}
-
-.mobile-event-card img {
-  width: 100%;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  border: 2px solid #000;
-  box-shadow: 6px 6px 0 #000;
-}
-
-.mobile-event-date {
-  font-size: 0.95rem;
-  font-weight: 900;
-  color: #ff2fa8;
-  margin-bottom: 0.3rem;
-  text-transform: uppercase;
-}
-
-.mobile-event-title {
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: #fff;
-  margin-bottom: 0.4rem;
-}
-
-.mobile-event-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  margin-bottom: 0.4rem;
-  font-size: 0.9rem;
-}
-
-.mobile-event-time,
-.mobile-event-location {
-  color: #ddd;
-}
-
-.mobile-event-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 0.4rem;
-}
-
-/* Dots in alto */
-
-#mobile-dots {
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-  z-index: 25;
-}
-
-.mobile-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 2px solid #000;
-  background: #ff2fa8;
-  opacity: 0.4;
-  transition: 0.15s;
-}
-
-.mobile-dot.active {
-  opacity: 1;
-  transform: scale(1.2);
-}
-
-/* Frecce */
-
-.mobile-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 20;
-  background: rgba(0,0,0,0.7);
-  color: #fff;
-  border: 2px solid #000;
-  padding: 8px 12px;
-  font-size: 22px;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 3px 3px 0 #000;
-}
-
-#mobile-prev { left: 10px; }
-#mobile-next { right: 10px; }
-
-/* ============================================================
-   RESPONSIVE SWITCH
-============================================================ */
-
-/* MOBILE */
-@media (max-width: 768px) {
-  #future-calendar { display: none; }
-  #future-events-list { display: none; }
-  #mobile-calendar-wrapper { display: flex; }
-  #past-events { margin-top: 2rem; }
-
-  #calendario {
-    padding: calc(var(--navbar-height) + 1rem) 1rem 2rem;
-  }
-
-  .calendar-filters {
-    overflow-x: auto;
-    padding-bottom: 0.4rem;
-  }
-}
-
-/* DESKTOP */
-@media (min-width: 769px) {
-  #future-calendar { display: flex; }   /* MOSTRA il calendario desktop */
-  #mobile-calendar-wrapper { display: none; }
-
-  /* Nascondi completamente le liste sotto il calendario */
-  #future-events-list,
-  #past-events {
-    display: none !important;
-  }
-}
-
-/* ============================================================
-   MODALE EVENTO
-============================================================ */
-
-#event-modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0,0,0,0.8);
-  z-index: var(--z-modal);
-}
-
-.event-modal-content {
-  background: #000;
-  color: #fff;
-  padding: 1.8rem;
-  border-radius: 12px;
-  max-width: 900px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 8px 8px 0 #ff2fa8;
-  transform: rotate(-1.5deg);
-}
-
-.event-modal-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 1.6rem;
-  cursor: pointer;
-}
-
-.modal-two-columns {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.modal-left { flex: 1 1 40%; }
-.modal-right { flex: 1 1 50%; }
-
-.modal-img {
-  width: 100%;
-  border: 2px solid #000;
-  box-shadow: 6px 6px 0 #ff2fa8;
-}
-
-.event-modal-date {
-  font-size: 1rem;
-  font-weight: 900;
-  color: #ff2fa8;
-  margin-bottom: 0.4rem;
-  text-transform: uppercase;
-}
-
-.event-modal-categories {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 0.6rem;
-}
-
-.event-tag {
-  background: #000;
-  color: #ff2fa8;
-  padding: 2px 8px;
-  border: 2px solid #ff2fa8;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.event-modal-content h2 {
-  font-size: 1.6rem;
-  margin: 0.4rem 0 0;
-}
-
-@media (max-width: 700px) {
-  .modal-two-columns { flex-direction: column; }
-  .event-modal-content {
-    transform: rotate(-1deg);
-    padding: 1.4rem;
-  }
-}
-/* ============================================================
-   MENU SELEZIONE MESE (NUOVA VERSIONE)
-============================================================ */
-
-.month-selector {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #000;
-  border: 2px solid #ff2fa8;
-  box-shadow: 6px 6px 0 #000;
-  padding: 0.8rem;
-  z-index: 9999;
-  display: none;
-  flex-direction: column;
-  gap: 0.8rem;
-  width: max-content;
-  min-width: 200px;
-}
-
-/* Dropdown ANNO + MESE */
-.month-selector select {
-  background: #ff2fa8;
-  color: #000;
-  border: 2px solid #000;
-  padding: 0.4rem 0.6rem;
-  font-weight: 900;
-  font-size: 0.9rem;
-  cursor: pointer;
-  box-shadow: 3px 3px 0 #000;
-  text-transform: uppercase;
-}
-
-.month-selector select:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Pulsante OK */
-.month-selector button {
-  background: #ff2fa8;
-  color: #000;
-  border: 1px solid #000;
-  padding: 0.4rem 0.8rem;
-  font-weight: 800;
-  cursor: pointer;
-  text-align: center;
-  box-shadow: 3px 3px 0 #000;
-  text-transform: uppercase;
-}
-
-.month-selector button:hover {
-  background: #000;
-  color: #ff2fa8;
-}
-
-/* Triangolino ▼ accanto al mese */
-.calendar-month span:last-child {
-  font-size: 1rem;
-  display: inline-block;
-  transform: translateY(2px);
-  transition: transform 0.15s;
-}
-
-/* Rotazione triangolino quando il menu è aperto */
-.calendar-month.menu-open span:last-child {
-  transform: translateY(2px) rotate(180deg);
-}
-.sticker-button {
-  display: inline-block;
-  margin-top: 24px;
-  margin-left: 70%;
-  padding: 10px 18px;
-  background: #ff2bb5;
-  color: #000;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 2px solid #000;
-  border-radius: 6px;
-  transform: rotate(-2deg);
-  box-shadow: 3px 3px 0 #000;
-  transition: 0.15s ease;
-}
-
-.sticker-button:hover {
-  transform: rotate(0deg) scale(1.03);
-  box-shadow: 4px 4px 0 #000;
-}
-
-.manifesto-brief p {
-  max-width: 70ch;
-  margin-bottom: 1.2em;
-}
-/* ===============================
-   PATCH MINIMALE — SEZIONI/MONDO
-   (scroll-friendly, non interferisce con categorie)
-=============================== */
-
-/* Applica SOLO alle sezioni principali della pagina */
-section#home,
-section#manifesto,
-section#calendario,
-section#artist3,
-section#partnership,
-section#gallery,
-section#contatti,
-section#sostienici {
-  opacity: 0.45;
-  transition: opacity 0.35s ease;
-  min-height: 100svh;
-}
-
-section#home.active,
-section#manifesto.active,
-section#calendario.active,
-section#artist3.active,
-section#partnership.active,
-section#gallery.active,
-section#contatti.active,
-section#sostienici.active {
-  opacity: 1;
-}
-
-/* ==========================================================
-   MODALE GALLERIA (MISURA FISSA 3/4 SCHERMO)
-========================================================== */
-
-#galleryModal {
-  position: fixed;
-  inset: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0, 0, 0, 0.85);
-
-  z-index: 9990;
-}
-
-#galleryModal.hidden {
-  display: none !important;
-}
-
-#galleryModal .modal-content {
-  position: relative;
-
-  width: 75vw;
-  height: 75dvh;
-  max-width: 1400px;
-  max-height: 900px;
-
-  overflow-y: auto;
-
-  padding: 2rem;
-
-  background: #111;
-  border: 2px solid #fff;
-  border-radius: 12px;
-  box-sizing: border-box;
-}
-
-/* ==========================================================
-   CAPTION
-========================================================== */
-
-#galleryModal .modal-caption {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-#galleryModal .modal-album-title {
-  margin: 0;
-}
-
-#galleryModal .modal-photographer {
-  margin-top: .5rem;
-  opacity: .8;
-}
-
-/* ==========================================================
-   PULSANTE CHIUSURA MODALE
-========================================================== */
-
-#galleryModal > .modal-content > .close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-
-  background: none;
-  border: none;
-
-  color: white;
-  font-size: 2rem;
-
-  cursor: pointer;
-
-  z-index: 1000;
-}
-
-/* ==========================================================
-   GRIGLIA FOTO
-========================================================== */
-
-#galleryModal .modal-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
-}
-
-#galleryModal .modal-grid.hidden {
-  display: none !important;
-}
-
-#galleryModal .modal-grid img {
-  width: 100%;
-  height: 220px;
-
-  object-fit: cover;
-
-  cursor: pointer;
-
-  border-radius: 6px;
-
-  transition:
-    transform .25s ease,
-    opacity .25s ease;
-}
-
-#galleryModal .modal-grid img:hover {
-  transform: scale(1.03);
-}
-
-/* ==========================================================
-   CAROSELLO (STESSA MISURA DELLA MODALE)
-========================================================== */
-
-#galleryModal .carousel {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0, 0, 0, .97);
-  border-radius: 10px;
-  box-sizing: border-box;
-
-  z-index: 500;
-}
-
-#galleryModal .carousel.hidden {
-  display: none !important;
-}
-
-/* ==========================================================
-   IMMAGINE CAROSELLO
-========================================================== */
-
-#galleryModal .carousel-img {
-  width: 85%;
-  height: 85%;
-  max-width: 100%;
-  max-height: 100%;
-
-  object-fit: contain;
-}
-
-/* ==========================================================
-   FRECCE
-========================================================== */
-
-#galleryModal .prev,
-#galleryModal .next {
-  position: absolute;
-  top: 50%;
-
-  transform: translateY(-50%);
-
-  padding: 1rem;
-
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 900;
-
-  color: white;
-
-  cursor: pointer;
-  user-select: none;
-
-  z-index: 100000;
-}
-
-#galleryModal .prev {
-  left: 20px;
-}
-
-#galleryModal .next {
-  right: 20px;
-}
-
-#galleryModal .prev:hover,
-#galleryModal .next:hover {
-  opacity: .7;
-}
-
-/* ==========================================================
-   X DEL CAROSELLO
-========================================================== */
-
-#galleryModal .carousel-close {
-  position: absolute;
-
-  top: 20px;
-  right: 20px;
-
-  width: 56px;
-  height: 56px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border: 2px solid #fff;
-  border-radius: 50%;
-
-  background: rgba(0, 0, 0, .8);
-
-  color: #fff;
-  font-size: 2rem;
-
-  cursor: pointer;
-
-  z-index: 1000;
-}
-
-#galleryModal .carousel-close:hover {
-  opacity: .7;
-}
-
-/* ==========================================================
-   MOBILE
-========================================================== */
-
-@media (max-width: 768px) {
-
-  #galleryModal .modal-content {
-    width: 85vw;
-    height: 75dvh;
-    max-width: none;
-    max-height: none;
-
-    overflow-y: auto;
-    padding: 1.5rem;
-
-    background: #111;
-    border: 2px solid #fff;
-    border-radius: 12px;
-  }
-
-  #galleryModal .carousel-img {
-    width: 90%;
-    height: 80%;
-  }
-
-  #galleryModal .modal-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  #galleryModal .modal-grid img {
-    height: 180px;
-  }
-
-  #galleryModal .prev,
-  #galleryModal .next {
-    font-size: 2.5rem;
-    padding: .5rem;
-  }
-
-  #galleryModal .prev {
-    left: 8px;
-  }
-
-  #galleryModal .next {
-    right: 8px;
-  }
-}
-/* ==================================================
-   HERO EDITORIALE QMS
-================================================== */
-
-.home-intro{
-  position:absolute;
-  z-index:15;
-
-  top:50%;
-  left:50%;
-
-  transform:translate(-50%,-50%);
-
-  width:min(90vw,700px);
-
-  text-align:center;
-  pointer-events:none;
-}
-
-.home-kicker{
-  display:inline-block;
-
-  margin-bottom:1rem;
-  padding:.4rem .9rem;
-
-  background:#fff;
-  color:#000;
-
-  border:2px solid #000;
-  box-shadow:0 0 0 2px #fff inset;
-
-  font-size:.75rem;
-  font-weight:900;
-  letter-spacing:.15em;
-
-  transform:rotate(-2deg);
-}
-
-.home-intro h1{
-  margin:0;
-
-  font-family:var(--font-sans);
-  font-size:clamp(2.5rem,8vw,6rem);
-  font-weight:900;
-  line-height:.85;
-
-  text-transform:uppercase;
-
-  color:#fff;
-
-  text-shadow:
-    4px 4px 0 #000,
-   -2px -2px 0 #000,
-    2px -2px 0 #000,
-   -2px 2px 0 #000;
-}
-
-.home-description{
-  max-width:540px;
-  margin:1.25rem auto 0;
-
-  font-size:1rem;
-  font-weight:700;
-  line-height:1.35;
-
-  color:#fff;
-
-  text-shadow:
-    2px 2px 0 rgba(0,0,0,.9);
-}
-
-/* ==================================================
-   CTA CENTRALI
-================================================== */
-
-.home-cta{
-  display:flex;
-  justify-content:center;
-  gap:1rem;
-
-  margin-top:1.5rem;
-
-  pointer-events:auto;
-}
-
-.home-cta a{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  padding:.9rem 1.4rem;
-
-  font-weight:900;
-  text-transform:uppercase;
-  text-decoration:none;
-
-  border:2px solid #000;
-
-  transition:.25s ease;
-}
-
-.cta-primary{
-  background:var(--primary-color);
-  color:#000;
-}
-
-.cta-secondary{
-  background:#000;
-  color:#fff;
-}
-
-.home-cta a:hover{
-  transform:translateY(-3px) rotate(-1deg);
-}
-
-/* ==================================================
-   EVENTO IN EVIDENZA
-================================================== */
-
-.poster-eventi{
-  animation:eventPulse 5s infinite;
-}
-
-@keyframes eventPulse{
-
-  0%{
-    box-shadow:
-      0 0 0 2px #000 inset;
-  }
-
-  50%{
-    box-shadow:
-      0 0 0 2px #000 inset,
-      0 0 20px rgba(255,255,0,.45);
-  }
-
-  100%{
-    box-shadow:
-      0 0 0 2px #000 inset;
-  }
-
-}
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width:768px){
-
-  .home-intro{
-    top:8%;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    width:85vw;
-  }
-
-  .home-kicker{
-    font-size:.65rem;
-  }
-
-  .home-intro h1{
-    font-size:clamp(2rem,8vw,3.5rem);
-  }
-
-  .home-description{
-    display:none;
-  }
-
-  .home-cta{
-    flex-direction:column;
-    align-items:center;
-  }
-
-  .home-cta a{
-    width:min(260px,80vw);
-  }
-
-}
-
-/* ==================================================
-   SMALL MOBILE
-================================================== */
-
-@media (max-width:480px){
-
-  .home-intro{
-    top:5%;
-  }
-
-  .home-kicker{
-    display:none;
-  }
-
-  .home-cta{
-    margin-top:.75rem;
-  }
-
-}
-/* ==================================================
-   MANIFESTO EXTENDED
-================================================== */
-
-#manifesto-extended{
-  padding:
-    calc(var(--navbar-height) + 4rem)
-    1.5rem
-    5rem;
-}
-
-#manifesto-extended .manifesto-container{
-  max-width:1000px;
-  margin:0 auto;
-}
-
-/* ==================================================
-   HERO MANIFESTO
-================================================== */
-
-.manifesto-title{
-  margin:0 0 1rem;
-
-  font-size:clamp(2.5rem,6vw,5rem);
-  font-weight:900;
-  line-height:.9;
-  text-transform:uppercase;
-
-  color:#fff;
-}
-
-.manifesto-subtitle{
-  max-width:760px;
-
-  margin:0 0 2rem;
-
-  font-size:clamp(1.05rem,2vw,1.3rem);
-  line-height:1.5;
-
-  color:rgba(255,255,255,.9);
-}
-
-.manifesto-lead{
-  margin:2rem 0 3rem;
-
-  font-size:clamp(1.2rem,3vw,2rem);
-  line-height:1.3;
-}
-
-/* ==================================================
-   OVERVIEW
-================================================== */
-
-.manifesto-overview{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-
-  gap:1.5rem;
-
-  margin:3rem 0 4rem;
-}
-
-.overview-item{
-  padding:1.5rem;
-
-  background:rgba(255,255,255,.06);
-
-  border:2px solid rgba(255,255,255,.15);
-
-  backdrop-filter:blur(6px);
-}
-
-.overview-item h3{
-  margin:0 0 1rem;
-
-  font-size:1.1rem;
-  font-weight:900;
-  text-transform:uppercase;
-}
-
-.overview-item p{
-  margin:0;
-
-  line-height:1.6;
-  font-size:.95rem;
-}
-
-/* ==================================================
-   TESTO MANIFESTO
-================================================== */
-
-.manifesto-body{
-  max-width:760px;
-}
-
-.manifesto-body p{
-  margin:0 0 1.8rem;
-
-  font-size:1.05rem;
-  line-height:1.9;
-}
-
-.manifesto-body strong{
-  color:var(--primary-color);
-}
-
-/* ==================================================
-   CTA FINALI
-================================================== */
-
-.manifesto-actions{
-  margin-top:5rem;
-
-  padding-top:3rem;
-
-  border-top:2px dashed rgba(255,255,255,.2);
-}
-
-.manifesto-actions h2{
-  margin-bottom:2rem;
-
-  font-size:clamp(1.8rem,4vw,3rem);
-  font-weight:900;
-  text-transform:uppercase;
-}
-
-.manifesto-buttons{
-  display:flex;
-  flex-wrap:wrap;
-  gap:1rem;
-}
-
-.manifesto-action{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  min-height:56px;
-
-  padding:1rem 1.5rem;
-
-  text-decoration:none;
-
-  font-weight:900;
-  text-transform:uppercase;
-
-  background:#fff;
-  color:#000;
-
-  border:2px solid #000;
-
-  transition:.25s ease;
-}
-
-.manifesto-action:hover{
-  transform:
-    translateY(-4px)
-    rotate(-1deg);
-
-  background:var(--primary-color);
-}
-
-/* ==================================================
-   TABLET
-================================================== */
-
-@media (max-width:900px){
-
-  .manifesto-overview{
-    grid-template-columns:1fr;
-  }
-
-}
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width:768px){
-
-  #manifesto-extended{
-    padding:
-      calc(var(--navbar-height) + 2rem)
-      1rem
-      4rem;
-  }
-
-  .manifesto-title{
-    font-size:clamp(2rem,10vw,3.5rem);
-  }
-
-  .manifesto-subtitle{
-    font-size:1rem;
-  }
-
-  .manifesto-body p{
-    font-size:1rem;
-    line-height:1.8;
-  }
-
-  .manifesto-buttons{
-    flex-direction:column;
-  }
-
-  .manifesto-action{
-    width:100%;
-  }
-
-}
-
-/* ==================================================
-   SMALL MOBILE
-================================================== */
-
-@media (max-width:480px){
-
-  .manifesto-lead{
-    font-size:1.15rem;
-  }
-
-  .overview-item{
-    padding:1.2rem;
-  }
-
-}
-/* ==================================================
-   EVENTI PAGE
-================================================== */
-
-.eventi-page{
-  position:relative;
-}
-
-/* ==================================================
-   HERO
-================================================== */
-
-.eventi-hero{
-  padding:
-    calc(var(--navbar-height) + 4rem)
-    2rem
-    5rem;
-
-  min-height:60vh;
-
-  display:flex;
-  align-items:center;
-}
-
-.eventi-hero-content{
-  max-width:900px;
-}
-
-.eventi-kicker{
-  display:inline-block;
-
-  margin-bottom:1rem;
-  padding:.4rem .9rem;
-
-  background:#fff;
-  color:#000;
-
-  font-size:.75rem;
-  font-weight:900;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-
-  border:2px solid #000;
-
-  transform:rotate(-2deg);
-}
-
-.eventi-hero h1{
-  margin:0 0 1rem;
-
-  font-size:clamp(3rem,10vw,7rem);
-  font-weight:900;
-  text-transform:uppercase;
-
-  line-height:.85;
-
-  color:#fff;
-
-  text-shadow:
-    4px 4px 0 #000,
-   -2px -2px 0 #000,
-    2px -2px 0 #000,
-   -2px 2px 0 #000;
-}
-
-.eventi-hero p{
-  max-width:700px;
-
-  font-size:1.15rem;
-  line-height:1.7;
-
-  color:#fff;
-}
-
-.hero-event-button{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  margin-top:2rem;
-  padding:1rem 1.5rem;
-
-  background:var(--primary-color);
-  color:#000;
-
-  text-decoration:none;
-  text-transform:uppercase;
-  font-weight:900;
-
-  border:2px solid #000;
-
-  transition:.25s ease;
-}
-
-.hero-event-button:hover{
-  transform:
-    translateY(-4px)
-    rotate(-1deg);
-}
-
-/* ==================================================
-   SEZIONI GENERALI
-================================================== */
-
-.section-header{
-  margin-bottom:2rem;
-}
-
-.section-header h2{
-  margin-bottom:.5rem;
-
-  font-size:clamp(2rem,4vw,4rem);
-  font-weight:900;
-  text-transform:uppercase;
-}
-
-.section-header p{
-  opacity:.8;
-  line-height:1.6;
-}
-
-.featured-event-section,
-.events-section,
-.archive-section,
-.artists-call-section{
-  padding:5rem 2rem;
-}
-
-/* ==================================================
-   PROSSIMO EVENTO
-================================================== */
-
-#featured-event-content{
-
-  min-height:300px;
-
-  padding:2rem;
-
-  background:rgba(255,255,255,.05);
-
-  border:2px solid rgba(255,255,255,.15);
-
-  backdrop-filter:blur(4px);
-}
-
-/* ==================================================
-   FILTRI
-================================================== */
-
-.calendar-filters{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.75rem;
-
-  margin-bottom:2rem;
-}
-
-.calendar-filters button{
-  padding:.7rem 1rem;
-
-  border:2px solid #fff;
-  background:#000;
-  color:#fff;
-
-  font-weight:700;
-  cursor:pointer;
-}
-
-.calendar-filters button.active{
-  background:var(--primary-color);
-  color:#000;
-  border-color:#000;
-}
-
-/* ==================================================
-   CALENDARIO DESKTOP
-================================================== */
-
-#future-calendar{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  align-items:center;
-
-  gap:1rem;
-}
-
-#prev-month,
-#next-month{
-  width:60px;
-  height:60px;
-
-  font-size:1.5rem;
-
-  border:none;
-  cursor:pointer;
-
-  background:#fff;
-  color:#000;
-}
-
-#future-month-container{
-  min-height:500px;
-}
-
-/* ==================================================
-   MOBILE CAROUSEL
-================================================== */
-
-#mobile-calendar-wrapper{
-  display:none;
-}
-
-/* ==================================================
-   ARCHIVIO
-================================================== */
-
-#past-events{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:1rem;
-}
-
-/* ==================================================
-   CALL ARTISTƏ
-================================================== */
-
-.artists-call-section{
-
-  border-top:2px dashed rgba(255,255,255,.15);
-}
-
-.artists-call-content{
-  max-width:800px;
-}
-
-.artists-call-content h2{
-  margin-bottom:1rem;
-
-  font-size:clamp(2rem,5vw,4rem);
-  text-transform:uppercase;
-  font-weight:900;
-}
-
-.artists-call-content p{
-  line-height:1.7;
-  margin-bottom:1rem;
-}
-
-.artists-call-button{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  margin-top:1rem;
-  padding:1rem 1.5rem;
-
-  background:var(--primary-color);
-  color:#000;
-
-  text-decoration:none;
-  text-transform:uppercase;
-
-  font-weight:900;
-
-  border:2px solid #000;
-}
-
-.artists-call-button:hover{
-  transform:
-    translateY(-4px)
-    rotate(-1deg);
-}
-
-/* ==================================================
-   MODAL
-================================================== */
-
-#event-modal{
-  position:fixed;
-  inset:0;
-
-  display:none;
-
-  background:rgba(0,0,0,.88);
-
-  z-index:9999;
-}
-
-.event-modal-content{
-  width:min(900px,90vw);
-
-  margin:5vh auto;
-
-  background:#111;
-
-  padding:2rem;
-
-  max-height:90vh;
-
-  overflow-y:auto;
-}
-
-.event-modal-close{
-  float:right;
-
-  background:none;
-  border:none;
-
-  color:white;
-
-  font-size:2rem;
-  cursor:pointer;
-}
-
-/* ==================================================
-   TABLET
-================================================== */
-
-@media (max-width:1024px){
-
-  .featured-event-section,
-  .events-section,
-  .archive-section,
-  .artists-call-section{
-    padding:4rem 1.5rem;
-  }
-
-}
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width:768px){
-
-  .eventi-hero{
-    padding:
-      calc(var(--navbar-height) + 2rem)
-      1rem
-      3rem;
-  }
-
-  .eventi-hero h1{
-    font-size:clamp(2.5rem,14vw,4.5rem);
-  }
-
-  .eventi-hero p{
-    font-size:1rem;
-  }
-
-  #future-calendar{
-    display:none;
-  }
-
-  #mobile-calendar-wrapper{
-    display:block;
-    position:relative;
-  }
-
-  #mobile-calendar-carousel{
-    overflow:hidden;
-  }
-
-  .mobile-arrow{
-    position:absolute;
-    top:50%;
-
-    transform:translateY(-50%);
-
-    width:44px;
-    height:44px;
-
-    border:none;
-
-    background:#fff;
-    color:#000;
-
-    cursor:pointer;
-    z-index:2;
-  }
-
-  #mobile-prev{
-    left:-10px;
-  }
-
-  #mobile-next{
-    right:-10px;
-  }
-
-}
-
-/* ==================================================
-   SMALL MOBILE
-================================================== */
-
-@media (max-width:480px){
-
-  .section-header h2{
-    font-size:1.8rem;
-  }
-
-  #featured-event-content{
-    padding:1.25rem;
-  }
-
-}
-/* ============================================================
-   PATCH FINALE UNICA — LOCANDINA A DESTRA, 95% VIEWPORT, FILTRI ARCHIVIO E MODALE
-   (incollare in fondo al CSS)
-============================================================ */
-
-/* --- Stati attivi usati da events.js --- */
-.calendar-filters button.active,
-.calendar-filters button.is-active,
-.archive-filter-btn.active,
-.archive-filter-btn.is-active {
-  background: var(--primary-color) !important;
-  color: #000 !important;
-  border-color: #000 !important;
-}
-
-.mobile-dot.active,
-.mobile-dot.is-active {
-  opacity: 1 !important;
-  transform: scale(1.25) !important;
-  filter: saturate(1.8) brightness(1.25);
-}
-
-/* --- Contenitore Prossimo Evento (Home + Pagina Eventi): max 95% schermo --- */
+/* Prossimo Evento (Home + Pagina Eventi): max 95% schermo */
 #featured-event-home,
 #featured-event-content,
 .featured-event-section .section-header,
@@ -4380,11 +1011,9 @@ section#sostienici.active {
   max-width: min(95vw, 1200px);
   width: 100%;
   margin-inline: auto;
-  box-sizing: border-box;
 }
 
 #featured-event-home {
-  min-height: 0 !important;
   max-height: 95dvh;
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.05);
@@ -4394,12 +1023,14 @@ section#sostienici.active {
 }
 
 #featured-event-content {
-  min-height: 0 !important;
   max-height: 95dvh;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
   overflow: auto;
 }
 
-/* Card Prossimo Evento: info a sinistra, locandina a destra */
 .featured-event-card {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.85fr);
@@ -4407,7 +1038,6 @@ section#sostienici.active {
   gap: 2rem;
   max-width: 100%;
   max-height: calc(95dvh - 4rem);
-  box-sizing: border-box;
 }
 
 .featured-event-body {
@@ -4418,7 +1048,6 @@ section#sostienici.active {
   min-width: 0;
 }
 
-/* Card Evento nel Calendario: info a sinistra, locandina a destra */
 .calendar-event-item {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
@@ -4431,7 +1060,6 @@ section#sostienici.active {
   background: rgba(255, 255, 255, 0.04);
   border: 2px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
-  box-sizing: border-box;
 }
 
 .calendar-event-info {
@@ -4449,7 +1077,6 @@ section#sostienici.active {
   width: 100%;
   max-height: min(75dvh, 95%);
   overflow: hidden;
-  box-sizing: border-box;
 }
 
 .featured-event-image,
@@ -4463,7 +1090,6 @@ section#sostienici.active {
   border: 2px solid var(--primary-color);
   border-radius: 8px;
   box-shadow: 6px 6px 0 #000;
-  box-sizing: border-box;
 }
 
 .event-categories {
@@ -4520,104 +1146,125 @@ section#sostienici.active {
   text-transform: uppercase;
 }
 
-/* --- Calendario Desktop (#future-calendar / #future-month-container) --- */
-@media (min-width: 769px) {
-  #future-calendar {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    max-width: 95vw;
-    margin-inline: auto;
-  }
-
-  #future-month-container {
-    width: min(95vw, 960px);
-    max-height: 95dvh;
-    min-height: 0;
-    overflow: auto;
-  }
-
-  #mobile-calendar-wrapper {
-    display: none !important;
-  }
+/* Filtri Categorie Calendario */
+.calendar-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
 }
 
-/* --- Carosello Mobile (#mobile-calendar-wrapper) --- */
-@media (max-width: 768px) {
-  #future-calendar,
-  #future-events-list {
-    display: none !important;
-  }
-
-  .featured-event-card,
-  .calendar-event-item {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    max-width: 95vw;
-    max-height: 95dvh;
-    overflow: auto;
-  }
-
-  .featured-event-image,
-  .calendar-event-image {
-    max-width: 95%;
-    max-height: 55dvh;
-  }
-
-  #mobile-calendar-wrapper {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    width: 95vw;
-    max-width: 95vw;
-    max-height: 95dvh;
-    margin: 1.5rem auto 0;
-    padding-top: 2rem;
-    box-sizing: border-box;
-  }
-
-  #mobile-calendar-carousel {
-    display: flex !important;
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: visible;
-    touch-action: pan-y;
-  }
-
-  #mobile-dots {
-    top: 4px;
-    bottom: auto;
-    z-index: 25;
-  }
-
-  .mobile-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 44px;
-    height: 44px;
-    border: 2px solid #000;
-    border-radius: 50%;
-    background: #fff;
-    color: #000;
-    font-size: 1.4rem;
-    font-weight: 900;
-    cursor: pointer;
-    z-index: 25;
-    box-shadow: 3px 3px 0 #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #mobile-prev { left: 8px; }
-  #mobile-next { right: 8px; }
+.calendar-filters button {
+  padding: 0.7rem 1rem;
+  border: 2px solid #fff;
+  background: #000;
+  color: #fff;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  cursor: pointer;
 }
 
-/* --- Filtri Multipli Archivio (#archive-filters) --- */
+.calendar-filters button.active,
+.calendar-filters button.is-active {
+  background: var(--primary-color);
+  color: #000;
+  border-color: #000;
+}
+
+/* Calendario Desktop */
+#future-calendar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 95vw;
+  margin-inline: auto;
+}
+
+#prev-month,
+#next-month {
+  width: 54px;
+  height: 54px;
+  font-size: 1.4rem;
+  font-weight: 900;
+  border: 2px solid #000;
+  border-radius: 999px;
+  cursor: pointer;
+  background: #ff2fa8;
+  color: #000;
+  box-shadow: 3px 3px 0 #000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#future-month-container {
+  width: min(95vw, 960px);
+  max-height: 95dvh;
+  overflow: auto;
+}
+
+.calendar-month {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.6rem;
+}
+
+.calendar-day {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #333;
+  background: #111;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  color: #aaa;
+  overflow: hidden;
+}
+
+.calendar-day.has-event {
+  background: #ff2fa8;
+  border-color: #000;
+}
+
+.calendar-day.has-event .calendar-day-number {
+  color: #000;
+  font-weight: 900;
+}
+
+.event-postit {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: clamp(55px, 9vw, 80px);
+  height: clamp(55px, 9vw, 80px);
+  background: #fff;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0 #000;
+  transform: rotate(-6deg);
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 2;
+  touch-action: pan-y;
+}
+
+.event-postit img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: rotate(-4deg);
+  touch-action: pan-y;
+}
+
+/* Filtri Multipli Archivio */
 .archive-filters {
   width: 95vw;
   max-width: 95vw;
@@ -4629,7 +1276,6 @@ section#sostienici.active {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  box-sizing: border-box;
 }
 
 .archive-filter-groups {
@@ -4677,6 +1323,13 @@ section#sostienici.active {
   transform: translateY(-1px);
 }
 
+.archive-filter-btn.active,
+.archive-filter-btn.is-active {
+  background: var(--primary-color);
+  color: #000;
+  border-color: #000;
+}
+
 .archive-filter-reset {
   align-self: flex-start;
   padding: 0.45rem 0.9rem;
@@ -4695,9 +1348,9 @@ section#sostienici.active {
   color: #000;
 }
 
-/* --- Archivio (#past-events) visibile su Desktop e Mobile --- */
+/* Archivio */
 #past-events {
-  display: grid !important;
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.2rem;
   margin: 1rem auto 0;
@@ -4715,7 +1368,6 @@ section#sostienici.active {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  box-sizing: border-box;
 }
 
 .archive-event-meta {
@@ -4730,90 +1382,272 @@ section#sostienici.active {
 }
 
 .archive-event-card .event-title {
-  margin: 0;
   font-size: 1.15rem;
-  font-weight: 900;
-  color: #fff;
-  text-transform: uppercase;
-}
-
-.archive-event-card .event-location,
-.archive-event-card .event-description {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.45;
 }
 
 .archive-event-card .event-categories {
-  display: flex;
-  flex-wrap: wrap;
   gap: 6px;
 }
 
 .archive-event-card .event-category {
   background: #000;
   color: #ff2fa8;
-  padding: 2px 8px;
   border: 1px solid #ff2fa8;
   font-size: 0.7rem;
-  font-weight: 800;
-  text-transform: uppercase;
 }
 
-/* --- Modale Evento (#event-modal) --- */
+/* Carosello Mobile Eventi */
+#mobile-calendar-wrapper {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #future-calendar,
+  #future-events-list {
+    display: none !important;
+  }
+
+  .featured-event-card,
+  .calendar-event-item {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 95vw;
+    max-height: 95dvh;
+    overflow: auto;
+  }
+
+  .featured-event-image,
+  .calendar-event-image {
+    max-width: 95%;
+    max-height: 55dvh;
+  }
+
+  #mobile-calendar-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    width: 95vw;
+    max-width: 95vw;
+    max-height: 95dvh;
+    margin: 1.5rem auto 0;
+    padding-top: 2rem;
+  }
+
+  #mobile-calendar-carousel {
+    display: flex;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+    touch-action: pan-y;
+    scroll-behavior: smooth;
+  }
+
+  .mobile-event-card {
+    flex: 0 0 100%;
+    min-width: 100%;
+    padding: 1rem 0.5rem 1.5rem;
+    touch-action: pan-y;
+  }
+
+  .mobile-event-card img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border: 2px solid #000;
+    box-shadow: 6px 6px 0 #000;
+    touch-action: pan-y;
+  }
+
+  #mobile-dots {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 25;
+  }
+
+  .mobile-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #000;
+    background: #ff2fa8;
+    opacity: 0.35;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .mobile-dot.active,
+  .mobile-dot.is-active {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+
+  .mobile-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+    font-size: 1.4rem;
+    font-weight: 900;
+    cursor: pointer;
+    z-index: 25;
+    box-shadow: 3px 3px 0 #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobile-prev { left: 8px; }
+  #mobile-next { right: 8px; }
+}
+
+/* Modale Evento */
 #event-modal {
-  z-index: var(--z-modal, 20000);
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: var(--z-modal);
 }
 
 #event-modal.open,
 #event-modal.show {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
+  display: flex;
 }
+
+.event-modal-content {
+  background: #111;
+  color: #fff;
+  padding: 1.8rem;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 8px 8px 0 #ff2fa8;
+  transform: rotate(-1.5deg);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.event-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.modal-two-columns {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.modal-left { flex: 1 1 40%; }
+.modal-right { flex: 1 1 50%; }
+
+.modal-img {
+  width: 100%;
+  border: 2px solid #000;
+  box-shadow: 6px 6px 0 #ff2fa8;
+}
+
 /* ============================================================
-   PATCH ARTISTƏ — GRIGLIA ADATTIVA ENTRO 95% SCHERMO + COVER VISIBILE
-   (incollare in fondo al CSS)
+   ARTISTƏ & ARTIST3.HTML
 ============================================================ */
 
 section[id="artistə"],
 section#artist3,
 .home-artists-section {
-  opacity: 1 !important;
   max-width: 95vw;
   width: 95vw;
   margin-inline: auto;
-  box-sizing: border-box;
+}
+
+.artist-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.artist-controls button {
+  padding: 0.6rem 1.2rem;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.artist-controls button:hover,
+.artist-controls button.active,
+.artist-controls button.is-active {
+  background: var(--primary-color);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(255, 0, 255, 0.3);
 }
 
 .artist-gallery {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)) !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
   gap: 1.1rem;
-  width: 100% !important;
-  max-width: 95vw !important;
-  box-sizing: border-box;
-  overflow-x: hidden !important;
+  width: 100%;
+  max-width: 95vw;
+  overflow-x: hidden;
   padding-bottom: 1.5rem;
+  touch-action: pan-y;
 }
 
 .artist-card {
   position: relative;
-  min-width: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border: 3px solid var(--primary-color);
   background: #000;
+  cursor: pointer;
   border-radius: 6px;
-  box-sizing: border-box;
   transform: rotate(-1deg);
   transition: transform 0.2s ease;
+  box-shadow: 0 0 0 3px #000 inset, 0 0 12px rgba(255, 0, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  touch-action: pan-y;
 }
 
 .artist-card:hover {
   transform: rotate(0deg) scale(1.02);
+}
+
+.artist-card img,
+.artist-cover-img,
+.artist-card * {
+  touch-action: pan-y;
 }
 
 .artist-card img,
@@ -4823,34 +1657,41 @@ section#artist3,
   width: 100%;
   height: 100%;
   object-fit: cover;
+  flex: 1;
+  filter: contrast(1.1) brightness(0.9);
   display: block;
 }
 
-.artist-card .artista-info {
+.artista-info {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
   z-index: 3;
+  background: #000;
+  color: var(--primary-color);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(0.75rem, 1.8vw, 1rem);
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 0.8rem;
+  opacity: 0;
+  transform: translateY(100%) rotate(-1deg);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px #fff inset;
 }
 
-.artists-page-main {
-  max-width: 95vw;
-  width: 95vw;
-  margin: 0 auto;
-  padding: calc(var(--navbar-height) + 2.5rem) 1rem 4rem;
-  box-sizing: border-box;
+.artist-card:hover .artista-info {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
 }
 
-.artists-page-cta {
-  margin-top: 2rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-}
-
-.artists-page-cta .sticker-button.manifesto-button {
-  margin-left: 0;
-  margin-top: 0;
-  text-decoration: none;
-  cursor: pointer;
+@media (hover: none) and (pointer: coarse) {
+  .artist-card .artista-info {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
 }
 
 .artista-role-tag {
@@ -4864,4 +1705,1096 @@ section#artist3,
   border: 1px solid #000;
   border-radius: 3px;
   vertical-align: middle;
+}
+
+.artists-page-main {
+  max-width: 95vw;
+  width: 95vw;
+  margin: 0 auto;
+  padding: calc(var(--navbar-height) + 2.5rem) 1rem 4rem;
+}
+
+.artists-page-cta {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.artists-page-cta .sticker-button.manifesto-button {
+  margin-left: 0;
+  margin-top: 0;
+}
+
+/* Modale Artista */
+.artist-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-modal);
+  padding: 2rem;
+}
+
+.artist-modal.hidden {
+  display: none;
+}
+
+.artist-modal-content {
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  background: #000;
+  border-radius: 12px;
+  position: relative;
+  border: 3px solid var(--primary-color);
+  box-shadow: 0 0 0 3px #000 inset, 0 0 20px rgba(255, 0, 255, 0.3);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--primary-color);
+  background: #000;
+  border: 2px solid var(--primary-color);
+  padding: 0.2rem 0.6rem;
+  transform: rotate(3deg);
+}
+
+.artist-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.artist-header h3 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  font-weight: 900;
+  transform: rotate(-1deg);
+}
+
+.artist-modal-layout {
+  display: flex;
+  gap: 2rem;
+}
+
+.artist-modal-text {
+  flex: 1;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.artist-modal-gallery {
+  flex: 1;
+  column-count: 2;
+  column-gap: 1rem;
+}
+
+.artist-modal-gallery img {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 0 3px #000 inset;
+  transform: rotate(-1deg);
+  transition: transform 0.25s ease;
+  touch-action: pan-y;
+}
+
+.artist-modal-gallery img:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+@media (max-width: 768px) {
+  .artist-modal-layout {
+    flex-direction: column;
+  }
+
+  .artist-modal-gallery {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 500px) {
+  .artist-modal-gallery {
+    column-count: 1;
+  }
+}
+
+/* ============================================================
+   PARTNERSHIP
+============================================================ */
+
+#partnership {
+  background: #000;
+  color: #fff;
+  height: 100dvh;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#partnership .collab-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  gap: 1.2rem;
+  overflow: hidden;
+}
+
+.collab-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 3px solid var(--primary-color);
+  background: #000;
+  border-radius: 6px;
+  transform: rotate(-1.5deg);
+  transition: transform 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.collab-card:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.collab-card img,
+.collab-card .ig-thumb {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+.collab-card .artista-info {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  background: #000;
+  color: var(--primary-color);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(0.75rem, 1.8vw, 1rem);
+  text-align: center;
+  padding: 0.8rem;
+  opacity: 0;
+  transform: translateY(100%) rotate(-1deg);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.collab-card:hover .artista-info {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
+}
+
+@media (max-width: 600px) {
+  #partnership {
+    height: auto;
+    overflow: visible;
+  }
+
+  #partnership .collab-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .collab-card {
+    transform: rotate(-1deg);
+  }
+}
+
+/* ============================================================
+   CONTATTI
+============================================================ */
+
+.contact-section {
+  min-height: calc(100dvh - var(--navbar-height));
+  width: 100%;
+  padding: 4vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4vw;
+}
+
+.contact-left,
+.contact-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2vw;
+}
+
+.contact-intro {
+  font-size: clamp(18px, 2.8vw, 32px);
+  font-weight: 900;
+  line-height: 1.15;
+  text-transform: uppercase;
+  background: #ff2e9a;
+  color: #fff;
+  padding: 2vw 3vw;
+  border: 0.6vw solid #fff;
+  box-shadow: 1vw 1vw 0 #000;
+  transform: rotate(-2deg);
+  max-width: 90%;
+}
+
+.social-links {
+  display: flex;
+  gap: 1.6vw;
+}
+
+.social-links a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(40px, 6vw, 70px);
+  height: clamp(40px, 6vw, 70px);
+  background: #000;
+  color: #fff;
+  border: 0.4vw solid #fff;
+  box-shadow: 0.6vw 0.6vw 0 #ff2e9a;
+  transform: rotate(-4deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.social-links a i {
+  font-size: clamp(18px, 3vw, 28px);
+}
+
+.social-links a:hover {
+  transform: rotate(4deg) scale(1.1);
+  box-shadow: 1vw 1vw 0 #ff2e9a;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4vw;
+  max-width: 90%;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 1vw;
+  border: 0.4vw solid #000;
+  background: #fff;
+  color: #000;
+  font-family: var(--font-sans);
+  font-size: clamp(14px, 2vw, 18px);
+  box-shadow: 0.6vw 0.6vw 0 #000;
+}
+
+.contact-form textarea {
+  min-height: 120px;
+  max-height: 25dvh;
+}
+
+.contact-form button {
+  padding: 1vw 2vw;
+  background-color: #ff2e9a;
+  color: #fff;
+  border: 0.6vw solid #fff;
+  box-shadow: 1vw 1vw 0 #000;
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: clamp(14px, 2.4vw, 22px);
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-form button:hover {
+  transform: rotate(2deg) scale(1.05);
+  box-shadow: 1.4vw 1.4vw 0 #000;
+}
+
+.contact-form.sending button {
+  background: #000;
+  color: var(--primary-color);
+  cursor: progress;
+}
+
+.contact-form .form-status {
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.contact-form.sent {
+  text-align: center;
+  color: #fff;
+}
+
+.form-thanks {
+  padding: 3rem 1rem;
+  border: 0.6vw solid #fff;
+  background: #000;
+  box-shadow: 1vw 1vw 0 #ff2e9a;
+  transform: rotate(-1.5deg);
+}
+
+.form-thanks h2 {
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: 900;
+  color: #ff2e9a;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.form-thanks p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+@media (max-width: 800px) {
+  .contact-section {
+    flex-direction: column;
+    justify-content: center;
+    padding: 4vw 5vw;
+    gap: 4vw;
+  }
+
+  .contact-left,
+  .contact-right {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    flex: unset;
+  }
+
+  .contact-intro {
+    font-size: clamp(16px, 4vw, 22px);
+    padding: 3vw 4vw;
+    max-width: 100%;
+    transform: rotate(-1deg);
+    box-shadow: 0.8vw 0.8vw 0 #000;
+  }
+
+  .social-links {
+    justify-content: center;
+    gap: 4vw;
+  }
+
+  .social-links a {
+    width: clamp(40px, 12vw, 60px);
+    height: clamp(40px, 12vw, 60px);
+    transform: rotate(-3deg);
+  }
+
+  .social-links a i {
+    font-size: clamp(18px, 6vw, 28px);
+  }
+
+  .contact-form {
+    max-width: 100%;
+    width: 100%;
+    gap: 3vw;
+    transform: rotate(1deg);
+  }
+
+  .contact-form textarea {
+    min-height: 18dvh;
+    max-height: 22dvh;
+  }
+
+  .contact-form button {
+    font-size: clamp(14px, 4vw, 20px);
+    padding: 2.5vw 4vw;
+  }
+}
+
+/* ============================================================
+   SOSTIENICI & TRASPARENZA
+============================================================ */
+
+.sostienici-grid {
+  display: grid;
+  grid-template-columns: 0.45fr 0.55fr;
+  gap: 3rem;
+  width: 100%;
+}
+
+.sostienici-col-left,
+.sostienici-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.sostienici-title {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  transform: rotate(-1deg);
+}
+
+.sostienici-title span {
+  background: #ff2e9a;
+  padding: 0.2em 0.4em;
+  color: #000;
+}
+
+.sost-card {
+  background: #111;
+  border: 3px solid #ff2e9a;
+  padding: 1.5rem;
+  border-radius: 6px;
+  box-shadow: 6px 6px 0 #ff2e9a;
+  transform: rotate(-1.5deg);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.sost-card:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.sost-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.sost-card p {
+  margin: 0;
+  color: #ff2e9a;
+  font-weight: 700;
+}
+
+.sost-cta {
+  background: #ff2e9a;
+  color: #000;
+  text-align: center;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3px solid #ff2e9a;
+  box-shadow: 6px 6px 0 #000;
+  transform: rotate(-2deg);
+}
+
+.sost-cta:hover {
+  transform: rotate(1deg) scale(1.05);
+}
+
+.sost-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: #000;
+  color: #ff00ff;
+  font-weight: 900;
+  font-size: 1.6rem;
+  line-height: 1;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #ff00ff;
+  border-radius: 4px;
+  transform: rotate(-4deg);
+  margin-top: 0.6rem;
+  pointer-events: none;
+}
+
+.sost-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-modal);
+}
+
+.sost-lightbox.show {
+  display: flex;
+}
+
+.sost-lightbox-content {
+  background: #000;
+  border: 3px solid #ff2e9a;
+  padding: 2rem;
+  max-width: 700px;
+  width: 90%;
+  box-shadow: 8px 8px 0 #ff2e9a;
+  transform: rotate(-1deg);
+}
+
+.sost-lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #ff2e9a;
+  cursor: pointer;
+}
+
+.qms-sostienici-section {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+}
+
+.qms-sostienici-wrapper {
+  height: 100%;
+  max-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 3rem;
+}
+
+.qms-sostienici-text,
+.qms-accordion {
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.qms-accordion {
+  max-height: calc(100dvh - 260px);
+}
+
+@media (max-width: 900px) {
+  .sostienici-grid {
+    grid-template-columns: 0.48fr 0.52fr;
+    gap: 1.8rem;
+  }
+
+  .sostienici-title {
+    font-size: 2.2rem;
+  }
+}
+
+.trasparenza-page {
+  max-width: 800px;
+  margin: 80px auto;
+  padding: 0 20px;
+  color: #ddd;
+}
+
+.trasparenza-page h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #fff;
+  text-align: left;
+}
+
+.trasparenza-intro {
+  color: #aaa;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.trasparenza-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trasparenza-list li {
+  margin-bottom: 12px;
+}
+
+.trasparenza-list a {
+  color: #888;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.trasparenza-list a:hover {
+  color: #bbb;
+  text-decoration: underline;
+}
+
+/* ============================================================
+   GALLERIA CARTELLE, MODALE GALLERIA, LIGHTBOX & MOSAICO
+============================================================ */
+
+.gallery-folders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  touch-action: pan-y;
+}
+
+.folder-preview {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--primary-color);
+  background: #000;
+  cursor: pointer;
+  border-radius: 6px;
+  transform: rotate(-1.5deg);
+  transition: transform 0.25s ease;
+  box-shadow: 0 0 0 3px #000 inset;
+  max-width: 100%;
+  touch-action: pan-y;
+}
+
+.folder-preview:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.folder-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.9);
+  touch-action: pan-y;
+}
+
+.folder-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: var(--primary-color);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-align: center;
+  box-shadow: 0 -3px 0 #000 inset;
+}
+
+@media (max-width: 768px) {
+  .gallery-folders {
+    grid-template-columns: 1fr;
+  }
+}
+
+#galleryModal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: var(--z-gallery);
+  padding: 2rem;
+}
+
+#galleryModal.hidden {
+  display: none !important;
+}
+
+#galleryModal .modal-content {
+  position: relative;
+  width: 75vw;
+  height: 75dvh;
+  max-width: 1400px;
+  max-height: 900px;
+  overflow-y: auto;
+  padding: 2rem;
+  background: #111;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+#galleryModal .modal-caption {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+#galleryModal .modal-album-title {
+  margin: 0;
+}
+
+#galleryModal .modal-photographer {
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+.modal-photographer a {
+  color: #ff4fa8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.modal-photographer a:hover {
+  color: #ff7fc4;
+  text-decoration: underline;
+}
+
+#galleryModal > .modal-content > .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#galleryModal .modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 1rem;
+  max-width: 100%;
+  overflow-x: hidden;
+  touch-action: pan-y;
+}
+
+#galleryModal .modal-grid.hidden {
+  display: none !important;
+}
+
+#galleryModal .modal-grid img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 2px solid var(--primary-color);
+  transform: rotate(-1deg);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  touch-action: pan-y;
+}
+
+#galleryModal .modal-grid img:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+#galleryModal .carousel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.97);
+  border-radius: 10px;
+  z-index: 500;
+}
+
+#galleryModal .carousel.hidden {
+  display: none !important;
+}
+
+#galleryModal .carousel-img {
+  width: 85%;
+  height: 85%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+#galleryModal .prev,
+#galleryModal .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1rem;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  z-index: 100000;
+}
+
+#galleryModal .prev { left: 20px; }
+#galleryModal .next { right: 20px; }
+
+#galleryModal .prev:hover,
+#galleryModal .next:hover {
+  opacity: 0.7;
+}
+
+#galleryModal .carousel-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  z-index: var(--z-lightbox);
+}
+
+.lightbox.open {
+  display: flex;
+}
+
+.lightbox-inner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 80vh;
+}
+
+#lightbox-img {
+  max-width: 90vw;
+  max-height: 70vh;
+  object-fit: contain;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 4px #000 inset;
+  transform: rotate(-1deg);
+}
+
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  padding: 0 0.5rem;
+  z-index: 100000;
+}
+
+.lightbox-prev { left: -3rem; }
+.lightbox-next { right: -3rem; }
+
+@media (max-width: 768px) {
+  .lightbox-prev { left: 10px; }
+  .lightbox-next { right: 10px; }
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  background: var(--primary-color);
+  color: #000;
+  border: 3px solid #000;
+  font-size: 2rem;
+  font-weight: 900;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  transform: rotate(3deg);
+}
+
+.lightbox-thumbs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.lightbox-thumbs img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border: 2px solid #fff;
+  cursor: pointer;
+  opacity: 0.6;
+  transform: rotate(-2deg);
+}
+
+.lightbox-thumbs img.active {
+  opacity: 1;
+  border-color: var(--primary-color);
+  transform: rotate(0deg) scale(1.05);
+}
+
+.mosaic-gallery {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: calc(var(--z-gallery) - 1);
+  overflow-y: auto;
+  padding: 2rem;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.mosaic-gallery.open {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mosaic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  max-width: 100%;
+  overflow-x: hidden;
+  touch-action: pan-y;
+}
+
+.mosaic-grid img {
+  width: 100%;
+  border-radius: 6px;
+  border: 2px solid var(--primary-color);
+  cursor: pointer;
+  transform: rotate(-1deg);
+  transition: transform 0.2s ease;
+  touch-action: pan-y;
+}
+
+.mosaic-grid img:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.mosaic-close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 3rem;
+  color: var(--primary-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  font-weight: bold;
+}
+
+/* Sezione narrativa chaos */
+.qms-gallery-narrativa.chaos {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+.qms-gallery-grid {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.qms-gallery-images {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.qms-gallery-images img {
+  position: absolute;
+  width: min(28vw, 38vh);
+  height: min(28vw, 38vh);
+  object-fit: cover;
+  border: 0.6vw solid #fff;
+  box-shadow: 1vw 1vw 0 #000;
+  filter: contrast(1.4) brightness(0.9) saturate(1.2) grayscale(0.15);
+}
+
+.qms-gallery-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5000;
+}
+
+.qms-gallery-labels .label {
+  position: absolute;
+  background: #ff2e9a;
+  padding: 1vw 2vw;
+  font-size: clamp(14px, 3vw, 32px);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  box-shadow: 1vw 1vw 0 #000;
+  max-width: 40vw;
+  overflow-wrap: break-word;
+  transform-origin: left top;
+  z-index: 5001;
+}
+
+.chaos-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-6deg);
+  z-index: 6000;
+  background: #ff2e9a;
+  padding: 2vw 4vw;
+  font-size: clamp(20px, 5vw, 60px);
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  border: 1vw solid #fff;
+  box-shadow: 2vw 2vw 0 #000;
+  filter: contrast(1.4);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   SCROLLBAR INVISIBILI
+============================================================ */
+
+*::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+* {
+  scrollbar-width: none !important;
 }
