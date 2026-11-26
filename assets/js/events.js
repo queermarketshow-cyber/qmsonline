@@ -217,7 +217,7 @@ if (calNextBtn) {
 
 function renderAll() {
 
-  renderFeaturedEventHome();
+  renderFeaturedEvent();
 
   const pastBtn = document.getElementById("show-past");
   const showingPast = pastBtn && pastBtn.classList.contains("active");
@@ -601,12 +601,14 @@ function linkCalendarToTimeline() {
   });
 }
 /* ============================================================
-   PROSSIMO EVENTO HOME
+   PROSSIMO EVENTO (HOME + EVENTI.HTML)
 ============================================================ */
 
-function renderFeaturedEventHome() {
+function renderFeaturedEvent() {
 
-  const container = document.getElementById("featured-event-home");
+  const container =
+    document.getElementById("featured-event-home") ||
+    document.getElementById("featured-event-content");
 
   if (!container) return;
 
@@ -626,6 +628,9 @@ function renderFeaturedEventHome() {
   }
 
   const ev = futureEvents[0];
+
+  const isHome =
+    !!document.getElementById("featured-event-home");
 
   const ticketButton = ev.ticketUrl
     ? `
@@ -730,6 +735,20 @@ function renderFeaturedEventHome() {
           ${ticketButton}
 
         </div>
+
+        ${
+          isHome
+            ? `
+              <a
+                href="eventi.html"
+                class="all-events-link">
+
+                Tutti gli eventi →
+
+              </a>
+            `
+            : ""
+        }
 
       </div>
 
