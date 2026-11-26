@@ -1,1440 +1,572 @@
-/* ============================================================
-   CONFIGURAZIONE BASE & CACHING
-============================================================ */
+(() => {
+  "use strict";
 
-let events = [];
-let currentMonth;
-let currentYear;
-const dataCache = {}; // Previene fetch duplicati
+  // 1. Configurazione sorgente dati
+  // Puoi puntare a un file JSON locale ("./events.json") o a un endpoint API ("https://tuodominio.it/api/events")
+  const CONFIG = {
+    sourceUrl: "./events.json",
+    fetchOptions: {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      },
+      cache: "no-store"
+    },
+    timeoutMs: 8000
+  };
 
-const now = new Date();
+  // 2. Riferimenti DOM
+  const dom = {
+    featuredContent: document.getElementById("featured-event-content"),
+    filters: document.getElementById("calendar-filters"),
+    prevMonthBtn: document.getElementById("prev-month"),
+    monthContainer: document.getElementById("future-month-container"),
+    nextMonthBtn: document.getElementById("next-month"),
+    mobileWrapper: document.getElementById("mobile-calendar-wrapper"),
+    mobileDots: document.getElementById("mobile-dots"),
+    mobilePrevBtn: document.getElementById("mobile-prev"),
+    mobileCarousel: document.getElementById("mobile-calendar-carousel"),
+    mobileNextBtn: document.getElementById("mobile-next"),
+    pastEvents: document.getElementById("past-events")
+  };
 
-let todayDate = new Date(
-  now.getFullYear(),
-  now.getMonth(),
-  now.getDate()
-);
+  // 3. Stato applicativo
+  const state = {
+    events: [],
+    selectedCategory: "Tutti",
+    activeMonthIndex: 0,
+    mobileSlideIndex: 0,
+    isLoading: false,
+    error: null,
+    listenersBound: false
+  };
 
-let todayYear = todayDate.getFullYear();
-let todayMonth = todayDate.getMonth();
+  // --- Utility date e stringhe ---
+  function parseLocalDate(dateStr) {
+    if (typeof dateStr !== "string" || !dateStr.trim()) return null;
+    const clean = dateStr.trim().split("T")[0];
+    const parts = clean.split("-").map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
 
-let activeCategory = "all";
-
-// Fetch centralizzata con gestione errori e cache
-async function fetchJSON(url) {
-  if (dataCache[url]) return dataCache[url];
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Failed to load ${url}`);
-    dataCache[url] = await res.json();
-    return dataCache[url];
-  } catch (err) {
-    console.error("Fetch error:", err);
-    return null;
+    const [y, m, d] = parts;
+    const date = new Date(y, m - 1, d);
+    if (
+      date.getFullYear() !== y ||
+      date.getMonth() !== m - 1 ||
+      date.getDate() !== d
+    ) {
+      return null;
+    }
+    return date;
   }
-}
 
-function isMobile() {
-  return window.matchMedia("(max-width: 768px)").matches;
-}
+  function startOfToday() {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
 
-/* ============================================================
-   UTILITY DATE
-============================================================ */
-
-function parseDateString(dateStr) {
-  const [y, m, d] = dateStr.split("-").map(Number);
-  const dateObj = new Date(y, m - 1, d);
-
-  const mm = String(m).padStart(2, "0");
-  const dd = String(d).padStart(2, "0");
-  const normalized = `${y}-${mm}-${dd}`;
-
-  return {
-    dateObj,
-    dateStr: normalized,
-    dateReadable: dateObj.toLocaleDateString("it-IT", {
-      weekday: "long",
-      day: "numeric",
+  function formatDateIT(dateStr) {
+    const date = parseLocalDate(dateStr);
+    if (!date) return dateStr || "";
+    return new Intl.DateTimeFormat("it-IT", {
+      day: "2-digit",
       month: "long",
       year: "numeric"
-    })
-  };
-}
-
-/* ============================================================
-   ESPANSIONE EVENTI
-============================================================ */
-
-function expandEvent(ev) {
-  const occurrences = [];
-
-  if (ev.start) {
-    const base = parseDateString(ev.start);
-    occurrences.push({ ...ev, ...base });
+    }).format(date);
   }
 
-  if (Array.isArray(ev.specificDates)) {
-    ev.specificDates.forEach(ds => {
-      const spec = parseDateString(ds);
-      if (!occurrences.some(o => o.dateStr === spec.dateStr)) {
-        occurrences.push({ ...ev, ...spec });
+  function formatMonthYearIT(dateObj) {
+    return new Intl.DateTimeFormat("it-IT", {
+      month: "long",
+      year: "numeric"
+    }).format(dateObj);
+  }
+
+  function getMonthKey(dateObj) {
+    return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}`;
+  }
+
+  function escapeHTML(str = "") {
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function sanitizeUrl(url = "") {
+    const trimmed = String(url).trim();
+    if (!trimmed) return "";
+    if (
+      trimmed.startsWith("#") ||
+      trimmed.startsWith("/") ||
+      trimmed.startsWith("./") ||
+      trimmed.startsWith("../")
+    ) {
+      return trimmed;
+    }
+    try {
+      const parsed = new URL(trimmed, window.location.origin);
+      if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+        return parsed.href;
       }
+    } catch {
+      return "";
+    }
+    return "";
+  }
+
+  // --- Normalizzazione e caricamento asincrono ---
+  function normalizeEventsPayload(payload) {
+    // Supporta sia un array diretto [...] sia oggetti wrapper comuni ({ events: [...] } o { data: [...] })
+    const rawList = Array.isArray(payload)
+      ? payload
+      : Array.isArray(payload?.events)
+        ? payload.events
+        : Array.isArray(payload?.data)
+          ? payload.data
+          : null;
+
+    if (!rawList) {
+      throw new Error("Formato JSON non valido: atteso un array di eventi.");
+    }
+
+    return rawList
+      .map((item, index) => {
+        if (!item || typeof item !== "object") return null;
+        const parsedDate = parseLocalDate(item.date);
+        if (!parsedDate || !item.title) return null;
+
+        return {
+          id: String(item.id ?? `evt-${index + 1}`),
+          title: String(item.title).trim(),
+          date: String(item.date).trim(),
+          time: item.time ? String(item.time).trim() : "",
+          category: item.category ? String(item.category).trim() : "Generale",
+          location: item.location ? String(item.location).trim() : "",
+          description: item.description ? String(item.description).trim() : "",
+          image: sanitizeUrl(item.image),
+          url: sanitizeUrl(item.url),
+          _dateObj: parsedDate
+        };
+      })
+      .filter(Boolean);
+  }
+
+  async function fetchEvents(url = CONFIG.sourceUrl, timeoutMs = CONFIG.timeoutMs) {
+    const controller = new AbortController();
+    const timerId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const response = await fetch(url, {
+        ...CONFIG.fetchOptions,
+        signal: controller.signal
+      });
+
+      if (!response.ok) {
+        throw new Error(`Errore HTTP ${response.status} durante il caricamento degli eventi.`);
+      }
+
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.includes("application/json") && !url.endsWith(".json")) {
+        // Prova comunque a leggere come JSON ma segnala risposte malformate
+        const text = await response.text();
+        try {
+          return JSON.parse(text);
+        } catch {
+          throw new Error("La risposta del server non è in formato JSON valido.");
+        }
+      }
+
+      return await response.json();
+    } catch (err) {
+      if (err.name === "AbortError") {
+        throw new Error("Il caricamento degli eventi ha superato il tempo massimo consentito.");
+      }
+      if (err instanceof TypeError) {
+        throw new Error("Impossibile raggiungere la sorgente eventi. Verifica la connessione o il percorso del file.");
+      }
+      throw err;
+    } finally {
+      window.clearTimeout(timerId);
+    }
+  }
+
+  // --- Suddivisione Futuri / Passati ---
+  function splitEvents(events) {
+    const today = startOfToday();
+    const upcoming = [];
+    const past = [];
+
+    events.forEach((evt) => {
+      const evtDate = evt._dateObj || parseLocalDate(evt.date);
+      if (!evtDate) return;
+
+      const normalized = { ...evt, _dateObj: evtDate };
+      if (evtDate >= today) {
+        upcoming.push(normalized);
+      } else {
+        past.push(normalized);
+      }
+    });
+
+    upcoming.sort((a, b) => a._dateObj - b._dateObj);
+    past.sort((a, b) => b._dateObj - a._dateObj);
+
+    return { upcoming, past };
+  }
+
+  // --- Stati Loading ed Errore ---
+  function renderLoadingState() {
+    const loadingMarkup = `<p class="loading-state" role="status">Caricamento eventi in corso...</p>`;
+    if (dom.featuredContent) dom.featuredContent.innerHTML = loadingMarkup;
+    if (dom.filters) dom.filters.innerHTML = "";
+    if (dom.monthContainer) dom.monthContainer.innerHTML = loadingMarkup;
+    if (dom.mobileCarousel) dom.mobileCarousel.innerHTML = loadingMarkup;
+    if (dom.mobileDots) dom.mobileDots.innerHTML = "";
+    if (dom.pastEvents) dom.pastEvents.innerHTML = loadingMarkup;
+
+    [dom.prevMonthBtn, dom.nextMonthBtn, dom.mobilePrevBtn, dom.mobileNextBtn].forEach((btn) => {
+      if (btn) btn.disabled = true;
     });
   }
 
-  if (Array.isArray(ev.recurringWeekdays) && ev.recurringWeekdays.length > 0 && ev.start && ev.end) {
-    const startInfo = parseDateString(ev.start);
-    const endInfo = parseDateString(ev.end);
-
-    let cursor = new Date(startInfo.dateObj.getTime());
-    const endDate = endInfo.dateObj;
-
-    // Sicurezza: limite massimo di iterazioni per evitare loop infiniti
-    let safetyCounter = 0;
-    while (cursor <= endDate && safetyCounter < 1000) {
-      const jsDay = cursor.getDay();
-      const ourDay = (jsDay + 6) % 7;
-
-      if (ev.recurringWeekdays.includes(ourDay)) {
-        const y = cursor.getFullYear();
-        const m = cursor.getMonth() + 1;
-        const d = cursor.getDate();
-        const mm = String(m).padStart(2, "0");
-        const dd = String(d).padStart(2, "0");
-        const ds = `${y}-${mm}-${dd}`;
-
-        if (!occurrences.some(o => o.dateStr === ds)) {
-          const info = parseDateString(ds);
-          occurrences.push({ ...ev, ...info });
-        }
-      }
-      cursor.setDate(cursor.getDate() + 1);
-      safetyCounter++;
-    }
-  }
-
-  return occurrences;
-}
-
-/* ============================================================
-   CARICAMENTO INIZIALE
-============================================================ */
-
-async function initApp() {
-
-  const data = await fetchJSON("events.json");
-  if (!data) return;
-
-  const expanded = [];
-
-  data.forEach(ev => {
-    expanded.push(...expandEvent(ev));
-  });
-
-  events = expanded.sort((a, b) => a.dateObj - b.dateObj);
-  let firstUpcomingIndex =
-  events.findIndex(ev => ev.dateObj >= realToday);
-
-if (firstUpcomingIndex === -1) {
-  firstUpcomingIndex = events.length - 1;
-}
-
-  /* ==========================================
-     FALLBACK SE NON ESISTONO EVENTI FUTURI
-  ========================================== */
-
-  const hasFutureEvents =
-    events.some(ev => ev.dateObj >= todayDate);
-
-  if (!hasFutureEvents && events.length > 0) {
-
-    const latestEvent =
-      events[events.length - 1];
-
-    todayDate = new Date(
-      latestEvent.dateObj.getFullYear(),
-      0,
-      1
-    );
-
-    todayYear = todayDate.getFullYear();
-    todayMonth = todayDate.getMonth();
-  }
-
-  const first = findFirstFutureMonthWithEvents();
-
-  currentMonth = first.month;
-  currentYear = first.year;
-
-  initFilters();
-  initControls();
-  renderAll();
-}
-
-/* Avvio applicazione */
-
-initApp();
-
-/* ============================================================
-   HELPER EVENTI
-============================================================ */
-
-function getFutureEvents() {
-
-  if (!events.length) return [];
-
-  return events.slice(firstUpcomingIndex);
-
-}
-
-function getPastEvents() {
-
-  if (!events.length) return [];
-
-  return events.slice(0, firstUpcomingIndex);
-
-}
-
-/* ============================================================
-   LOGICA DI RICERCA MESE (SAFE)
-============================================================ */
-
-function monthHasEvents(month, year) {
-
-  return getFutureEvents().some(ev =>
-
-    ev.dateObj.getFullYear() === year &&
-    ev.dateObj.getMonth() === month &&
-
-    (
-      activeCategory === "all" ||
-      ev.categories.includes(activeCategory)
-    )
-
-  );
-
-}
-
-function findFirstFutureMonthWithEvents() {
-
-  let m = todayMonth;
-  let y = todayYear;
-
-  if (events.length === 0) {
-    return {
-      month: m,
-      year: y
-    };
-  }
-
-  let iterations = 0;
-  const maxSearch = 24;
-
-  while (
-    !monthHasEvents(m, y) &&
-    iterations < maxSearch
-  ) {
-
-    m++;
-
-    if (m > 11) {
-      m = 0;
-      y++;
-    }
-
-    iterations++;
-
-  }
-
-  return {
-    month: m,
-    year: y
-  };
-
-}
-/* ============================================================
-   NAVIGAZIONE MESI
-============================================================ */
-
-const calPrevBtn =
-  document.getElementById("prev-month");
-
-const calNextBtn =
-  document.getElementById("next-month");
-
-if (calPrevBtn) {
-
-  calPrevBtn.addEventListener("click", () => {
-
-    let m = currentMonth;
-    let y = currentYear;
-    let iterations = 0;
-
-    do {
-
-      m--;
-
-      if (m < 0) {
-        m = 11;
-        y--;
-      }
-
-      iterations++;
-
-      if (iterations > 24) return;
-
-    } while (!monthHasEvents(m, y));
-
-    currentMonth = m;
-    currentYear = y;
-
-    renderAll();
-
-  });
-
-}
-
-if (calNextBtn) {
-
-  calNextBtn.addEventListener("click", () => {
-
-    let m = currentMonth;
-    let y = currentYear;
-    let iterations = 0;
-
-    do {
-
-      m++;
-
-      if (m > 11) {
-        m = 0;
-        y++;
-      }
-
-      iterations++;
-
-      if (iterations > 24) return;
-
-    } while (!monthHasEvents(m, y));
-
-    currentMonth = m;
-    currentYear = y;
-
-    renderAll();
-
-  });
-
-}
-/* ============================================================
-   RENDER ALL
-============================================================ */
-
-function renderAll() {
-
-  renderFeaturedEvent();
-
-  const pastBtn = document.getElementById("show-past");
-  const showingPast = pastBtn && pastBtn.classList.contains("active");
-
-  if (!showingPast) {
-
-    renderCalendar(currentMonth, currentYear);
-    renderMobileCalendarCarousel();
-
-  }
-
-  renderPastEvents();
-  linkCalendarToTimeline();
-
-}
-/* ============================================================
-   CALENDARIO DESKTOP + SELETTORE
-============================================================ */
-
-function renderCalendar(month, year) {
-
-  const container = document.getElementById("future-month-container");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const date = new Date(year, month, 1);
-  const monthName = date.toLocaleString("it-IT", {
-    month: "long"
-  });
-
-  const monthWrapper = document.createElement("div");
-
-  monthWrapper.className = "calendar-month";
-  monthWrapper.style.display = "flex";
-  monthWrapper.style.alignItems = "center";
-  monthWrapper.style.gap = "8px";
-  monthWrapper.style.cursor = "pointer";
-  monthWrapper.style.position = "relative";
-
-  const monthText = document.createElement("span");
-  monthText.textContent = `${monthName} ${year}`;
-
-  const triangle = document.createElement("span");
-  triangle.textContent = "▼";
-  triangle.style.fontSize = "1rem";
-  triangle.style.transform = "translateY(2px)";
-  triangle.className = "month-triangle";
-
-  monthWrapper.appendChild(monthText);
-  monthWrapper.appendChild(triangle);
-
-  container.appendChild(monthWrapper);
-
-  buildYearMonthSelector(monthWrapper);
-
-  const grid = document.createElement("div");
-  grid.className = "calendar-grid";
-
-  const firstDay =
-    date.getDay() === 0
-      ? 6
-      : date.getDay() - 1;
-
-  for (let i = 0; i < firstDay; i++) {
-    grid.appendChild(document.createElement("div"));
-  }
-
-  const daysInMonth =
-    new Date(year, month + 1, 0).getDate();
-
-  for (let d = 1; d <= daysInMonth; d++) {
-
-    const dayEl = document.createElement("div");
-    dayEl.className = "calendar-day";
-
-    const fullDate =
-      new Date(year, month, d);
-
-    const iso = [
-      fullDate.getFullYear(),
-      String(fullDate.getMonth() + 1).padStart(2, "0"),
-      String(fullDate.getDate()).padStart(2, "0")
-    ].join("-");
-
-    dayEl.dataset.date = iso;
-
-    const num =
-      document.createElement("div");
-
-    num.className =
-      "calendar-day-number";
-
-    num.textContent = d;
-
-    dayEl.appendChild(num);
-
-const todaysEvents = getFutureEvents().filter(ev =>
-
-  ev.dateStr === iso &&
-
-  (
-    activeCategory === "all" ||
-    ev.categories.includes(activeCategory)
-  )
-
-);
-
-if (todaysEvents.length > 0) {
-
-  dayEl.classList.add("has-event");
-
-  const mainEv = todaysEvents[0];
-
-  const postit =
-    document.createElement("div");
-
-  postit.className = "event-postit";
-
-  if (mainEv.image) {
-
-    const img =
-      document.createElement("img");
-
-    img.src = mainEv.image;
-
-    postit.appendChild(img);
-
-  }
-
-  postit.addEventListener("click", e => {
-
-    e.stopPropagation();
-
-    openEventModal(mainEv);
-
-  });
-
-  dayEl.appendChild(postit);
-
-}
-
-grid.appendChild(dayEl);
-
-function buildYearMonthSelector(monthWrapper) {
-
-  monthWrapper
-    .querySelectorAll(".month-selector")
-    .forEach(el => el.remove());
-
-  const selector =
-    document.createElement("div");
-
-  selector.className = "month-selector";
-  selector.style.display = "none";
-
-  selector.addEventListener("click", e => {
-    e.stopPropagation();
-  });
-
-  const map = new Map();
-
-  events
-    .filter(ev => ev.dateObj >= todayDate)
-    .forEach(ev => {
-
-      const y =
-        ev.dateObj.getFullYear();
-
-      const m =
-        ev.dateObj.getMonth();
-
-      if (!map.has(y)) {
-        map.set(y, new Set());
-      }
-
-      map.get(y).add(m);
-
-    });
-
-  const years =
-    [...map.keys()]
-      .sort((a, b) => a - b);
-
-  const yearSelect =
-    document.createElement("select");
-
-  yearSelect.innerHTML =
-    `<option value="">Anno</option>`;
-
-  years.forEach(y => {
-
-    yearSelect.innerHTML +=
-      `<option value="${y}">
-        ${y}
-      </option>`;
-
-  });
-
-  const monthSelect =
-    document.createElement("select");
-
-  monthSelect.innerHTML =
-    `<option value="">Mese</option>`;
-
-  monthSelect.disabled = true;
-
-  yearSelect.addEventListener("change", () => {
-
-    const y =
-      Number(yearSelect.value);
-
-    monthSelect.disabled = false;
-
-    monthSelect.innerHTML =
-      `<option value="">Mese</option>`;
-
-    if (map.has(y)) {
-
-      [...map.get(y)]
-        .sort((a, b) => a - b)
-        .forEach(m => {
-
-          const name =
-            new Date(y, m, 1)
-            .toLocaleString("it-IT", {
-              month: "long"
-            });
-
-          monthSelect.innerHTML +=
-            `<option value="${m}">
-              ${name}
-            </option>`;
-
-        });
-
-    }
-
-  });
-
-  const okBtn =
-    document.createElement("button");
-
-  okBtn.textContent = "OK";
-
-  okBtn.addEventListener("click", () => {
-
-    const y =
-      Number(yearSelect.value);
-
-    const m =
-      Number(monthSelect.value);
-
-    if (!y || isNaN(m)) return;
-
-    currentYear = y;
-    currentMonth = m;
-
-    selector.style.display = "none";
-
-    monthWrapper.classList.remove(
-      "menu-open"
-    );
-
-    renderAll();
-
-  });
-
-  selector.appendChild(yearSelect);
-  selector.appendChild(monthSelect);
-  selector.appendChild(okBtn);
-
-  monthWrapper.appendChild(selector);
-
-  monthWrapper.addEventListener(
-    "click",
-    () => {
-
-      const isOpen =
-        selector.style.display === "flex";
-
-      selector.style.display =
-        isOpen ? "none" : "flex";
-
-      monthWrapper.classList.toggle(
-        "menu-open",
-        !isOpen
-      );
-
-    }
-  );
-
-}
-/* ============================================================
-   MOBILE CAROUSEL & SWIPE
-============================================================ */
-
-function generateDotsWindow(total, activeIndex) {
-
-  const dotsContainer =
-    document.getElementById("mobile-dots");
-
-  if (!dotsContainer) return;
-
-  dotsContainer.innerHTML = "";
-
-  const windowSize = 15;
-  const half = Math.floor(windowSize / 2);
-
-  let start =
-    Math.max(0, activeIndex - half);
-
-  let end =
-    Math.min(total - 1, activeIndex + half);
-
-  if (activeIndex < half) {
-    end = Math.min(total - 1, windowSize - 1);
-  }
-
-  if (activeIndex > total - half - 1) {
-    start = Math.max(0, total - windowSize);
-  }
-
-  for (let i = start; i <= end; i++) {
-
-    const dot =
-      document.createElement("div");
-
-    dot.className =
-      "mobile-dot" +
-      (i === activeIndex ? " active" : "");
-
-    dot.addEventListener("click", () => {
-      window.goTo(i);
-    });
-
-    dotsContainer.appendChild(dot);
-
-  }
-
-}
-
-function renderMobileCalendarCarousel() {
-
-  const carousel =
-    document.getElementById("mobile-calendar-carousel");
-
-  const dotsContainer =
-    document.getElementById("mobile-dots");
-
-  if (!carousel || !dotsContainer) return;
-
-  carousel.innerHTML = "";
-
-  const timelineEvents = events
-
-    .filter(ev =>
-
-      ev.dateObj >= todayDate &&
-
-      (
-        activeCategory === "all" ||
-        ev.categories.includes(activeCategory)
-      )
-
-    )
-
-    .sort((a, b) => a.dateObj - b.dateObj);
-
-  if (timelineEvents.length === 0) return;
-
-  const startIndex = 0;
-
-  timelineEvents.forEach(ev => {
-
-    const card = document.createElement("div");
-
-    card.className = "mobile-event-card";
-
-    card.innerHTML = `
-
-      ${ev.image ? `<img src="${ev.image}">` : ""}
-
-      <div class="mobile-event-date">
-        ${ev.dateReadable}
+  function renderErrorState(message) {
+    const safeMsg = escapeHTML(message);
+    const errorMarkup = `
+      <div class="error-state" role="alert">
+        <p>${safeMsg}</p>
+        <button type="button" class="retry-events-btn" data-action="retry-events">Riprova</button>
       </div>
-
-      <div class="mobile-event-title">
-        ${ev.title}
-      </div>
-
-      <div class="mobile-event-info">
-
-        ${
-          ev.time
-            ? `
-              <div class="mobile-event-time">
-                🕒 ${ev.time}
-              </div>
-            `
-            : ""
-        }
-
-        ${
-          ev.location
-            ? `
-              <div class="mobile-event-location">
-                📍 ${ev.location}
-              </div>
-            `
-            : ""
-        }
-
-      </div>
-
-      <div class="mobile-event-tags">
-
-        ${ev.categories
-          .map(c =>
-            `<span class="timeline-event-tag">${c}</span>`
-          )
-          .join("")}
-
-      </div>
-
     `;
 
-    card.addEventListener("click", () => {
-      openEventModal(ev);
+    if (dom.featuredContent) dom.featuredContent.innerHTML = errorMarkup;
+    if (dom.filters) dom.filters.innerHTML = "";
+    if (dom.monthContainer) {
+      dom.monthContainer.innerHTML = `<p class="empty-state">Calendario non disponibile al momento.</p>`;
+    }
+    if (dom.mobileCarousel) {
+      dom.mobileCarousel.innerHTML = `<p class="empty-state">Calendario non disponibile al momento.</p>`;
+    }
+    if (dom.mobileDots) dom.mobileDots.innerHTML = "";
+    if (dom.pastEvents) {
+      dom.pastEvents.innerHTML = `<p class="empty-state">Archivio non disponibile al momento.</p>`;
+    }
+
+    [dom.prevMonthBtn, dom.nextMonthBtn, dom.mobilePrevBtn, dom.mobileNextBtn].forEach((btn) => {
+      if (btn) btn.disabled = true;
     });
+  }
 
-    carousel.appendChild(card);
+  // --- 1. Prossimo Evento (#featured-event-content) ---
+  function renderFeaturedEvent(upcomingEvents) {
+    if (!dom.featuredContent) return;
 
-  });
-
-  generateDotsWindow(
-    timelineEvents.length,
-    startIndex
-  );
-
-  initMobileSwipe(
-    carousel,
-    dotsContainer,
-    startIndex
-  );
-
-}
-
-function initMobileSwipe(
-  carousel,
-  dotsContainer,
-  startIndex = 0
-) {
-
-  let index = startIndex;
-
-  const cards = [...carousel.children];
-  const total = cards.length;
-
-  window.goTo = function(
-    i,
-    instant = false
-  ) {
-
-    index =
-      Math.max(
-        0,
-        Math.min(i, total - 1)
-      );
-
-    const target = cards[index];
-
-    if (!target) return;
-
-    carousel.scrollTo({
-      left: target.offsetLeft,
-      behavior: instant ? "auto" : "smooth"
-    });
-
-    generateDotsWindow(total, index);
-
-  };
-
-  let startX = 0;
-  let startY = 0;
-  let lastX = 0;
-  let lastY = 0;
-  let isDragging = false;
-
-  carousel.addEventListener("pointerdown", e => {
-
-    if (e.pointerType === "mouse") return;
-
-    startX = e.clientX;
-    startY = e.clientY;
-
-    lastX = e.clientX;
-    lastY = e.clientY;
-
-    isDragging = true;
-
-  });
-
-  carousel.addEventListener("pointermove", e => {
-
-    if (!isDragging) return;
-
-    lastX = e.clientX;
-    lastY = e.clientY;
-
-  });
-
-  const endDrag = () => {
-
-    if (!isDragging) return;
-
-    isDragging = false;
-
-    const dx = lastX - startX;
-    const dy = lastY - startY;
-
-    if (
-      Math.abs(dx) <= Math.abs(dy) * 1.2 ||
-      Math.abs(dx) < 40
-    ) {
+    const nextEvent = upcomingEvents[0];
+    if (!nextEvent) {
+      dom.featuredContent.innerHTML = `<p class="empty-state">Nessun prossimo evento in programma al momento.</p>`;
       return;
     }
 
-    dx < 0
-      ? window.goTo(index + 1)
-      : window.goTo(index - 1);
-
-  };
-
-  carousel.addEventListener(
-    "pointerup",
-    endDrag
-  );
-
-  carousel.addEventListener(
-    "pointercancel",
-    endDrag
-  );
-
-  const prev =
-    document.getElementById("mobile-prev");
-
-  const next =
-    document.getElementById("mobile-next");
-
-  if (prev) {
-    prev.onclick = () => window.goTo(index - 1);
+    dom.featuredContent.innerHTML = `
+      <article class="featured-event-card" data-event-id="${escapeHTML(nextEvent.id)}">
+        ${nextEvent.image ? `<img class="featured-event-image" src="${escapeHTML(nextEvent.image)}" alt="${escapeHTML(nextEvent.title)}" loading="lazy">` : ""}
+        <div class="featured-event-body">
+          <span class="event-category">${escapeHTML(nextEvent.category)}</span>
+          <time class="event-date" datetime="${escapeHTML(nextEvent.date)}">
+            ${escapeHTML(formatDateIT(nextEvent.date))}${nextEvent.time ? ` · ${escapeHTML(nextEvent.time)}` : ""}
+          </time>
+          <h3 class="event-title">${escapeHTML(nextEvent.title)}</h3>
+          ${nextEvent.location ? `<p class="event-location">${escapeHTML(nextEvent.location)}</p>` : ""}
+          ${nextEvent.description ? `<p class="event-description">${escapeHTML(nextEvent.description)}</p>` : ""}
+          ${nextEvent.url ? `<a class="event-link" href="${escapeHTML(nextEvent.url)}">Dettagli</a>` : ""}
+        </div>
+      </article>
+    `;
   }
 
-  if (next) {
-    next.onclick = () => window.goTo(index + 1);
+  // --- 2. Filtri (#calendar-filters) ---
+  function getFilteredUpcoming(upcomingEvents) {
+    if (state.selectedCategory === "Tutti") return upcomingEvents;
+    return upcomingEvents.filter((evt) => evt.category === state.selectedCategory);
   }
 
-  window.goTo(startIndex, true);
+  function renderFilters(upcomingEvents) {
+    if (!dom.filters) return;
 
-}
-/* ============================================================
-   FILTRI E ARCHIVIO
-============================================================ */
+    const categories = ["Tutti", ...new Set(upcomingEvents.map((e) => e.category).filter(Boolean))];
+    if (!categories.includes(state.selectedCategory)) {
+      state.selectedCategory = "Tutti";
+    }
 
-function initFilters() {
+    dom.filters.innerHTML = categories
+      .map((cat) => {
+        const isActive = cat === state.selectedCategory;
+        return `
+          <button
+            type="button"
+            class="filter-btn ${isActive ? "is-active" : ""}"
+            data-category="${escapeHTML(cat)}"
+            aria-pressed="${isActive}"
+          >
+            ${escapeHTML(cat)}
+          </button>
+        `;
+      })
+      .join("");
+  }
 
-  const container =
-    document.getElementById("calendar-filters");
+  // --- Raggruppamento per mese ---
+  function groupEventsByMonth(events) {
+    const map = new Map();
 
-  if (!container || events.length === 0) return;
-
-  const allCats = new Set();
-
-  events.forEach(ev => {
-    ev.categories.forEach(c => {
-      allCats.add(c);
-    });
-  });
-
-  container.innerHTML = `
-    <button data-cat="all" class="active">
-      Tutti
-    </button>
-
-    ${[...allCats]
-      .map(c => `
-        <button data-cat="${c}">
-          ${c}
-        </button>
-      `)
-      .join("")}
-  `;
-
-  container
-    .querySelectorAll("button")
-    .forEach(btn => {
-
-      btn.addEventListener("click", () => {
-
-        container
-          .querySelectorAll("button")
-          .forEach(b =>
-            b.classList.remove("active")
-          );
-
-        btn.classList.add("active");
-
-        activeCategory =
-          btn.dataset.cat;
-
-        renderAll();
-
-      });
-
+    events.forEach((evt) => {
+      const key = getMonthKey(evt._dateObj);
+      if (!map.has(key)) {
+        map.set(key, {
+          key,
+          monthDate: new Date(evt._dateObj.getFullYear(), evt._dateObj.getMonth(), 1),
+          events: []
+        });
+      }
+      map.get(key).events.push(evt);
     });
 
-}
+    return Array.from(map.values());
+  }
 
-/* ============================================================
-   CONTROLLI
-============================================================ */
+  function renderEventItemHTML(evt) {
+    return `
+      <article class="calendar-event-item" data-event-id="${escapeHTML(evt.id)}">
+        <div class="calendar-event-meta">
+          <time datetime="${escapeHTML(evt.date)}">${escapeHTML(formatDateIT(evt.date))}</time>
+          ${evt.time ? `<span>${escapeHTML(evt.time)}</span>` : ""}
+          <span class="event-category">${escapeHTML(evt.category)}</span>
+        </div>
+        <h4 class="event-title">${escapeHTML(evt.title)}</h4>
+        ${evt.location ? `<p class="event-location">${escapeHTML(evt.location)}</p>` : ""}
+        ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
+      </article>
+    `;
+  }
 
-function initControls() {
-  /* non più necessari */
-}
+  // --- 3. Calendario Desktop (#future-month-container, #prev-month, #next-month) ---
+  function renderDesktopCalendar(monthGroups) {
+    if (!dom.monthContainer) return;
 
-/* ============================================================
-   ARCHIVIO EVENTI
-============================================================ */
+    if (!monthGroups.length) {
+      dom.monthContainer.innerHTML = `<p class="empty-state">Nessun evento futuro per il filtro selezionato.</p>`;
+      if (dom.prevMonthBtn) dom.prevMonthBtn.disabled = true;
+      if (dom.nextMonthBtn) dom.nextMonthBtn.disabled = true;
+      return;
+    }
 
-function renderPastEvents() {
+    state.activeMonthIndex = Math.max(0, Math.min(state.activeMonthIndex, monthGroups.length - 1));
+    const currentGroup = monthGroups[state.activeMonthIndex];
 
-  const container =
-    document.getElementById("past-events");
+    dom.monthContainer.innerHTML = `
+      <div class="month-block" data-month="${escapeHTML(currentGroup.key)}">
+        <h3 class="month-title">${escapeHTML(formatMonthYearIT(currentGroup.monthDate))}</h3>
+        <div class="month-events-list">
+          ${currentGroup.events.map(renderEventItemHTML).join("")}
+        </div>
+      </div>
+    `;
 
-  if (!container) return;
+    if (dom.prevMonthBtn) dom.prevMonthBtn.disabled = state.activeMonthIndex === 0;
+    if (dom.nextMonthBtn) dom.nextMonthBtn.disabled = state.activeMonthIndex === monthGroups.length - 1;
+  }
 
-  container.innerHTML = "";
+  // --- 4. Carosello Mobile (#mobile-calendar-carousel, #mobile-dots, #mobile-prev, #mobile-next) ---
+  function renderMobileCarousel(monthGroups) {
+    if (!dom.mobileCarousel) return;
 
-  events
+    if (!monthGroups.length) {
+      dom.mobileCarousel.innerHTML = `<p class="empty-state">Nessun evento futuro disponibile.</p>`;
+      if (dom.mobileDots) dom.mobileDots.innerHTML = "";
+      if (dom.mobilePrevBtn) dom.mobilePrevBtn.disabled = true;
+      if (dom.mobileNextBtn) dom.mobileNextBtn.disabled = true;
+      return;
+    }
 
-    .filter(ev =>
+    state.mobileSlideIndex = Math.max(0, Math.min(state.mobileSlideIndex, monthGroups.length - 1));
+    const activeSlide = monthGroups[state.mobileSlideIndex];
 
-      ev.dateObj < todayDate &&
+    dom.mobileCarousel.innerHTML = `
+      <div class="mobile-slide" data-month="${escapeHTML(activeSlide.key)}">
+        <h3 class="month-title">${escapeHTML(formatMonthYearIT(activeSlide.monthDate))}</h3>
+        <div class="month-events-list">
+          ${activeSlide.events.map(renderEventItemHTML).join("")}
+        </div>
+      </div>
+    `;
 
-      (
-        activeCategory === "all" ||
-        ev.categories.includes(activeCategory)
+    if (dom.mobileDots) {
+      dom.mobileDots.innerHTML = monthGroups
+        .map((group, idx) => {
+          const active = idx === state.mobileSlideIndex;
+          return `
+            <button
+              type="button"
+              class="mobile-dot ${active ? "is-active" : ""}"
+              data-slide-index="${idx}"
+              aria-label="Vai a ${escapeHTML(formatMonthYearIT(group.monthDate))}"
+              aria-current="${active ? "true" : "false"}"
+            ></button>
+          `;
+        })
+        .join("");
+    }
+
+    if (dom.mobilePrevBtn) dom.mobilePrevBtn.disabled = state.mobileSlideIndex === 0;
+    if (dom.mobileNextBtn) dom.mobileNextBtn.disabled = state.mobileSlideIndex === monthGroups.length - 1;
+  }
+
+  // --- 5. Archivio Eventi (#past-events) ---
+  function renderArchive(pastEvents) {
+    if (!dom.pastEvents) return;
+
+    if (!pastEvents.length) {
+      dom.pastEvents.innerHTML = `<p class="empty-state">Nessun evento nell'archivio.</p>`;
+      return;
+    }
+
+    dom.pastEvents.innerHTML = pastEvents
+      .map(
+        (evt) => `
+        <article class="archive-event-card" data-event-id="${escapeHTML(evt.id)}">
+          <div class="archive-event-meta">
+            <time datetime="${escapeHTML(evt.date)}">${escapeHTML(formatDateIT(evt.date))}</time>
+            <span class="event-category">${escapeHTML(evt.category)}</span>
+          </div>
+          <h3 class="event-title">${escapeHTML(evt.title)}</h3>
+          ${evt.location ? `<p class="event-location">${escapeHTML(evt.location)}</p>` : ""}
+          ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
+        </article>
+      `
       )
+      .join("");
+  }
 
-    )
+  // --- Eventi UI e Rendering principale ---
+  function getCurrentGroups() {
+    const { upcoming } = splitEvents(state.events);
+    return groupEventsByMonth(getFilteredUpcoming(upcoming));
+  }
 
-    .sort((a, b) =>
-      b.dateObj - a.dateObj
-    )
+  function refreshCalendarViews(upcoming) {
+    renderFilters(upcoming);
+    const groups = groupEventsByMonth(getFilteredUpcoming(upcoming));
+    renderDesktopCalendar(groups);
+    renderMobileCarousel(groups);
+  }
 
-    .forEach(ev => {
+  function renderAll(eventsData) {
+    const { upcoming, past } = splitEvents(eventsData);
+    renderFeaturedEvent(upcoming);
+    refreshCalendarViews(upcoming);
+    renderArchive(past);
+  }
 
-      const el =
-        document.createElement("div");
+  function bindEventsOnce() {
+    if (state.listenersBound) return;
+    state.listenersBound = true;
 
-      el.className = "timeline-event";
-
-      el.dataset.date =
-        ev.dateStr;
-
-      el.innerHTML = `
-
-        <div class="timeline-event-date">
-          ${ev.dateReadable}
-        </div>
-
-        <div class="timeline-event-title">
-          ${ev.title}
-        </div>
-
-        <div class="timeline-event-tags">
-
-          ${ev.categories
-            .map(c =>
-              `<span class="timeline-event-tag">${c}</span>`
-            )
-            .join("")}
-
-        </div>
-
-        ${
-          ev.image
-            ? `
-              <img
-                src="${ev.image}"
-                class="timeline-event-img">
-            `
-            : ""
-        }
-
-      `;
-
-      el.addEventListener("click", () => {
-        openEventModal(ev);
-      });
-
-      container.appendChild(el);
-
+    // Delegazione per pulsante "Riprova" in caso di errore di rete/JSON
+    document.addEventListener("click", (e) => {
+      const retryBtn = e.target.closest('[data-action="retry-events"]');
+      if (retryBtn) {
+        loadAndRenderEvents();
+      }
     });
 
-}
-
-/* ============================================================
-   LINK CALENDARIO → ARCHIVIO
-============================================================ */
-
-function linkCalendarToTimeline() {
-
-  document
-    .querySelectorAll(".calendar-day.has-event")
-    .forEach(day => {
-
-      day.addEventListener("click", () => {
-
-        const target =
-          document.querySelector(
-            `.timeline-event[data-date="${day.dataset.date}"]`
-          );
-
-        if (target) {
-
-          target.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-
-        }
-
+    if (dom.filters) {
+      dom.filters.addEventListener("click", (e) => {
+        const btn = e.target.closest(".filter-btn[data-category]");
+        if (!btn) return;
+        state.selectedCategory = btn.dataset.category;
+        state.activeMonthIndex = 0;
+        state.mobileSlideIndex = 0;
+        const { upcoming } = splitEvents(state.events);
+        refreshCalendarViews(upcoming);
       });
+    }
 
-    });
+    if (dom.prevMonthBtn) {
+      dom.prevMonthBtn.addEventListener("click", () => {
+        if (state.activeMonthIndex > 0) {
+          state.activeMonthIndex -= 1;
+          renderDesktopCalendar(getCurrentGroups());
+        }
+      });
+    }
 
-}
-/* ============================================================
-   PROSSIMO EVENTO (HOME + EVENTI.HTML)
-============================================================ */
+    if (dom.nextMonthBtn) {
+      dom.nextMonthBtn.addEventListener("click", () => {
+        const groups = getCurrentGroups();
+        if (state.activeMonthIndex < groups.length - 1) {
+          state.activeMonthIndex += 1;
+          renderDesktopCalendar(groups);
+        }
+      });
+    }
 
-function renderFeaturedEvent() {
+    if (dom.mobilePrevBtn) {
+      dom.mobilePrevBtn.addEventListener("click", () => {
+        if (state.mobileSlideIndex > 0) {
+          state.mobileSlideIndex -= 1;
+          renderMobileCarousel(getCurrentGroups());
+        }
+      });
+    }
 
-  const container =
-    document.getElementById("featured-event-home") ||
-    document.getElementById("featured-event-content");
+    if (dom.mobileNextBtn) {
+      dom.mobileNextBtn.addEventListener("click", () => {
+        const groups = getCurrentGroups();
+        if (state.mobileSlideIndex < groups.length - 1) {
+          state.mobileSlideIndex += 1;
+          renderMobileCarousel(groups);
+        }
+      });
+    }
 
-  if (!container) return;
-
-  let availableEvents = events
-    .filter(ev =>
-      activeCategory === "all" ||
-      ev.categories.includes(activeCategory)
-    )
-    .sort((a, b) => a.dateObj - b.dateObj);
-
-  if (!availableEvents.length) {
-
-    container.innerHTML = `
-      <div class="featured-event-empty">
-        Nessun evento in programma.
-      </div>
-    `;
-
-    return;
+    if (dom.mobileDots) {
+      dom.mobileDots.addEventListener("click", (e) => {
+        const dot = e.target.closest(".mobile-dot[data-slide-index]");
+        if (!dot) return;
+        state.mobileSlideIndex = Number(dot.dataset.slideIndex);
+        renderMobileCarousel(getCurrentGroups());
+      });
+    }
   }
 
-  let ev =
-    availableEvents.find(
-      e => e.dateObj >= todayDate
-    ) || availableEvents[0];
+  async function loadAndRenderEvents() {
+    if (state.isLoading) return;
+    state.isLoading = true;
+    state.error = null;
+    renderLoadingState();
 
-  const isHome =
-    !!document.getElementById("featured-event-home");
-
-  const ticketButton = ev.ticketUrl
-    ? `
-      <a
-        href="${ev.ticketUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="event-primary-btn">
-
-        Prenota / Acquista
-
-      </a>
-    `
-    : `
-      <span class="event-free-entry">
-        ${ev.freeEntry === false
-          ? "Biglietti presto disponibili"
-          : "Ingresso gratuito"}
-      </span>
-    `;
-
-  const locationMarkup = ev.venueUrl
-    ? `
-      <a
-        href="${ev.venueUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="event-location">
-
-        📍 ${ev.location}
-
-      </a>
-    `
-    : `
-      <span class="event-location">
-        📍 ${ev.location}
-      </span>
-    `;
-
-  container.innerHTML = `
-
-    <div class="featured-event-wrapper">
-
-      <div class="featured-event-image">
-
-        ${
-          ev.image
-            ? `
-              <img
-                src="${ev.image}"
-                alt="${ev.title}">
-            `
-            : ""
-        }
-
-      </div>
-
-      <div class="featured-event-content">
-
-        <span class="event-label">
-          PROSSIMO EVENTO
-        </span>
-
-        <h2 class="event-title">
-          ${ev.title}
-        </h2>
-
-        <div class="event-meta">
-
-          <p>
-            📅 ${ev.dateReadable}
-          </p>
-
-          ${
-            ev.time
-              ? `
-                <p>
-                  🕒 ${ev.time}
-                </p>
-              `
-              : ""
-          }
-
-          <p>
-            ${locationMarkup}
-          </p>
-
-        </div>
-
-        ${
-          ev.description
-            ? `
-              <p class="event-description">
-                ${ev.description}
-              </p>
-            `
-            : ""
-        }
-
-        <div class="event-actions">
-
-          ${ticketButton}
-
-        </div>
-
-        ${
-          isHome
-            ? `
-              <a
-                href="eventi.html"
-                class="all-events-link">
-
-                Tutti gli eventi →
-
-              </a>
-            `
-            : ""
-        }
-
-      </div>
-
-    </div>
-
-  `;
-}
-/* ============================================================
-   MODALE EVENTO + BODY LOCK
-============================================================ */
-
-function lockBodyForModal() {
-
-  if (
-    !(
-      isMobile() &&
-      window.innerHeight > window.innerWidth
-    )
-  ) {
-    return;
+    try {
+      const rawPayload = await fetchEvents(CONFIG.sourceUrl, CONFIG.timeoutMs);
+      state.events = normalizeEventsPayload(rawPayload);
+      renderAll(state.events);
+    } catch (err) {
+      state.error = err.message || "Errore imprevisto durante il caricamento degli eventi.";
+      renderErrorState(state.error);
+    } finally {
+      state.isLoading = false;
+    }
   }
 
-  const scrollY = window.scrollY;
-
-  document.body.dataset.scrollY = scrollY;
-
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollY}px`;
-  document.body.style.width = "100%";
-
-}
-
-function unlockBodyFromModal() {
-
-  if (
-    document.body.style.position !== "fixed"
-  ) {
-    return;
+  function init() {
+    bindEventsOnce();
+    loadAndRenderEvents();
   }
 
-  const scrollY = parseInt(
-    document.body.dataset.scrollY || "0",
-    10
-  );
-
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.width = "";
-
-  window.scrollTo(0, scrollY);
-
-}
-
-function openEventModal(ev) {
-
-  const modal =
-    document.getElementById("event-modal");
-
-  const modalBody =
-    document.getElementById("event-modal-body");
-
-  if (!modal || !modalBody) return;
-
-  const locationMarkup = ev.venueUrl
-
-    ? `
-      <a
-        href="${ev.venueUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="event-location-link">
-
-        📍 ${ev.location}
-
-      </a>
-    `
-
-    : `
-      <span class="event-location-link">
-        📍 ${ev.location || ""}
-      </span>
-    `;
-
-  const ticketMarkup = ev.ticketUrl
-
-    ? `
-      <a
-        href="${ev.ticketUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="event-primary-btn">
-
-        Prenota / Acquista
-
-      </a>
-    `
-
-    : `
-      <span class="event-free-entry">
-
-        ${ev.freeEntry === false
-          ? "Biglietti presto disponibili"
-          : "Ingresso gratuito"}
-
-      </span>
-    `;
-
-  modalBody.innerHTML = `
-
-    <div class="modal-two-columns">
-
-      <div class="modal-left">
-
-        ${
-          ev.image
-            ? `
-              <img
-                src="${ev.image}"
-                class="modal-img"
-                alt="${ev.title}">
-            `
-            : ""
-        }
-
-      </div>
-
-      <div class="modal-right">
-
-        <div class="event-modal-date">
-          ${ev.dateReadable}
-        </div>
-
-        ${
-          ev.time
-            ? `
-              <div class="event-modal-time">
-                🕒 ${ev.time}
-              </div>
-            `
-            : ""
-        }
-
-        <div class="event-modal-categories">
-
-          ${ev.categories
-            .map(c =>
-              `<span class="event-tag">${c}</span>`
-            )
-            .join("")}
-
-        </div>
-
-        <h2>
-          ${ev.title}
-        </h2>
-
-        ${
-          ev.description
-            ? `
-              <p class="event-modal-description">
-                ${ev.description}
-              </p>
-            `
-            : ""
-        }
-
-        ${
-          ev.location
-            ? `
-              <div class="event-modal-location">
-                ${locationMarkup}
-              </div>
-            `
-            : ""
-        }
-
-        <div class="event-modal-actions">
-
-          ${ticketMarkup}
-
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
-
-  modal.style.display = "flex";
-
-  lockBodyForModal();
-
-}
-
-const modalCloseBtn =
-  document.querySelector(".event-modal-close");
-
-if (modalCloseBtn) {
-
-  modalCloseBtn.addEventListener("click", () => {
-
-    document.getElementById(
-      "event-modal"
-    ).style.display = "none";
-
-    unlockBodyFromModal();
-
-  });
-
-}
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
