@@ -21,16 +21,11 @@
 
 <section id="home" class="home-collage">
 
-  <!-- INTRO EDITORIALE -->
+  <!-- INTRO EDITORIALE (PUNTO DI FUOCO) -->
   <div class="home-intro">
+    <span class="home-kicker">EVENTI · ARTE · QUEERNESS</span>
 
-    <span class="home-kicker">
-      EVENTI · ARTE · QUEERNESS
-    </span>
-
-    <h1>
-      QUEER MARKET SHOW
-    </h1>
+    <h1>QUEER MARKET SHOW</h1>
 
     <p class="home-description">
       Arte, comunità e disobbedienza creativa.
@@ -38,109 +33,69 @@
     </p>
 
     <div class="home-cta">
-      <a href="#calendario" class="cta-primary">
-        Prossimo Evento
-      </a>
-
-      <a href="#manifesto" class="cta-secondary">
-        Scopri il Progetto
-      </a>
+      <a href="#calendario" class="cta-primary">Prossimo Evento</a>
+      <a href="#manifesto" class="cta-secondary">Scopri il Progetto</a>
     </div>
-
   </div>
 
-  <!-- ARTISTə -->
-  <a href="#artiste"
-     class="poster poster-XXL p-xxl poster-artist3 tilt-left p-artist3"
-     data-section="Artistə">
-
-    <img
-      src="images/collage.jpg"
-      alt="Artistə e progettualità queer">
-
+  <!-- POSTER SECONDARI (CORNICE PUNK) -->
+  <a href="#calendario" class="poster poster-XS poster-eventi" aria-label="Vai agli eventi">
+    <img src="images/MANI nere QMS.png" alt="Prossimi eventi Queer Market Show">
+    <span class="sticker">EVENTI</span>
   </a>
 
-  <!-- SOSTIENICI -->
-  <a href="#sostienici"
-     class="poster poster-L poster-sostienici tilt-left p-sostienici"
-     data-section="Sostienici">
-
-    <img
-      src="images/soldi.png"
-      alt="Sostieni Queer Market Show">
-
+  <a href="#manifesto" class="poster poster-XL poster-manifesto" aria-label="Leggi il manifesto">
+    <img src="images/manifesto.png" alt="Manifesto Queer Market Show">
+    <span class="sticker">MANIFESTO</span>
   </a>
 
-  <!-- MANIFESTO -->
-  <a href="#manifesto"
-     class="poster poster-XL poster-manifesto tilt-right p-manifesto"
-     data-section="Manifesto">
-
-    <img
-      src="images/manifesto.png"
-      alt="Manifesto Queer Market Show">
-
-  </a>
-
-  <!-- GALLERIA -->
-  <a href="#gallery"
-     class="poster poster-S poster-galleria tilt-right p-galleria"
-     data-section="Galleria">
-
-    <img
-      src="images/homegallery.jpeg"
-      alt="Galleria fotografica">
-
-  </a>
-
-  <!-- EVENTI -->
-  <a href="#calendario"
-     class="poster poster-XS poster-eventi tilt-left p-eventi"
-     data-section="Eventi">
-
-    <img
-      src="images/MANI nere QMS.png"
-      alt="Prossimi eventi">
-
+  <a href="#artiste" class="poster poster-XXL poster-artist3" aria-label="Scopri le artiste e gli artisti">
+    <img src="images/collage.jpg" alt="Artistə e progettualità queer">
   </a>
 
 </section>
 
 <!-- NAVBAR -->
-<nav class="navbar">
-  <div class="logo">Queer Market Show</div>
+<header class="navbar-wrap">
+  <nav class="navbar" aria-label="Navigazione principale">
+    <a href="#home" class="logo">Queer Market Show</a>
 
-  <!-- HAMBURGER MOBILE -->
-  <button class="menu-toggle" aria-label="Apri menu" aria-expanded="false">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-  </button>
+    <!-- MENU DESKTOP -->
+    <ul class="menu-desktop">
+      <li><a href="#manifesto">Manifesto</a></li>
+      <li><a href="#calendario">Eventi</a></li>
+      <li><a href="#artistə">Artistə</a></li>
+      <li><a href="#partnership">Collab</a></li>
+      <li><a href="#gallery">Galleria</a></li>
+      <li><a href="#contatti">Contatti</a></li>
+      <li><a href="#sostienici" class="nav-cta">Sostienici</a></li>
+    </ul>
 
-  <!-- MENU DESKTOP -->
-  <div class="menu-desktop">
-    <a href="#home">Home</a>
+    <!-- HAMBURGER MOBILE -->
+    <button
+      type="button"
+      class="menu-toggle"
+      aria-label="Apri menu"
+      aria-controls="menu-mobile"
+      aria-expanded="false"
+    >
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </nav>
+
+  <!-- MENU MOBILE -->
+  <div id="menu-mobile" class="menu-mobile" aria-hidden="true">
     <a href="#manifesto">Manifesto</a>
     <a href="#calendario">Eventi</a>
     <a href="#artistə">Artistə</a>
-    <a href="#partnership">Collab e Altro</a>
+    <a href="#partnership">Collab</a>
     <a href="#gallery">Galleria</a>
     <a href="#contatti">Contatti</a>
-    <a href="#sostienici">Sostienici</a>
+    <a href="#sostienici" class="nav-cta">Sostienici</a>
   </div>
-</nav>
-
-<!-- MENU MOBILE -->
-<div class="menu-mobile">
-  <a href="#home">Home</a>
-  <a href="#manifesto">Manifesto</a>
-  <a href="#calendario">Eventi</a>
-  <a href="#artistə">Artistə</a>
-  <a href="#partnership">Collab e Altro</a>
-  <a href="#gallery">Galleria</a>
-  <a href="#contatti">Contatti</a>
-  <a href="#sostienici">Sostienici</a>
-</div>
+</header>
 
 <section id="manifesto" class="manifesto-section scroll-section">
 
@@ -151,40 +106,35 @@
     </h2>
 
     <p class="manifesto-lead">
-      <strong>
-        Non siamo qui per decorare. Siamo qui per disturbare.
-      </strong>
+      Non siamo qui per decorare. Siamo qui per disturbare.
     </p>
 
     <div class="manifesto-body manifesto-brief">
 
       <p>
         <strong>Queer Market Show APS</strong> è un'associazione culturale
-        queer indipendente che crea eventi, performance, workshop,
-        mercati artistici e spazi di incontro nel Salento.
+        queer indipendente che organizza eventi, performance, workshop,
+        mercati artistici e spazi d'incontro nel Salento.
       </p>
 
       <p>
-        Lavoriamo per costruire luoghi in cui differenze, identità,
-        desideri e pratiche culturali possano incontrarsi senza dover
-        chiedere il permesso di esistere.
+        Costruiamo luoghi in cui differenze, identità, desideri e pratiche
+        culturali possano incontrarsi senza dover chiedere il permesso di esistere.
       </p>
 
       <p>
-        Per noi il queer non è una decorazione né un'etichetta.
-        È un modo di attraversare il mondo, mettere in discussione ciò
-        che sembra inevitabile e aprire possibilità dove prima c'erano confini.
+        Per noi il queer non è un'etichetta né un ornamento: è un modo di
+        attraversare il mondo, mettere in discussione ciò che sembra
+        inevitabile e aprire varchi dove prima c'erano confini.
       </p>
 
       <p>
-        Per questo organizziamo esperienze che mescolano arte,
-        comunità, performance, attivismo, sperimentazione e cura reciproca.
+        Mettiamo insieme arte, comunità, performance, attivismo,
+        sperimentazione e cura reciproca.
       </p>
 
-      <p>
-        <strong>
-          Siamo qui per disturbare. E per farlo insieme.
-        </strong>
+      <p class="manifesto-closing">
+        <strong>Siamo qui per disturbare. E per farlo insieme.</strong>
       </p>
 
     </div>
@@ -198,7 +148,7 @@
 
 </section>
 
-<section id="calendario" class="featured-event-home">
+<section id="calendario" class="featured-event-home scroll-section">
 
   <div class="section-header">
 
@@ -207,16 +157,17 @@
     </h2>
 
     <p>
-      Il prossimo appuntamento della comunità Queer Market Show.
+      Il prossimo appuntamento da segnare: corpi, suoni, spazi e incontri.
     </p>
 
   </div>
 
-  <div id="featured-event-home">
+  <div id="next-event-slot" class="featured-event-slot" aria-live="polite">
 
     <!--
       Riempito automaticamente da events.js
-      utilizzando il primo evento futuro del JSON
+      utilizzando il primo evento futuro del JSON.
+      Prevedi un fallback chiaro se non ci sono eventi futuri in programma.
     -->
 
   </div>
@@ -224,7 +175,7 @@
   <div class="featured-event-footer">
 
     <a href="eventi.html" class="sticker-button manifesto-button">
-      Tutti gli eventi →
+      Tutti gli eventi e archivio →
     </a>
 
   </div>
@@ -232,9 +183,18 @@
 </section>
 
 <section id="artistə" class="scroll-section home-artists-section">
-  <h2>Artistə Residenti</h2>
 
-  <div id="artists-resident" class="artist-gallery" data-home-only="resident"></div>
+  <div class="section-header">
+    <h2>Artistə Residenti</h2>
+    <p>
+      Corpi, suoni, visioni e pratiche che tengono acceso il cuore del progetto.
+    </p>
+  </div>
+
+  <div id="artists-resident"
+       class="artist-gallery"
+       data-home-only="resident"
+       aria-label="Galleria artistə residenti"></div>
 
   <div class="artists-page-cta">
     <a href="artist3.html" class="sticker-button manifesto-button">
@@ -242,69 +202,85 @@
     </a>
   </div>
 
-  <!-- Qui il JS inserirà automaticamente tutte le modali -->
+  <!-- Contenitore per le modali generate dinamicamente dal JS -->
   <div id="artist-modals"></div>
+
 </section>
 
-<!-- COLLAB & ALTRO -->
+<!-- COLLAB -->
 <section id="partnership" class="scroll-section">
-  <h2>Collab & Altro</h2>
-  <p>Progetti, alleanze, contaminazioni e presenze che ampliano il nostro ecosistema queer.</p>
+  <div class="section-header">
+    <h2>Collab</h2>
+    <p>Progetti, alleanze, contaminazioni e presenze che ampliano il nostro ecosistema queer.</p>
+  </div>
 
   <div class="collab-grid">
 
     <!-- Uomo di Vetro -->
-    <a href="https://www.youtube.com/watch?v=MCub2R6jOZE" 
-       target="_blank" 
+    <a href="https://www.youtube.com/watch?v=MCub2R6jOZE"
+       target="_blank"
+       rel="noopener noreferrer"
        class="collab-card">
-      <img src="https://img.youtube.com/vi/MCub2R6jOZE/0.jpg" alt="Uomo di Vetro">
-      <div class="artista-info">
+      <img src="https://img.youtube.com/vi/MCub2R6jOZE/0.jpg"
+           alt="Uomo di Vetro — Video e performance">
+      <div class="collab-meta">
         <h3>Uomo di Vetro</h3>
-        <p>Video / Performance</p>
+        <span>Video / Performance</span>
       </div>
     </a>
 
     <!-- Officine M.A.I. + -->
-    <a href="https://www.instagram.com/officinemaipiu/" 
-       target="_blank" 
+    <a href="https://www.instagram.com/officinemaipiu/"
+       target="_blank"
+       rel="noopener noreferrer"
        class="collab-card">
-      <img class="ig-thumb" src="images/collab/omlogo.jpg" alt="Officine M.A.I. +">
-      <div class="artista-info">
+      <img class="ig-thumb"
+           src="images/collab/omlogo.jpg"
+           alt="Officine M.A.I. + — Spazio e collettivo">
+      <div class="collab-meta">
         <h3>Officine M.A.I. +</h3>
-        <p>Spazio / Collettivo</p>
+        <span>Spazio / Collettivo</span>
       </div>
     </a>
 
     <!-- Delusional -->
-    <a href="https://www.youtube.com/watch?v=2b7_i6LF-80&list=RD2b7_i6LF-80&start_radio=1" 
-       target="_blank" 
+    <a href="https://www.youtube.com/watch?v=2b7_i6LF-80&list=RD2b7_i6LF-80&start_radio=1"
+       target="_blank"
+       rel="noopener noreferrer"
        class="collab-card">
-      <img src="https://img.youtube.com/vi/2b7_i6LF-80/0.jpg" alt="DELUSIONAL - POCELAIN DANCER RMX">
-      <div class="artista-info">
-        <h3>DELUSIONAL - POCELAIN DANCER RMX</h3>
-        <p>Video / Performance</p>
+      <img src="https://img.youtube.com/vi/2b7_i6LF-80/0.jpg"
+           alt="DELUSIONAL - PORCELAIN DANCER RMX — Video e performance">
+      <div class="collab-meta">
+        <h3>DELUSIONAL - PORCELAIN DANCER RMX</h3>
+        <span>Video / Performance</span>
       </div>
     </a>
 
     <!-- INDECOROSA -->
-    <a href="https://www.instagram.com/indecorosazine/" 
-       target="_blank" 
+    <a href="https://www.instagram.com/indecorosazine/"
+       target="_blank"
+       rel="noopener noreferrer"
        class="collab-card">
-      <img class="ig-thumb" src="images/collab/indecorosa.jpg" alt="INDECOROSA">
-      <div class="artista-info">
+      <img class="ig-thumb"
+           src="images/collab/indecorosa.jpg"
+           alt="INDECOROSA — Zine e progetto">
+      <div class="collab-meta">
         <h3>INDECOROSA</h3>
-        <p>Zine / Progetto</p>
+        <span>Zine / Progetto</span>
       </div>
     </a>
 
     <!-- FUORIBINARIA -->
-    <a href="https://www.instagram.com/fuoribinaria/" 
-       target="_blank" 
+    <a href="https://www.instagram.com/fuoribinaria/"
+       target="_blank"
+       rel="noopener noreferrer"
        class="collab-card">
-      <img class="ig-thumb" src="images/collab/fuoribinaria.jpg" alt="FUORIBINARIA">
-      <div class="artista-info">
+      <img class="ig-thumb"
+           src="images/collab/fuoribinaria.jpg"
+           alt="FUORIBINARIA — Spazio e collettivo">
+      <div class="collab-meta">
         <h3>FUORIBINARIA</h3>
-        <p>Spazio / Collettivo</p>
+        <span>Spazio / Collettivo</span>
       </div>
     </a>
 
@@ -312,32 +288,34 @@
 </section>
 
 
-<section id="gallery" class="qms-gallery-narrativa chaos">
+<section id="gallery" class="qms-gallery-narrativa chaos scroll-section" aria-label="Galleria fotografica">
 
   <div class="qms-gallery-grid">
-    <div class="qms-gallery-images"></div>
+    <div class="qms-gallery-images" aria-live="polite"></div>
 
-    <!-- Le etichette le scrivi tu -->
     <div class="qms-gallery-labels">
       <div class="label">energia collettiva</div>
       <div class="label">costruire insieme</div>
       <div class="label">La cura ci unisce</div>
       <div class="label">Corpi che resistono</div>
     </div>
+
+    <a href="archivio.html" class="qms-gallery-archive-link chaos-button">
+      ✦ Mostra tutto ✦
+    </a>
   </div>
 
-  <a href="/archivio.html" class="qms-gallery-archive-link chaos-button">✦ Mostra tutto ✦</a>
 </section>
 
 
 <!-- Modale Galleria -->
-<div id="galleryModal" class="modal hidden">
+<div id="galleryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalAlbumTitle">
   <div class="modal-content">
-    <button class="close">&times;</button>
+    <button type="button" class="close" aria-label="Chiudi galleria">&times;</button>
 
     <!-- Caption album + fotografi -->
     <div class="modal-caption">
-      <h3 class="modal-album-title"></h3>
+      <h3 id="modalAlbumTitle" class="modal-album-title"></h3>
       <p class="modal-photographer"></p>
     </div>
 
@@ -345,28 +323,28 @@
     <div class="modal-grid"></div>
 
     <!-- Carosello interno -->
-    <div class="carousel hidden">
-      <span class="prev">&#10094;</span>
+    <div class="carousel hidden" aria-label="Carosello foto album">
+      <button type="button" class="prev" aria-label="Foto precedente">&#10094;</button>
       <img class="carousel-img" src="" alt="">
-      <span class="next">&#10095;</span>
+      <button type="button" class="next" aria-label="Foto successiva">&#10095;</button>
     </div>
   </div>
 </div>
 
 <!-- LIGHTBOX -->
-<div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
+<div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true" aria-label="Anteprima immagine" onclick="closeLightbox()">
   <div class="lightbox-inner" onclick="event.stopPropagation()">
-    <span class="lightbox-prev" onclick="prevLightbox()">&#10094;</span>
+    <button type="button" class="lightbox-prev" aria-label="Immagine precedente" onclick="prevLightbox()">&#10094;</button>
     <img id="lightbox-img" src="" alt="Immagine ingrandita">
-    <span class="lightbox-next" onclick="nextLightbox()">&#10095;</span>
-    <button class="lightbox-close" onclick="closeLightbox()">×</button>
+    <button type="button" class="lightbox-next" aria-label="Immagine successiva" onclick="nextLightbox()">&#10095;</button>
+    <button type="button" class="lightbox-close" aria-label="Chiudi anteprima" onclick="closeLightbox()">×</button>
   </div>
 </div>
 
-<section id="contatti" class="contact-section scroll-section">
+<section id="contatti" class="contact-section scroll-section" aria-labelledby="contatti-heading">
 
   <div class="contact-left">
-    <div class="contact-intro">
+    <div id="contatti-heading" class="contact-intro">
       Hai un evento?<br>
       Una performance?<br>
       Un delirio?<br>
@@ -379,86 +357,114 @@
 
   <div class="contact-right">
 
-    <div class="social-links">
-      <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-      <a href="https://www.tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
-      <a href="mailto:queermarketshow@gmail.com"><i class="fas fa-envelope"></i></a>
+    <div class="social-links" aria-label="Canali social e email">
+      <a href="https://www.instagram.com/_qms_/"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Instagram di Queer Market Show">
+        <i class="fab fa-instagram" aria-hidden="true"></i>
+      </a>
+      
+      <a href="https://www.tiktok.com/@queermarket"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="TikTok di Queer Market Show">
+        <i class="fab fa-tiktok" aria-hidden="true"></i>
+      </a>
+      <a href="mailto:queermarketshow@gmail.com"
+         aria-label="Scrivi una mail a Queer Market Show">
+        <i class="fas fa-envelope" aria-hidden="true"></i>
+      </a>
     </div>
 
-    <form class="contact-form" id="qmsForm" action="https://formspree.io/f/xbdakywd" method="POST">
-      <input type="text" name="name" placeholder="Il tuo nome" required>
-      <input type="email" name="email" placeholder="La tua email" required>
-      <textarea name="message" placeholder="Scrivi qui il tuo messaggio…" required></textarea>
-      <button type="submit">Invia</button>
-      <p class="form-status"></p>
-    </form>
+    <form class="contact-form"
+          id="qmsForm"
+          action="https://formspree.io/f/xbdakywd"
+          method="POST">
+      <label for="contact-name" class="sr-only">Il tuo nome</label>
+      <input id="contact-name"
+             type="text"
+             name="name"
+             placeholder="Il tuo nome"
+             autocomplete="name"
+             required>
 
+      <label for="contact-email" class="sr-only">La tua email</label>
+      <input id="contact-email"
+             type="email"
+             name="email"
+             placeholder="La tua email"
+             autocomplete="email"
+             required>
+
+      <label for="contact-message" class="sr-only">Il tuo messaggio</label>
+      <textarea id="contact-message"
+                name="message"
+                placeholder="Scrivi qui il tuo messaggio…"
+                required></textarea>
+
+      <button type="submit">Invia</button>
+      <p class="form-status" role="status" aria-live="polite"></p>
+    </form>
 
   </div>
 
 </section>
 
-<section id="sostienici" class="qms-sostienici-section">
+<section id="sostienici" class="qms-sostienici-section scroll-section" aria-labelledby="sostienici-title">
   <div class="sostienici-grid">
 
     <!-- COLONNA SINISTRA -->
     <div class="sostienici-col-left">
 
-      <h2 class="sostienici-title">
+      <h2 id="sostienici-title" class="sostienici-title">
         Spazio Nostro, <span>Spazio Libero</span>
       </h2>
 
-      <!-- CARD 1 -->
-      <div class="sost-card" data-card="1">
+      <button type="button" class="sost-card" data-card="1">
+        <h3>Chi siamo e perché questo spazio</h3>
+        <span class="sost-plus" aria-hidden="true">+</span>
+      </button>
+
+      <button type="button" class="sost-card" data-card="2">
         <h3>Da anni costruiamo un nodo essenziale</h3>
-        <p class="sost-plus">+</p>
-      </div>
+        <span class="sost-plus" aria-hidden="true">+</span>
+      </button>
 
-      <!-- CARD 2 -->
-      <div class="sost-card" data-card="2">
-        <h3>Chi siamo</h3>
-        <p class="sost-plus">+</p>
-      </div>
-
-      <!-- CARD 3 -->
-      <div class="sost-card" data-card="3">
+      <button type="button" class="sost-card" data-card="3">
         <h3>Perché esiste questo spazio</h3>
-        <p class="sost-plus">+</p>
-      </div>
+        <span class="sost-plus" aria-hidden="true">+</span>
+      </button>
 
     </div>
 
     <!-- COLONNA DESTRA -->
     <div class="sostienici-col-right">
 
-      <!-- CARD 4 -->
-      <div class="sost-card" data-card="4">
+      <button type="button" class="sost-card" data-card="4">
         <h3>Il punto è semplice</h3>
-        <p class="sost-plus">+</p>
-      </div>
+        <span class="sost-plus" aria-hidden="true">+</span>
+      </button>
 
-      <!-- CARD 5 -->
-      <div class="sost-card" data-card="5">
+      <button type="button" class="sost-card" data-card="5">
         <h3>A cosa servono i fondi</h3>
-        <p class="sost-plus">+</p>
-      </div>
+        <span class="sost-plus" aria-hidden="true">+</span>
+      </button>
 
-      <!-- CARD 6 -->
-      <div class="sost-card" data-card="6">
+      <button type="button" class="sost-card" data-card="6">
         <h3>Perché farlo ora</h3>
-        <p class="sost-plus">+</p>
-      </div>
+        <span class="sost-plus" aria-hidden="true">+</span>
+      </button>
 
-      <!-- CARD 7 -->
-      <div class="sost-card" data-card="7">
-        <h3>Facciamo in modo che questo spazio resti vivo</h3>
-        <p class="sost-plus">+</p>
-      </div>
+      <button type="button" class="sost-card" data-card="7">
+        <h3>Restiamo vivi insieme</h3>
+        <span class="sost-plus" aria-hidden="true">+</span>
+      </button>
 
       <!-- CTA -->
       <a href="https://chuffed.org/project/qms-ha-bisogno-del-tuo-sostegno"
          target="_blank"
+         rel="noopener noreferrer"
          class="sost-card sost-cta">
         ✦ Sostieni il Festival ✦
       </a>
@@ -467,9 +473,9 @@
   </div>
 
   <!-- LIGHTBOX -->
-  <div class="sost-lightbox" id="sost-lightbox">
+  <div class="sost-lightbox" id="sost-lightbox" role="dialog" aria-modal="true" aria-label="Approfondimento sostegno">
     <div class="sost-lightbox-content">
-      <button class="sost-lightbox-close">×</button>
+      <button type="button" class="sost-lightbox-close" aria-label="Chiudi approfondimento">×</button>
       <div class="sost-lightbox-body"></div>
     </div>
   </div>
@@ -514,19 +520,23 @@
 
 <footer class="qms-footer">
   <div class="qms-footer-left">
-    <strong>Queer Market Show APS</strong><br>
-    Via Bradano 1<br>
-    73100, Lecce (LE)<br>
-    CF. 93170860758<br>
-    Codice ATECO 949920<br>
-    Repertorio RUNTS 143747
+    <address class="qms-footer-address">
+      <strong>Queer Market Show APS</strong><br>
+      Via Bradano 1<br>
+      73100, Lecce (LE)<br>
+      CF 93170860758<br>
+      Codice ATECO 949920<br>
+      Repertorio RUNTS 143747
+    </address>
   </div>
 
-  <div class="qms-footer-right">
-    <a href="trasparenza.html" target="_blank" rel="noopener noreferrer">Trasparenza</a><br>
-    <a href="statuto.html" target="_blank" rel="noopener noreferrer">Statuto</a><br>
-    <a href="adesionesociə.html" target="_blank" rel="noopener noreferrer">Diventa Sociə</a>
-  </div>
+  <nav class="qms-footer-right" aria-label="Documenti e tesseramento">
+    <ul class="qms-footer-links">
+      <li><a href="trasparenza.html">Trasparenza</a></li>
+      <li><a href="statuto.html">Statuto</a></li>
+      <li><a href="adesionesociə.html">Diventa Sociə</a></li>
+    </ul>
+  </nav>
 </footer>
 
 </body>
