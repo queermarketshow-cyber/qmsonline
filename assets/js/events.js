@@ -39,7 +39,8 @@
     mobilePrevBtn: document.getElementById("mobile-prev"),
     mobileCarousel: document.getElementById("mobile-calendar-carousel"),
     mobileNextBtn: document.getElementById("mobile-next"),
-    pastEvents: document.getElementById("past-events")
+    pastEvents: document.getElementById("past-events"),
+    archiveFilters: null
   };
 
   const state = {
@@ -47,10 +48,36 @@
     selectedCategory: "Tutti",
     activeMonthIndex: 0,
     mobileSlideIndex: 0,
+    archiveFilters: {
+      years: new Set(),
+      months: new Set(),
+      categories: new Set()
+    },
     isLoading: false,
     error: null,
     listenersBound: false
   };
+
+  function ensureArchiveFilterContainer() {
+    if (!dom.pastEvents) return null;
+    if (dom.archiveFilters && dom.archiveFilters.isConnected) {
+      return dom.archiveFilters;
+    }
+
+    const existing = document.getElementById("archive-filters");
+    if (existing) {
+      dom.archiveFilters = existing;
+      return existing;
+    }
+
+    const container = document.createElement("div");
+    container.id = "archive-filters";
+    container.className = "archive-filters";
+    container.setAttribute("aria-label", "Filtri archivio eventi");
+    dom.pastEvents.parentNode.insertBefore(container, dom.pastEvents);
+    dom.archiveFilters = container;
+    return container;
+  }
 
   function parseLocalDate(dateStr) {
     if (typeof dateStr !== "string" || !dateStr.trim()) return null;
@@ -111,6 +138,13 @@
       month: "long",
       year: "numeric"
     }).format(dateObj);
+  }
+
+  function formatMonthNameIT(monthNumber) {
+    const sampleDate = new Date(2026, monthNumber - 1, 1);
+    return new Intl.DateTimeFormat("it-IT", {
+      month: "long"
+    }).format(sampleDate);
   }
 
   function getMonthKey(dateObj) {
@@ -406,6 +440,7 @@
     if (dom.monthContainer) dom.monthContainer.innerHTML = loadingMarkup;
     if (dom.mobileCarousel) dom.mobileCarousel.innerHTML = loadingMarkup;
     if (dom.mobileDots) dom.mobileDots.innerHTML = "";
+    if (dom.archiveFilters) dom.archiveFilters.innerHTML = "";
     if (dom.pastEvents) dom.pastEvents.innerHTML = loadingMarkup;
 
     [dom.prevMonthBtn, dom.nextMonthBtn, dom.mobilePrevBtn, dom.mobileNextBtn].forEach((btn) => {
@@ -434,6 +469,7 @@
       dom.mobileCarousel.innerHTML = `<p class="empty-state">Calendario non disponibile al momento.</p>`;
     }
     if (dom.mobileDots) dom.mobileDots.innerHTML = "";
+    if (dom.archiveFilters) dom.archiveFilters.innerHTML = "";
     if (dom.pastEvents) {
       dom.pastEvents.innerHTML = `<p class="empty-state">Archivio non disponibile al momento.</p>`;
     }
@@ -658,7 +694,127 @@
     if (dom.mobileNextBtn) dom.mobileNextBtn.disabled = state.mobileSlideIndex === monthGroups.length - 1;
   }
 
+  // --- Filtri multipli Archivio (Anno, Mese, Tipologia evento) ---
+  function getArchiveOptions(pastEvents) {
+    const yearsSet = new Set();
+    const monthsSet = new Set();
+    const categoriesSet = new Set();
+
+    pastEvents.forEach((evt) => {
+      const d = evt._dateObj || parseLocalDate(evt.start);
+      if (d) {
+        yearsSet.add(String(d.getFullYear()));
+        monthsSet.add(String(d.getMonth() + 1).padStart(2, "0"));
+      }
+      (evt.categories || []).forEach((cat) => {
+        if (cat) categoriesSet.add(cat);
+      });
+    });
+
+    const years = Array.from(yearsSet).sort((a, b) => Number(b) - Number(a));
+    const months = Array.from(monthsSet).sort((a, b) => Number(a) - Number(b));
+    const categories = Array.from(categoriesSet).sort((a, b) => a.localeCompare(b, "it"));
+
+    return { years, months, categories };
+  }
+
+  function pruneInvalidArchiveSelections(options) {
+    state.archiveFilters.years.forEach((y) => {
+      if (!options.years.includes(y)) state.archiveFilters.years.delete(y);
+    });
+    state.archiveFilters.months.forEach((m) => {
+      if (!options.months.includes(m)) state.archiveFilters.months.delete(m);
+    });
+    state.archiveFilters.categories.forEach((c) => {
+      if (!options.categories.includes(c)) state.archiveFilters.categories.delete(c);
+    });
+  }
+
+  function getFilteredArchive(pastEvents) {
+    const { years, months, categories } = state.archiveFilters;
+
+    return pastEvents.filter((evt) => {
+      const d = evt._dateObj || parseLocalDate(evt.start);
+      const evtYear = d ? String(d.getFullYear()) : "";
+      const evtMonth = d ? String(d.getMonth() + 1).padStart(2, "0") : "";
+      const evtCats = evt.categories || [];
+
+      if (years.size > 0 && !years.has(evtYear)) return false;
+      if (months.size > 0 && !months.has(evtMonth)) return false;
+      if (categories.size > 0 && !evtCats.some((c) => categories.has(c))) return false;
+
+      return true;
+    });
+  }
+
+  function renderArchiveFilters(pastEvents) {
+    const container = ensureArchiveFilterContainer();
+    if (!container) return;
+
+    if (!pastEvents.length) {
+      container.innerHTML = "";
+      return;
+    }
+
+    const options = getArchiveOptions(pastEvents);
+    pruneInvalidArchiveSelections(options);
+
+    const hasAnySelection =
+      state.archiveFilters.years.size > 0 ||
+      state.archiveFilters.months.size > 0 ||
+      state.archiveFilters.categories.size > 0;
+
+    const renderGroupButtons = (groupKey, items, selectedSet, formatLabel) => {
+      if (!items.length) return `<span class="archive-filter-empty">Nessuna opzione</span>`;
+      return items
+        .map((val) => {
+          const isSelected = selectedSet.has(val);
+          return `
+            <button
+              type="button"
+              class="archive-filter-btn ${isSelected ? "is-active active" : ""}"
+              data-archive-group="${escapeHTML(groupKey)}"
+              data-archive-value="${escapeHTML(val)}"
+              aria-pressed="${isSelected}"
+            >
+              ${escapeHTML(formatLabel(val))}
+            </button>
+          `;
+        })
+        .join("");
+    };
+
+    container.innerHTML = `
+      <div class="archive-filter-groups">
+        <div class="archive-filter-group">
+          <span class="archive-filter-label">Anno</span>
+          <div class="archive-filter-options">
+            ${renderGroupButtons("years", options.years, state.archiveFilters.years, (y) => y)}
+          </div>
+        </div>
+        <div class="archive-filter-group">
+          <span class="archive-filter-label">Mese</span>
+          <div class="archive-filter-options">
+            ${renderGroupButtons("months", options.months, state.archiveFilters.months, (m) => formatMonthNameIT(Number(m)))}
+          </div>
+        </div>
+        <div class="archive-filter-group">
+          <span class="archive-filter-label">Tipologia</span>
+          <div class="archive-filter-options">
+            ${renderGroupButtons("categories", options.categories, state.archiveFilters.categories, (c) => c)}
+          </div>
+        </div>
+      </div>
+      ${
+        hasAnySelection
+          ? `<button type="button" class="archive-filter-reset" data-action="reset-archive-filters">Azzera filtri</button>`
+          : ""
+      }
+    `;
+  }
+
   function renderArchive(pastEvents) {
+    renderArchiveFilters(pastEvents);
     if (!dom.pastEvents) return;
 
     if (!pastEvents.length) {
@@ -666,7 +822,13 @@
       return;
     }
 
-    dom.pastEvents.innerHTML = pastEvents
+    const filteredPast = getFilteredArchive(pastEvents);
+    if (!filteredPast.length) {
+      dom.pastEvents.innerHTML = `<p class="empty-state">Nessun evento nell'archivio corrisponde ai filtri selezionati.</p>`;
+      return;
+    }
+
+    dom.pastEvents.innerHTML = filteredPast
       .map((evt) => {
         const dateLabel = formatDateRangeIT(evt.start, evt.end);
         return `
@@ -711,6 +873,33 @@
       const retryBtn = e.target.closest('[data-action="retry-events"]');
       if (retryBtn) {
         loadAndRenderEvents();
+        return;
+      }
+
+      const resetArchiveBtn = e.target.closest('[data-action="reset-archive-filters"]');
+      if (resetArchiveBtn) {
+        state.archiveFilters.years.clear();
+        state.archiveFilters.months.clear();
+        state.archiveFilters.categories.clear();
+        const { past } = splitEvents(state.events);
+        renderArchive(past);
+        return;
+      }
+
+      const archiveFilterBtn = e.target.closest(".archive-filter-btn[data-archive-group][data-archive-value]");
+      if (archiveFilterBtn) {
+        const group = archiveFilterBtn.dataset.archiveGroup;
+        const value = archiveFilterBtn.dataset.archiveValue;
+        const targetSet = state.archiveFilters[group];
+        if (targetSet) {
+          if (targetSet.has(value)) {
+            targetSet.delete(value);
+          } else {
+            targetSet.add(value);
+          }
+          const { past } = splitEvents(state.events);
+          renderArchive(past);
+        }
       }
     });
 
@@ -793,6 +982,7 @@
   }
 
   function init() {
+    ensureArchiveFilterContainer();
     bindEventsOnce();
     loadAndRenderEvents();
   }

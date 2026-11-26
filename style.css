@@ -4351,16 +4351,18 @@ section#sostienici.active {
 
 }
 /* ============================================================
-   PATCH FINALE UNICA — LOCANDINA A DESTRA, 95% VIEWPORT, ARCHIVIO E MODALE
+   PATCH FINALE UNICA — LOCANDINA A DESTRA, 95% VIEWPORT, FILTRI ARCHIVIO E MODALE
    (incollare in fondo al CSS)
 ============================================================ */
 
 /* --- Stati attivi usati da events.js --- */
 .calendar-filters button.active,
-.calendar-filters button.is-active {
-  background: var(--primary-color);
-  color: #000;
-  border-color: #000;
+.calendar-filters button.is-active,
+.archive-filter-btn.active,
+.archive-filter-btn.is-active {
+  background: var(--primary-color) !important;
+  color: #000 !important;
+  border-color: #000 !important;
 }
 
 .mobile-dot.active,
@@ -4416,7 +4418,7 @@ section#sostienici.active {
   min-width: 0;
 }
 
-/* Card Evento nel Calendario: info a sinistra, locandina a destra (cerchio rosso) */
+/* Card Evento nel Calendario: info a sinistra, locandina a destra */
 .calendar-event-item {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
@@ -4615,12 +4617,90 @@ section#sostienici.active {
   #mobile-next { right: 8px; }
 }
 
+/* --- Filtri Multipli Archivio (#archive-filters) --- */
+.archive-filters {
+  width: 95vw;
+  max-width: 95vw;
+  margin: 0 auto 1.25rem;
+  padding: 1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-sizing: border-box;
+}
+
+.archive-filter-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.archive-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.archive-filter-label {
+  min-width: 90px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary-color);
+}
+
+.archive-filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.archive-filter-btn {
+  padding: 0.42rem 0.85rem;
+  border: 2px solid #fff;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.archive-filter-btn:hover {
+  transform: translateY(-1px);
+}
+
+.archive-filter-reset {
+  align-self: flex-start;
+  padding: 0.45rem 0.9rem;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.archive-filter-reset:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
 /* --- Archivio (#past-events) visibile su Desktop e Mobile --- */
 #past-events {
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.2rem;
-  margin: 1.5rem auto 0;
+  margin: 1rem auto 0;
   width: 95vw;
   max-width: 95vw;
 }
