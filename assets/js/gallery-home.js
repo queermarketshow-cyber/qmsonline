@@ -31,8 +31,14 @@ async function loadChaosGallery() {
 
   if (!allImages.length) return;
 
-  const count = Math.min(allImages.length, Math.floor(Math.random() * 16) + 20);
-  const selected = allImages.sort(() => Math.random() - 0.5).slice(0, count);
+  // Più foto (36-52) per riempire bene il tavolo; se il pool è più piccolo, ricicla con shuffle
+  const targetCount = Math.floor(Math.random() * 17) + 36;
+  const pool = [];
+  while (pool.length < targetCount) {
+    const shuffled = allImages.slice().sort(() => Math.random() - 0.5);
+    pool.push(...shuffled);
+  }
+  const selected = pool.slice(0, targetCount);
 
   const imgLayer = document.querySelector('.qms-gallery-images');
   const labelLayer = document.querySelector('.qms-gallery-labels');
@@ -44,37 +50,58 @@ async function loadChaosGallery() {
   const labels = Array.from(labelLayer.querySelectorAll('.label'));
   const gridWidth = grid.clientWidth;
   const gridHeight = grid.clientHeight;
+  const isMobile = gridWidth <= 768;
 
   const scaleFactor = Math.min(gridWidth, gridHeight) / 900;
-  const labelScale = Math.max(0.6, Math.min(1.2, scaleFactor));
-  const ctaScale = Math.max(0.5, Math.min(1.0, scaleFactor));
+  const labelScale = Math.max(0.65, Math.min(1.2, scaleFactor));
+  const ctaScale = Math.max(0.62, Math.min(1.05, scaleFactor));
 
-  cta.style.transform = `translate(-50%, -50%) rotate(-6deg) scale(${ctaScale})`;
+  cta.style.zIndex = '200';
+  cta.style.transform = `translate(-50%, -50%) rotate(-5deg) scale(${ctaScale})`;
 
   imgLayer.innerHTML = '';
-  selected.forEach((item) => {
+
+  const approxCardW = isMobile ? Math.min(138, gridWidth * 0.25) : Math.min(225, gridWidth * 0.155);
+  const approxCardH = isMobile ? Math.min(165, gridWidth * 0.30) : Math.min(270, gridWidth * 0.19);
+  const maxX = Math.max(20, gridWidth - approxCardW * 0.65);
+  const maxY = Math.max(20, gridHeight - approxCardH * 0.65);
+
+  // Distribuzione a zone + jitter così copre tutta la superficie senza lasciare buchi
+  const cols = isMobile ? 4 : 7;
+  const rows = Math.ceil(targetCount / cols);
+
+  selected.forEach((item, index) => {
     const img = document.createElement('img');
     img.src = item.src;
     img.alt = '';
-    img.loading = 'lazy';
+    img.loading = 'eager';
     img.addEventListener('error', () => {
       img.style.display = 'none';
     }, { once: true });
 
-    const maxX = Math.max(0, gridWidth * 0.78);
-    const maxY = Math.max(0, gridHeight * 0.75);
+    const col = index % cols;
+    const row = Math.floor(index / cols);
 
-    img.style.top = Math.random() * maxY + 'px';
-    img.style.left = Math.random() * maxX + 'px';
-    img.style.transform = `rotate(${Math.random() * 50 - 25}deg)`;
-    img.style.zIndex = String(Math.floor(Math.random() * 50) + 1);
+    const cellW = maxX / cols;
+    const cellH = maxY / Math.max(1, rows);
+
+    const jitterX = (Math.random() - 0.5) * cellW * 1.15;
+    const jitterY = (Math.random() - 0.5) * cellH * 1.15;
+
+    const left = Math.max(-approxCardW * 0.25, Math.min(maxX, col * cellW + cellW * 0.2 + jitterX));
+    const top = Math.max(-approxCardH * 0.2, Math.min(maxY, row * cellH + cellH * 0.2 + jitterY));
+
+    img.style.top = `${top}px`;
+    img.style.left = `${left}px`;
+    img.style.transform = `rotate(${(Math.random() * 44 - 22).toFixed(1)}deg)`;
+    img.style.zIndex = String(Math.floor(Math.random() * 60) + 1);
 
     imgLayer.appendChild(img);
   });
 
   const placedLabelsRects = [];
   const ctaRect = cta.getBoundingClientRect();
-  const BUFFER = 12;
+  const BUFFER = 14;
 
   function isColliding(rect, others) {
     const collidesWithCTA = !(
@@ -103,11 +130,11 @@ async function loadChaosGallery() {
     const lw = label.offsetWidth * labelScale;
     const lh = label.offsetHeight * labelScale;
 
-    while (!placed && attempts < 150) {
+    while (!placed && attempts < 180) {
       attempts++;
 
-      const top = Math.random() * Math.max(0, gridHeight - lh - 20);
-      const left = Math.random() * Math.max(0, gridWidth - lw - 20);
+      const top = Math.random() * Math.max(0, gridHeight - lh - 24);
+      const left = Math.random() * Math.max(0, gridWidth - lw - 24);
 
       const virtualRect = {
         left,
@@ -117,10 +144,10 @@ async function loadChaosGallery() {
       };
 
       if (!isColliding(virtualRect, placedLabelsRects)) {
-        label.style.top = top + 'px';
-        label.style.left = left + 'px';
+        label.style.top = `${top}px`;
+        label.style.left = `${left}px`;
         label.style.transformOrigin = 'left top';
-        label.style.transform = `rotate(${Math.random() * 30 - 15}deg) scale(${labelScale})`;
+        label.style.transform = `rotate(${(Math.random() * 26 - 13).toFixed(1)}deg) scale(${labelScale})`;
 
         placedLabelsRects.push(virtualRect);
         placed = true;

@@ -2345,7 +2345,7 @@ a.sost-card.sost-cta:focus-visible {
 .qms-gallery-grid {
   position: relative;
   width: 100%;
-  min-height: clamp(540px, 78dvh, 840px);
+  min-height: clamp(580px, 84dvh, 920px);
   padding: clamp(2.5rem, 5vw, 4rem) clamp(1rem, 3vw, 2.5rem) clamp(3.5rem, 6vw, 5rem);
   display: flex;
   flex-direction: column;
@@ -2354,7 +2354,7 @@ a.sost-card.sost-cta:focus-visible {
   overflow: hidden;
 }
 
-/* Layer delle 20-35 Polaroid buttate sul tavolo dal JS */
+/* Layer delle Polaroid fitte buttate sul tavolo dal JS */
 .qms-gallery-images {
   position: absolute;
   inset: 0;
@@ -2364,17 +2364,17 @@ a.sost-card.sost-cta:focus-visible {
 
 .qms-gallery-images img {
   position: absolute;
-  width: clamp(145px, 19vw, 265px);
-  height: clamp(170px, 23vw, 310px);
+  width: clamp(120px, 15.5vw, 225px);
+  height: clamp(142px, 19vw, 270px);
   object-fit: cover;
   object-position: center;
   opacity: 1;
   mix-blend-mode: normal;
   background: #f5f2ec;
-  padding: 6px 6px 20px 6px;
+  padding: 5px 5px 17px 5px;
   border: 2px solid #111;
   border-radius: 0;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.82), 5px 5px 0 #000;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.85), 4px 4px 0 #000;
   filter: contrast(1.32) saturate(1.22);
   transform-origin: center;
   pointer-events: auto;
@@ -2387,7 +2387,7 @@ a.sost-card.sost-cta:focus-visible {
 .qms-gallery-images img:hover,
 .qms-gallery-images img:focus-visible {
   border-color: var(--primary-color);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.9), 8px 8px 0 var(--primary-color);
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.92), 7px 7px 0 var(--primary-color);
   filter: contrast(1.45) saturate(1.38) brightness(1.06);
   outline: none;
 }
@@ -2396,15 +2396,15 @@ a.sost-card.sost-cta:focus-visible {
 .qms-gallery-labels {
   position: absolute;
   inset: 0;
-  z-index: 60;
+  z-index: 90;
   pointer-events: none;
 }
 
 .qms-gallery-labels .label {
   position: absolute;
   background: var(--accent-pink);
-  padding: 0.5rem 1rem;
-  font-size: clamp(0.9rem, 2vw, 1.45rem);
+  padding: 0.48rem 0.95rem;
+  font-size: clamp(0.88rem, 1.9vw, 1.4rem);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -2426,35 +2426,39 @@ a.sost-card.sost-cta:focus-visible {
   box-shadow: 6px 6px 0 var(--primary-color);
 }
 
-/* CTA centrale posizionata e scalata dal JS */
+/* CTA "Mostra tutto": sempre visibile, cliccabile e sopra le foto e le label */
 .chaos-button {
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 70;
+  z-index: 200;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent-pink);
-  padding: 0.95rem 1.75rem;
-  font-size: clamp(0.95rem, 2vw, 1.35rem);
+  background: var(--primary-color);
+  padding: 1rem 1.85rem;
+  font-size: clamp(1rem, 2.1vw, 1.45rem);
   font-weight: 900;
   color: #000;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   text-decoration: none;
   border: 3px solid #fff;
   border-radius: 0;
-  box-shadow: 6px 6px 0 #000;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.92), 7px 7px 0 #000;
   cursor: pointer;
-  transition: background-color 0.12s ease, box-shadow 0.12s ease;
+  pointer-events: auto;
+  user-select: none;
+  transition: background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
 }
 
 .chaos-button:hover,
 .chaos-button:focus-visible {
-  background: var(--primary-color);
-  box-shadow: 8px 8px 0 var(--primary-color);
-  outline: none;
+  background: #fff;
+  color: #000;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.95), 9px 9px 0 var(--accent-pink);
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 /* Cartelle in archivio / modale */
@@ -2800,25 +2804,25 @@ a.sost-card.sost-cta:focus-visible {
 
 @media (max-width: 768px) {
   .qms-gallery-grid {
-    min-height: 500px;
+    min-height: 540px;
     padding: 2rem 0.75rem 3rem;
   }
 
   .qms-gallery-images img {
-    width: clamp(110px, 30vw, 165px);
-    height: clamp(130px, 35vw, 195px);
-    padding: 5px 5px 14px 5px;
+    width: clamp(92px, 25vw, 138px);
+    height: clamp(110px, 30vw, 165px);
+    padding: 4px 4px 13px 4px;
     box-shadow: 4px 4px 0 #000;
   }
 
   .qms-gallery-labels .label {
-    font-size: 0.76rem;
-    padding: 0.38rem 0.72rem;
+    font-size: 0.74rem;
+    padding: 0.36rem 0.68rem;
   }
 
   .chaos-button {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.85rem;
+    padding: 0.82rem 1.35rem;
+    font-size: 0.88rem;
   }
 }
 
