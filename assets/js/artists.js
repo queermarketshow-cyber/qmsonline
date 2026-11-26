@@ -12,33 +12,6 @@
     timeoutMs: 8000
   };
 
-  const FALLBACK_ARTISTS = [
-    {
-      id: "artist-1",
-      name: "Vespera",
-      role: "resident",
-      cover: "images/artisti/resident-1.jpg",
-      bio: "DJ e selettore tra elettronica sperimentale, club culture e sonorità del sud.",
-      gallery: []
-    },
-    {
-      id: "artist-2",
-      name: "Mina K.",
-      role: "resident",
-      cover: "images/artisti/resident-2.jpg",
-      bio: "Visual artist e performer attive tra installazioni, luce e immagine in movimento.",
-      gallery: []
-    },
-    {
-      id: "artist-3",
-      name: "Soraia",
-      role: "guest",
-      cover: "images/artisti/guest-1.jpg",
-      bio: "Artista ospite e ricercatrice sonora con focus su archivi e narrazioni collettive.",
-      gallery: []
-    }
-  ];
-
   function getDom() {
     return {
       sectionHome:
@@ -93,10 +66,27 @@
     return "";
   }
 
-  function normalizeRole(artist) {
-    const raw = String(
-      artist.role ?? artist.ruolo ?? artist.type ?? artist.tipo ?? artist.category ?? ""
-    )
+  function joinAssetPath(basePath, fileOrUrl) {
+    const cleanFile = String(fileOrUrl || "").trim();
+    if (!cleanFile) return "";
+
+    if (
+      cleanFile.startsWith("http://") ||
+      cleanFile.startsWith("https://") ||
+      cleanFile.startsWith("/") ||
+      cleanFile.startsWith("./") ||
+      cleanFile.startsWith("../")
+    ) {
+      return sanitizeUrl(cleanFile);
+    }
+
+    const cleanDir = String(basePath || "").trim().replace(/^\/+|\/+$/g, "");
+    const combined = cleanDir ? `${cleanDir}/${cleanFile.replace(/^\/+/, "")}` : cleanFile;
+    return sanitizeUrl(combined);
+  }
+
+  function normalizeArtistType(artist) {
+    const raw = String(artist.type ?? artist.category ?? "")
       .trim()
       .toLowerCase();
 
@@ -126,27 +116,36 @@
         const rawName = item.name ?? item.nome ?? item.title;
         if (!rawName || !String(rawName).trim()) return null;
 
-        const rawImage =
-          item.cover ??
-          item.image ??
-          item.img ??
-          item.foto ??
-          item.avatar ??
-          "";
-        const rawBio = item.bio ?? item.description ?? item.descrizione ?? "";
-        const rawGallery = Array.isArray(item.gallery)
-          ? item.gallery
-          : Array.isArray(item.immagini)
-            ? item.immagini
+        const basePath = item.path ?? item.folder ?? "";
+        const rawCover = item.cover ?? item.image ?? item.img ?? item.foto ?? "";
+        const coverUrl = joinAssetPath(basePath, rawCover);
+
+        const rawImages = Array.isArray(item.images)
+          ? item.images
+          : Array.isArray(item.gallery)
+            ? item.gallery
             : [];
+
+        const galleryUrls = rawImages
+          .map((img) => joinAssetPath(basePath, img))
+          .filter(Boolean);
+
+        const finalCover = coverUrl || galleryUrls[0] || "";
+        const bioLong = item.bio_long ? String(item.bio_long).trim() : "";
+        const bioShort = item.bio_short ? String(item.bio_short).trim() : "";
 
         return {
           id: String(item.id ?? `artist-${idx + 1}`),
           name: String(rawName).trim(),
-          role: normalizeRole(item),
-          image: sanitizeUrl(rawImage),
-          bio: String(rawBio).trim(),
-          gallery: rawGallery.map((g) => sanitizeUrl(g)).filter(Boolean)
+          role: item.role ? String(item.role).trim() : "",
+          type: normalizeArtistType(item),
+          bioShort,
+          bioLong,
+          bio: bioLong || bioShort,
+          instagram: sanitizeUrl(item.instagram ?? item.ig ?? ""),
+          path: String(basePath || "").trim(),
+          cover: finalCover,
+          gallery: galleryUrls
         };
       })
       .filter(Boolean);
@@ -170,7 +169,8 @@
 
   async function loadArtistsData() {
     if (window.location.protocol === "file:") {
-      return normalizeArtists(FALLBACK_ARTISTS);
+      console.warn("[artists.js] Protocollo file:// rilevato: avvia un server locale per leggere artists.json.");
+      return [];
     }
 
     for (const url of CONFIG.candidateUrls) {
@@ -186,26 +186,28 @@
       }
     }
 
-    console.info("[artists.js] Nessun artists.json trovato, uso dati predefiniti.");
-    return normalizeArtists(FALLBACK_ARTISTS);
+    console.warn("[artists.js] Nessun artists.json valido trovato.");
+    return [];
   }
 
   function renderArtistCard(artist) {
     const safeId = escapeHTML(artist.id);
     const safeName = escapeHTML(artist.name);
-    const safeImg = escapeHTML(artist.image);
-    const badgeLabel = artist.role === "guest" ? "Ospite" : "Resident";
+    const safeCover = escapeHTML(artist.cover);
+    const typeLabel = artist.type === "guest" ? "Ospite" : "Resident";
+    const roleTag = artist.role ? `<span class="artista-role-tag">${escapeHTML(artist.role)}</span>` : "";
 
     return `
       <article class="artist-card" data-artist-id="${safeId}" tabindex="0" role="button" aria-label="Apri scheda di ${safeName}">
         ${
-          safeImg
-            ? `<img class="artist-cover-img" src="${safeImg}" alt="${safeName}" onerror="this.classList.add('is-broken'); this.style.display='none';">`
+          safeCover
+            ? `<img class="artist-cover-img" src="${safeCover}" alt="${safeName}" onerror="this.style.display='none';">`
             : ""
         }
         <div class="artista-info">
           <span class="artista-name">${safeName}</span>
-          <span class="artista-role-tag">${escapeHTML(badgeLabel)}</span>
+          <span class="artista-role-tag">${escapeHTML(typeLabel)}</span>
+          ${roleTag}
         </div>
       </article>
     `;
@@ -216,8 +218,8 @@
       dom.sectionHome.style.opacity = "1";
     }
 
-    const residents = state.artists.filter((a) => a.role === "resident");
-    const guests = state.artists.filter((a) => a.role === "guest");
+    const residents = state.artists.filter((a) => a.type === "resident");
+    const guests = state.artists.filter((a) => a.type === "guest");
 
     console.info(
       `[artists.js] Residenti: ${residents.length} | Ospiti: ${guests.length}`
@@ -242,7 +244,7 @@
     const filtered =
       state.allFilter === "all"
         ? state.artists
-        : state.artists.filter((a) => a.role === state.allFilter);
+        : state.artists.filter((a) => a.type === state.allFilter);
 
     dom.allGallery.innerHTML = filtered.length
       ? filtered.map(renderArtistCard).join("")
@@ -255,10 +257,27 @@
 
     state.activeArtistId = artist.id;
 
-    const galleryHTML = artist.gallery.length
-      ? `<div class="artist-modal-gallery">${artist.gallery
+    const modalGalleryItems = artist.gallery.length
+      ? artist.gallery
+      : artist.cover
+        ? [artist.cover]
+        : [];
+
+    const galleryHTML = modalGalleryItems.length
+      ? `<div class="artist-modal-gallery">${modalGalleryItems
           .map((src) => `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}">`)
           .join("")}</div>`
+      : "";
+
+    const bioHTML = [
+      artist.bioShort ? `<p class="artist-modal-lead"><strong>${escapeHTML(artist.bioShort)}</strong></p>` : "",
+      artist.bioLong ? `<p>${escapeHTML(artist.bioLong)}</p>` : ""
+    ]
+      .filter(Boolean)
+      .join("") || `<p>Biografia in aggiornamento.</p>`;
+
+    const igHTML = artist.instagram
+      ? `<p class="artist-modal-social"><a href="${escapeHTML(artist.instagram)}" target="_blank" rel="noopener noreferrer">Instagram →</a></p>`
       : "";
 
     dom.modalsContainer.innerHTML = `
@@ -267,11 +286,13 @@
           <button type="button" class="close-button" data-action="close-artist-modal" aria-label="Chiudi scheda">&times;</button>
           <div class="artist-header">
             <h3 id="artist-modal-title">${escapeHTML(artist.name)}</h3>
-            <span class="artista-role-tag">${artist.role === "guest" ? "Ospite" : "Resident"}</span>
+            <span class="artista-role-tag">${artist.type === "guest" ? "Ospite" : "Resident"}</span>
+            ${artist.role ? `<span class="artista-role-tag">${escapeHTML(artist.role)}</span>` : ""}
           </div>
           <div class="artist-modal-layout">
             <div class="artist-modal-text">
-              ${artist.bio ? `<p>${escapeHTML(artist.bio)}</p>` : `<p>Biografia in aggiornamento.</p>`}
+              ${bioHTML}
+              ${igHTML}
             </div>
             ${galleryHTML}
           </div>
