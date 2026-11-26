@@ -365,7 +365,7 @@ section[id] {
 }
 
 /* ============================================================
-   HOME COLLAGE — MORSO PUNK + RITORNO PULITO IN NAVIGAZIONE
+   HOME COLLAGE — TUTTI I POSTER VISIBILI, MORSO PUNK & RITORNO PULITO
 ============================================================ */
 
 .home-collage,
@@ -394,7 +394,6 @@ section[id] {
   transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
   overflow: hidden;
-  /* Ritorno fluido ma scattante allo stato di partenza */
   transition:
     transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
     border-color 0.14s ease,
@@ -402,7 +401,6 @@ section[id] {
     z-index 0s linear 0.16s;
 }
 
-/* Quando passa in primo piano, sale subito (z-index immediato) ma resta sotto .home-intro (z-index: 12) */
 .poster:hover,
 .poster:focus-visible {
   transform: rotate(0deg) scale(1.06) translateZ(0);
@@ -415,6 +413,12 @@ section[id] {
     box-shadow 0.14s ease,
     z-index 0s linear 0s;
   outline: none;
+}
+
+/* Poster puramente decorativi / collage senza link: si integrano sul muro senza rubare click */
+.poster:not(a) {
+  pointer-events: none;
+  border-color: rgba(255, 255, 255, 0.85);
 }
 
 .poster img {
@@ -432,7 +436,7 @@ section[id] {
   filter: contrast(1.42) saturate(1.35) brightness(1.05);
 }
 
-/* Base collage a tutta scena */
+/* Sfondo base a tutta scena */
 .poster-XXL {
   inset: 0;
   width: 100%;
@@ -441,6 +445,7 @@ section[id] {
   z-index: 1;
   border: none;
   box-shadow: none;
+  pointer-events: none;
 }
 
 .poster-XXL:hover,
@@ -455,10 +460,10 @@ section[id] {
   filter: grayscale(25%) contrast(1.45) brightness(0.82);
 }
 
-/* Poster ai lati: sfacciati e inclinati, ma con corridoio centrale libero per la navigazione/lettura */
+/* Ritagli e poster distribuiti intorno al centro */
 .poster-XL {
-  width: clamp(165px, 21vw, 290px);
-  height: clamp(240px, 44vh, 410px);
+  width: clamp(160px, 20vw, 280px);
+  height: clamp(220px, 38vh, 370px);
   top: 6%;
   right: 2.5%;
   --tilt: 4deg;
@@ -466,17 +471,26 @@ section[id] {
 }
 
 .poster-L {
-  width: clamp(210px, 29vw, 380px);
-  height: clamp(110px, 16vh, 170px);
+  width: clamp(200px, 27vw, 350px);
+  height: clamp(105px, 16vh, 165px);
   bottom: 5%;
   left: 2.5%;
   --tilt: -4deg;
   z-index: 3;
 }
 
+.poster-M {
+  width: clamp(165px, 21vw, 285px);
+  height: clamp(120px, 18vh, 200px);
+  top: 52%;
+  left: 4%;
+  --tilt: -2.5deg;
+  z-index: 3;
+}
+
 .poster-S {
-  width: clamp(155px, 20vw, 265px);
-  height: clamp(155px, 20vw, 265px);
+  width: clamp(150px, 19vw, 255px);
+  height: clamp(150px, 19vw, 255px);
   bottom: 6%;
   right: 4%;
   --tilt: -3.5deg;
@@ -484,12 +498,22 @@ section[id] {
 }
 
 .poster-XS {
-  width: clamp(140px, 17vw, 235px);
-  height: clamp(175px, 23vw, 295px);
+  width: clamp(135px, 16vw, 230px);
+  height: clamp(170px, 22vw, 285px);
   top: 7%;
   left: 2.5%;
   --tilt: 5deg;
   z-index: 4;
+}
+
+/* Eventuali poster aggiuntivi senza classe di taglia specifica */
+.poster:not(.poster-XXL):not(.poster-XL):not(.poster-L):not(.poster-M):not(.poster-S):not(.poster-XS) {
+  width: clamp(145px, 18vw, 240px);
+  height: clamp(125px, 18vh, 210px);
+  top: 16%;
+  right: 22%;
+  --tilt: -3deg;
+  z-index: 3;
 }
 
 .poster-eventi {
@@ -529,7 +553,7 @@ section[id] {
   pointer-events: none;
 }
 
-/* Blocco centrale: sempre sopra i poster (z-index: 12), zero scatole morbide */
+/* Blocco centrale: sempre sopra i poster (z-index: 12) */
 .home-intro {
   position: relative;
   z-index: 12;
@@ -668,8 +692,10 @@ section[id] {
 
   .poster-XL,
   .poster-L,
+  .poster-M,
   .poster-S,
-  .poster-XS {
+  .poster-XS,
+  .poster:not(.poster-XXL) {
     top: auto;
     left: auto;
     right: auto;
