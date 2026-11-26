@@ -12,13 +12,12 @@
     timeoutMs: 8000
   };
 
-  // Elenco predefinito: usato se artists.json non esiste o è vuoto
   const FALLBACK_ARTISTS = [
     {
       id: "artist-1",
       name: "Vespera",
       role: "resident",
-      image: "images/artisti/resident-1.jpg",
+      cover: "images/artisti/resident-1.jpg",
       bio: "DJ e selettore tra elettronica sperimentale, club culture e sonorità del sud.",
       gallery: []
     },
@@ -26,7 +25,7 @@
       id: "artist-2",
       name: "Mina K.",
       role: "resident",
-      image: "images/artisti/resident-2.jpg",
+      cover: "images/artisti/resident-2.jpg",
       bio: "Visual artist e performer attive tra installazioni, luce e immagine in movimento.",
       gallery: []
     },
@@ -34,7 +33,7 @@
       id: "artist-3",
       name: "Soraia",
       role: "guest",
-      image: "images/artisti/guest-1.jpg",
+      cover: "images/artisti/guest-1.jpg",
       bio: "Artista ospite e ricercatrice sonora con focus su archivi e narrazioni collettive.",
       gallery: []
     }
@@ -127,7 +126,13 @@
         const rawName = item.name ?? item.nome ?? item.title;
         if (!rawName || !String(rawName).trim()) return null;
 
-        const rawImage = item.image ?? item.img ?? item.foto ?? item.avatar ?? "";
+        const rawImage =
+          item.cover ??
+          item.image ??
+          item.img ??
+          item.foto ??
+          item.avatar ??
+          "";
         const rawBio = item.bio ?? item.description ?? item.descrizione ?? "";
         const rawGallery = Array.isArray(item.gallery)
           ? item.gallery
@@ -195,7 +200,7 @@
       <article class="artist-card" data-artist-id="${safeId}" tabindex="0" role="button" aria-label="Apri scheda di ${safeName}">
         ${
           safeImg
-            ? `<img src="${safeImg}" alt="${safeName}" loading="lazy" onerror="this.style.display='none'">`
+            ? `<img class="artist-cover-img" src="${safeImg}" alt="${safeName}" onerror="this.classList.add('is-broken'); this.style.display='none';">`
             : ""
         }
         <div class="artista-info">
@@ -252,7 +257,7 @@
 
     const galleryHTML = artist.gallery.length
       ? `<div class="artist-modal-gallery">${artist.gallery
-          .map((src) => `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}" loading="lazy">`)
+          .map((src) => `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}">`)
           .join("")}</div>`
       : "";
 

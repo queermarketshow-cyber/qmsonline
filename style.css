@@ -4772,13 +4772,69 @@ section#sostienici.active {
   align-items: center;
 }
 /* ============================================================
-   PATCH ARTIST3 PAGE + STICKER BUTTON + BADGE RUOLO
+   PATCH ARTISTƏ — GRIGLIA ADATTIVA ENTRO 95% SCHERMO + COVER VISIBILE
+   (incollare in fondo al CSS)
 ============================================================ */
 
+section[id="artistə"],
+section#artist3,
+.home-artists-section {
+  opacity: 1 !important;
+  max-width: 95vw;
+  width: 95vw;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+.artist-gallery {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)) !important;
+  gap: 1.1rem;
+  width: 100% !important;
+  max-width: 95vw !important;
+  box-sizing: border-box;
+  overflow-x: hidden !important;
+  padding-bottom: 1.5rem;
+}
+
+.artist-card {
+  position: relative;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 3px solid var(--primary-color);
+  background: #000;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transform: rotate(-1deg);
+  transition: transform 0.2s ease;
+}
+
+.artist-card:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.artist-card img,
+.artist-cover-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.artist-card .artista-info {
+  z-index: 3;
+}
+
 .artists-page-main {
-  max-width: min(95vw, 1200px);
+  max-width: 95vw;
+  width: 95vw;
   margin: 0 auto;
-  padding: calc(var(--navbar-height) + 2.5rem) 1.5rem 4rem;
+  padding: calc(var(--navbar-height) + 2.5rem) 1rem 4rem;
   box-sizing: border-box;
 }
 
@@ -4808,16 +4864,4 @@ section#sostienici.active {
   border: 1px solid #000;
   border-radius: 3px;
   vertical-align: middle;
-}
-
-.artist-card-placeholder {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  text-align: center;
-  color: var(--primary-color);
 }
