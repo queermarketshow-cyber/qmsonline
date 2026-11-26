@@ -3944,3 +3944,408 @@ section#sostienici.active {
   }
 
 }
+/* ==================================================
+   EVENTI PAGE
+================================================== */
+
+.eventi-page{
+  position:relative;
+}
+
+/* ==================================================
+   HERO
+================================================== */
+
+.eventi-hero{
+  padding:
+    calc(var(--navbar-height) + 4rem)
+    2rem
+    5rem;
+
+  min-height:60vh;
+
+  display:flex;
+  align-items:center;
+}
+
+.eventi-hero-content{
+  max-width:900px;
+}
+
+.eventi-kicker{
+  display:inline-block;
+
+  margin-bottom:1rem;
+  padding:.4rem .9rem;
+
+  background:#fff;
+  color:#000;
+
+  font-size:.75rem;
+  font-weight:900;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+
+  border:2px solid #000;
+
+  transform:rotate(-2deg);
+}
+
+.eventi-hero h1{
+  margin:0 0 1rem;
+
+  font-size:clamp(3rem,10vw,7rem);
+  font-weight:900;
+  text-transform:uppercase;
+
+  line-height:.85;
+
+  color:#fff;
+
+  text-shadow:
+    4px 4px 0 #000,
+   -2px -2px 0 #000,
+    2px -2px 0 #000,
+   -2px 2px 0 #000;
+}
+
+.eventi-hero p{
+  max-width:700px;
+
+  font-size:1.15rem;
+  line-height:1.7;
+
+  color:#fff;
+}
+
+.hero-event-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-top:2rem;
+  padding:1rem 1.5rem;
+
+  background:var(--primary-color);
+  color:#000;
+
+  text-decoration:none;
+  text-transform:uppercase;
+  font-weight:900;
+
+  border:2px solid #000;
+
+  transition:.25s ease;
+}
+
+.hero-event-button:hover{
+  transform:
+    translateY(-4px)
+    rotate(-1deg);
+}
+
+/* ==================================================
+   SEZIONI GENERALI
+================================================== */
+
+.section-header{
+  margin-bottom:2rem;
+}
+
+.section-header h2{
+  margin-bottom:.5rem;
+
+  font-size:clamp(2rem,4vw,4rem);
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.section-header p{
+  opacity:.8;
+  line-height:1.6;
+}
+
+.featured-event-section,
+.events-section,
+.archive-section,
+.artists-call-section{
+  padding:5rem 2rem;
+}
+
+/* ==================================================
+   PROSSIMO EVENTO
+================================================== */
+
+#featured-event-content{
+
+  min-height:300px;
+
+  padding:2rem;
+
+  background:rgba(255,255,255,.05);
+
+  border:2px solid rgba(255,255,255,.15);
+
+  backdrop-filter:blur(4px);
+}
+
+/* ==================================================
+   FILTRI
+================================================== */
+
+.calendar-filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.75rem;
+
+  margin-bottom:2rem;
+}
+
+.calendar-filters button{
+  padding:.7rem 1rem;
+
+  border:2px solid #fff;
+  background:#000;
+  color:#fff;
+
+  font-weight:700;
+  cursor:pointer;
+}
+
+.calendar-filters button.active{
+  background:var(--primary-color);
+  color:#000;
+  border-color:#000;
+}
+
+/* ==================================================
+   CALENDARIO DESKTOP
+================================================== */
+
+#future-calendar{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+
+  gap:1rem;
+}
+
+#prev-month,
+#next-month{
+  width:60px;
+  height:60px;
+
+  font-size:1.5rem;
+
+  border:none;
+  cursor:pointer;
+
+  background:#fff;
+  color:#000;
+}
+
+#future-month-container{
+  min-height:500px;
+}
+
+/* ==================================================
+   MOBILE CAROUSEL
+================================================== */
+
+#mobile-calendar-wrapper{
+  display:none;
+}
+
+/* ==================================================
+   ARCHIVIO
+================================================== */
+
+#past-events{
+  display:grid;
+  gap:1.5rem;
+}
+
+/* ==================================================
+   CALL ARTISTƏ
+================================================== */
+
+.artists-call-section{
+
+  border-top:2px dashed rgba(255,255,255,.15);
+}
+
+.artists-call-content{
+  max-width:800px;
+}
+
+.artists-call-content h2{
+  margin-bottom:1rem;
+
+  font-size:clamp(2rem,5vw,4rem);
+  text-transform:uppercase;
+  font-weight:900;
+}
+
+.artists-call-content p{
+  line-height:1.7;
+  margin-bottom:1rem;
+}
+
+.artists-call-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-top:1rem;
+  padding:1rem 1.5rem;
+
+  background:var(--primary-color);
+  color:#000;
+
+  text-decoration:none;
+  text-transform:uppercase;
+
+  font-weight:900;
+
+  border:2px solid #000;
+}
+
+.artists-call-button:hover{
+  transform:
+    translateY(-4px)
+    rotate(-1deg);
+}
+
+/* ==================================================
+   MODAL
+================================================== */
+
+#event-modal{
+  position:fixed;
+  inset:0;
+
+  display:none;
+
+  background:rgba(0,0,0,.88);
+
+  z-index:9999;
+}
+
+.event-modal-content{
+  width:min(900px,90vw);
+
+  margin:5vh auto;
+
+  background:#111;
+
+  padding:2rem;
+
+  max-height:90vh;
+
+  overflow-y:auto;
+}
+
+.event-modal-close{
+  float:right;
+
+  background:none;
+  border:none;
+
+  color:white;
+
+  font-size:2rem;
+  cursor:pointer;
+}
+
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width:1024px){
+
+  .featured-event-section,
+  .events-section,
+  .archive-section,
+  .artists-call-section{
+    padding:4rem 1.5rem;
+  }
+
+}
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width:768px){
+
+  .eventi-hero{
+    padding:
+      calc(var(--navbar-height) + 2rem)
+      1rem
+      3rem;
+  }
+
+  .eventi-hero h1{
+    font-size:clamp(2.5rem,14vw,4.5rem);
+  }
+
+  .eventi-hero p{
+    font-size:1rem;
+  }
+
+  #future-calendar{
+    display:none;
+  }
+
+  #mobile-calendar-wrapper{
+    display:block;
+    position:relative;
+  }
+
+  #mobile-calendar-carousel{
+    overflow:hidden;
+  }
+
+  .mobile-arrow{
+    position:absolute;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:44px;
+    height:44px;
+
+    border:none;
+
+    background:#fff;
+    color:#000;
+
+    cursor:pointer;
+    z-index:2;
+  }
+
+  #mobile-prev{
+    left:-10px;
+  }
+
+  #mobile-next{
+    right:-10px;
+  }
+
+}
+
+/* ==================================================
+   SMALL MOBILE
+================================================== */
+
+@media (max-width:480px){
+
+  .section-header h2{
+    font-size:1.8rem;
+  }
+
+  #featured-event-content{
+    padding:1.25rem;
+  }
+
+}
