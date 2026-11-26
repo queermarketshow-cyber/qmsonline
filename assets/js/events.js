@@ -6,7 +6,14 @@
       "./events.json",
       "events.json",
       "/events.json",
-      "./data/events.json"
+      "../events.json",
+      "./data/events.json",
+      "/data/events.json",
+      "./event.json",
+      "event.json",
+      "/event.json",
+      "../event.json",
+      "./data/event.json"
     ],
     fetchOptions: {
       method: "GET",
@@ -21,6 +28,8 @@
 
   const dom = {
     featuredContent: document.getElementById("featured-event-content"),
+    featuredHome: document.getElementById("featured-event-home"),
+    calendarSection: document.getElementById("calendario"),
     filters: document.getElementById("calendar-filters"),
     prevMonthBtn: document.getElementById("prev-month"),
     monthContainer: document.getElementById("future-month-container"),
@@ -238,18 +247,23 @@
     return parsed;
   }
 
+  function resolveCandidateUrl(candidate) {
+    return new URL(candidate, window.location.href).href;
+  }
+
   async function fetchSingleUrl(url, timeoutMs) {
+    const resolvedUrl = resolveCandidateUrl(url);
     const controller = new AbortController();
     const timerId = window.setTimeout(() => controller.abort(), timeoutMs);
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(resolvedUrl, {
         ...CONFIG.fetchOptions,
         signal: controller.signal
       });
 
       if (!response.ok) {
-        const err = new Error(`HTTP ${response.status} su ${url}`);
+        const err = new Error(`HTTP ${response.status} su ${resolvedUrl}`);
         err.status = response.status;
         throw err;
       }
@@ -258,11 +272,11 @@
       try {
         return JSON.parse(text);
       } catch (parseErr) {
-        throw new Error(`JSON non valido in ${url}: ${parseErr.message}`);
+        throw new Error(`JSON non valido in ${resolvedUrl}: ${parseErr.message}`);
       }
     } catch (err) {
       if (err.name === "AbortError") {
-        throw new Error(`Timeout durante il caricamento di ${url}`);
+        throw new Error(`Timeout durante il caricamento di ${resolvedUrl}`);
       }
       throw err;
     } finally {
@@ -273,26 +287,31 @@
   async function fetchEventsFromCandidates() {
     if (window.location.protocol === "file:") {
       throw new Error(
-        "Stai aprendo la pagina tramite file://. Avvia un server locale (es. Live Server o 'python -m http.server') per permettere a fetch() di leggere event.json."
+        "Stai aprendo la pagina tramite file://. Avvia un server locale (es. Live Server o 'python -m http.server') per permettere a fetch() di leggere events.json."
       );
     }
 
+    const tried = [];
     let lastError = null;
 
     for (const url of CONFIG.candidateUrls) {
+      const resolvedUrl = resolveCandidateUrl(url);
+      tried.push(resolvedUrl);
       try {
         const data = await fetchSingleUrl(url, CONFIG.timeoutMs);
-        console.info("[events.js] Caricato con successo da:", url);
+        console.info("[events.js] Caricato con successo da:", resolvedUrl);
         return data;
       } catch (err) {
         lastError = err;
-        if (err.message && err.message.startsWith("JSON non valido")) {
+        if (err.message && err.message.includes("JSON non valido")) {
           throw err;
         }
       }
     }
 
-    throw lastError || new Error("Impossibile trovare event.json nei percorsi configurati.");
+    throw new Error(
+      `File JSON non trovato. URL provati da ${window.location.href}: ${tried.join(", ")} (${lastError ? lastError.message : "errore sconosciuto"})`
+    );
   }
 
   function splitEvents(events) {
@@ -374,9 +393,15 @@
     return { upcoming, past };
   }
 
+  function getFeaturedContainers() {
+    return [dom.featuredContent, dom.featuredHome].filter(Boolean);
+  }
+
   function renderLoadingState() {
     const loadingMarkup = `<p class="loading-state" role="status">Caricamento eventi in corso...</p>`;
-    if (dom.featuredContent) dom.featuredContent.innerHTML = loadingMarkup;
+    getFeaturedContainers().forEach((el) => {
+      el.innerHTML = loadingMarkup;
+    });
     if (dom.filters) dom.filters.innerHTML = "";
     if (dom.monthContainer) dom.monthContainer.innerHTML = loadingMarkup;
     if (dom.mobileCarousel) dom.mobileCarousel.innerHTML = loadingMarkup;
@@ -398,7 +423,9 @@
       </div>
     `;
 
-    if (dom.featuredContent) dom.featuredContent.innerHTML = errorMarkup;
+    getFeaturedContainers().forEach((el) => {
+      el.innerHTML = errorMarkup;
+    });
     if (dom.filters) dom.filters.innerHTML = "";
     if (dom.monthContainer) {
       dom.monthContainer.innerHTML = `<p class="empty-state">Calendario non disponibile al momento.</p>`;
@@ -444,17 +471,24 @@
   }
 
   function renderFeaturedEvent(upcomingEvents) {
-    if (!dom.featuredContent) return;
+    const containers = getFeaturedContainers();
+    if (!containers.length) return;
+
+    if (dom.calendarSection) {
+      dom.calendarSection.style.opacity = "1";
+    }
 
     const nextEvent = upcomingEvents[0];
     if (!nextEvent) {
-      dom.featuredContent.innerHTML = `<p class="empty-state">Nessun prossimo evento in programma al momento.</p>`;
+      const emptyMarkup = `<p class="empty-state">Nessun prossimo evento in programma al momento.</p>`;
+      containers.forEach((el) => {
+        el.innerHTML = emptyMarkup;
+      });
       return;
     }
 
     const dateLabel = formatDateRangeIT(nextEvent.start, nextEvent.end);
-
-    dom.featuredContent.innerHTML = `
+    const cardMarkup = `
       <article class="featured-event-card" data-event-id="${escapeHTML(nextEvent.id)}">
         ${nextEvent.image ? `<img class="featured-event-image" src="${escapeHTML(nextEvent.image)}" alt="${escapeHTML(nextEvent.title)}" loading="lazy">` : ""}
         <div class="featured-event-body">
@@ -469,6 +503,10 @@
         </div>
       </article>
     `;
+
+    containers.forEach((el) => {
+      el.innerHTML = cardMarkup;
+    });
   }
 
   function getFilteredUpcoming(upcomingEvents) {
