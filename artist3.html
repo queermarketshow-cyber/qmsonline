@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutte le Artistə — Queer Market Show</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="artists-page">
+  <div class="logo-background" aria-hidden="true"></div>
+
+  <main class="artists-page-main">
+    <header class="section-header">
+      <h1>Tutte le Artistə</h1>
+      <p>Residenti, ospiti e tutte le figure della comunità Queer Market Show.</p>
+    </header>
+
+    <div class="artist-controls" id="all-artists-filters">
+      <button type="button" class="active" data-artist-filter="all">Tutte</button>
+      <button type="button" data-artist-filter="resident">Residenti</button>
+      <button type="button" data-artist-filter="guest">Ospiti</button>
+    </div>
+
+    <div id="artists-all" class="artist-gallery"></div>
+
+    <div class="artists-page-cta">
+      <a href="index.html#artistə" class="sticker-button manifesto-button">
+        ← Torna alla Home
+      </a>
+    </div>
+
+    <div id="artist-modals"></div>
+  </main>
+
+  <script src="base.js" defer></script>
+  <script src="artists.js" defer></script>
+</body>
+</html>

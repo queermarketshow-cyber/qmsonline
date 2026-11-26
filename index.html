@@ -231,16 +231,22 @@
 
 </section>
 
-<section id="artistə" class="scroll-section">
-  <h2>Artistə</h2>
+<section id="artistə" class="scroll-section home-artists-section">
+  <h2>Artistə Residenti</h2>
 
   <div class="artist-controls">
-    <button id="btn-resident" class="active">Residenti</button>
-    <button id="btn-guest">Ospiti</button>
+    <button id="btn-resident" type="button" class="active">Residenti</button>
+    <button id="btn-guest" type="button">Ospiti</button>
   </div>
 
-  <div id="artists-resident" class="artist-gallery"></div>
+  <div id="artists-resident" class="artist-gallery" data-home-only="resident"></div>
   <div id="artists-guest" class="artist-gallery" style="display:none;"></div>
+
+  <div class="artists-page-cta">
+    <a href="artist3.html" class="sticker-button manifesto-button">
+      Tutte le artistə →
+    </a>
+  </div>
 
   <!-- Qui il JS inserirà automaticamente tutte le modali -->
   <div id="artist-modals"></div>
