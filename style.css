@@ -3534,3 +3534,203 @@ section#sostienici.active {
     right: 8px;
   }
 }
+/* ==================================================
+   HERO EDITORIALE QMS
+================================================== */
+
+.home-intro{
+  position:absolute;
+  z-index:15;
+
+  top:50%;
+  left:50%;
+
+  transform:translate(-50%,-50%);
+
+  width:min(90vw,700px);
+
+  text-align:center;
+  pointer-events:none;
+}
+
+.home-kicker{
+  display:inline-block;
+
+  margin-bottom:1rem;
+  padding:.4rem .9rem;
+
+  background:#fff;
+  color:#000;
+
+  border:2px solid #000;
+  box-shadow:0 0 0 2px #fff inset;
+
+  font-size:.75rem;
+  font-weight:900;
+  letter-spacing:.15em;
+
+  transform:rotate(-2deg);
+}
+
+.home-intro h1{
+  margin:0;
+
+  font-family:var(--font-sans);
+  font-size:clamp(2.5rem,8vw,6rem);
+  font-weight:900;
+  line-height:.85;
+
+  text-transform:uppercase;
+
+  color:#fff;
+
+  text-shadow:
+    4px 4px 0 #000,
+   -2px -2px 0 #000,
+    2px -2px 0 #000,
+   -2px 2px 0 #000;
+}
+
+.home-description{
+  max-width:540px;
+  margin:1.25rem auto 0;
+
+  font-size:1rem;
+  font-weight:700;
+  line-height:1.35;
+
+  color:#fff;
+
+  text-shadow:
+    2px 2px 0 rgba(0,0,0,.9);
+}
+
+/* ==================================================
+   CTA CENTRALI
+================================================== */
+
+.home-cta{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+
+  margin-top:1.5rem;
+
+  pointer-events:auto;
+}
+
+.home-cta a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:.9rem 1.4rem;
+
+  font-weight:900;
+  text-transform:uppercase;
+  text-decoration:none;
+
+  border:2px solid #000;
+
+  transition:.25s ease;
+}
+
+.cta-primary{
+  background:var(--primary-color);
+  color:#000;
+}
+
+.cta-secondary{
+  background:#000;
+  color:#fff;
+}
+
+.home-cta a:hover{
+  transform:translateY(-3px) rotate(-1deg);
+}
+
+/* ==================================================
+   EVENTO IN EVIDENZA
+================================================== */
+
+.poster-eventi{
+  animation:eventPulse 5s infinite;
+}
+
+@keyframes eventPulse{
+
+  0%{
+    box-shadow:
+      0 0 0 2px #000 inset;
+  }
+
+  50%{
+    box-shadow:
+      0 0 0 2px #000 inset,
+      0 0 20px rgba(255,255,0,.45);
+  }
+
+  100%{
+    box-shadow:
+      0 0 0 2px #000 inset;
+  }
+
+}
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width:768px){
+
+  .home-intro{
+    top:8%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:85vw;
+  }
+
+  .home-kicker{
+    font-size:.65rem;
+  }
+
+  .home-intro h1{
+    font-size:clamp(2rem,8vw,3.5rem);
+  }
+
+  .home-description{
+    display:none;
+  }
+
+  .home-cta{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .home-cta a{
+    width:min(260px,80vw);
+  }
+
+}
+
+/* ==================================================
+   SMALL MOBILE
+================================================== */
+
+@media (max-width:480px){
+
+  .home-intro{
+    top:5%;
+  }
+
+  .home-kicker{
+    display:none;
+  }
+
+  .home-cta{
+    margin-top:.75rem;
+  }
+
+}
