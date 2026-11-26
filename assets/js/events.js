@@ -305,10 +305,11 @@
     const past = [];
 
     events.forEach((evt) => {
-      const hasSpecific = Array.isArray(evt.specificDates) && evt.specificDates.length > 0;
-      const hasRecurring = Array.isArray(evt.recurringWeekdays) && evt.recurringWeekdays.length > 0;
+      const hasSpecific = evt.specificDates.length > 0;
+      const hasRecurring = evt.recurringWeekdays.length > 0;
 
       if (hasSpecific) {
+        let hasFuture = false;
         let latestPastDate = null;
         let earliestFutureDate = null;
 
@@ -316,68 +317,11 @@
           const d = parseLocalDate(iso);
           if (!d) return;
           if (d >= today) {
+            hasFuture = true;
             if (!earliestFutureDate || d < earliestFutureDate) earliestFutureDate = d;
           } else if (!latestPastDate || d > latestPastDate) {
             latestPastDate = d;
           }
-        });
-
-        if (earliestFutureDate) {
-          const iso = toISODateLocal(earliestFutureDate);
-          upcoming.push({ ...evt, start: iso, end: iso, _dateObj: earliestFutureDate });
-        }
-        if (latestPastDate) {
-          const iso = toISODateLocal(latestPastDate);
-          past.push({ ...evt, start: iso, end: iso, _dateObj: latestPastDate });
-        }
-        return;
-      }
-
-      if (hasRecurring) {
-        const rangeStart = evt._startObj > today ? evt._startObj : today;
-        const rangeEnd =
-          evt._endObj > rangeStart && evt._endObj < horizonEnd
-            ? evt._endObj
-            : horizonEnd;
-
-        let nextOccurrence = null;
-        for (let cursor = new Date(rangeStart); cursor <= rangeEnd; cursor = addDays(cursor, 1)) {
-          if (evt.recurringWeekdays.includes(cursor.getDay())) {
-            nextOccurrence = new Date(cursor);
-            break;
-          }
-        }
-
-        if (nextOccurrence) {
-          const iso = toISODateLocal(nextOccurrence);
-          upcoming.push({ ...evt, start: iso, end: iso, _dateObj: nextOccurrence });
-        }
-
-        if (evt._startObj < today) {
-          const pastEnd = evt._endObj < today ? evt._endObj : addDays(today, -1);
-          past.push({ ...evt, _dateObj: pastEnd });
-        }
-        return;
-      }
-
-      // Evento singolo o multi-giorno (start -> end)
-      if (evt._endObj >= today) {
-        upcoming.push({ ...evt, _dateObj: evt._startObj });
-      }
-      if (evt._startObj < today) {
-        past.push({ ...evt, _dateObj: evt._endObj < today ? evt._endObj : evt._startObj });
-      }
-    });
-
-    upcoming.sort((a, b) => a._dateObj - b._dateObj);
-    past.sort((a, b) => b._dateObj - a._dateObj);
-
-    console.info(
-      `[events.js] Totale: ${events.length} | Futuri/Prossimi: ${upcoming.length} | Archivio: ${past.length}`
-    );
-
-    return { upcoming, past };
-  }
         });
 
         if (hasFuture) {
