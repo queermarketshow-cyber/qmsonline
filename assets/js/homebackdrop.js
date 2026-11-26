@@ -13,27 +13,27 @@
     'images/home/398305568_326402376660831_151121864657075626.webp'
   ];
 
-  // 5 slot desktop: dimensioni nettamente diverse e ampie per riempire il muro
+  // 5 slot desktop molto ampi per riempire gran parte della parete con taglie opposte
   const DESKTOP_SLOTS = [
-    // 1. Enorme fascia-muro bassa/larga
-    { top: '54%',   left: '8%',   w: 'clamp(420px, 56vw, 820px)', h: 'clamp(190px, 34vh, 330px)', tilt: '-2.5deg', z: 2, tear: 'tear-1' },
-    // 2. Blocco alto-largo che taglia la parte superiore
-    { top: '-2%',   left: '20%',  w: 'clamp(360px, 48vw, 700px)', h: 'clamp(140px, 23vh, 230px)', tilt: '2deg',    z: 2, tear: 'tear-2' },
-    // 3. Ritaglio alto e stretto sul lato sinistro
-    { top: '12%',   left: '-2%',  w: 'clamp(150px, 18vw, 260px)', h: 'clamp(280px, 48vh, 460px)', tilt: '-4deg',   z: 3, tear: 'tear-3' },
-    // 4. Ritaglio medio-grande a destra
-    { top: '18%',   right: '-2%', w: 'clamp(210px, 27vw, 390px)', h: 'clamp(230px, 39vh, 370px)', tilt: '3.5deg',  z: 2, tear: 'tear-4' },
-    // 5. Pezzo compatto ma denso in basso a destra
-    { bottom: '2%', right: '10%', w: 'clamp(160px, 20vw, 280px)', h: 'clamp(120px, 19vh, 185px)', tilt: '-5deg',   z: 3, tear: 'tear-5' }
+    // 1. Enorme strato basso che occupa quasi tutta la larghezza
+    { bottom: '-4%', left: '-3%',   w: 'clamp(560px, 78vw, 1150px)', h: 'clamp(240px, 44vh, 420px)', tilt: '-2deg',   z: 2, tear: 'tear-1' },
+    // 2. Ampio strato alto che taglia la parte superiore
+    { top: '-5%',    left: '6%',    w: 'clamp(520px, 74vw, 1080px)', h: 'clamp(190px, 34vh, 320px)', tilt: '2.5deg',  z: 2, tear: 'tear-2' },
+    // 3. Colonna strappata alta e stretta sul lato sinistro
+    { top: '8%',     left: '-4%',   w: 'clamp(190px, 24vw, 340px)',  h: 'clamp(360px, 68vh, 620px)', tilt: '-3.5deg', z: 3, tear: 'tear-3' },
+    // 4. Grande blocco strappato sul lato destro
+    { top: '12%',    right: '-4%',  w: 'clamp(260px, 34vw, 490px)',  h: 'clamp(310px, 56vh, 520px)', tilt: '3deg',    z: 2, tear: 'tear-4' },
+    // 5. Ritaglio compatto ma denso in basso a destra
+    { bottom: '2%',  right: '4%',   w: 'clamp(175px, 22vw, 310px)',  h: 'clamp(135px, 22vh, 210px)', tilt: '-4.5deg', z: 3, tear: 'tear-5' }
   ];
 
-  // 5 slot mobile: 5 dimensioni diverse che coprono molta parete senza impilarsi in lista
+  // 5 slot mobile: coprono molta più superficie pur restando ai bordi/sotto del testo
   const MOBILE_SLOTS = [
-    { top: '-1%',    left: '6%',   w: '280px', h: '105px', tilt: '-3deg', z: 2, tear: 'tear-1' },
-    { top: '14%',    right: '-18px',w: '115px', h: '210px', tilt: '4deg',  z: 2, tear: 'tear-2' },
-    { top: '36%',    left: '-16px', w: '105px', h: '165px', tilt: '-4.5deg',z: 2, tear: 'tear-3' },
-    { bottom: '14%', right: '-10px',w: '230px', h: '115px', tilt: '3deg',  z: 2, tear: 'tear-4' },
-    { bottom: '-1%', left: '8%',   w: '145px', h: '88px',  tilt: '-4deg', z: 2, tear: 'tear-5' }
+    { top: '-3%',    left: '-4%',   w: '340px', h: '145px', tilt: '-2.5deg', z: 2, tear: 'tear-1' },
+    { top: '10%',    right: '-24px', w: '145px', h: '280px', tilt: '3.5deg',  z: 2, tear: 'tear-2' },
+    { top: '34%',    left: '-24px',  w: '135px', h: '230px', tilt: '-4deg',   z: 2, tear: 'tear-3' },
+    { bottom: '8%',  right: '-14px', w: '290px', h: '165px', tilt: '2.5deg',  z: 2, tear: 'tear-4' },
+    { bottom: '-3%', left: '-6%',   w: '210px', h: '125px', tilt: '-3.5deg', z: 2, tear: 'tear-5' }
   ];
 
   const TEARS = ['tear-1', 'tear-2', 'tear-3', 'tear-4', 'tear-5'];
@@ -67,7 +67,7 @@
     pickedImages.forEach((src, idx) => {
       const slot = slots[idx];
       const tearClass = TEARS[(idx + Math.floor(Math.random() * TEARS.length)) % TEARS.length];
-      const randomTiltOffset = (Math.random() * 3 - 1.5).toFixed(1);
+      const randomTiltOffset = (Math.random() * 2.5 - 1.25).toFixed(1);
 
       const patch = document.createElement('div');
       patch.className = `home-wall-patch ${tearClass}`;
