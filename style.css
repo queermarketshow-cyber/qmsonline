@@ -365,7 +365,7 @@ section[id] {
 }
 
 /* ============================================================
-   HOME COLLAGE & HERO EDITORIALE
+   HOME COLLAGE — CRUDA, PUNK, MA LEGGIBILE
 ============================================================ */
 
 .home-collage,
@@ -379,7 +379,23 @@ section[id] {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #000;
   z-index: 1;
+}
+
+/* Leggero scudo scuro solo al centro per far reggere il testo sul collage */
+.home-collage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.42) 55%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  z-index: 6;
+  pointer-events: none;
 }
 
 .poster {
@@ -388,18 +404,20 @@ section[id] {
   color: #fff;
   text-decoration: none;
   border: 2px solid #fff;
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 4px 4px 0 #000;
+  background: #090909;
+  box-shadow: 6px 6px 0 #000;
   transform: rotate(var(--tilt, 0deg));
   transform-origin: center;
   overflow: hidden;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
 }
 
 .poster:hover,
 .poster:focus-visible {
-  transform: rotate(0deg) scale(1.02);
+  transform: rotate(0deg) scale(1.03);
   border-color: var(--primary-color);
+  box-shadow: 8px 8px 0 var(--primary-color);
+  z-index: 8;
   outline: none;
 }
 
@@ -409,7 +427,7 @@ section[id] {
   display: block;
   object-fit: cover;
   object-position: center;
-  opacity: 0.78;
+  filter: contrast(1.22) saturate(1.15);
 }
 
 .poster-XXL {
@@ -423,52 +441,43 @@ section[id] {
 }
 
 .poster-XXL img {
-  opacity: 0.28;
-  filter: grayscale(40%) contrast(1.15);
+  opacity: 0.62;
+  filter: grayscale(35%) contrast(1.35) brightness(0.85);
 }
 
 .poster-XL {
-  width: clamp(140px, 16vw, 220px);
-  height: clamp(200px, 34vh, 320px);
-  top: 10%;
-  right: 4%;
-  --tilt: 2.5deg;
+  width: clamp(160px, 20vw, 270px);
+  height: clamp(230px, 42vh, 390px);
+  top: 7%;
+  right: 3%;
+  --tilt: 3.5deg;
   z-index: 2;
 }
 
 .poster-L {
-  width: clamp(180px, 24vw, 300px);
-  height: clamp(90px, 14vh, 140px);
-  bottom: 8%;
-  left: 4%;
-  --tilt: -2.5deg;
-  z-index: 3;
-}
-
-.poster-M {
-  width: clamp(160px, 22vw, 280px);
-  height: clamp(110px, 16vw, 190px);
-  bottom: 12%;
-  right: 12%;
-  --tilt: 1.8deg;
+  width: clamp(200px, 28vw, 360px);
+  height: clamp(105px, 16vh, 165px);
+  bottom: 6%;
+  left: 3%;
+  --tilt: -3.5deg;
   z-index: 3;
 }
 
 .poster-S {
-  width: clamp(130px, 16vw, 210px);
-  height: clamp(130px, 16vw, 210px);
-  bottom: 10%;
+  width: clamp(150px, 19vw, 250px);
+  height: clamp(150px, 19vw, 250px);
+  bottom: 8%;
   right: 5%;
-  --tilt: -2deg;
+  --tilt: -3deg;
   z-index: 4;
 }
 
 .poster-XS {
-  width: clamp(115px, 14vw, 185px);
-  height: clamp(145px, 18vw, 235px);
-  top: 11%;
-  left: 4%;
-  --tilt: 3.5deg;
+  width: clamp(135px, 16vw, 220px);
+  height: clamp(170px, 22vw, 280px);
+  top: 8%;
+  left: 3%;
+  --tilt: 4.5deg;
   z-index: 4;
 }
 
@@ -480,127 +489,133 @@ section[id] {
 
 .poster-manifesto {
   background: #111;
-  border: 2px dashed var(--primary-color);
+  border: 3px dashed var(--primary-color);
 }
 
 .poster-galleria {
   background: #1a1a1a;
-  border-color: #fff;
+  border: 2px solid #fff;
 }
 
 .poster-artist3 {
-  background: #090909;
-}
-
-.poster-sostienici {
-  background: #000;
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  background: #050505;
 }
 
 .sticker {
   background: var(--primary-color);
   color: #000;
-  padding: 4px 8px;
+  padding: 4px 9px;
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
   position: absolute;
   bottom: 8px;
   right: 8px;
-  transform: rotate(2.5deg);
-  border: 1px solid #000;
-  box-shadow: 2px 2px 0 #000;
+  transform: rotate(3deg);
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0 #000;
   pointer-events: none;
 }
 
-.sticker.small {
-  font-size: 0.65rem;
-}
-
+/* Testo libero sul collage, zero scatola grigia */
 .home-intro {
   position: relative;
   z-index: 10;
-  width: min(92vw, 680px);
-  padding: 2rem 1.75rem;
+  width: min(92vw, 720px);
+  padding: 0.5rem;
   text-align: center;
-  background: rgba(0, 0, 0, 0.72);
-  border: 2px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 8px 8px 0 #000;
-  backdrop-filter: blur(4px);
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .home-kicker {
   display: inline-block;
-  margin-bottom: 0.9rem;
-  padding: 0.35rem 0.85rem;
+  margin-bottom: 0.95rem;
+  padding: 0.38rem 0.9rem;
   background: #fff;
   color: #000;
   border: 2px solid #000;
-  font-size: 0.72rem;
+  box-shadow: 4px 4px 0 var(--primary-color);
+  font-size: 0.75rem;
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  transform: rotate(-1.5deg);
+  transform: rotate(-2.5deg);
 }
 
 .home-intro h1 {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: clamp(2.4rem, 7vw, 5.2rem);
+  font-size: clamp(2.6rem, 7.6vw, 5.6rem);
   font-weight: 900;
-  line-height: 0.92;
+  line-height: 0.88;
   text-transform: uppercase;
   color: #fff;
-  text-shadow: 3px 3px 0 #000;
+  transform: rotate(-1deg);
+  text-shadow:
+    4px 4px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    0 0 24px rgba(0, 0, 0, 0.9);
 }
 
 .home-description {
-  max-width: 52ch;
-  margin: 1.1rem auto 0;
-  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--secondary-color);
+  max-width: 50ch;
+  margin: 1.15rem auto 0;
+  font-size: clamp(0.98rem, 1.55vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.4;
+  color: #fff;
+  text-shadow:
+    2px 2px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000;
 }
 
 .home-cta {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.9rem;
-  margin-top: 1.5rem;
+  gap: 1rem;
+  margin-top: 1.55rem;
 }
 
 .home-cta a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.85rem 1.35rem;
-  font-size: 0.88rem;
+  padding: 0.9rem 1.45rem;
+  font-size: 0.9rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-decoration: none;
-  border: 2px solid #fff;
-  box-shadow: 4px 4px 0 #000;
-  transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+  border: 2px solid #000;
+  box-shadow: 5px 5px 0 #000;
+  transition: transform 0.14s ease, background-color 0.14s ease, color 0.14s ease, box-shadow 0.14s ease;
 }
 
 .cta-primary {
   background: var(--primary-color);
   color: #000;
-  border-color: #000;
+  transform: rotate(-1.5deg);
 }
 
 .cta-secondary {
   background: #000;
   color: #fff;
+  border-color: #fff;
+  box-shadow: 5px 5px 0 var(--primary-color);
+  transform: rotate(1.5deg);
 }
 
 .home-cta a:hover,
 .home-cta a:focus-visible {
-  transform: translateY(-2px);
+  transform: rotate(0deg) translateY(-3px);
   outline: none;
 }
 
@@ -610,15 +625,14 @@ section[id] {
     min-height: auto;
     padding: 1.75rem 1rem 2.5rem;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
   }
 
   .poster {
     position: relative;
     inset: auto;
-    width: 100%;
-    max-width: 340px;
-    height: 150px;
+    width: min(88vw, 320px);
+    height: 135px;
     transform: rotate(var(--tilt, 0deg));
   }
 
@@ -628,25 +642,27 @@ section[id] {
     width: 100%;
     max-width: none;
     height: 100%;
-    z-index: 0;
+    z-index: 1;
   }
 
   .poster-XL,
   .poster-L,
-  .poster-M,
   .poster-S,
   .poster-XS {
     top: auto;
     left: auto;
     right: auto;
     bottom: auto;
-    width: min(88vw, 320px);
-    height: 130px;
+    z-index: 3;
   }
 
   .home-intro {
     width: 100%;
-    padding: 1.4rem 1rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .home-intro h1 {
+    transform: none;
   }
 
   .home-cta {
@@ -656,6 +672,7 @@ section[id] {
 
   .home-cta a {
     width: 100%;
+    transform: none;
   }
 }
 
