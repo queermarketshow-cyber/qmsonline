@@ -3,7 +3,7 @@
 
   // 1. Configurazione sorgente dati
   const CONFIG = {
-    sourceUrl: "./event.json",
+    sourceUrl: "events.json",
     fetchOptions: {
       method: "GET",
       headers: {
