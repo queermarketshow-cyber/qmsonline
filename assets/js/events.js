@@ -142,10 +142,18 @@ initApp();
 
 function monthHasEvents(month, year) {
   return events.some(ev =>
-    ev.dateObj.getFullYear() === year &&
-    ev.dateObj.getMonth() === month &&
-    (activeCategory === "all" || ev.categories.includes(activeCategory))
-  );
+
+  ev.dateObj >= todayDate &&
+
+  ev.dateObj.getFullYear() === year &&
+  ev.dateObj.getMonth() === month &&
+
+  (
+    activeCategory === "all" ||
+    ev.categories.includes(activeCategory)
+  )
+
+);
 }
 
 function findFirstFutureMonthWithEvents() {
@@ -297,9 +305,17 @@ function renderCalendar(month, year) {
     dayEl.appendChild(num);
 
     const todaysEvents = events.filter(ev =>
-      ev.dateStr === iso &&
-      (activeCategory === "all" || ev.categories.includes(activeCategory))
-    );
+
+  ev.dateObj >= todayDate &&
+
+  ev.dateStr === iso &&
+
+  (
+    activeCategory === "all" ||
+    ev.categories.includes(activeCategory)
+  )
+
+);
 
     if (todaysEvents.length > 0) {
       dayEl.classList.add("has-event");
