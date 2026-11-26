@@ -470,6 +470,15 @@
     return `<div class="event-actions">${parts.join("")}</div>`;
   }
 
+  function renderPosterHTML(evt, className) {
+    if (!evt.image) return "";
+    return `
+      <div class="event-poster-media">
+        <img class="${escapeHTML(className)}" src="${escapeHTML(evt.image)}" alt="Locandina ${escapeHTML(evt.title)}" loading="lazy">
+      </div>
+    `;
+  }
+
   function renderFeaturedEvent(upcomingEvents) {
     const containers = getFeaturedContainers();
     if (!containers.length) return;
@@ -490,7 +499,6 @@
     const dateLabel = formatDateRangeIT(nextEvent.start, nextEvent.end);
     const cardMarkup = `
       <article class="featured-event-card" data-event-id="${escapeHTML(nextEvent.id)}">
-        ${nextEvent.image ? `<img class="featured-event-image" src="${escapeHTML(nextEvent.image)}" alt="${escapeHTML(nextEvent.title)}" loading="lazy">` : ""}
         <div class="featured-event-body">
           <div class="event-categories">${renderCategoriesHTML(nextEvent.categories)}</div>
           <time class="event-date" datetime="${escapeHTML(nextEvent.start)}">
@@ -501,6 +509,7 @@
           ${nextEvent.description ? `<p class="event-description">${escapeHTML(nextEvent.description)}</p>` : ""}
           ${renderEntryAndTicketHTML(nextEvent)}
         </div>
+        ${renderPosterHTML(nextEvent, "featured-event-image")}
       </article>
     `;
 
@@ -563,15 +572,18 @@
     const dateLabel = formatDateRangeIT(evt.start, evt.end);
     return `
       <article class="calendar-event-item" data-event-id="${escapeHTML(evt.id)}">
-        <div class="calendar-event-meta">
-          <time datetime="${escapeHTML(evt.start)}">${escapeHTML(dateLabel)}</time>
-          ${evt.time ? `<span class="event-time">${escapeHTML(evt.time)}</span>` : ""}
-          <div class="event-categories">${renderCategoriesHTML(evt.categories)}</div>
+        <div class="calendar-event-info">
+          <div class="calendar-event-meta">
+            <time datetime="${escapeHTML(evt.start)}">${escapeHTML(dateLabel)}</time>
+            ${evt.time ? `<span class="event-time">${escapeHTML(evt.time)}</span>` : ""}
+            <div class="event-categories">${renderCategoriesHTML(evt.categories)}</div>
+          </div>
+          <h4 class="event-title">${escapeHTML(evt.title)}</h4>
+          ${renderLocationHTML(evt)}
+          ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
+          ${renderEntryAndTicketHTML(evt)}
         </div>
-        <h4 class="event-title">${escapeHTML(evt.title)}</h4>
-        ${renderLocationHTML(evt)}
-        ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
-        ${renderEntryAndTicketHTML(evt)}
+        ${renderPosterHTML(evt, "calendar-event-image")}
       </article>
     `;
   }
