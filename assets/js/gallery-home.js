@@ -3,9 +3,8 @@
 ============================================================ */
 
 async function loadChaosGallery() {
-  // 1. GESTIONE DATI (Asincrona con Fallback)
-  // Utilizza window.galleryData se disponibile (caricato da uno script centrale)
-  // altrimenti effettua il fetch locale per compatibilità.
+  if (loadChaosGallery._done) return;
+
   let data;
   if (window.galleryData) {
     data = window.galleryData;
@@ -20,16 +19,19 @@ async function loadChaosGallery() {
     }
   }
 
-  // 2. PREPARAZIONE IMMAGINI
+  if (!Array.isArray(data) || !data.length) return;
+  loadChaosGallery._done = true;
+
   const allImages = [];
   data.forEach(folder => {
-    folder.images.forEach(img => {
+    (folder.images || []).forEach(img => {
       allImages.push({ src: `${folder.path}/${img}` });
     });
   });
 
-  // 3. SELEZIONE CASUALE (20-35 immagini)
-  const count = Math.floor(Math.random() * 16) + 20;
+  if (!allImages.length) return;
+
+  const count = Math.min(allImages.length, Math.floor(Math.random() * 16) + 20);
   const selected = allImages.sort(() => Math.random() - 0.5).slice(0, count);
 
   const imgLayer = document.querySelector('.qms-gallery-images');
@@ -43,43 +45,38 @@ async function loadChaosGallery() {
   const gridWidth = grid.clientWidth;
   const gridHeight = grid.clientHeight;
 
-  // 4. SCALING DINAMICO (Basato sulla dimensione del container)
   const scaleFactor = Math.min(gridWidth, gridHeight) / 900;
   const labelScale = Math.max(0.6, Math.min(1.2, scaleFactor));
   const ctaScale = Math.max(0.5, Math.min(1.0, scaleFactor));
 
-  // Applica scaling alla CTA
   cta.style.transform = `translate(-50%, -50%) rotate(-6deg) scale(${ctaScale})`;
 
-  // 5. GENERAZIONE IMMAGINI NEL LAYER
-  imgLayer.innerHTML = ''; 
+  imgLayer.innerHTML = '';
   selected.forEach((item) => {
     const img = document.createElement('img');
     img.src = item.src;
-    img.loading = "lazy"; // Ottimizzazione caricamento
+    img.alt = '';
+    img.loading = 'lazy';
+    img.addEventListener('error', () => {
+      img.style.display = 'none';
+    }, { once: true });
 
-    const maxX = gridWidth * 0.75;
-    const maxY = gridHeight * 0.75;
+    const maxX = Math.max(0, gridWidth * 0.78);
+    const maxY = Math.max(0, gridHeight * 0.75);
 
     img.style.top = Math.random() * maxY + 'px';
     img.style.left = Math.random() * maxX + 'px';
     img.style.transform = `rotate(${Math.random() * 50 - 25}deg)`;
-    img.style.zIndex = Math.floor(Math.random() * 50) + 1;
+    img.style.zIndex = String(Math.floor(Math.random() * 50) + 1);
 
     imgLayer.appendChild(img);
   });
 
-  // 6. POSIZIONAMENTO LABELS (Anti-Collisione & Anti-Freeze)
   const placedLabelsRects = [];
   const ctaRect = cta.getBoundingClientRect();
-  const BUFFER = 12; // Spazio minimo tra gli elementi
+  const BUFFER = 12;
 
-  /**
-   * Verifica collisioni usando coordinate virtuali per evitare 
-   * continui ricalcoli del DOM (getBoundingClientRect)
-   */
   function isColliding(rect, others) {
-    // Collisione con la CTA centrale
     const collidesWithCTA = !(
       rect.right + BUFFER < ctaRect.left ||
       rect.left - BUFFER > ctaRect.right ||
@@ -88,7 +85,6 @@ async function loadChaosGallery() {
     );
     if (collidesWithCTA) return true;
 
-    // Collisione con altre label già posizionate
     return others.some(br => !(
       rect.right + BUFFER < br.left ||
       rect.left - BUFFER > br.right ||
@@ -101,23 +97,21 @@ async function loadChaosGallery() {
     let attempts = 0;
     let placed = false;
 
-    // Reset stile per calcolo dimensioni
     label.style.display = 'block';
     label.style.visibility = 'hidden';
 
     const lw = label.offsetWidth * labelScale;
     const lh = label.offsetHeight * labelScale;
 
-    // Limite di tentativi (150) per evitare loop infiniti su schermi piccoli
     while (!placed && attempts < 150) {
       attempts++;
 
-      const top = Math.random() * (gridHeight - lh - 20);
-      const left = Math.random() * (gridWidth - lw - 20);
+      const top = Math.random() * Math.max(0, gridHeight - lh - 20);
+      const left = Math.random() * Math.max(0, gridWidth - lw - 20);
 
       const virtualRect = {
-        left: left,
-        top: top,
+        left,
+        top,
         right: left + lw,
         bottom: top + lh
       };
@@ -125,33 +119,27 @@ async function loadChaosGallery() {
       if (!isColliding(virtualRect, placedLabelsRects)) {
         label.style.top = top + 'px';
         label.style.left = left + 'px';
-        label.style.transformOrigin = "left top";
+        label.style.transformOrigin = 'left top';
         label.style.transform = `rotate(${Math.random() * 30 - 15}deg) scale(${labelScale})`;
-        
+
         placedLabelsRects.push(virtualRect);
         placed = true;
       }
     }
 
-    // Se dopo i tentativi è posizionata, la rendiamo visibile
     if (placed) {
       label.style.visibility = 'visible';
     } else {
-      label.style.display = 'none'; // Nasconde se non c'è spazio
+      label.style.display = 'none';
     }
   });
 }
 
-/* ============================================================
-   INIZIALIZZAZIONE SICURA
-============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Avvia la galleria se i dati sono pronti, altrimenti attende l'evento custom
   if (window.galleryData) {
     loadChaosGallery();
   } else {
-    document.addEventListener('galleryReady', loadChaosGallery);
-    // Fallback temporizzato se galleryReady non dovesse scattare
+    document.addEventListener('galleryReady', loadChaosGallery, { once: true });
     setTimeout(loadChaosGallery, 2000);
   }
 });

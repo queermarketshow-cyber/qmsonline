@@ -2349,12 +2349,12 @@ a.sost-card.sost-cta:focus-visible {
   padding: clamp(2.5rem, 5vw, 4rem) clamp(1rem, 3vw, 2.5rem) clamp(3.5rem, 6vw, 5rem);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   overflow: hidden;
 }
 
-/* Polaroid buttate sul tavolo: cornice chiara spessa in basso, ombra netta, sovrapposizioni opache */
+/* Layer delle 20-35 Polaroid buttate sul tavolo dal JS */
 .qms-gallery-images {
   position: absolute;
   inset: 0;
@@ -2364,70 +2364,47 @@ a.sost-card.sost-cta:focus-visible {
 
 .qms-gallery-images img {
   position: absolute;
-  width: clamp(165px, 23vw, 310px);
-  height: clamp(190px, 26vw, 350px);
+  width: clamp(145px, 19vw, 265px);
+  height: clamp(170px, 23vw, 310px);
   object-fit: cover;
   object-position: center;
   opacity: 1;
   mix-blend-mode: normal;
   background: #f5f2ec;
-  padding: 7px 7px 22px 7px;
+  padding: 6px 6px 20px 6px;
   border: 2px solid #111;
   border-radius: 0;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.8), 6px 6px 0 #000;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.82), 5px 5px 0 #000;
   filter: contrast(1.32) saturate(1.22);
-  transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
   pointer-events: auto;
   transition:
-    transform 0.13s cubic-bezier(0.2, 0.9, 0.3, 1),
     border-color 0.11s ease,
     box-shadow 0.13s ease,
-    filter 0.13s ease,
-    z-index 0s linear 0.13s;
+    filter 0.13s ease;
 }
-
-.qms-gallery-images img:nth-child(6n + 1) { top: 6%;    left: 4%;   --tilt: -5deg;  z-index: 2; }
-.qms-gallery-images img:nth-child(6n + 2) { top: 4%;    left: 28%;  --tilt: 3.5deg; z-index: 3; }
-.qms-gallery-images img:nth-child(6n + 3) { top: 8%;    right: 6%;  --tilt: -3deg;  z-index: 2; }
-.qms-gallery-images img:nth-child(6n + 4) { bottom: 8%; left: 12%;  --tilt: 4.5deg; z-index: 4; }
-.qms-gallery-images img:nth-child(6n + 5) { bottom: 6%; left: 42%;  --tilt: -6deg;  z-index: 3; }
-.qms-gallery-images img:nth-child(6n)     { bottom: 9%; right: 9%;  --tilt: 4deg;   z-index: 4; }
 
 .qms-gallery-images img:hover,
 .qms-gallery-images img:focus-visible {
-  transform: rotate(calc(var(--tilt, 0deg) * -0.4)) scale(1.07) translateZ(0);
   border-color: var(--primary-color);
-  box-shadow: 9px 9px 0 var(--primary-color);
-  filter: contrast(1.44) saturate(1.36) brightness(1.05);
-  z-index: 9;
-  transition:
-    transform 0.11s cubic-bezier(0.2, 0.9, 0.3, 1),
-    border-color 0.1s ease,
-    box-shadow 0.11s ease,
-    filter 0.11s ease,
-    z-index 0s linear 0s;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.9), 8px 8px 0 var(--primary-color);
+  filter: contrast(1.45) saturate(1.38) brightness(1.06);
   outline: none;
 }
 
-/* Etichette narrative: sticker opachi sopra le Polaroid */
+/* Etichette posizionate dal JS con anti-collisione */
 .qms-gallery-labels {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.9rem 1.3rem;
-  padding: 1rem 0;
+  position: absolute;
+  inset: 0;
+  z-index: 60;
   pointer-events: none;
 }
 
 .qms-gallery-labels .label {
+  position: absolute;
   background: var(--accent-pink);
   padding: 0.5rem 1rem;
-  font-size: clamp(0.9rem, 2vw, 1.5rem);
+  font-size: clamp(0.9rem, 2vw, 1.45rem);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -2435,35 +2412,32 @@ a.sost-card.sost-cta:focus-visible {
   border: 2px solid #000;
   border-radius: 0;
   box-shadow: 4px 4px 0 #fff;
-  transform: rotate(-2deg) translateZ(0);
   pointer-events: auto;
-  transition:
-    transform 0.12s cubic-bezier(0.2, 0.9, 0.3, 1),
-    background-color 0.12s ease,
-    box-shadow 0.12s ease;
+  user-select: none;
+  transition: background-color 0.12s ease, box-shadow 0.12s ease;
 }
 
 .qms-gallery-labels .label:nth-child(even) {
   background: var(--primary-color);
-  transform: rotate(2deg) translateZ(0);
 }
 
 .qms-gallery-labels .label:hover {
   background: #fff;
-  transform: rotate(0deg) scale(1.06) translateZ(0);
   box-shadow: 6px 6px 0 var(--primary-color);
 }
 
+/* CTA centrale posizionata e scalata dal JS */
 .chaos-button {
-  position: relative;
-  z-index: 12;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 70;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
   background: var(--accent-pink);
   padding: 0.95rem 1.75rem;
-  font-size: clamp(0.95rem, 2vw, 1.4rem);
+  font-size: clamp(0.95rem, 2vw, 1.35rem);
   font-weight: 900;
   color: #000;
   text-transform: uppercase;
@@ -2472,21 +2446,18 @@ a.sost-card.sost-cta:focus-visible {
   border: 3px solid #fff;
   border-radius: 0;
   box-shadow: 6px 6px 0 #000;
-  transform: rotate(-2deg) translateZ(0);
-  transition:
-    transform 0.12s cubic-bezier(0.2, 0.9, 0.3, 1),
-    background-color 0.12s ease,
-    box-shadow 0.12s ease;
+  cursor: pointer;
+  transition: background-color 0.12s ease, box-shadow 0.12s ease;
 }
 
 .chaos-button:hover,
 .chaos-button:focus-visible {
   background: var(--primary-color);
-  transform: rotate(0deg) translateY(-3px) scale(1.04) translateZ(0);
   box-shadow: 8px 8px 0 var(--primary-color);
   outline: none;
 }
 
+/* Cartelle in archivio / modale */
 .gallery-folders {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -2829,42 +2800,25 @@ a.sost-card.sost-cta:focus-visible {
 
 @media (max-width: 768px) {
   .qms-gallery-grid {
-    min-height: auto;
-    max-height: none;
-    padding: 2.25rem 0.9rem 3rem;
-  }
-
-  .qms-gallery-images {
-    position: relative;
-    inset: auto;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-    width: 100%;
-    margin-bottom: 1rem;
+    min-height: 500px;
+    padding: 2rem 0.75rem 3rem;
   }
 
   .qms-gallery-images img {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: 155px;
-    padding: 5px 5px 15px 5px;
+    width: clamp(110px, 30vw, 165px);
+    height: clamp(130px, 35vw, 195px);
+    padding: 5px 5px 14px 5px;
     box-shadow: 4px 4px 0 #000;
   }
 
-  .qms-gallery-images img:nth-child(odd)  { --tilt: -2.5deg; }
-  .qms-gallery-images img:nth-child(even) { --tilt: 2.5deg; }
-
   .qms-gallery-labels .label {
-    font-size: 0.78rem;
-    padding: 0.4rem 0.75rem;
+    font-size: 0.76rem;
+    padding: 0.38rem 0.72rem;
   }
 
   .chaos-button {
-    margin-top: 1.25rem;
-    padding: 0.8rem 1.35rem;
-    font-size: 0.88rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
   }
 }
 
