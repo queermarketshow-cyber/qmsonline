@@ -7,7 +7,9 @@
       "artists.json",
       "/artists.json",
       "../artists.json",
-      "./data/artists.json"
+      "../../artists.json",
+      "./data/artists.json",
+      "/data/artists.json"
     ],
     timeoutMs: 8000
   };
@@ -32,6 +34,7 @@
     artists: [],
     allFilter: "all",
     activeArtistId: null,
+    loadError: "",
     listenersBound: false
   };
 
@@ -45,8 +48,9 @@
   }
 
   function sanitizeUrl(url = "") {
-    const trimmed = String(url).trim();
+    const trimmed = String(url || "").trim();
     if (!trimmed) return "";
+    if (/^(javascript|data|vbscript):/i.test(trimmed)) return "";
     if (
       trimmed.startsWith("#") ||
       trimmed.startsWith("/") ||
@@ -56,14 +60,18 @@
       return trimmed;
     }
     try {
-      const parsed = new URL(trimmed, window.location.origin);
+      const base =
+        window.location.origin && window.location.origin !== "null"
+          ? window.location.origin
+          : window.location.href;
+      const parsed = new URL(trimmed, base);
       if (parsed.protocol === "https:" || parsed.protocol === "http:") {
-        return parsed.href;
+        return trimmed;
       }
     } catch {
-      return "";
+      return trimmed;
     }
-    return "";
+    return trimmed;
   }
 
   function joinAssetPath(basePath, fileOrUrl) {
@@ -172,12 +180,18 @@
   }
 
   async function loadArtistsData() {
+    state.loadError = "";
+
     if (window.location.protocol === "file:") {
-      console.warn("[artists.js] Protocollo file:// rilevato: avvia un server locale per leggere artists.json.");
+      state.loadError =
+        "Apertura tramite file://: avvia un server locale per caricare artists.json.";
+      console.warn("[artists.js]", state.loadError);
       return [];
     }
 
+    const tried = [];
     for (const url of CONFIG.candidateUrls) {
+      tried.push(url);
       try {
         const data = await fetchSingle(url);
         const normalized = normalizeArtists(data);
@@ -197,7 +211,8 @@
       }
     }
 
-    console.warn("[artists.js] Nessun artists.json valido trovato.");
+    state.loadError = `Impossibile caricare artists.json (percorsi provati: ${tried.join(", ")}).`;
+    console.warn("[artists.js]", state.loadError);
     return [];
   }
 
@@ -234,20 +249,16 @@
     const residents = state.artists.filter((a) => a.type === "resident");
     const guests = state.artists.filter((a) => a.type === "guest");
 
-    console.info(
-      `[artists.js] Residenti: ${residents.length} | Ospiti: ${guests.length}`
-    );
-
     if (dom.residentGallery) {
       dom.residentGallery.innerHTML = residents.length
         ? residents.map(renderArtistCard).join("")
-        : `<p class="empty-state">Nessuna artista resident disponibile al momento.</p>`;
+        : `<p class="empty-state">${escapeHTML(state.loadError || "Nessuna artista resident disponibile al momento.")}</p>`;
     }
 
     if (dom.guestGallery) {
       dom.guestGallery.innerHTML = guests.length
         ? guests.map(renderArtistCard).join("")
-        : `<p class="empty-state">Nessuna artista ospite al momento.</p>`;
+        : `<p class="empty-state">${escapeHTML(state.loadError || "Nessuna artista ospite al momento.")}</p>`;
     }
   }
 
@@ -259,9 +270,15 @@
         ? state.artists
         : state.artists.filter((a) => a.type === state.allFilter);
 
-    dom.allGallery.innerHTML = filtered.length
-      ? filtered.map(renderArtistCard).join("")
-      : `<p class="empty-state">Nessuna artista trovata per questo filtro.</p>`;
+    if (!filtered.length) {
+      const msg =
+        state.loadError ||
+        "Nessuna artista trovata per questo filtro.";
+      dom.allGallery.innerHTML = `<p class="empty-state">${escapeHTML(msg)}</p>`;
+      return;
+    }
+
+    dom.allGallery.innerHTML = filtered.map(renderArtistCard).join("");
   }
 
   function openArtistModal(artistId, dom) {
