@@ -31,7 +31,7 @@ async function loadChaosGallery() {
 
   if (!allImages.length) return;
 
-  // Più foto (36-52) per riempire bene il tavolo; se il pool è più piccolo, ricicla con shuffle
+  // 36-52 foto per riempire il tavolo in modo denso; se il pool è più corto, ricicla mescolando
   const targetCount = Math.floor(Math.random() * 17) + 36;
   const pool = [];
   while (pool.length < targetCount) {
@@ -53,8 +53,8 @@ async function loadChaosGallery() {
   const isMobile = gridWidth <= 768;
 
   const scaleFactor = Math.min(gridWidth, gridHeight) / 900;
-  const labelScale = Math.max(0.65, Math.min(1.2, scaleFactor));
-  const ctaScale = Math.max(0.62, Math.min(1.05, scaleFactor));
+  const labelScale = Math.max(0.6, Math.min(1.0, scaleFactor));
+  const ctaScale = Math.max(0.88, Math.min(1.32, scaleFactor * 1.15));
 
   cta.style.zIndex = '200';
   cta.style.transform = `translate(-50%, -50%) rotate(-5deg) scale(${ctaScale})`;
@@ -66,7 +66,6 @@ async function loadChaosGallery() {
   const maxX = Math.max(20, gridWidth - approxCardW * 0.65);
   const maxY = Math.max(20, gridHeight - approxCardH * 0.65);
 
-  // Distribuzione a zone + jitter così copre tutta la superficie senza lasciare buchi
   const cols = isMobile ? 4 : 7;
   const rows = Math.ceil(targetCount / cols);
 
@@ -101,7 +100,7 @@ async function loadChaosGallery() {
 
   const placedLabelsRects = [];
   const ctaRect = cta.getBoundingClientRect();
-  const BUFFER = 14;
+  const BUFFER = 24;
 
   function isColliding(rect, others) {
     const collidesWithCTA = !(
