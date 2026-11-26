@@ -198,63 +198,90 @@
 
 </section>
 
-<section id="calendario">
+<section id="calendario" class="featured-event-home">
 
-  <!-- FILTRI CATEGORIE -->
-  <div class="calendar-filters" id="calendar-filters"></div>
+  <div class="featured-event-wrapper">
 
+    <div class="featured-event-image">
 
-  <div class="calendar-layout">
+      <img
+        src="images/eventi/prossimo-evento.jpg"
+        alt="Locandina del prossimo evento">
 
-    <!-- ============================
-         CALENDARIO FUTURO (DESKTOP)
-    ============================= -->
-    <div id="future-calendar">
-      <button id="prev-month">←</button>
-      <div id="future-month-container"></div>
-      <button id="next-month">→</button>
     </div>
 
-    <!-- ============================
-         CALENDARIO MOBILE (CAROUSEL)
-    ============================= -->
-    <div id="mobile-calendar-wrapper">
+    <div class="featured-event-content">
 
-      <!-- PALLINI INDICATORI -->
-      <div id="mobile-dots"></div>
+      <span class="event-label">
+        PROSSIMO EVENTO
+      </span>
 
-      <!-- FRECCIA SINISTRA -->
-      <button id="mobile-prev" class="mobile-arrow">‹</button>
+      <h2 class="event-title">
+        Queer Burlesque Night
+      </h2>
 
-      <!-- CAROSELLO -->
-      <div id="mobile-calendar-carousel">
-        <!-- Le card vengono inserite via JS -->
+      <div class="event-meta">
+
+        <p>
+          📅 14 Febbraio 2027
+        </p>
+
+        <p>
+          🕒 Ore 21:00
+        </p>
+
+        <p>
+          <a
+            href="https://maps.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="event-location">
+
+            📍 Manifatture Knos, Lecce
+
+          </a>
+        </p>
+
       </div>
 
-      <!-- FRECCIA DESTRA -->
-      <button id="mobile-next" class="mobile-arrow">›</button>
+      <p class="event-description">
+        Performance, musica e corpi fuori norma.
+        Una serata dedicata alla sperimentazione,
+        alla comunità e all'immaginazione queer.
+      </p>
+
+      <div class="event-actions">
+
+        <!-- MOSTRA SOLO SE ESISTE ticketUrl -->
+
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="event-primary-btn">
+
+          Prenota / Acquista
+
+        </a>
+
+        <!-- OPPURE -->
+
+        <span class="event-free-entry">
+          Ingresso gratuito
+        </span>
+
+      </div>
+
+      <a
+        href="eventi.html"
+        class="all-events-link">
+
+        Tutti gli eventi →
+
+      </a>
+
     </div>
 
-    <!-- ============================
-         TIMELINE MOBILE (fallback)
-    ============================= -->
-    <div id="mobile-timeline" class="mobile-timeline"></div>
-
-    <!-- ============================
-         EVENTI PASSATI (DESKTOP)
-    ============================= -->
-    <div id="past-events"></div>
-
-  </div>
-
-  <!-- ============================
-       MODALE EVENTO
-  ============================= -->
-  <div id="event-modal">
-    <div class="event-modal-content">
-      <button class="event-modal-close">✕</button>
-      <div id="event-modal-body"></div>
-    </div>
   </div>
 
 </section>

@@ -519,5 +519,22 @@
     "location": "Convitto Palmieri, Lecce",
     "image": "images/eventi/20260307-gaya.jpg",
     "categories": ["performance", "djset", "talk"]
-  }
+  },
+  {
+  "id": "event-2026-11-28-partyinginpalestine",
+  "title": "Partying in Palestine",
+  "start": "2026-11-28",
+  "end": "2026-11-28",
+  "time": "21:00",
+  "description": "costruire comunità attraverso l'arte sotto occupazione.",
+  "location": "Spazio Sociale Zei, Lecce",
+  "venueUrl": "https://maps.app.goo.gl/ucBKoPWr9m4zrjjU7",
+  "image": "images/eventi/20261128-partyinginpalestine.jpg",
+  "ticketUrl": "",
+  "freeEntry": true,
+  "recurringWeekdays": [],
+  "specificDates": [],
+  "categories": ["djset", "talk"]
+}
+
 ]
