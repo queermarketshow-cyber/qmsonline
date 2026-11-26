@@ -434,7 +434,6 @@ section[id] {
   overflow: visible;
   transform: rotate(var(--tilt, 0deg)) translateZ(0);
   transform-origin: center;
-  filter: drop-shadow(5px 5px 0 #000) drop-shadow(-1px -1px 0 rgba(255, 255, 255, 0.72));
 }
 
 .home-wall-patch img {
@@ -444,7 +443,7 @@ section[id] {
   object-fit: cover;
   object-position: center;
   opacity: 1;
-  filter: contrast(1.42) saturate(1.25);
+  filter: url(#torn-paper-edge) contrast(1.42) saturate(1.25);
 }
 
 /* Profili a lembi strappati come carta scollata */
@@ -677,6 +676,10 @@ a.poster:focus-visible .sticker {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+  }
+
+  .home-wall-patch img {
+    filter: url(#torn-paper-edge) contrast(1.45) saturate(1.25);
   }
 
   .poster-XS {
