@@ -10,8 +10,7 @@
 
   <meta
     name="description"
-    content="Eventi, performance, workshop, mercati artistici e pratiche queer nel Salento. Esplora i prossimi appuntamenti e l'archivio vivente di Queer Market Show."
-  >
+    content="Eventi, performance, workshop, mercati artistici e pratiche queer nel Salento. Esplora i prossimi appuntamenti e l'archivio vivente di Queer Market Show.">
 
   <link rel="icon"
         href="images/logo-qms.ico"
@@ -49,144 +48,138 @@
 
   </nav>
 
-<!-- HERO -->
+  <!-- HERO -->
 
-<header class="eventi-hero">
+  <header class="eventi-hero">
 
-  <div class="eventi-hero-content">
+    <div class="eventi-hero-content">
 
-    <span class="eventi-kicker">
-      CORPI · SUONI · PRESENZE
-    </span>
+      <span class="eventi-kicker">
+        CORPI · SUONI · PRESENZE
+      </span>
 
-    <h1>
-      CHE SUCCEDE ORA
-    </h1>
+      <h1>
+        CHE SUCCEDE ORA
+      </h1>
 
-    <a href="#future-events"
-       class="hero-event-button">
-      ESPLORA
-    </a>
-
-  </div>
-
-</header>
-
-<!-- CALENDARIO EVENTI -->
-
-<section id="future-events"
-         class="events-section">
-
-  <!-- FILTRI -->
-
-  <div id="calendar-filters"
-       class="calendar-filters">
-  </div>
-
-  <!-- DESKTOP -->
-
-  <div id="future-calendar">
-
-    <button id="prev-month">
-      ←
-    </button>
-
-    <div id="future-month-container">
     </div>
 
-    <button id="next-month">
-      →
-    </button>
+  </header>
 
-  </div>
+  <!-- CALENDARIO -->
 
-  <!-- MOBILE -->
+  <section id="future-events"
+           class="events-section">
 
-  <div id="mobile-calendar-wrapper">
+    <div id="calendar-filters"
+         class="calendar-filters">
+    </div>
 
-    <div id="mobile-dots"></div>
+    <!-- DESKTOP -->
 
-    <button id="mobile-prev"
-            class="mobile-arrow"
-            aria-label="Evento precedente">
-      ‹
-    </button>
+    <div id="future-calendar">
 
-    <div id="mobile-calendar-carousel">
+      <button id="prev-month"
+              aria-label="Mese precedente">
+        ←
+      </button>
+
+      <div id="future-month-container"></div>
+
+      <button id="next-month"
+              aria-label="Mese successivo">
+        →
+      </button>
+
+    </div>
+
+    <!-- MOBILE -->
+
+    <div id="mobile-calendar-wrapper">
+
+      <div id="mobile-dots"></div>
+
+      <button id="mobile-prev"
+              class="mobile-arrow"
+              aria-label="Evento precedente">
+        ‹
+      </button>
+
+      <div id="mobile-calendar-carousel">
+
+        <!-- POPOLATO DA JS -->
+
+      </div>
+
+      <button id="mobile-next"
+              class="mobile-arrow"
+              aria-label="Evento successivo">
+        ›
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- ARCHIVIO -->
+
+  <section id="archive"
+           class="archive-section">
+
+    <div class="section-header">
+
+      <h2>
+        ARCHIVIO VIVENTE
+      </h2>
+
+      <p>
+        TUTTE LE TRACCE LASCIATE DIETRO DI NOI
+      </p>
+
+    </div>
+
+    <div id="past-events">
 
       <!-- POPOLATO DA JS -->
 
     </div>
 
-    <button id="mobile-next"
-            class="mobile-arrow"
-            aria-label="Evento successivo">
-      ›
-    </button>
+  </section>
 
-  </div>
+  <!-- CALL TO ACTION -->
 
-</section>
+  <section class="artists-call-section">
 
-<!-- ARCHIVIO -->
+    <div class="artists-call-content">
 
-<section id="archive"
-         class="archive-section">
+      <span class="eventi-kicker">
+        COSTRUIAMO INSIEME
+      </span>
 
-  <div class="section-header">
+      <h2>
+        COSA STAI COSTRUENDO?
+      </h2>
 
-    <h2>
-      ARCHIVIO VIVENTE
-    </h2>
+      <p>
+        Performance, workshop, installazioni,
+        pratiche ibride, esperimenti e idee
+        difficili da classificare.
+      </p>
 
-    <p>
-      TUTTE LE TRACCE LASCIATE DIETRO DI NOI
-    </p>
+      <p>
+        Se pensi che possa trovare spazio
+        dentro Queer Market Show,
+        raccontacela.
+      </p>
 
-  </div>
+      <a href="index.html#contatti"
+         class="artists-call-button">
+        PROPONI UN PROGETTO
+      </a>
 
-  <div id="past-events">
+    </div>
 
-    <!-- POPOLATO DA JS -->
-
-  </div>
-
-</section>
-
-<!-- CALL TO ACTION -->
-
-<section class="artists-call-section">
-
-  <div class="artists-call-content">
-
-    <span class="eventi-kicker">
-      COSTRUIAMO INSIEME
-    </span>
-
-    <h2>
-      COSA STAI COSTRUENDO?
-    </h2>
-
-    <p>
-      Performance, workshop,
-      installazioni, pratiche ibride,
-      esperimenti e idee difficili da classificare.
-    </p>
-
-    <p>
-      Se pensi che possa trovare spazio
-      dentro Queer Market Show,
-      raccontacela.
-    </p>
-
-    <a href="index.html#contatti"
-       class="artists-call-button">
-      PROPONI UN PROGETTO
-    </a>
-
-  </div>
-
-</section>
+  </section>
 
   <!-- MODALE EVENTO -->
 
@@ -238,6 +231,8 @@
 
   </footer>
 
+  <!-- SCRIPT -->
+
   <script src="assets/js/base.js"></script>
   <script src="assets/js/events.js"></script>
 
@@ -246,6 +241,8 @@
     function updateNavbarHeight() {
 
       const nav = document.querySelector(".navbar");
+
+      if (!nav) return;
 
       document.documentElement.style.setProperty(
         "--navbar-height",
