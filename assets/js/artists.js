@@ -211,29 +211,74 @@
   }
 
   function renderArtistCard(artist) {
-    const safeId = escapeHTML(artist.id);
-    const safeName = escapeHTML(artist.name);
-    const safeCover = escapeHTML(artist.cover);
-    const typeLabel = artist.type === "guest" ? "Ospite" : "Resident";
-    const roleTag = artist.role
-      ? `<span class="artista-role-tag">${escapeHTML(artist.role)}</span>`
-      : "";
 
-    return `
-      <article class="artist-card" data-artist-id="${safeId}" tabindex="0" role="button" aria-label="Apri scheda di ${safeName}">
+  const safeId = escapeHTML(artist.id);
+  const safeName = escapeHTML(artist.name);
+  const safeCover = escapeHTML(artist.cover);
+
+  const typeLabel =
+    artist.type === "guest"
+      ? "OSPITE"
+      : "RESIDENT";
+
+  const roleTag = artist.role
+    ? `
+      <span class="artist-cast-tag">
+        ${escapeHTML(artist.role)}
+      </span>
+    `
+    : "";
+
+  return `
+
+    <article
+      class="artist-card artist-cast-card"
+      data-artist-id="${safeId}"
+      tabindex="0"
+      role="button"
+      aria-label="Apri scheda di ${safeName}"
+    >
+
+      <div class="artist-cast-image">
+
         ${
           safeCover
-            ? `<img class="artist-cover-img" src="${safeCover}" alt="${safeName}" onerror="this.style.display='none';">`
+            ? `
+              <img
+                class="artist-cover-img"
+                src="${safeCover}"
+                alt="${safeName}"
+                loading="lazy"
+                onerror="this.style.display='none';"
+              >
+            `
             : ""
         }
-        <div class="artista-info">
-          <span class="artista-name">${safeName}</span>
-          <span class="artista-role-tag">${escapeHTML(typeLabel)}</span>
+
+      </div>
+
+      <div class="artist-cast-info">
+
+        <span class="artist-cast-name">
+          ${safeName}
+        </span>
+
+        <div class="artist-cast-tags">
+
+          <span class="artist-cast-tag">
+            ${escapeHTML(typeLabel)}
+          </span>
+
           ${roleTag}
+
         </div>
-      </article>
-    `;
-  }
+
+      </div>
+
+    </article>
+
+  `;
+}
 
   function renderHomeResidents(dom) {
     if (dom.sectionHome) {
