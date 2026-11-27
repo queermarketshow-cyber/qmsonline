@@ -614,6 +614,20 @@ a.poster:focus-visible .sticker {
   font-weight: 800;
   line-height: 1.35;
 }
+.home-subdescription {
+  max-width: 48ch;
+  margin: 1rem auto 0;
+  padding: 0.35rem 0.8rem;
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  border: 1.5px solid #fff;
+  box-shadow: 3px 3px 0 var(--primary-color);
+  transform: rotate(-0.8deg);
+  font-size: clamp(0.92rem, 1.4vw, 1.08rem);
+  font-weight: 800;
+  line-height: 1.35;
+}
 
 .home-cta {
   display: flex;
