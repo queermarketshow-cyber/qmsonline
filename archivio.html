@@ -53,7 +53,7 @@
     <section id="archivio" class="scroll-section qms-archive-page">
       <header class="archive-hero">
         <span class="archive-kicker">Archivio · Memorie &amp; Sguardi</span>
-        <h1>L'Archivio del Show</h1>
+        <h1>L'Archivio di QMS</h1>
         <p class="archive-intro">
           Frammenti di serate, corpi, tavoli, sguardi e attraversamenti:
           l'archivio vivo di ciò che abbiamo costruito insieme.
@@ -143,6 +143,7 @@
         const noteEl = document.getElementById("archiveMarginNote");
         const counterEl = document.getElementById("archiveLiveCounter");
         const foldersContainer = document.querySelector(".gallery-folders");
+        const mosaicGrid = document.querySelector(".mosaic-grid");
         const modalEl = document.getElementById("galleryModal");
         const mosaicEl = document.getElementById("mosaicGallery");
         if (!noteEl || !counterEl || !foldersContainer) return;
@@ -168,30 +169,63 @@
           renderNote(noteIndex + 1);
         }
 
+        function getTotalPages(folders) {
+          let totalPages = 0;
+
+          folders.forEach((folder) => {
+            const rawCount =
+              folder.dataset.photoCount ||
+              folder.dataset.count ||
+              folder.dataset.pages ||
+              folder.getAttribute("data-photos");
+
+            if (rawCount && !Number.isNaN(Number(rawCount))) {
+              totalPages += Number(rawCount);
+              return;
+            }
+
+            const countBadge = folder.querySelector("[data-photo-count], .photo-count, .folder-count");
+            if (countBadge) {
+              const parsed = parseInt((countBadge.textContent || "").replace(/\D+/g, ""), 10);
+              if (!Number.isNaN(parsed) && parsed > 0) {
+                totalPages += parsed;
+                return;
+              }
+            }
+
+            const imgs = folder.querySelectorAll("img");
+            if (imgs.length > 1) {
+              totalPages += imgs.length;
+            }
+          });
+
+          if (!totalPages && mosaicGrid) {
+            const mosaicImgs = mosaicGrid.querySelectorAll("img").length;
+            if (mosaicImgs > 0) {
+              totalPages = mosaicImgs;
+            }
+          }
+
+          return totalPages;
+        }
+
         function updateCounter() {
           const folders = foldersContainer.querySelectorAll(".folder-preview");
           const albumCount = folders.length;
-
-          let photoCount = 0;
-          folders.forEach((folder) => {
-            const rawCount = folder.dataset.photoCount || folder.dataset.count;
-            if (rawCount && !Number.isNaN(Number(rawCount))) {
-              photoCount += Number(rawCount);
-            } else {
-              const imgs = folder.querySelectorAll("img");
-              if (imgs.length > 1) photoCount += imgs.length;
-            }
-          });
+          const totalPages = getTotalPages(folders);
 
           if (!albumCount) {
             counterEl.textContent = "Archivio in ascolto";
             return;
           }
 
+          const chapterLabel = albumCount === 1 ? "capitolo" : "capitoli";
+          const pageLabel = totalPages === 1 ? "pagina" : "pagine";
+
           counterEl.textContent =
-            photoCount > 0
-              ? `${albumCount} ${albumCount === 1 ? "capitolo" : "capitoli"} · ${photoCount} scatti`
-              : `${albumCount} ${albumCount === 1 ? "capitolo" : "capitoli"} aperti`;
+            totalPages > 0
+              ? `${albumCount} ${chapterLabel} · ${totalPages} ${pageLabel}`
+              : `${albumCount} ${chapterLabel} aperti`;
         }
 
         noteEl.addEventListener("click", cycleNote);
@@ -203,7 +237,11 @@
         });
 
         const observer = new MutationObserver(updateCounter);
-        observer.observe(foldersContainer, { childList: true, subtree: true });
+        observer.observe(foldersContainer, { childList: true, subtree: true, attributes: true });
+
+        if (mosaicGrid) {
+          new MutationObserver(updateCounter).observe(mosaicGrid, { childList: true, subtree: true });
+        }
 
         if (modalEl) {
           new MutationObserver(() => {
