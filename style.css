@@ -3509,28 +3509,3 @@ a.sost-card.sost-cta:focus-visible {
 * {
   scrollbar-width: none !important;
 }
-.artist-modal-nav {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  gap: 1rem !important;
-  margin-top: 1.5rem !important;
-  padding-top: 1rem !important;
-  border-top: 2px dashed rgba(255, 255, 255, 0.35) !important;
-  position: relative !important;
-  z-index: 10 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-
-.artist-nav-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  position: relative !important;
-  z-index: 11 !important;
-}
