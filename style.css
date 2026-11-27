@@ -2129,9 +2129,12 @@ section#artist3,
   inset: 0;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(4px);
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 920px) auto;
+  grid-template-areas: "prev content next";
   justify-content: center;
   align-items: center;
+  column-gap: 1rem;
   z-index: var(--z-modal);
   padding: 1.25rem;
 }
@@ -2141,6 +2144,7 @@ section#artist3,
 }
 
 .artist-modal-content {
+  grid-area: content;
   max-width: 920px;
   width: 100%;
   max-height: 88dvh;
@@ -2325,13 +2329,7 @@ section#artist3,
 }
 
 .artist-modal-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 2px dashed rgba(255, 255, 255, 0.25);
+  display: contents;
 }
 
 .artist-nav-btn {
@@ -2339,7 +2337,7 @@ section#artist3,
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.7rem 1.2rem;
+  padding: 0.85rem 1.15rem;
   background: var(--primary-color);
   color: #000;
   border: 2px solid #000;
@@ -2349,25 +2347,71 @@ section#artist3,
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  white-space: nowrap;
   cursor: pointer;
-  transform: rotate(-1deg);
+  position: sticky;
+  top: 50%;
+  z-index: 5;
+  transform: translateY(-50%) rotate(-1.5deg);
   transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
 }
 
+.artist-nav-btn[data-action="prev-artist"] {
+  grid-area: prev;
+}
+
 .artist-nav-btn[data-action="next-artist"] {
+  grid-area: next;
   background: #fff;
   color: #000;
   box-shadow: 4px 4px 0 var(--primary-color);
-  transform: rotate(1deg);
+  transform: translateY(-50%) rotate(1.5deg);
 }
 
 .artist-nav-btn:hover,
 .artist-nav-btn:focus-visible {
   background: var(--accent-pink);
   color: #000;
-  transform: rotate(0deg) translateY(-2px);
+  transform: translateY(calc(-50% - 2px)) rotate(0deg);
   box-shadow: 5px 5px 0 #fff;
   outline: none;
+}
+
+@media (max-width: 1080px) {
+  .artist-modal {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "content"
+      "nav";
+    row-gap: 0.85rem;
+  }
+
+  .artist-modal-nav {
+    grid-area: nav;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    max-width: 920px;
+    width: 100%;
+  }
+
+  .artist-nav-btn,
+  .artist-nav-btn[data-action="next-artist"] {
+    position: static;
+    top: auto;
+    transform: rotate(-1deg);
+    padding: 0.7rem 1.15rem;
+  }
+
+  .artist-nav-btn[data-action="next-artist"] {
+    transform: rotate(1deg);
+  }
+
+  .artist-nav-btn:hover,
+  .artist-nav-btn:focus-visible {
+    transform: translateY(-2px) rotate(0deg);
+  }
 }
 
 @media (max-width: 768px) {
@@ -2378,7 +2422,7 @@ section#artist3,
   .artist-modal-content {
     padding: 1.35rem 1.1rem;
     transform: none;
-    max-height: 92dvh;
+    max-height: 82dvh;
     box-shadow:
       5px 5px 0 var(--primary-color),
       9px 9px 0 #000;
