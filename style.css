@@ -2160,11 +2160,65 @@ section#artist3,
   overscroll-behavior: contain;
 }
 
-.artist-modal-content .close-button {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  font-size: 1.5rem;
+.artist-modal-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.15rem;
+}
+
+.artist-modal-nav--single {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.artist-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  background: var(--primary-color);
+  color: #000;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0 #fff;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: rotate(-1.5deg);
+  transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.artist-nav-btn[data-action="prev-artist"] {
+  justify-self: start;
+}
+
+.artist-nav-btn[data-action="next-artist"] {
+  justify-self: end;
+  background: #fff;
+  color: #000;
+  box-shadow: 3px 3px 0 var(--primary-color);
+  transform: rotate(1.5deg);
+}
+
+.artist-nav-btn:hover,
+.artist-nav-btn:focus-visible {
+  background: var(--accent-pink);
+  color: #000;
+  transform: translateY(-2px) rotate(0deg);
+  box-shadow: 4px 4px 0 #fff;
+  outline: none;
+}
+
+.artist-modal-nav .close-button {
+  justify-self: center;
+  align-self: center;
+  font-size: 1.4rem;
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
@@ -2173,17 +2227,18 @@ section#artist3,
   border: 2px solid #000;
   box-shadow: 3px 3px 0 #fff;
   border-radius: 0;
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+  transform: rotate(2deg);
   transition: transform 0.12s ease, background-color 0.12s ease, box-shadow 0.12s ease;
 }
 
-.artist-modal-content .close-button:hover,
-.artist-modal-content .close-button:focus-visible {
+.artist-modal-nav .close-button:hover,
+.artist-modal-nav .close-button:focus-visible {
   background: #fff;
   color: #000;
   transform: rotate(-4deg) scale(1.05);
@@ -2196,9 +2251,8 @@ section#artist3,
   align-items: center;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-bottom: 0.9rem;
-  padding-right: 3rem;
-  padding-bottom: 0.9rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
   border-bottom: 2px solid var(--primary-color);
 }
 
@@ -2226,54 +2280,6 @@ section#artist3,
   box-shadow: 3px 3px 0 #fff;
   border-radius: 0;
   transform: rotate(-2deg);
-}
-
-/* Fascia dedicata sotto l'header e sopra bio/galleria */
-.artist-modal-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.35rem;
-  padding: 0.45rem 0;
-  border-bottom: 2px dashed rgba(255, 255, 255, 0.25);
-}
-
-.artist-nav-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 0.55rem 0.95rem;
-  background: var(--primary-color);
-  color: #000;
-  border: 2px solid #000;
-  box-shadow: 3px 3px 0 #fff;
-  font-family: var(--font-sans);
-  font-size: 0.78rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  cursor: pointer;
-  transform: rotate(-1.5deg);
-  transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
-}
-
-.artist-nav-btn[data-action="next-artist"] {
-  background: #fff;
-  color: #000;
-  box-shadow: 3px 3px 0 var(--primary-color);
-  transform: rotate(1.5deg);
-}
-
-.artist-nav-btn:hover,
-.artist-nav-btn:focus-visible {
-  background: var(--accent-pink);
-  color: #000;
-  transform: translateY(-2px) rotate(0deg);
-  box-shadow: 4px 4px 0 #fff;
-  outline: none;
 }
 
 .artist-modal-layout {
@@ -2387,12 +2393,19 @@ section#artist3,
   }
 
   .artist-modal-nav {
+    gap: 0.5rem;
     margin-bottom: 1rem;
   }
 
   .artist-nav-btn {
-    padding: 0.5rem 0.75rem;
+    padding: 0.45rem 0.7rem;
     font-size: 0.72rem;
+  }
+
+  .artist-modal-nav .close-button {
+    width: 30px;
+    height: 30px;
+    font-size: 1.25rem;
   }
 
   .artist-modal-layout {

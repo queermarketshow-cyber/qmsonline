@@ -374,20 +374,21 @@
       : "";
 
     const navList = getModalList();
+    const closeBtnHTML = `<button type="button" class="close-button" data-action="close-artist-modal" aria-label="Chiudi scheda">&times;</button>`;
     const navHTML =
       navList.length > 1
         ? `
           <div class="artist-modal-nav">
             <button type="button" class="artist-nav-btn" data-action="prev-artist">← Prec</button>
+            ${closeBtnHTML}
             <button type="button" class="artist-nav-btn" data-action="next-artist">Succ →</button>
           </div>
         `
-        : "";
+        : `<div class="artist-modal-nav artist-modal-nav--single">${closeBtnHTML}</div>`;
 
     dom.modalsContainer.innerHTML = `
       <div class="artist-modal" role="dialog" aria-modal="true" aria-labelledby="artist-modal-title">
         <div class="artist-modal-content">
-          <button type="button" class="close-button" data-action="close-artist-modal" aria-label="Chiudi scheda">&times;</button>
           ${navHTML}
           <div class="artist-header">
             <h3 id="artist-modal-title">${escapeHTML(artist.name)}</h3>
