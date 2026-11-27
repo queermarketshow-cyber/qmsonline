@@ -17,6 +17,7 @@
   function getDom() {
     return {
       sectionHome:
+        document.getElementById("artiste") ||
         document.getElementById("artistə") ||
         document.getElementById("artist3") ||
         document.querySelector(".home-artists-section"),
@@ -211,74 +212,60 @@
   }
 
   function renderArtistCard(artist) {
+    const safeId = escapeHTML(artist.id);
+    const safeName = escapeHTML(artist.name);
+    const safeCover = escapeHTML(artist.cover);
 
-  const safeId = escapeHTML(artist.id);
-  const safeName = escapeHTML(artist.name);
-  const safeCover = escapeHTML(artist.cover);
+    const typeLabel = artist.type === "guest" ? "OSPITE" : "RESIDENT";
 
-  const typeLabel =
-    artist.type === "guest"
-      ? "OSPITE"
-      : "RESIDENT";
-
-  const roleTag = artist.role
-    ? `
-      <span class="artist-cast-tag">
-        ${escapeHTML(artist.role)}
-      </span>
-    `
-    : "";
-
-  return `
-
-    <article
-      class="artist-card artist-cast-card"
-      data-artist-id="${safeId}"
-      tabindex="0"
-      role="button"
-      aria-label="Apri scheda di ${safeName}"
-    >
-
-      <div class="artist-cast-image">
-
-        ${
-          safeCover
-            ? `
-              <img
-                class="artist-cover-img"
-                src="${safeCover}"
-                alt="${safeName}"
-                loading="lazy"
-                onerror="this.style.display='none';"
-              >
-            `
-            : ""
-        }
-
-      </div>
-
-      <div class="artist-cast-info">
-
-        <span class="artist-cast-name">
-          ${safeName}
+    const roleTag = artist.role
+      ? `
+        <span class="artist-cast-tag">
+          ${escapeHTML(artist.role)}
         </span>
+      `
+      : "";
 
-        <div class="artist-cast-tags">
-
-          <span class="artist-cast-tag">
-            ${escapeHTML(typeLabel)}
-          </span>
-
-          ${roleTag}
-
+    return `
+      <article
+        class="artist-card artist-cast-card"
+        data-artist-id="${safeId}"
+        tabindex="0"
+        role="button"
+        aria-label="Apri scheda di ${safeName}"
+      >
+        <div class="artist-cast-image">
+          ${
+            safeCover
+              ? `
+                <img
+                  class="artist-cover-img"
+                  src="${safeCover}"
+                  alt="${safeName}"
+                  loading="lazy"
+                  onerror="this.style.display='none';"
+                >
+              `
+              : ""
+          }
         </div>
 
-      </div>
+        <div class="artist-cast-info">
+          <span class="artist-cast-name">
+            ${safeName}
+          </span>
 
-    </article>
+          <div class="artist-cast-tags">
+            <span class="artist-cast-tag">
+              ${escapeHTML(typeLabel)}
+            </span>
 
-  `;
-}
+            ${roleTag}
+          </div>
+        </div>
+      </article>
+    `;
+  }
 
   function renderHomeResidents(dom) {
     if (dom.sectionHome) {
@@ -322,16 +309,42 @@
     dom.allGallery.innerHTML = filtered.map(renderArtistCard).join("");
   }
 
+  function getModalList() {
+    const isHomeOnly =
+      Boolean(document.getElementById("artists-resident")) &&
+      !document.getElementById("artists-all");
+
+    if (isHomeOnly && state.activeArtistId) {
+      const residents = state.artists.filter((a) => a.type === "resident");
+      if (residents.some((a) => a.id === state.activeArtistId)) {
+        return residents;
+      }
+    }
+
+    if (document.getElementById("artists-all") && state.allFilter !== "all") {
+      const filtered = state.artists.filter((a) => a.type === state.allFilter);
+      if (filtered.some((a) => a.id === state.activeArtistId)) {
+        return filtered;
+      }
+    }
+
+    return state.artists;
+  }
+
   function openArtistModal(artistId, dom, triggerCard = null) {
     const artist = state.artists.find((a) => a.id === artistId);
     if (!artist || !dom.modalsContainer) return;
 
+    const isFirstOpen = !state.activeArtistId;
     state.activeArtistId = artist.id;
-    state.savedScrollY = window.scrollY;
-    state.lastFocusedCard =
-      triggerCard ||
-      document.querySelector(`.artist-card[data-artist-id="${CSS.escape(artistId)}"]`) ||
-      null;
+
+    if (isFirstOpen) {
+      state.savedScrollY = window.scrollY;
+      state.lastFocusedCard =
+        triggerCard ||
+        document.querySelector(`.artist-card[data-artist-id="${CSS.escape(artistId)}"]`) ||
+        null;
+    }
 
     const modalGalleryItems = artist.gallery.length
       ? artist.gallery
@@ -339,24 +352,37 @@
         ? [artist.cover]
         : [];
 
-    const galleryHTML = modalGalleryItems.length
+    const hasGallery = modalGalleryItems.length > 0;
+    const galleryHTML = hasGallery
       ? `<div class="artist-modal-gallery">${modalGalleryItems
-          .map((src) => `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}">`)
+          .map((src) => `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}" loading="lazy">`)
           .join("")}</div>`
       : "";
 
-    const bioHTML = [
-      artist.bioShort
-        ? `<p class="artist-modal-lead"><strong>${escapeHTML(artist.bioShort)}</strong></p>`
-        : "",
-      artist.bioLong ? `<p>${escapeHTML(artist.bioLong)}</p>` : ""
-    ]
-      .filter(Boolean)
-      .join("") || `<p>Biografia in aggiornamento.</p>`;
+    const bioHTML =
+      [
+        artist.bioShort
+          ? `<p class="artist-modal-lead"><strong>${escapeHTML(artist.bioShort)}</strong></p>`
+          : "",
+        artist.bioLong ? `<p>${escapeHTML(artist.bioLong)}</p>` : ""
+      ]
+        .filter(Boolean)
+        .join("") || `<p>Biografia in aggiornamento.</p>`;
 
     const igHTML = artist.instagram
       ? `<p class="artist-modal-social"><a href="${escapeHTML(artist.instagram)}" target="_blank" rel="noopener noreferrer">Instagram →</a></p>`
       : "";
+
+    const navList = getModalList();
+    const navHTML =
+      navList.length > 1
+        ? `
+          <div class="artist-modal-nav">
+            <button type="button" class="artist-nav-btn" data-action="prev-artist">← Prec</button>
+            <button type="button" class="artist-nav-btn" data-action="next-artist">Succ →</button>
+          </div>
+        `
+        : "";
 
     dom.modalsContainer.innerHTML = `
       <div class="artist-modal" role="dialog" aria-modal="true" aria-labelledby="artist-modal-title">
@@ -367,18 +393,29 @@
             <span class="artista-role-tag">${artist.type === "guest" ? "Ospite" : "Resident"}</span>
             ${artist.role ? `<span class="artista-role-tag">${escapeHTML(artist.role)}</span>` : ""}
           </div>
-          <div class="artist-modal-layout">
+          <div class="artist-modal-layout ${hasGallery ? "" : "artist-modal-layout--single"}">
             <div class="artist-modal-text">
               ${bioHTML}
               ${igHTML}
             </div>
             ${galleryHTML}
           </div>
+          ${navHTML}
         </div>
       </div>
     `;
 
     document.body.classList.add("modal-open");
+  }
+
+  function stepArtistModal(direction, dom) {
+    if (!state.activeArtistId) return;
+    const navList = getModalList();
+    if (navList.length < 2) return;
+    const idx = navList.findIndex((a) => a.id === state.activeArtistId);
+    if (idx === -1) return;
+    const nextIdx = (idx + direction + navList.length) % navList.length;
+    openArtistModal(navList[nextIdx].id, dom);
   }
 
   function closeArtistModal(dom) {
@@ -429,6 +466,18 @@
         return;
       }
 
+      if (e.target.closest('[data-action="prev-artist"]')) {
+        e.preventDefault();
+        stepArtistModal(-1, currentDom);
+        return;
+      }
+
+      if (e.target.closest('[data-action="next-artist"]')) {
+        e.preventDefault();
+        stepArtistModal(1, currentDom);
+        return;
+      }
+
       const modalBackdrop = e.target.closest(".artist-modal");
       if (modalBackdrop && e.target === modalBackdrop) {
         closeArtistModal(currentDom);
@@ -442,21 +491,41 @@
       }
     });
 
-    document.addEventListener("keydown", (e) => {
-      const currentDom = getDom();
-      if (e.key === "Escape" && state.activeArtistId) {
-        e.preventDefault();
-        closeArtistModal(currentDom);
-        return;
-      }
-      if (e.key === "Enter") {
-        const card = document.activeElement?.closest(".artist-card[data-artist-id]");
-        if (card) {
-          e.preventDefault();
-          openArtistModal(card.dataset.artistId, currentDom, card);
+    window.addEventListener(
+      "keydown",
+      (e) => {
+        if (!state.activeArtistId) {
+          if (e.key === "Enter") {
+            const card = document.activeElement?.closest(".artist-card[data-artist-id]");
+            if (card) {
+              e.preventDefault();
+              openArtistModal(card.dataset.artistId, getDom(), card);
+            }
+          }
+          return;
         }
-      }
-    });
+
+        const currentDom = getDom();
+        if (e.key === "Escape") {
+          e.preventDefault();
+          e.stopPropagation();
+          closeArtistModal(currentDom);
+          return;
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          e.stopPropagation();
+          stepArtistModal(-1, currentDom);
+          return;
+        }
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          e.stopPropagation();
+          stepArtistModal(1, currentDom);
+        }
+      },
+      true
+    );
   }
 
   async function init() {
