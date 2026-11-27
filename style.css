@@ -2133,7 +2133,7 @@ section#artist3,
   justify-content: center;
   align-items: center;
   z-index: var(--z-modal, 1000);
-  padding: 1.25rem 5.5rem;
+  padding: 1.25rem;
 }
 
 .artist-modal.hidden {
@@ -2196,9 +2196,9 @@ section#artist3,
   align-items: center;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.9rem;
   padding-right: 3rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.9rem;
   border-bottom: 2px solid var(--primary-color);
 }
 
@@ -2226,6 +2226,54 @@ section#artist3,
   box-shadow: 3px 3px 0 #fff;
   border-radius: 0;
   transform: rotate(-2deg);
+}
+
+/* Fascia dedicata sotto l'header e sopra bio/galleria */
+.artist-modal-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+  padding: 0.45rem 0;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.25);
+}
+
+.artist-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.95rem;
+  background: var(--primary-color);
+  color: #000;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0 #fff;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: rotate(-1.5deg);
+  transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.artist-nav-btn[data-action="next-artist"] {
+  background: #fff;
+  color: #000;
+  box-shadow: 3px 3px 0 var(--primary-color);
+  transform: rotate(1.5deg);
+}
+
+.artist-nav-btn:hover,
+.artist-nav-btn:focus-visible {
+  background: var(--accent-pink);
+  color: #000;
+  transform: translateY(-2px) rotate(0deg);
+  box-shadow: 4px 4px 0 #fff;
+  outline: none;
 }
 
 .artist-modal-layout {
@@ -2324,93 +2372,32 @@ section#artist3,
   outline: none;
 }
 
-.artist-modal-nav {
-  display: contents;
-}
-
-.artist-nav-btn {
-  position: fixed;
-  top: 50%;
-  bottom: auto;
-  margin: 0;
-  z-index: calc(var(--z-modal, 1000) + 5);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 0.85rem 1rem;
-  background: var(--primary-color);
-  color: #000;
-  border: 2px solid #000;
-  box-shadow: 4px 4px 0 #fff;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  cursor: pointer;
-  transform: translateY(-50%) rotate(-1.5deg);
-  transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
-}
-
-.artist-nav-btn[data-action="prev-artist"] {
-  left: 1rem;
-  right: auto;
-}
-
-.artist-nav-btn[data-action="next-artist"] {
-  right: 1rem;
-  left: auto;
-  background: #fff;
-  color: #000;
-  box-shadow: 4px 4px 0 var(--primary-color);
-  transform: translateY(-50%) rotate(1.5deg);
-}
-
-.artist-nav-btn:hover,
-.artist-nav-btn:focus-visible {
-  background: var(--accent-pink);
-  color: #000;
-  transform: translateY(calc(-50% - 2px)) rotate(0deg);
-  box-shadow: 5px 5px 0 #fff;
-  outline: none;
-}
-
-body:has(#lightbox.open) .artist-nav-btn {
-  display: none;
-}
-
 @media (max-width: 768px) {
   .artist-modal {
-    padding: 0.75rem 3.5rem;
+    padding: 0.75rem;
   }
 
   .artist-modal-content {
     padding: 1.35rem 1.1rem;
     transform: none;
-    max-height: 86dvh;
+    max-height: 92dvh;
     box-shadow:
       5px 5px 0 var(--primary-color),
       9px 9px 0 #000;
   }
 
-  .artist-modal-layout {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+  .artist-modal-nav {
+    margin-bottom: 1rem;
   }
 
   .artist-nav-btn {
-    padding: 0.65rem 0.75rem;
+    padding: 0.5rem 0.75rem;
     font-size: 0.72rem;
   }
 
-  .artist-nav-btn[data-action="prev-artist"] {
-    left: 0.4rem;
-  }
-
-  .artist-nav-btn[data-action="next-artist"] {
-    right: 0.4rem;
+  .artist-modal-layout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 }
 
