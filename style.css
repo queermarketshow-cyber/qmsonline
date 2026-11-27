@@ -1677,31 +1677,6 @@ a.poster:focus-visible .sticker {
     box-shadow: 4px 4px 0 #000;
   }
 
-  #mobile-dots {
-    position: absolute;
-    top: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 6px;
-    z-index: 25;
-  }
-
-  .mobile-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 2px solid #000;
-    background: var(--accent-pink);
-    opacity: 0.35;
-    cursor: pointer;
-  }
-
-  .mobile-dot.active,
-  .mobile-dot.is-active {
-    opacity: 1;
-    transform: scale(1.2);
-  }
 
   .mobile-arrow {
     position: absolute;
