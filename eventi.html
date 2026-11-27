@@ -8,20 +8,28 @@
 
   <title>Eventi | Queer Market Show APS</title>
 
-  <meta name="description"
-        content="Eventi, performance, workshop, talk e dj set di Queer Market Show nel Salento. Scopri i prossimi appuntamenti e consulta l'archivio completo.">
+  <meta
+    name="description"
+    content="Eventi, performance, workshop, talk, mercati artistici e pratiche queer nel Salento. Prossimi appuntamenti e archivio completo di Queer Market Show."
+  >
 
-  <link rel="icon"
-        href="images/logo-qms.ico"
-        type="image/x-icon">
+  <link
+    rel="icon"
+    href="images/logo-qms.ico"
+    type="image/x-icon"
+  >
 
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap"
-        rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  >
 
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  >
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="fix.css">
@@ -30,20 +38,20 @@
 
 <body>
 
-  <!-- SFONDO -->
-
   <div class="logo-background"></div>
 
   <!-- NAVBAR -->
 
   <nav class="navbar">
 
-    <div class="logo">
+    <a href="index.html" class="logo">
       Queer Market Show
-    </div>
+    </a>
 
-    <a href="index.html"
-       class="back-button">
+    <a
+      href="index.html"
+      class="back-button"
+    >
       ← Torna al sito
     </a>
 
@@ -56,77 +64,84 @@
     <div class="eventi-hero-content">
 
       <span class="eventi-kicker">
-        EVENTI · PERFORMANCE · COMUNITÀ
+        CORPI · SUONI · PRESENZE
       </span>
 
       <h1>
-        Eventi
+        CI VEDIAMO QUI.
       </h1>
 
       <p>
-        Performance, workshop, talk, dj set,
-        mercati artistici e pratiche queer
-        nel Salento.
+        Eventi, performance, workshop,
+        pratiche culturali queer e occasioni
+        per attraversare insieme lo spazio reale.
       </p>
 
-      <a href="#featured-event"
-         class="hero-event-button">
-
-        Scopri il prossimo evento
-
+      <a
+        href="#featured-event"
+        class="hero-event-button"
+      >
+        PROSSIMO EVENTO
       </a>
 
     </div>
 
   </header>
 
-  <!-- PROSSIMO EVENTO -->
+  <!-- EVENTO IN EVIDENZA -->
 
-  <section id="featured-event"
-           class="featured-event-section">
+  <section
+    id="featured-event"
+    class="featured-event-section"
+  >
 
     <div class="section-header">
 
       <h2>
-        Prossimo Evento
+        PRESENZA<br>
+        O NIENTE
       </h2>
 
       <p>
-        Il prossimo appuntamento in programma.
+        IL PROSSIMO SPAZIO DA ATTRAVERSARE
       </p>
 
     </div>
 
-    <div id="featured-event-content">
+    <div
+      id="featured-event-content"
+      aria-live="polite"
+    >
 
-      <!-- Popolato via JS -->
+      <!-- POPOLATO DA events.js -->
 
     </div>
 
   </section>
 
-  <!-- CALENDARIO COMPLETO -->
+  <!-- CALENDARIO FUTURO -->
 
-  <section id="future-events"
-           class="events-section">
+  <section
+    id="future-events"
+    class="events-section"
+  >
 
     <div class="section-header">
 
       <h2>
-        Calendario Eventi
+        CHE SUCCEDE ORA
       </h2>
 
       <p>
-        Tutti gli appuntamenti futuri.
+        I PROSSIMI APPUNTAMENTI
       </p>
 
     </div>
 
-    <!-- FILTRI -->
-
-    <div id="calendar-filters"
-         class="calendar-filters">
-    </div>
+    <div
+      id="calendar-filters"
+      class="calendar-filters"
+    ></div>
 
     <!-- DESKTOP -->
 
@@ -136,8 +151,7 @@
         ←
       </button>
 
-      <div id="future-month-container">
-      </div>
+      <div id="future-month-container"></div>
 
       <button id="next-month">
         →
@@ -151,24 +165,26 @@
 
       <div id="mobile-dots"></div>
 
-      <button id="mobile-prev"
-              class="mobile-arrow">
-
+      <button
+        id="mobile-prev"
+        class="mobile-arrow"
+        aria-label="Evento precedente"
+      >
         ‹
-
       </button>
 
       <div id="mobile-calendar-carousel">
 
-        <!-- JS -->
+        <!-- POPOLATO DA JS -->
 
       </div>
 
-      <button id="mobile-next"
-              class="mobile-arrow">
-
+      <button
+        id="mobile-next"
+        class="mobile-arrow"
+        aria-label="Evento successivo"
+      >
         ›
-
       </button>
 
     </div>
@@ -177,54 +193,64 @@
 
   <!-- ARCHIVIO -->
 
-  <section id="archive"
-           class="archive-section">
+  <section
+    id="archive"
+    class="archive-section"
+  >
 
     <div class="section-header">
 
       <h2>
-        Archivio Eventi
+        ARCHIVIO<br>
+        VIVENTE
       </h2>
 
       <p>
-        Performance, workshop e incontri già realizzati.
+        TUTTE LE TRACCE LASCIATE DIETRO DI NOI
       </p>
 
     </div>
 
     <div id="past-events">
 
-      <!-- JS -->
+      <!-- POPOLATO DA JS -->
 
     </div>
 
   </section>
 
-  <!-- CALL ARTISTƏ -->
+  <!-- CALL TO ACTION -->
 
   <section class="artists-call-section">
 
     <div class="artists-call-content">
 
+      <span class="eventi-kicker">
+        COSTRUIAMO INSIEME
+      </span>
+
       <h2>
-        Hai una proposta?
+        COSA STAI COSTRUENDO?
       </h2>
 
       <p>
-        Performance, workshop, installazioni,
-        talk, pratiche ibride o idee difficili da classificare.
+        Performance, workshop,
+        installazioni, rituali,
+        pratiche ibride e idee difficili
+        da classificare.
       </p>
 
       <p>
-        Se pensi che possa trovare spazio nel nostro ecosistema,
-        raccontacela.
+        Se pensi che possano trovare spazio
+        dentro l'ecosistema Queer Market Show,
+        raccontacele.
       </p>
 
-      <a href="index.html#contatti"
-         class="artists-call-button">
-
-        Proponi un progetto
-
+      <a
+        href="index.html#contatti"
+        class="artists-call-button"
+      >
+        PROPONI UN PROGETTO
       </a>
 
     </div>
@@ -237,12 +263,14 @@
 
     <div class="event-modal-content">
 
-      <button class="event-modal-close">
+      <button
+        class="event-modal-close"
+        aria-label="Chiudi"
+      >
         ✕
       </button>
 
-      <div id="event-modal-body">
-      </div>
+      <div id="event-modal-body"></div>
 
     </div>
 
@@ -254,14 +282,12 @@
 
     <div class="qms-footer-left">
 
-      <strong>
-        Queer Market Show APS
-      </strong><br>
+      <strong>Queer Market Show APS</strong><br>
 
       Via Bradano 1<br>
       73100 Lecce (LE)<br>
 
-      CF. 93170860758<br>
+      CF 93170860758<br>
 
       Codice ATECO 949920<br>
 
@@ -271,12 +297,12 @@
 
     <div class="qms-footer-right">
 
-      <a href="trasparenza.html"
-         target="_blank"
-         rel="noopener noreferrer">
-
+      <a
+        href="trasparenza.html"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Trasparenza
-
       </a>
 
     </div>
@@ -286,7 +312,6 @@
   <!-- SCRIPT -->
 
   <script src="assets/js/base.js"></script>
-  <script src="assets/js/navbar.js"></script>
   <script src="assets/js/events.js"></script>
 
   <script>
