@@ -3825,6 +3825,62 @@ a.sost-card.sost-cta:focus-visible {
     text-align: center;
   }
 }
+/* ============================================================
+   NOTA A MARGINE FANZINE & CONTATORE VIVO ARCHIVIO
+============================================================ */
+
+.archive-margin-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 2px dashed rgba(255, 255, 255, 0.25);
+}
+
+.archive-margin-note {
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  background: #141414;
+  color: rgba(255, 255, 255, 0.92);
+  border-left: 3px solid var(--accent-pink);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background-color 0.12s ease;
+}
+
+.archive-margin-note strong {
+  color: var(--accent-pink);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.74rem;
+}
+
+.archive-margin-note:hover,
+.archive-margin-note:focus-visible {
+  background: #1c1c1c;
+  border-left-color: var(--primary-color);
+  outline: none;
+}
+
+.archive-live-counter {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  background: var(--primary-color);
+  color: #000;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0 #fff;
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transform: rotate(1deg);
+  white-space: nowrap;
+}
 
 /* ============================================================
    SCROLLBAR INVISIBILI

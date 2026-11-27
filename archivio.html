@@ -53,15 +53,28 @@
     <section id="archivio" class="scroll-section qms-archive-page">
       <header class="archive-hero">
         <span class="archive-kicker">Archivio · Memorie &amp; Sguardi</span>
-        <h1>L'Archivio di QMS</h1>
+        <h1>L'Archivio del Show</h1>
         <p class="archive-intro">
           Frammenti di serate, corpi, tavoli, sguardi e attraversamenti:
           l'archivio vivo di ciò che abbiamo costruito insieme.
         </p>
         <div class="archive-manifesto-strip" aria-hidden="true">
-          <span>01 / SPAZI, NON POSTI</span>
-          <span>02 / pluralità</span>
+          <span>01 / spazi, non posti</span>
+          <span>02 / storie e sensazioni</span>
           <span>03 / MEMORIA COLLETTIVA</span>
+        </div>
+        <div class="archive-margin-bar">
+          <p class="archive-margin-note"
+             id="archiveMarginNote"
+             role="button"
+             tabindex="0"
+             data-action="cycle-archive-note"
+             title="Clicca per leggere un'altra nota a margine">
+            <strong>Nota a margine:</strong> qui non si archivia per catalogare, si tiene traccia di ciò che ci ha attraversatə.
+          </p>
+          <span class="archive-live-counter" id="archiveLiveCounter" aria-live="polite">
+            Archivio in ascolto
+          </span>
         </div>
       </header>
 
@@ -121,6 +134,98 @@
   <script src="assets/js/gallery-modal.js" defer></script>
   <script src="assets/js/gallery-folders.js" defer></script>
   <script src="assets/js/mosaic-gallery.js" defer></script>
+
+  <script defer>
+    (() => {
+      "use strict";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const noteEl = document.getElementById("archiveMarginNote");
+        const counterEl = document.getElementById("archiveLiveCounter");
+        const foldersContainer = document.querySelector(".gallery-folders");
+        const modalEl = document.getElementById("galleryModal");
+        const mosaicEl = document.getElementById("mosaicGallery");
+        if (!noteEl || !counterEl || !foldersContainer) return;
+
+        const notes = [
+          "qui non si archivia per catalogare, si tiene traccia di ciò che ci ha attraversatə.",
+          "ogni foto è una notte trattenuta un secondo in più prima che facesse giorno.",
+          "sguardi, tavoli, sudore, glitter e corpi che non chiedono permesso per restare.",
+          "sfoglia a salti: non serve seguire un ordine per riconoscere un momento.",
+          "le fotografie non chiudono una serata: la lasciano aperta a chi guarda dopo."
+        ];
+
+        let noteIndex = 0;
+
+        function renderNote(nextIdx) {
+          if (typeof nextIdx === "number") {
+            noteIndex = ((nextIdx % notes.length) + notes.length) % notes.length;
+          }
+          noteEl.innerHTML = `<strong>Nota a margine:</strong> ${notes[noteIndex]}`;
+        }
+
+        function cycleNote() {
+          renderNote(noteIndex + 1);
+        }
+
+        function updateCounter() {
+          const folders = foldersContainer.querySelectorAll(".folder-preview");
+          const albumCount = folders.length;
+
+          let photoCount = 0;
+          folders.forEach((folder) => {
+            const rawCount = folder.dataset.photoCount || folder.dataset.count;
+            if (rawCount && !Number.isNaN(Number(rawCount))) {
+              photoCount += Number(rawCount);
+            } else {
+              const imgs = folder.querySelectorAll("img");
+              if (imgs.length > 1) photoCount += imgs.length;
+            }
+          });
+
+          if (!albumCount) {
+            counterEl.textContent = "Archivio in ascolto";
+            return;
+          }
+
+          counterEl.textContent =
+            photoCount > 0
+              ? `${albumCount} ${albumCount === 1 ? "capitolo" : "capitoli"} · ${photoCount} scatti`
+              : `${albumCount} ${albumCount === 1 ? "capitolo" : "capitoli"} aperti`;
+        }
+
+        noteEl.addEventListener("click", cycleNote);
+        noteEl.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            cycleNote();
+          }
+        });
+
+        const observer = new MutationObserver(updateCounter);
+        observer.observe(foldersContainer, { childList: true, subtree: true });
+
+        if (modalEl) {
+          new MutationObserver(() => {
+            if (!modalEl.classList.contains("hidden")) {
+              renderNote(1);
+            }
+          }).observe(modalEl, { attributes: true, attributeFilter: ["class"] });
+        }
+
+        if (mosaicEl) {
+          new MutationObserver(() => {
+            if (mosaicEl.classList.contains("open") && !mosaicEl.classList.contains("hidden")) {
+              renderNote(3);
+            }
+          }).observe(mosaicEl, { attributes: true, attributeFilter: ["class"] });
+        }
+
+        renderNote(0);
+        updateCounter();
+      });
+    })();
+  </script>
 
 </body>
 
