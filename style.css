@@ -254,7 +254,7 @@ section[id] {
   box-shadow: 0 6px 0 #000;
 
   padding: 1rem 1.25rem 1.5rem;
-  margin-top:80px !important;
+  margin-top:none;
 
   flex-direction: column;
   gap: 0.35rem;
