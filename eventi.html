@@ -1,287 +1,139 @@
-<!DOCTYPE html>
-<html lang="it">
+<!-- HERO -->
 
-<head>
+<header class="eventi-hero">
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div class="eventi-hero-content">
 
-  <title>Eventi | Queer Market Show APS</title>
+    <span class="eventi-kicker">
+      CORPI · SUONI · PRESENZE
+    </span>
 
-  <meta
-    name="description"
-    content="Eventi, performance, workshop, mercati artistici e pratiche queer nel Salento. Esplora i prossimi appuntamenti e l'archivio vivente di Queer Market Show."
-  >
+    <h1>
+      CHE SUCCEDE ORA
+    </h1>
 
-  <link rel="icon"
-        href="images/logo-qms.ico"
-        type="image/x-icon">
-
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap"
-        rel="stylesheet">
-
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer">
-
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="fix.css">
-
-</head>
-
-<body>
-
-  <div class="logo-background"></div>
-
-  <!-- NAVBAR -->
-
-  <nav class="navbar">
-
-    <a href="index.html" class="logo">
-      Queer Market Show
+    <a href="#future-events"
+       class="hero-event-button">
+      PROSSIMI APPUNTAMENTI
     </a>
 
-    <a href="index.html"
-       class="back-button">
-      ← Torna al sito
-    </a>
+  </div>
 
-  </nav>
+</header>
 
-  <!-- HERO -->
+<!-- PROSSIMI APPUNTAMENTI -->
 
-  <header class="eventi-hero">
+<section id="future-events"
+         class="events-section">
 
-    <div class="eventi-hero-content">
 
-      <span class="eventi-kicker">
-        CORPI · SUONI · PRESENZE
-      </span>
+  <!-- FILTRI -->
 
-      <h1>
-        CHE SUCCEDE ORA
-      </h1>
+  <div id="calendar-filters"
+       class="calendar-filters">
+  </div>
 
-      <p>
-        Eventi, performance, workshop,
-        pratiche culturali queer e occasioni
-        per attraversare insieme lo spazio reale.
-      </p>
+  <!-- DESKTOP -->
 
-      <a href="#future-events"
-         class="hero-event-button">
+  <div id="future-calendar">
 
-        PROSSIMI APPUNTAMENTI
+    <button id="prev-month">
+      ←
+    </button>
 
-      </a>
-
+    <div id="future-month-container">
     </div>
 
-  </header>
+    <button id="next-month">
+      →
+    </button>
 
-  <!-- PROSSIMI APPUNTAMENTI -->
+  </div>
 
-  <section id="future-events"
-           class="events-section">
+  <!-- MOBILE -->
 
-    <div class="section-header">
+  <div id="mobile-calendar-wrapper">
 
-      <h2>
-        PROSSIMI APPUNTAMENTI
-      </h2>
+    <div id="mobile-dots"></div>
 
-      <p>
-        TUTTO QUELLO CHE STA PER ACCADERE
-      </p>
+    <button id="mobile-prev"
+            class="mobile-arrow"
+            aria-label="Evento precedente">
+      ‹
+    </button>
 
-    </div>
-
-    <!-- FILTRI -->
-
-    <div id="calendar-filters"
-         class="calendar-filters">
-    </div>
-
-    <!-- DESKTOP -->
-
-    <div id="future-calendar">
-
-      <button id="prev-month">
-        ←
-      </button>
-
-      <div id="future-month-container"></div>
-
-      <button id="next-month">
-        →
-      </button>
-
-    </div>
-
-    <!-- MOBILE -->
-
-    <div id="mobile-calendar-wrapper">
-
-      <div id="mobile-dots"></div>
-
-      <button id="mobile-prev"
-              class="mobile-arrow"
-              aria-label="Evento precedente">
-        ‹
-      </button>
-
-      <div id="mobile-calendar-carousel">
-
-        <!-- POPOLATO DA JS -->
-
-      </div>
-
-      <button id="mobile-next"
-              class="mobile-arrow"
-              aria-label="Evento successivo">
-        ›
-      </button>
-
-    </div>
-
-  </section>
-
-  <!-- ARCHIVIO -->
-
-  <section id="archive"
-           class="archive-section">
-
-    <div class="section-header">
-
-      <h2>
-        ARCHIVIO VIVENTE
-      </h2>
-
-      <p>
-        TUTTE LE TRACCE LASCIATE DIETRO DI NOI
-      </p>
-
-    </div>
-
-    <div id="past-events">
+    <div id="mobile-calendar-carousel">
 
       <!-- POPOLATO DA JS -->
 
     </div>
 
-  </section>
-
-  <!-- CALL FINALE -->
-
-  <section class="artists-call-section">
-
-    <div class="artists-call-content">
-
-      <span class="eventi-kicker">
-        COSTRUIAMO INSIEME
-      </span>
-
-      <h2>
-        COSA STAI COSTRUENDO?
-      </h2>
-
-      <p>
-        Performance, workshop,
-        installazioni,
-        pratiche ibride,
-        esperimenti,
-        idee difficili da classificare.
-      </p>
-
-      <p>
-        Se pensi che possa trovare spazio
-        dentro Queer Market Show,
-        raccontacela.
-      </p>
-
-      <a href="index.html#contatti"
-         class="artists-call-button">
-
-        PROPONI UN PROGETTO
-
-      </a>
-
-    </div>
-
-  </section>
-
-  <!-- MODALE EVENTO -->
-
-  <div id="event-modal">
-
-    <div class="event-modal-content">
-
-      <button class="event-modal-close"
-              aria-label="Chiudi">
-        ✕
-      </button>
-
-      <div id="event-modal-body"></div>
-
-    </div>
+    <button id="mobile-next"
+            class="mobile-arrow"
+            aria-label="Evento successivo">
+      ›
+    </button>
 
   </div>
 
-  <!-- FOOTER -->
+</section>
 
-  <footer class="qms-footer">
+<!-- ARCHIVIO -->
 
-    <div class="qms-footer-left">
+<section id="archive"
+         class="archive-section">
 
-      <strong>Queer Market Show APS</strong><br>
+  <div class="section-header">
 
-      Via Bradano 1<br>
-      73100 Lecce (LE)<br>
+    <h2>
+      ARCHIVIO VIVENTE
+    </h2>
 
-      CF 93170860758<br>
+    <p>
+      TUTTE LE TRACCE LASCIATE DIETRO DI NOI
+    </p>
 
-      Codice ATECO 949920<br>
+  </div>
 
-      Repertorio RUNTS 143747
+  <div id="past-events">
 
-    </div>
+    <!-- POPOLATO DA JS -->
 
-    <div class="qms-footer-right">
+  </div>
 
-      <a href="trasparenza.html"
-         target="_blank"
-         rel="noopener noreferrer">
+</section>
 
-        Trasparenza
+<!-- CALL TO ACTION -->
 
-      </a>
+<section class="artists-call-section">
 
-    </div>
+  <div class="artists-call-content">
 
-  </footer>
+    <span class="eventi-kicker">
+      COSTRUIAMO INSIEME
+    </span>
 
-  <script src="assets/js/base.js"></script>
-  <script src="assets/js/events.js"></script>
+    <h2>
+      COSA STAI COSTRUENDO?
+    </h2>
 
-  <script>
+    <p>
+      Performance, workshop,
+      installazioni, pratiche ibride,
+      esperimenti e idee difficili da classificare.
+    </p>
 
-    function updateNavbarHeight() {
+    <p>
+      Se pensi che possano trovare spazio
+      dentro Queer Market Show,
+      raccontacele.
+    </p>
 
-      const nav = document.querySelector(".navbar");
+    <a href="index.html#contatti"
+       class="artists-call-button">
+      PROPONI UN PROGETTO
+    </a>
 
-      document.documentElement.style.setProperty(
-        "--navbar-height",
-        nav.offsetHeight + "px"
-      );
+  </div>
 
-    }
-
-    window.addEventListener("load", updateNavbarHeight);
-    window.addEventListener("resize", updateNavbarHeight);
-
-  </script>
-
-</body>
-
-</html>
+</section>
