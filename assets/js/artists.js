@@ -388,6 +388,7 @@
       <div class="artist-modal" role="dialog" aria-modal="true" aria-labelledby="artist-modal-title">
         <div class="artist-modal-content">
           <button type="button" class="close-button" data-action="close-artist-modal" aria-label="Chiudi scheda">&times;</button>
+          ${navHTML}
           <div class="artist-header">
             <h3 id="artist-modal-title">${escapeHTML(artist.name)}</h3>
             <span class="artista-role-tag">${artist.type === "guest" ? "Ospite" : "Resident"}</span>
@@ -400,7 +401,6 @@
             </div>
             ${galleryHTML}
           </div>
-          ${navHTML}
         </div>
       </div>
     `;
