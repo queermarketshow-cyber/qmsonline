@@ -3133,7 +3133,7 @@ a.sost-card.sost-cta:focus-visible {
   color: #000;
   border: 2px solid #000;
   border-radius: 0;
-  box-shadow: 3px 3px 0 #fff;
+  box-shadow: 4px 4px 0 #fff;
   pointer-events: auto;
   user-select: none;
   transition: background-color 0.12s ease, box-shadow 0.12s ease;
@@ -3145,7 +3145,7 @@ a.sost-card.sost-cta:focus-visible {
 
 .qms-gallery-labels .label:hover {
   background: #fff;
-  box-shadow: 5px 5px 0 var(--primary-color);
+  box-shadow: 6px 6px 0 var(--primary-color);
 }
 
 /* CTA "Mostra tutto": sempre visibile, cliccabile e più grande delle altre etichette */
