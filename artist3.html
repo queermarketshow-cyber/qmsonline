@@ -40,9 +40,42 @@
     </header>
 
     <div class="artist-controls" id="all-artists-filters">
-      <button type="button" class="active" data-artist-filter="all">Tutte</button>
-      <button type="button" data-artist-filter="resident">Residenti</button>
-      <button type="button" data-artist-filter="guest">Ospiti</button>
+      <button
+        type="button"
+        class="artist-filters-dropdown-toggle"
+        data-action="toggle-filters-dropdown"
+        aria-expanded="false"
+        aria-controls="artist-filters-panel"
+      >
+        <span>Filtri: <strong data-filters-summary>Tutte · Tutti i tag</strong></span>
+        <span class="artist-filters-caret" aria-hidden="true">▾</span>
+      </button>
+
+      <div class="artist-filters-panel" id="artist-filters-panel">
+        <div class="artist-filter-group artist-filter-group--type" role="group" aria-label="Filtra per categoria">
+          <button type="button" class="active" data-artist-filter="all">Tutte</button>
+          <button type="button" data-artist-filter="resident">Residenti</button>
+          <button type="button" data-artist-filter="guest">Ospiti</button>
+        </div>
+
+        <div class="artist-filter-divider" aria-hidden="true"></div>
+
+        <div
+          class="artist-filter-group artist-filter-group--tags"
+          id="artists-tag-filters"
+          role="group"
+          aria-label="Filtra per tag"
+        ></div>
+
+        <button
+          type="button"
+          class="artist-filter-reset"
+          data-action="reset-artist-filters"
+          title="Reimposta filtri"
+        >
+          Reset
+        </button>
+      </div>
     </div>
 
     <div id="artists-all" class="artist-gallery"></div>
