@@ -2133,7 +2133,7 @@ section#artist3,
   justify-content: center;
   align-items: center;
   z-index: var(--z-modal, 1000);
-  padding: 1.25rem 5.5rem;
+  padding: 1.25rem 7.5rem;
 }
 
 .artist-modal.hidden {
@@ -2354,13 +2354,14 @@ section#artist3,
   transition: transform 0.12s ease, background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
 }
 
+/* Posizionati esternamente ai lati del box da 920px (dove hai segnato le X rosse) */
 .artist-nav-btn[data-action="prev-artist"] {
-  left: 1rem !important;
+  left: max(0.75rem, calc(50% - 460px - 6.75rem)) !important;
   right: auto !important;
 }
 
 .artist-nav-btn[data-action="next-artist"] {
-  right: 1rem !important;
+  right: max(0.75rem, calc(50% - 460px - 6.75rem)) !important;
   left: auto !important;
   background: #fff;
   color: #000;
@@ -2377,9 +2378,28 @@ section#artist3,
   outline: none;
 }
 
+@media (max-width: 1180px) {
+  .artist-modal {
+    padding: 1rem 5.5rem;
+  }
+
+  .artist-nav-btn {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.74rem;
+  }
+
+  .artist-nav-btn[data-action="prev-artist"] {
+    left: 0.6rem !important;
+  }
+
+  .artist-nav-btn[data-action="next-artist"] {
+    right: 0.6rem !important;
+  }
+}
+
 @media (max-width: 768px) {
   .artist-modal {
-    padding: 0.75rem 3.5rem;
+    padding: 0.75rem 3.75rem;
   }
 
   .artist-modal-content {
@@ -2397,16 +2417,16 @@ section#artist3,
   }
 
   .artist-nav-btn {
-    padding: 0.65rem 0.75rem;
-    font-size: 0.72rem;
+    padding: 0.6rem 0.65rem;
+    font-size: 0.68rem;
   }
 
   .artist-nav-btn[data-action="prev-artist"] {
-    left: 0.4rem !important;
+    left: 0.35rem !important;
   }
 
   .artist-nav-btn[data-action="next-artist"] {
-    right: 0.4rem !important;
+    right: 0.35rem !important;
   }
 }
 
