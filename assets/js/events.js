@@ -823,7 +823,7 @@ function renderArchiveFilters(pastEvents) {
         <select id="archive-category-mobile">
 
           <option value="">
-            Tipologia
+            Tipo
           </option>
 
           ${options.categories.map(category => `

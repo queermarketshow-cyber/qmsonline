@@ -1819,18 +1819,30 @@ a.poster:focus-visible .sticker {
   }
 
   .archive-mobile-filters{
-    display:flex;
-    flex-direction:column;
-    gap:.8rem;
-    max-width:420px;
+
+    display:grid;
+
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+
+    gap:.5rem;
+
+    width:100%;
+
+    max-width:none;
+
     margin:0 auto;
+
+    align-items:center;
   }
 
   .archive-mobile-filters select{
 
     width:100%;
 
-    padding:.9rem 1rem;
+    min-width:0;
+
+    padding:.85rem .55rem;
 
     background:#000;
     color:#fff;
@@ -1839,15 +1851,41 @@ a.poster:focus-visible .sticker {
 
     font-family:var(--font-sans);
     font-weight:900;
-    font-size:.9rem;
+    font-size:.72rem;
 
     text-transform:uppercase;
 
     box-shadow:
-      4px 4px 0 var(--primary-color);
+      3px 3px 0 var(--primary-color);
 
     appearance:none;
     -webkit-appearance:none;
+
+    text-overflow:ellipsis;
+    overflow:hidden;
+
+    cursor:pointer;
+  }
+
+  .archive-mobile-filters select:nth-child(1){
+    transform:rotate(-1deg);
+  }
+
+  .archive-mobile-filters select:nth-child(2){
+    transform:rotate(1deg);
+  }
+
+  .archive-mobile-filters select:nth-child(3){
+    transform:rotate(-1deg);
+  }
+
+  .archive-mobile-filters .archive-filter-reset{
+
+    grid-column:1 / -1;
+
+    justify-self:center;
+
+    margin-top:.4rem;
   }
 
 }
