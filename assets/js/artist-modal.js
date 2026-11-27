@@ -43,6 +43,7 @@
   function getDom() {
     return {
       sectionHome:
+        document.getElementById("artiste") ||
         document.getElementById("artistə") ||
         document.getElementById("artist3") ||
         document.querySelector(".home-artists-section"),
@@ -245,16 +246,31 @@
   }
 
   function openArtistModal(artistId, dom) {
-    const artist = state.artists.find((a) => a.id === artistId);
-    if (!artist || !dom.modalsContainer) return;
+    const currentIndex = state.artists.findIndex((a) => a.id === artistId);
+    if (currentIndex === -1 || !dom.modalsContainer) return;
 
+    const artist = state.artists[currentIndex];
     state.activeArtistId = artist.id;
 
-    const galleryHTML = artist.gallery.length
+    const hasGallery = artist.gallery.length > 0;
+    const galleryHTML = hasGallery
       ? `<div class="artist-modal-gallery">${artist.gallery
-          .map((src) => `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}" loading="lazy">`)
+          .map(
+            (src) =>
+              `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}" loading="lazy">`
+          )
           .join("")}</div>`
       : "";
+
+    const navHTML =
+      state.artists.length > 1
+        ? `
+          <div class="artist-modal-nav">
+            <button type="button" class="artist-nav-btn" data-action="prev-artist">← Prec</button>
+            <button type="button" class="artist-nav-btn" data-action="next-artist">Succ →</button>
+          </div>
+        `
+        : "";
 
     dom.modalsContainer.innerHTML = `
       <div class="artist-modal" role="dialog" aria-modal="true" aria-labelledby="artist-modal-title">
@@ -264,17 +280,26 @@
             <h3 id="artist-modal-title">${escapeHTML(artist.name)}</h3>
             <span class="artista-role-tag">${artist.role === "guest" ? "Ospite" : "Resident"}</span>
           </div>
-          <div class="artist-modal-layout">
+          <div class="artist-modal-layout ${hasGallery ? "" : "artist-modal-layout--single"}">
             <div class="artist-modal-text">
               ${artist.bio ? `<p>${escapeHTML(artist.bio)}</p>` : `<p>Biografia in aggiornamento.</p>`}
             </div>
             ${galleryHTML}
           </div>
+          ${navHTML}
         </div>
       </div>
     `;
 
     document.body.classList.add("modal-open");
+  }
+
+  function stepArtistModal(direction, dom) {
+    if (!state.activeArtistId || state.artists.length < 2) return;
+    const idx = state.artists.findIndex((a) => a.id === state.activeArtistId);
+    if (idx === -1) return;
+    const nextIdx = (idx + direction + state.artists.length) % state.artists.length;
+    openArtistModal(state.artists[nextIdx].id, dom);
   }
 
   function closeArtistModal(dom) {
@@ -327,6 +352,16 @@
         return;
       }
 
+      if (e.target.closest('[data-action="prev-artist"]')) {
+        stepArtistModal(-1, currentDom);
+        return;
+      }
+
+      if (e.target.closest('[data-action="next-artist"]')) {
+        stepArtistModal(1, currentDom);
+        return;
+      }
+
       const modalBackdrop = e.target.closest(".artist-modal");
       if (modalBackdrop && e.target === modalBackdrop) {
         closeArtistModal(currentDom);
@@ -343,6 +378,17 @@
       const currentDom = getDom();
       if (e.key === "Escape" && state.activeArtistId) {
         closeArtistModal(currentDom);
+        return;
+      }
+      if (state.activeArtistId && e.key === "ArrowLeft") {
+        e.preventDefault();
+        stepArtistModal(-1, currentDom);
+        return;
+      }
+      if (state.activeArtistId && e.key === "ArrowRight") {
+        e.preventDefault();
+        stepArtistModal(1, currentDom);
+        return;
       }
       if (e.key === "Enter") {
         const card = document.activeElement?.closest(".artist-card[data-artist-id]");
