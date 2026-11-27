@@ -7,38 +7,12 @@
       "artists.json",
       "/artists.json",
       "../artists.json",
-      "./data/artists.json"
+      "../../artists.json",
+      "./data/artists.json",
+      "/data/artists.json"
     ],
     timeoutMs: 8000
   };
-
-  // Elenco predefinito: usato se artists.json non esiste o è vuoto
-  const FALLBACK_ARTISTS = [
-    {
-      id: "artist-1",
-      name: "Vespera",
-      role: "resident",
-      image: "images/artisti/resident-1.jpg",
-      bio: "DJ e selettore tra elettronica sperimentale, club culture e sonorità del sud.",
-      gallery: []
-    },
-    {
-      id: "artist-2",
-      name: "Mina K.",
-      role: "resident",
-      image: "images/artisti/resident-2.jpg",
-      bio: "Visual artist e performer attive tra installazioni, luce e immagine in movimento.",
-      gallery: []
-    },
-    {
-      id: "artist-3",
-      name: "Soraia",
-      role: "guest",
-      image: "images/artisti/guest-1.jpg",
-      bio: "Artista ospite e ricercatrice sonora con focus su archivi e narrazioni collettive.",
-      gallery: []
-    }
-  ];
 
   function getDom() {
     return {
@@ -47,10 +21,7 @@
         document.getElementById("artistə") ||
         document.getElementById("artist3") ||
         document.querySelector(".home-artists-section"),
-      btnResident: document.getElementById("btn-resident"),
-      btnGuest: document.getElementById("btn-guest"),
       residentGallery: document.getElementById("artists-resident"),
-      guestGallery: document.getElementById("artists-guest"),
       allGallery: document.getElementById("artists-all"),
       allFilters: document.getElementById("all-artists-filters"),
       modalsContainer: document.getElementById("artist-modals")
@@ -61,6 +32,9 @@
     artists: [],
     allFilter: "all",
     activeArtistId: null,
+    lastFocusedCard: null,
+    savedScrollY: null,
+    loadError: "",
     listenersBound: false
   };
 
@@ -74,8 +48,9 @@
   }
 
   function sanitizeUrl(url = "") {
-    const trimmed = String(url).trim();
+    const trimmed = String(url || "").trim();
     if (!trimmed) return "";
+    if (/^(javascript|data|vbscript):/i.test(trimmed)) return "";
     if (
       trimmed.startsWith("#") ||
       trimmed.startsWith("/") ||
@@ -85,20 +60,40 @@
       return trimmed;
     }
     try {
-      const parsed = new URL(trimmed, window.location.origin);
-      if (parsed.protocol === "https:" || parsed.protocol === "http:") {
-        return parsed.href;
-      }
+      const base =
+        window.location.origin && window.location.origin !== "null"
+          ? window.location.origin
+          : window.location.href;
+      new URL(trimmed, base);
+      return trimmed;
     } catch {
-      return "";
+      return trimmed;
     }
-    return "";
   }
 
-  function normalizeRole(artist) {
-    const raw = String(
-      artist.role ?? artist.ruolo ?? artist.type ?? artist.tipo ?? artist.category ?? ""
-    )
+  function joinAssetPath(basePath, fileOrUrl) {
+    const cleanFile = String(fileOrUrl || "").trim();
+    if (!cleanFile) return "";
+
+    if (
+      cleanFile.startsWith("http://") ||
+      cleanFile.startsWith("https://") ||
+      cleanFile.startsWith("/") ||
+      cleanFile.startsWith("./") ||
+      cleanFile.startsWith("../")
+    ) {
+      return sanitizeUrl(cleanFile);
+    }
+
+    const cleanDir = String(basePath || "").trim().replace(/^\/+|\/+$/g, "");
+    const combined = cleanDir
+      ? `${cleanDir}/${cleanFile.replace(/^\/+/, "")}`
+      : cleanFile;
+    return sanitizeUrl(combined);
+  }
+
+  function normalizeArtistType(artist) {
+    const raw = String(artist.type ?? artist.category ?? "")
       .trim()
       .toLowerCase();
 
@@ -128,21 +123,38 @@
         const rawName = item.name ?? item.nome ?? item.title;
         if (!rawName || !String(rawName).trim()) return null;
 
-        const rawImage = item.image ?? item.img ?? item.foto ?? item.avatar ?? "";
-        const rawBio = item.bio ?? item.description ?? item.descrizione ?? "";
-        const rawGallery = Array.isArray(item.gallery)
-          ? item.gallery
-          : Array.isArray(item.immagini)
-            ? item.immagini
+        const basePath =
+          item.path ?? item.folder ?? item.dir ?? item.basePath ?? "";
+        const rawCover =
+          item.cover ?? item.image ?? item.img ?? item.foto ?? "";
+        const coverUrl = joinAssetPath(basePath, rawCover);
+
+        const rawImages = Array.isArray(item.images)
+          ? item.images
+          : Array.isArray(item.gallery)
+            ? item.gallery
             : [];
+
+        const galleryUrls = rawImages
+          .map((img) => joinAssetPath(basePath, img))
+          .filter(Boolean);
+
+        const finalCover = coverUrl || galleryUrls[0] || "";
+        const bioLong = item.bio_long ? String(item.bio_long).trim() : "";
+        const bioShort = item.bio_short ? String(item.bio_short).trim() : "";
 
         return {
           id: String(item.id ?? `artist-${idx + 1}`),
           name: String(rawName).trim(),
-          role: normalizeRole(item),
-          image: sanitizeUrl(rawImage),
-          bio: String(rawBio).trim(),
-          gallery: rawGallery.map((g) => sanitizeUrl(g)).filter(Boolean)
+          role: item.role ? String(item.role).trim() : "",
+          type: normalizeArtistType(item),
+          bioShort,
+          bioLong,
+          bio: bioLong || bioShort,
+          instagram: sanitizeUrl(item.instagram ?? item.ig ?? ""),
+          path: String(basePath || "").trim(),
+          cover: finalCover,
+          gallery: galleryUrls
         };
       })
       .filter(Boolean);
@@ -165,16 +177,28 @@
   }
 
   async function loadArtistsData() {
+    state.loadError = "";
+
     if (window.location.protocol === "file:") {
-      return normalizeArtists(FALLBACK_ARTISTS);
+      state.loadError =
+        "Apertura tramite file://: avvia un server locale per caricare artists.json.";
+      console.warn("[artists.js]", state.loadError);
+      return [];
     }
 
+    const tried = [];
     for (const url of CONFIG.candidateUrls) {
+      tried.push(url);
       try {
         const data = await fetchSingle(url);
         const normalized = normalizeArtists(data);
         if (normalized.length > 0) {
-          console.info("[artists.js] Caricato da:", url, "Totale:", normalized.length);
+          console.info(
+            "[artists.js] Caricato da:",
+            url,
+            "Totale:",
+            normalized.length
+          );
           return normalized;
         }
       } catch {
@@ -182,88 +206,166 @@
       }
     }
 
-    console.info("[artists.js] Nessun artists.json trovato, uso dati predefiniti.");
-    return normalizeArtists(FALLBACK_ARTISTS);
+    state.loadError = `Impossibile caricare artists.json (percorsi provati: ${tried.join(", ")}).`;
+    console.warn("[artists.js]", state.loadError);
+    return [];
   }
 
   function renderArtistCard(artist) {
     const safeId = escapeHTML(artist.id);
     const safeName = escapeHTML(artist.name);
-    const safeImg = escapeHTML(artist.image);
-    const badgeLabel = artist.role === "guest" ? "Ospite" : "Resident";
+    const safeCover = escapeHTML(artist.cover);
+
+    const typeLabel = artist.type === "guest" ? "OSPITE" : "RESIDENT";
+
+    const roleTag = artist.role
+      ? `
+        <span class="artist-cast-tag">
+          ${escapeHTML(artist.role)}
+        </span>
+      `
+      : "";
 
     return `
-      <article class="artist-card" data-artist-id="${safeId}" tabindex="0" role="button" aria-label="Apri scheda di ${safeName}">
-        ${
-          safeImg
-            ? `<img src="${safeImg}" alt="${safeName}" loading="lazy" onerror="this.style.display='none'">`
-            : ""
-        }
-        <div class="artista-info">
-          <span class="artista-name">${safeName}</span>
-          <span class="artista-role-tag">${escapeHTML(badgeLabel)}</span>
+      <article
+        class="artist-card artist-cast-card"
+        data-artist-id="${safeId}"
+        tabindex="0"
+        role="button"
+        aria-label="Apri scheda di ${safeName}"
+      >
+        <div class="artist-cast-image">
+          ${
+            safeCover
+              ? `
+                <img
+                  class="artist-cover-img"
+                  src="${safeCover}"
+                  alt="${safeName}"
+                  loading="lazy"
+                  onerror="this.style.display='none';"
+                >
+              `
+              : ""
+          }
+        </div>
+
+        <div class="artist-cast-info">
+          <span class="artist-cast-name">
+            ${safeName}
+          </span>
+
+          <div class="artist-cast-tags">
+            <span class="artist-cast-tag">
+              ${escapeHTML(typeLabel)}
+            </span>
+
+            ${roleTag}
+          </div>
         </div>
       </article>
     `;
   }
 
-  function renderHomeGalleries(dom) {
+  function renderHomeResidents(dom) {
     if (dom.sectionHome) {
       dom.sectionHome.style.opacity = "1";
     }
+    if (!dom.residentGallery) return;
 
-    const residents = state.artists.filter((a) => a.role === "resident");
-    const guests = state.artists.filter((a) => a.role === "guest");
+    const residents = state.artists.filter((a) => a.type === "resident");
+    dom.residentGallery.innerHTML = residents.length
+      ? residents.map(renderArtistCard).join("")
+      : `<p class="empty-state">${escapeHTML(state.loadError || "Nessuna artista resident disponibile al momento.")}</p>`;
+  }
 
-    console.info(
-      `[artists.js] Residenti: ${residents.length} | Ospiti: ${guests.length}`
-    );
-
-    if (dom.residentGallery) {
-      dom.residentGallery.innerHTML = residents.length
-        ? residents.map(renderArtistCard).join("")
-        : `<p class="empty-state">Nessuna artista resident disponibile al momento.</p>`;
-    }
-
-    if (dom.guestGallery) {
-      dom.guestGallery.innerHTML = guests.length
-        ? guests.map(renderArtistCard).join("")
-        : `<p class="empty-state">Nessuna artista ospite al momento.</p>`;
-    }
+  function syncAllFilterButtons(dom) {
+    if (!dom.allFilters) return;
+    dom.allFilters.querySelectorAll("[data-artist-filter]").forEach((btn) => {
+      const isActive = btn.dataset.artistFilter === state.allFilter;
+      btn.classList.toggle("active", isActive);
+      btn.classList.toggle("is-active", isActive);
+      btn.setAttribute("aria-pressed", String(isActive));
+    });
   }
 
   function renderAllArtistsPage(dom) {
     if (!dom.allGallery) return;
+    syncAllFilterButtons(dom);
 
     const filtered =
       state.allFilter === "all"
         ? state.artists
-        : state.artists.filter((a) => a.role === state.allFilter);
+        : state.artists.filter((a) => a.type === state.allFilter);
 
-    dom.allGallery.innerHTML = filtered.length
-      ? filtered.map(renderArtistCard).join("")
-      : `<p class="empty-state">Nessuna artista trovata per questo filtro.</p>`;
+    if (!filtered.length) {
+      const msg =
+        state.loadError ||
+        "Nessuna artista trovata per questo filtro.";
+      dom.allGallery.innerHTML = `<p class="empty-state">${escapeHTML(msg)}</p>`;
+      return;
+    }
+
+    dom.allGallery.innerHTML = filtered.map(renderArtistCard).join("");
   }
 
-  function openArtistModal(artistId, dom) {
-    const currentIndex = state.artists.findIndex((a) => a.id === artistId);
-    if (currentIndex === -1 || !dom.modalsContainer) return;
+  function getModalList() {
+    if (
+      state.activeArtistId &&
+      document.getElementById("artists-resident") &&
+      !document.getElementById("artists-all")
+    ) {
+      const residents = state.artists.filter((a) => a.type === "resident");
+      if (residents.some((a) => a.id === state.activeArtistId)) {
+        return residents;
+      }
+    }
+    return state.artists;
+  }
 
-    const artist = state.artists[currentIndex];
+  function openArtistModal(artistId, dom, triggerCard = null) {
+    const artist = state.artists.find((a) => a.id === artistId);
+    if (!artist || !dom.modalsContainer) return;
+
+    const isFirstOpen = !state.activeArtistId;
     state.activeArtistId = artist.id;
 
-    const hasGallery = artist.gallery.length > 0;
-    const galleryHTML = hasGallery
-      ? `<div class="artist-modal-gallery">${artist.gallery
-          .map(
-            (src) =>
-              `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}" loading="lazy">`
-          )
+    if (isFirstOpen) {
+      state.savedScrollY = window.scrollY;
+      state.lastFocusedCard =
+        triggerCard ||
+        document.querySelector(`.artist-card[data-artist-id="${CSS.escape(artistId)}"]`) ||
+        null;
+    }
+
+    const modalGalleryItems = artist.gallery.length
+      ? artist.gallery
+      : artist.cover
+        ? [artist.cover]
+        : [];
+
+    const galleryHTML = modalGalleryItems.length
+      ? `<div class="artist-modal-gallery">${modalGalleryItems
+          .map((src) => `<img src="${escapeHTML(src)}" alt="${escapeHTML(artist.name)}" loading="lazy">`)
           .join("")}</div>`
       : "";
 
+    const bioHTML = [
+      artist.bioShort
+        ? `<p class="artist-modal-lead"><strong>${escapeHTML(artist.bioShort)}</strong></p>`
+        : "",
+      artist.bioLong ? `<p>${escapeHTML(artist.bioLong)}</p>` : ""
+    ]
+      .filter(Boolean)
+      .join("") || `<p>Biografia in aggiornamento.</p>`;
+
+    const igHTML = artist.instagram
+      ? `<p class="artist-modal-social"><a href="${escapeHTML(artist.instagram)}" target="_blank" rel="noopener noreferrer">Instagram →</a></p>`
+      : "";
+
+    const navList = getModalList();
     const navHTML =
-      state.artists.length > 1
+      navList.length > 1
         ? `
           <div class="artist-modal-nav">
             <button type="button" class="artist-nav-btn" data-action="prev-artist">← Prec</button>
@@ -278,11 +380,13 @@
           <button type="button" class="close-button" data-action="close-artist-modal" aria-label="Chiudi scheda">&times;</button>
           <div class="artist-header">
             <h3 id="artist-modal-title">${escapeHTML(artist.name)}</h3>
-            <span class="artista-role-tag">${artist.role === "guest" ? "Ospite" : "Resident"}</span>
+            <span class="artista-role-tag">${artist.type === "guest" ? "Ospite" : "Resident"}</span>
+            ${artist.role ? `<span class="artista-role-tag">${escapeHTML(artist.role)}</span>` : ""}
           </div>
-          <div class="artist-modal-layout ${hasGallery ? "" : "artist-modal-layout--single"}">
+          <div class="artist-modal-layout ${galleryHTML ? "" : "artist-modal-layout--single"}">
             <div class="artist-modal-text">
-              ${artist.bio ? `<p>${escapeHTML(artist.bio)}</p>` : `<p>Biografia in aggiornamento.</p>`}
+              ${bioHTML}
+              ${igHTML}
             </div>
             ${galleryHTML}
           </div>
@@ -292,72 +396,75 @@
     `;
 
     document.body.classList.add("modal-open");
+    console.info("[artists.js] Aperta modale per:", artist.name, "| Voci navigabili:", navList.length);
   }
 
   function stepArtistModal(direction, dom) {
-    if (!state.activeArtistId || state.artists.length < 2) return;
-    const idx = state.artists.findIndex((a) => a.id === state.activeArtistId);
+    if (!state.activeArtistId) return;
+    const navList = getModalList();
+    if (navList.length < 2) return;
+    const idx = navList.findIndex((a) => a.id === state.activeArtistId);
     if (idx === -1) return;
-    const nextIdx = (idx + direction + state.artists.length) % state.artists.length;
-    openArtistModal(state.artists[nextIdx].id, dom);
+    const nextIdx = (idx + direction + navList.length) % navList.length;
+    openArtistModal(navList[nextIdx].id, dom);
   }
 
   function closeArtistModal(dom) {
+    const targetCard = state.lastFocusedCard;
+    const targetScrollY = state.savedScrollY;
+
     state.activeArtistId = null;
+    state.lastFocusedCard = null;
+    state.savedScrollY = null;
+
     if (dom.modalsContainer) {
       dom.modalsContainer.innerHTML = "";
     }
     document.body.classList.remove("modal-open");
+
+    if (typeof targetScrollY === "number") {
+      window.scrollTo({ top: targetScrollY, behavior: "instant" });
+    }
+
+    if (targetCard && targetCard.isConnected) {
+      try {
+        targetCard.focus({ preventScroll: true });
+      } catch {
+        targetCard.focus();
+      }
+    } else if (dom.sectionHome) {
+      dom.sectionHome.scrollIntoView({ behavior: "instant", block: "nearest" });
+    }
   }
 
   function bindEventsOnce() {
     if (state.listenersBound) return;
     state.listenersBound = true;
 
-    const dom = getDom();
-
-    if (dom.btnResident && dom.btnGuest && dom.residentGallery && dom.guestGallery) {
-      dom.btnResident.addEventListener("click", () => {
-        dom.btnResident.classList.add("active");
-        dom.btnGuest.classList.remove("active");
-        dom.residentGallery.style.display = "";
-        dom.guestGallery.style.display = "none";
-      });
-
-      dom.btnGuest.addEventListener("click", () => {
-        dom.btnGuest.classList.add("active");
-        dom.btnResident.classList.remove("active");
-        dom.guestGallery.style.display = "";
-        dom.residentGallery.style.display = "none";
-      });
-    }
-
-    if (dom.allFilters) {
-      dom.allFilters.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-artist-filter]");
-        if (!btn) return;
-        state.allFilter = btn.dataset.artistFilter;
-        dom.allFilters.querySelectorAll("[data-artist-filter]").forEach((el) => {
-          el.classList.toggle("active", el === btn);
-        });
-        renderAllArtistsPage(getDom());
-      });
-    }
-
     document.addEventListener("click", (e) => {
       const currentDom = getDom();
 
+      const filterBtn = e.target.closest("#all-artists-filters [data-artist-filter]");
+      if (filterBtn) {
+        state.allFilter = filterBtn.dataset.artistFilter;
+        renderAllArtistsPage(currentDom);
+        return;
+      }
+
       if (e.target.closest('[data-action="close-artist-modal"]')) {
+        e.preventDefault();
         closeArtistModal(currentDom);
         return;
       }
 
       if (e.target.closest('[data-action="prev-artist"]')) {
+        e.preventDefault();
         stepArtistModal(-1, currentDom);
         return;
       }
 
       if (e.target.closest('[data-action="next-artist"]')) {
+        e.preventDefault();
         stepArtistModal(1, currentDom);
         return;
       }
@@ -370,41 +477,53 @@
 
       const card = e.target.closest(".artist-card[data-artist-id]");
       if (card) {
-        openArtistModal(card.dataset.artistId, currentDom);
+        e.preventDefault();
+        openArtistModal(card.dataset.artistId, currentDom, card);
       }
     });
 
-    document.addEventListener("keydown", (e) => {
-      const currentDom = getDom();
-      if (e.key === "Escape" && state.activeArtistId) {
-        closeArtistModal(currentDom);
-        return;
-      }
-      if (state.activeArtistId && e.key === "ArrowLeft") {
-        e.preventDefault();
-        stepArtistModal(-1, currentDom);
-        return;
-      }
-      if (state.activeArtistId && e.key === "ArrowRight") {
-        e.preventDefault();
-        stepArtistModal(1, currentDom);
-        return;
-      }
-      if (e.key === "Enter") {
-        const card = document.activeElement?.closest(".artist-card[data-artist-id]");
-        if (card) {
-          e.preventDefault();
-          openArtistModal(card.dataset.artistId, currentDom);
+    window.addEventListener(
+      "keydown",
+      (e) => {
+        if (!state.activeArtistId) {
+          if (e.key === "Enter") {
+            const card = document.activeElement?.closest(".artist-card[data-artist-id]");
+            if (card) {
+              e.preventDefault();
+              openArtistModal(card.dataset.artistId, getDom(), card);
+            }
+          }
+          return;
         }
-      }
-    });
+
+        const currentDom = getDom();
+        if (e.key === "Escape") {
+          e.preventDefault();
+          e.stopPropagation();
+          closeArtistModal(currentDom);
+          return;
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          e.stopPropagation();
+          stepArtistModal(-1, currentDom);
+          return;
+        }
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          e.stopPropagation();
+          stepArtistModal(1, currentDom);
+        }
+      },
+      true
+    );
   }
 
   async function init() {
     const dom = getDom();
     bindEventsOnce();
     state.artists = await loadArtistsData();
-    renderHomeGalleries(dom);
+    renderHomeResidents(dom);
     renderAllArtistsPage(dom);
   }
 
