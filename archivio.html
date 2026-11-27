@@ -5,10 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Queer Market Show APS</title>
+  <title>Archivio — Queer Market Show APS</title>
 
   <link rel="icon" href="images/logo-qms.ico" type="image/x-icon">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap"
         rel="stylesheet">
 
@@ -21,73 +23,71 @@
   <link rel="stylesheet" href="fix.css">
 </head>
 
-<body>
+<body class="archive-page zine-archive">
 
   <!-- SFONDO -->
-  <div class="logo-background"></div>
+  <div class="logo-background" aria-hidden="true"></div>
 
   <!-- NAVBAR -->
-  <nav class="navbar">
-
-    <div class="logo">
+  <nav class="navbar" aria-label="Navigazione archivio">
+    <a href="index.html" class="logo">
       Queer Market Show
-    </div>
-
-    <a href="javascript:history.back()" class="back-button">
-      ←
     </a>
 
+    <a href="javascript:history.back()" class="back-button" aria-label="Torna indietro">
+      ←
+    </a>
   </nav>
 
   <!-- MENU MOBILE -->
-  <div class="menu-mobile">
-
-    <a href="javascript:history.back()" class="back-button-mobile">
+  <nav class="menu-mobile" aria-label="Navigazione mobile archivio">
+    <a href="javascript:history.back()" class="back-button-mobile" aria-label="Torna indietro">
       ←
     </a>
-
-  </div>
+  </nav>
 
   <!-- =====================================================
-       ARCHIVIO
+       ARCHIVIO — FANZINE DELLE MEMORIE
   ====================================================== -->
+  <main class="archive-main">
+    <section id="archivio" class="scroll-section qms-archive-page">
+      <header class="archive-hero">
+        <span class="archive-kicker">Archivio · Memorie &amp; Sguardi</span>
+        <h1>L'Archivio del Show</h1>
+        <p class="archive-intro">
+          Frammenti di serate, corpi, tavoli, sguardi e attraversamenti:
+          l'archivio vivo di ciò che abbiamo costruito insieme.
+        </p>
+        <div class="archive-manifesto-strip" aria-hidden="true">
+          <span>01 / CAPITOLI &amp; SERATE</span>
+          <span>02 / FOGLIO A CONTATTO</span>
+          <span>03 / MEMORIA COLLETTIVA</span>
+        </div>
+      </header>
 
-  <section id="archivio" class="scroll-section qms-archive-page">
+      <!-- Cartelle generate da JS -->
+      <div class="gallery-folders" id="gallery-folders"></div>
 
-    <h2>Archivio Fotografico</h2>
-
-    <p class="archive-intro">
-      Tutte le immagini del Queer Market Show.
-    </p>
-
-    <!-- Cartelle generate da JS -->
-    <div class="gallery-folders"></div>
-
-    <!-- Mosaico -->
-    <div class="mosaic-gallery hidden">
-      <button class="mosaic-close">×</button>
-      <div class="mosaic-grid"></div>
-    </div>
-
-  </section>
+      <!-- Mosaico -->
+      <div class="mosaic-gallery hidden" id="mosaicGallery" role="dialog" aria-modal="true" aria-label="Mosaico foto">
+        <button type="button" class="mosaic-close" aria-label="Chiudi mosaico">&times;</button>
+        <div class="mosaic-grid"></div>
+      </div>
+    </section>
+  </main>
 
   <!-- =====================================================
        MODALE GALLERIA
   ====================================================== -->
-
-  <div id="galleryModal" class="modal hidden">
-
+  <div id="galleryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="gallery-modal-title">
     <div class="modal-content">
 
       <!-- CHIUDE LA CARTELLA E TORNA ALLE CARTELLE -->
-      <button class="close">×</button>
+      <button type="button" class="close" aria-label="Chiudi album">&times;</button>
 
       <div class="modal-caption">
-
-        <h3 class="modal-album-title"></h3>
-
+        <h3 id="gallery-modal-title" class="modal-album-title"></h3>
         <p class="modal-photographer"></p>
-
       </div>
 
       <!-- GRIGLIA FOTO -->
@@ -96,50 +96,31 @@
       <!-- =================================================
            CAROSELLO FULLSCREEN
       ================================================== -->
-
       <div class="carousel hidden">
-
         <!-- CHIUDE SOLO IL CAROSELLO -->
-        <button class="carousel-close">×</button>
+        <button type="button" class="carousel-close" aria-label="Chiudi immagine ingrandita">&times;</button>
 
-        <span class="prev">❮</span>
+        <button type="button" class="prev" aria-label="Foto precedente">❮</button>
 
         <img
           class="carousel-img"
           src=""
           alt="Immagine galleria">
 
-        <span class="next">❯</span>
-
+        <button type="button" class="next" aria-label="Foto successiva">❯</button>
       </div>
 
     </div>
-
   </div>
 
   <!-- =====================================================
        SCRIPT
   ====================================================== -->
-
-  <script src="assets/js/base2.js"></script>
-  <script src="assets/js/navbar.js"></script>
-
-  <script src="assets/js/gallery-modal.js"></script>
-  <script src="assets/js/gallery-folders.js"></script>
-  <script src="assets/js/mosaic-gallery.js"></script>
-
-  <script src="assets/js/events.js"></script>
-  <script src="assets/js/artists.js"></script>
-
-  <script>
-    window.addEventListener("load", () => {
-
-      if (typeof initArtist3 === "function") {
-        initArtist3();
-      }
-
-    });
-  </script>
+  <script src="assets/js/base2.js" defer></script>
+  <script src="assets/js/navbar.js" defer></script>
+  <script src="assets/js/gallery-modal.js" defer></script>
+  <script src="assets/js/gallery-folders.js" defer></script>
+  <script src="assets/js/mosaic-gallery.js" defer></script>
 
 </body>
 
