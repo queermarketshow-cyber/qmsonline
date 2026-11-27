@@ -1790,7 +1790,92 @@ a.poster:focus-visible .sticker {
   border-radius: 6px;
   box-shadow: 4px 4px 0 #000;
 }
+.mobile-event-filters {
+  display: none;
+}
 
+@media (max-width: 768px) {
+
+  .calendar-filters {
+    display: none;
+  }
+
+  .mobile-event-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    max-width: 420px;
+
+    margin: 0 auto 2rem;
+  }
+
+  .mobile-event-filters select {
+
+    width: 100%;
+
+    padding: 0.9rem 1rem;
+
+    background: #000;
+    color: #fff;
+
+    border: 3px solid #fff;
+
+    font-family: var(--font-sans);
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    box-shadow:
+      4px 4px 0 var(--primary-color);
+
+    appearance: none;
+  }
+
+}
+.archive-mobile-filters{
+  display:none;
+}
+
+@media (max-width:768px){
+
+  .archive-filter-groups{
+    display:none;
+  }
+
+  .archive-mobile-filters{
+    display:flex;
+    flex-direction:column;
+    gap:.8rem;
+    max-width:420px;
+    margin:0 auto;
+  }
+
+  .archive-mobile-filters select{
+
+    width:100%;
+
+    padding:.9rem 1rem;
+
+    background:#000;
+    color:#fff;
+
+    border:3px solid #fff;
+
+    font-family:var(--font-sans);
+    font-weight:900;
+    font-size:.9rem;
+
+    text-transform:uppercase;
+
+    box-shadow:
+      4px 4px 0 var(--primary-color);
+
+    appearance:none;
+    -webkit-appearance:none;
+  }
+
+}
 /* ============================================================
    ARTISTƏ & ARTIST3.HTML
 ============================================================ */

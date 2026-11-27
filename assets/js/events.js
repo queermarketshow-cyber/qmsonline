@@ -747,72 +747,315 @@
     });
   }
 
-  function renderArchiveFilters(pastEvents) {
-    const container = ensureArchiveFilterContainer();
-    if (!container) return;
+function renderArchiveFilters(pastEvents) {
 
-    if (!pastEvents.length) {
-      container.innerHTML = "";
-      return;
-    }
+  const container = ensureArchiveFilterContainer();
 
-    const options = getArchiveOptions(pastEvents);
-    pruneInvalidArchiveSelections(options);
+  if (!container) return;
 
-    const hasAnySelection =
-      state.archiveFilters.years.size > 0 ||
-      state.archiveFilters.months.size > 0 ||
-      state.archiveFilters.categories.size > 0;
-
-    const renderGroupButtons = (groupKey, items, selectedSet, formatLabel) => {
-      if (!items.length) return `<span class="archive-filter-empty">Nessuna opzione</span>`;
-      return items
-        .map((val) => {
-          const isSelected = selectedSet.has(val);
-          return `
-            <button
-              type="button"
-              class="archive-filter-btn ${isSelected ? "is-active active" : ""}"
-              data-archive-group="${escapeHTML(groupKey)}"
-              data-archive-value="${escapeHTML(val)}"
-              aria-pressed="${isSelected}"
-            >
-              ${escapeHTML(formatLabel(val))}
-            </button>
-          `;
-        })
-        .join("");
-    };
-
-    container.innerHTML = `
-      <div class="archive-filter-groups">
-        <div class="archive-filter-group">
-          <span class="archive-filter-label">Anno</span>
-          <div class="archive-filter-options">
-            ${renderGroupButtons("years", options.years, state.archiveFilters.years, (y) => y)}
-          </div>
-        </div>
-        <div class="archive-filter-group">
-          <span class="archive-filter-label">Mese</span>
-          <div class="archive-filter-options">
-            ${renderGroupButtons("months", options.months, state.archiveFilters.months, (m) => formatMonthNameIT(Number(m)))}
-          </div>
-        </div>
-        <div class="archive-filter-group">
-          <span class="archive-filter-label">Tipologia</span>
-          <div class="archive-filter-options">
-            ${renderGroupButtons("categories", options.categories, state.archiveFilters.categories, (c) => c)}
-          </div>
-        </div>
-      </div>
-      ${
-        hasAnySelection
-          ? `<button type="button" class="archive-filter-reset" data-action="reset-archive-filters">Azzera filtri</button>`
-          : ""
-      }
-    `;
+  if (!pastEvents.length) {
+    container.innerHTML = "";
+    return;
   }
 
+  const options = getArchiveOptions(pastEvents);
+
+  pruneInvalidArchiveSelections(options);
+
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+
+    const selectedYear =
+      [...state.archiveFilters.years][0] || "";
+
+    const selectedMonth =
+      [...state.archiveFilters.months][0] || "";
+
+    const selectedCategory =
+      [...state.archiveFilters.categories][0] || "";
+
+    const hasAnySelection =
+      selectedYear ||
+      selectedMonth ||
+      selectedCategory;
+
+    container.innerHTML = `
+
+      <div class="archive-mobile-filters">
+
+        <select id="archive-year-mobile">
+
+          <option value="">
+            Anno
+          </option>
+
+          ${options.years.map(year => `
+            <option
+              value="${escapeHTML(year)}"
+              ${selectedYear === year ? "selected" : ""}
+            >
+              ${escapeHTML(year)}
+            </option>
+          `).join("")}
+
+        </select>
+
+        <select id="archive-month-mobile">
+
+          <option value="">
+            Mese
+          </option>
+
+          ${options.months.map(month => `
+            <option
+              value="${escapeHTML(month)}"
+              ${selectedMonth === month ? "selected" : ""}
+            >
+              ${escapeHTML(
+                formatMonthNameIT(Number(month))
+              )}
+            </option>
+          `).join("")}
+
+        </select>
+
+        <select id="archive-category-mobile">
+
+          <option value="">
+            Tipologia
+          </option>
+
+          ${options.categories.map(category => `
+            <option
+              value="${escapeHTML(category)}"
+              ${selectedCategory === category ? "selected" : ""}
+            >
+              ${escapeHTML(category)}
+            </option>
+          `).join("")}
+
+        </select>
+
+        ${
+          hasAnySelection
+            ? `
+              <button
+                type="button"
+                class="archive-filter-reset"
+                data-action="reset-archive-filters">
+                Azzera filtri
+              </button>
+            `
+            : ""
+        }
+
+      </div>
+
+    `;
+
+    requestAnimationFrame(() => {
+
+      const yearSelect =
+        document.getElementById(
+          "archive-year-mobile"
+        );
+
+      const monthSelect =
+        document.getElementById(
+          "archive-month-mobile"
+        );
+
+      const categorySelect =
+        document.getElementById(
+          "archive-category-mobile"
+        );
+
+      yearSelect?.addEventListener(
+        "change",
+        e => {
+
+          state.archiveFilters.years.clear();
+
+          if (e.target.value) {
+            state.archiveFilters.years.add(
+              e.target.value
+            );
+          }
+
+          const { past } =
+            splitEvents(state.events);
+
+          renderArchive(past);
+
+        }
+      );
+
+      monthSelect?.addEventListener(
+        "change",
+        e => {
+
+          state.archiveFilters.months.clear();
+
+          if (e.target.value) {
+            state.archiveFilters.months.add(
+              e.target.value
+            );
+          }
+
+          const { past } =
+            splitEvents(state.events);
+
+          renderArchive(past);
+
+        }
+      );
+
+      categorySelect?.addEventListener(
+        "change",
+        e => {
+
+          state.archiveFilters.categories.clear();
+
+          if (e.target.value) {
+            state.archiveFilters.categories.add(
+              e.target.value
+            );
+          }
+
+          const { past } =
+            splitEvents(state.events);
+
+          renderArchive(past);
+
+        }
+      );
+
+    });
+
+    return;
+  }
+
+  const hasAnySelection =
+    state.archiveFilters.years.size > 0 ||
+    state.archiveFilters.months.size > 0 ||
+    state.archiveFilters.categories.size > 0;
+
+  const renderGroupButtons = (
+    groupKey,
+    items,
+    selectedSet,
+    formatLabel
+  ) => {
+
+    if (!items.length) {
+      return `
+        <span class="archive-filter-empty">
+          Nessuna opzione
+        </span>
+      `;
+    }
+
+    return items
+      .map(val => {
+
+        const isSelected =
+          selectedSet.has(val);
+
+        return `
+          <button
+            type="button"
+            class="archive-filter-btn ${isSelected ? "is-active active" : ""}"
+            data-archive-group="${escapeHTML(groupKey)}"
+            data-archive-value="${escapeHTML(val)}"
+            aria-pressed="${isSelected}"
+          >
+            ${escapeHTML(formatLabel(val))}
+          </button>
+        `;
+      })
+      .join("");
+
+  };
+
+  container.innerHTML = `
+
+    <div class="archive-filter-groups">
+
+      <div class="archive-filter-group">
+
+        <span class="archive-filter-label">
+          Anno
+        </span>
+
+        <div class="archive-filter-options">
+
+          ${renderGroupButtons(
+            "years",
+            options.years,
+            state.archiveFilters.years,
+            y => y
+          )}
+
+        </div>
+
+      </div>
+
+      <div class="archive-filter-group">
+
+        <span class="archive-filter-label">
+          Mese
+        </span>
+
+        <div class="archive-filter-options">
+
+          ${renderGroupButtons(
+            "months",
+            options.months,
+            state.archiveFilters.months,
+            m => formatMonthNameIT(Number(m))
+          )}
+
+        </div>
+
+      </div>
+
+      <div class="archive-filter-group">
+
+        <span class="archive-filter-label">
+          Tipologia
+        </span>
+
+        <div class="archive-filter-options">
+
+          ${renderGroupButtons(
+            "categories",
+            options.categories,
+            state.archiveFilters.categories,
+            c => c
+          )}
+
+        </div>
+
+      </div>
+
+    </div>
+
+    ${
+      hasAnySelection
+        ? `
+          <button
+            type="button"
+            class="archive-filter-reset"
+            data-action="reset-archive-filters">
+            Azzera filtri
+          </button>
+        `
+        : ""
+    }
+
+  `;
+}
   function renderArchive(pastEvents) {
     renderArchiveFilters(pastEvents);
     if (!dom.pastEvents) return;
