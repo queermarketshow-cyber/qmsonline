@@ -3114,39 +3114,6 @@ a.sost-card.sost-cta:focus-visible {
   outline: none;
 }
 
-/* Etichette posizionate dal JS con anti-collisione */
-.qms-gallery-labels {
-  position: absolute;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-}
-
-.qms-gallery-labels .label {
-  position: absolute;
-  background: var(--accent-pink);
-  padding: 0.36rem 0.72rem;
-  font-size: clamp(0.76rem, 1.35vw, 1rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #000;
-  border: 2px solid #000;
-  border-radius: 0;
-  box-shadow: 4px 4px 0 #fff;
-  pointer-events: auto;
-  user-select: none;
-  transition: background-color 0.12s ease, box-shadow 0.12s ease;
-}
-
-.qms-gallery-labels .label:nth-child(even) {
-  background: var(--primary-color);
-}
-
-.qms-gallery-labels .label:hover {
-  background: #fff;
-  box-shadow: 6px 6px 0 var(--primary-color);
-}
 
 /* CTA "Mostra tutto": sempre visibile, cliccabile e più grande delle altre etichette */
 .chaos-button {
