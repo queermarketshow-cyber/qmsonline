@@ -1,3 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Eventi | Queer Market Show APS</title>
+
+  <meta
+    name="description"
+    content="Eventi, performance, workshop, mercati artistici e pratiche queer nel Salento. Esplora i prossimi appuntamenti e l'archivio vivente di Queer Market Show."
+  >
+
+  <link rel="icon"
+        href="images/logo-qms.ico"
+        type="image/x-icon">
+
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="fix.css">
+
+</head>
+
+<body>
+
+  <div class="logo-background"></div>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar">
+
+    <a href="index.html" class="logo">
+      Queer Market Show
+    </a>
+
+    <a href="index.html"
+       class="back-button">
+      ← Torna al sito
+    </a>
+
+  </nav>
+
 <!-- HERO -->
 
 <header class="eventi-hero">
@@ -136,3 +187,78 @@
   </div>
 
 </section>
+
+  <!-- MODALE EVENTO -->
+
+  <div id="event-modal">
+
+    <div class="event-modal-content">
+
+      <button class="event-modal-close"
+              aria-label="Chiudi">
+        ✕
+      </button>
+
+      <div id="event-modal-body"></div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <footer class="qms-footer">
+
+    <div class="qms-footer-left">
+
+      <strong>Queer Market Show APS</strong><br>
+
+      Via Bradano 1<br>
+      73100 Lecce (LE)<br>
+
+      CF 93170860758<br>
+
+      Codice ATECO 949920<br>
+
+      Repertorio RUNTS 143747
+
+    </div>
+
+    <div class="qms-footer-right">
+
+      <a href="trasparenza.html"
+         target="_blank"
+         rel="noopener noreferrer">
+
+        Trasparenza
+
+      </a>
+
+    </div>
+
+  </footer>
+
+  <script src="assets/js/base.js"></script>
+  <script src="assets/js/events.js"></script>
+
+  <script>
+
+    function updateNavbarHeight() {
+
+      const nav = document.querySelector(".navbar");
+
+      document.documentElement.style.setProperty(
+        "--navbar-height",
+        nav.offsetHeight + "px"
+      );
+
+    }
+
+    window.addEventListener("load", updateNavbarHeight);
+    window.addEventListener("resize", updateNavbarHeight);
+
+  </script>
+
+</body>
+
+</html>
