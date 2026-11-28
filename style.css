@@ -4374,3 +4374,11 @@ body::before{
 
     z-index:-1;
 }
+.artist-card,
+.collab-card,
+.event-card,
+.featured-event-card,
+.folder-preview,
+.gallery-folder{
+    background:#000;
+}
