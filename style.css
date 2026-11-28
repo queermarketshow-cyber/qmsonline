@@ -4100,6 +4100,10 @@ a.sost-card.sost-cta:focus-visible {
    QMS · GRAIN & TEARS SYSTEM
 ===================================================== */
 
+/* =====================================================
+   QMS · GRAIN + TEARS SYSTEM
+===================================================== */
+
 /* ---------------------------------
    GRAIN OVERLAY GLOBALE
 --------------------------------- */
@@ -4179,7 +4183,7 @@ body::before{
 
     background-repeat:no-repeat;
     background-position:center;
-    background-size:contain;
+    background-size:100% 100%;
 
     pointer-events:none;
 
@@ -4203,51 +4207,59 @@ body::before{
 }
 
 /* ---------------------------------
-   POSIZIONI
+   STRAPPI ORIZZONTALI
+   OCCUPANO TUTTA LA WIDTH
 --------------------------------- */
 
 .tear-top{
-    top:-25px;
-    left:-5%;
+    top:-20px;
+    left:-10vw;
 
-    width:110%;
-    height:120px;
+    width:120vw;
+    height:clamp(90px, 8vw, 180px);
 
-    transform:rotate(-3deg);
+    transform:rotate(-2deg);
 }
 
 .tear-bottom{
-    bottom:-25px;
-    left:-5%;
+    bottom:-20px;
+    left:-10vw;
 
-    width:110%;
-    height:120px;
+    width:120vw;
+    height:clamp(90px, 8vw, 180px);
 
     transform:rotate(2deg);
 }
 
-.tear-left{
-    left:-45px;
-    top:10%;
+/* ---------------------------------
+   STRAPPI VERTICALI
+   OCCUPANO TUTTA LA HEIGHT
+--------------------------------- */
 
-    width:120px;
-    height:70%;
+.tear-left{
+    left:-70px;
+    top:-10vh;
+
+    width:clamp(90px, 8vw, 180px);
+    height:120vh;
 
     transform:rotate(90deg);
+    transform-origin:center;
 }
 
 .tear-right{
-    right:-45px;
-    top:10%;
+    right:-70px;
+    top:-10vh;
 
-    width:120px;
-    height:70%;
+    width:clamp(90px, 8vw, 180px);
+    height:120vh;
 
     transform:rotate(-90deg);
+    transform-origin:center;
 }
 
 /* ---------------------------------
-   VARIANTI DI INTENSITÀ
+   INTENSITÀ
 --------------------------------- */
 
 .tear-soft{
@@ -4286,12 +4298,28 @@ body::before{
 
     .tear-top,
     .tear-bottom{
-        height:80px;
+        height:clamp(60px, 10vw, 100px);
     }
 
     .tear-left,
     .tear-right{
-        width:80px;
+        width:clamp(60px, 10vw, 100px);
     }
 
+}
+
+/* ---------------------------------
+   PRESET CONSIGLIATI QMS
+--------------------------------- */
+
+.tear-foto{
+    opacity:.65;
+}
+
+.tear-sporco{
+    opacity:.45;
+}
+
+.tear-nero{
+    opacity:.75;
 }
