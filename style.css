@@ -4096,3 +4096,202 @@ a.sost-card.sost-cta:focus-visible {
   color: #fff;
   outline: none;
 }
+/* =====================================================
+   QMS · GRAIN & TEARS SYSTEM
+===================================================== */
+
+/* ---------------------------------
+   GRAIN OVERLAY GLOBALE
+--------------------------------- */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9999;
+
+    background:url("images/noise.png") repeat;
+
+    opacity:.04;
+
+    mix-blend-mode:overlay;
+}
+
+/* ---------------------------------
+   STRUTTURA SEZIONI
+--------------------------------- */
+
+.scroll-section,
+.manifesto-section,
+.archive-section,
+.events-section,
+.eventi-hero,
+.contact-section,
+.qms-gallery-narrativa,
+.qms-sostienici-section,
+.artists-page-main,
+.qms-archive-page,
+#manifesto-extended,
+#sostienici-dettagli,
+#archivio{
+    position:relative;
+    overflow:hidden;
+}
+
+.scroll-section > *,
+.manifesto-section > *,
+.archive-section > *,
+.events-section > *,
+.eventi-hero > *,
+.contact-section > *,
+.qms-gallery-narrativa > *,
+.qms-sostienici-section > *,
+.artists-page-main > *,
+.qms-archive-page > *,
+#manifesto-extended > *,
+#sostienici-dettagli > *,
+#archivio > *{
+    position:relative;
+    z-index:2;
+}
+
+/* ---------------------------------
+   WRAPPER STRAPPI
+--------------------------------- */
+
+.section-tears{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+
+    pointer-events:none;
+    z-index:1;
+}
+
+/* ---------------------------------
+   STRAPPI BASE
+--------------------------------- */
+
+.tear{
+    position:absolute;
+    display:block;
+
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
+
+    pointer-events:none;
+
+    opacity:.55;
+}
+
+/* ---------------------------------
+   PNG
+--------------------------------- */
+
+.tear-foto{
+    background-image:url("images/strappo_foto.png");
+}
+
+.tear-sporco{
+    background-image:url("images/strappo_sporco.png");
+}
+
+.tear-nero{
+    background-image:url("images/strappo_nero.png");
+}
+
+/* ---------------------------------
+   POSIZIONI
+--------------------------------- */
+
+.tear-top{
+    top:-25px;
+    left:-5%;
+
+    width:110%;
+    height:120px;
+
+    transform:rotate(-3deg);
+}
+
+.tear-bottom{
+    bottom:-25px;
+    left:-5%;
+
+    width:110%;
+    height:120px;
+
+    transform:rotate(2deg);
+}
+
+.tear-left{
+    left:-45px;
+    top:10%;
+
+    width:120px;
+    height:70%;
+
+    transform:rotate(90deg);
+}
+
+.tear-right{
+    right:-45px;
+    top:10%;
+
+    width:120px;
+    height:70%;
+
+    transform:rotate(-90deg);
+}
+
+/* ---------------------------------
+   VARIANTI DI INTENSITÀ
+--------------------------------- */
+
+.tear-soft{
+    opacity:.35;
+}
+
+.tear-medium{
+    opacity:.55;
+}
+
+.tear-strong{
+    opacity:.8;
+}
+
+/* ---------------------------------
+   MICRO VARIAZIONI ORGANICHE
+--------------------------------- */
+
+.section-tears .tear:nth-child(1){
+    filter:contrast(105%);
+}
+
+.section-tears .tear:nth-child(2){
+    filter:contrast(115%);
+}
+
+.section-tears .tear:nth-child(3){
+    filter:contrast(110%);
+}
+
+/* ---------------------------------
+   MOBILE
+--------------------------------- */
+
+@media (max-width:768px){
+
+    .tear-top,
+    .tear-bottom{
+        height:80px;
+    }
+
+    .tear-left,
+    .tear-right{
+        width:80px;
+    }
+
+}
