@@ -694,7 +694,6 @@
     if (dom.mobileNextBtn) dom.mobileNextBtn.disabled = state.mobileSlideIndex === monthGroups.length - 1;
   }
 
-  // --- Filtri multipli Archivio (Anno, Mese, Tipologia evento) ---
   function getArchiveOptions(pastEvents) {
     const yearsSet = new Set();
     const monthsSet = new Set();
@@ -747,315 +746,153 @@
     });
   }
 
-function renderArchiveFilters(pastEvents) {
+  function renderArchiveFilters(pastEvents) {
+    const container = ensureArchiveFilterContainer();
+    if (!container) return;
 
-  const container = ensureArchiveFilterContainer();
+    if (!pastEvents.length) {
+      container.innerHTML = "";
+      return;
+    }
 
-  if (!container) return;
+    const options = getArchiveOptions(pastEvents);
+    pruneInvalidArchiveSelections(options);
 
-  if (!pastEvents.length) {
-    container.innerHTML = "";
-    return;
-  }
+    const isMobile = window.innerWidth <= 768;
 
-  const options = getArchiveOptions(pastEvents);
+    if (isMobile) {
+      const selectedYear = [...state.archiveFilters.years][0] || "";
+      const selectedMonth = [...state.archiveFilters.months][0] || "";
+      const selectedCategory = [...state.archiveFilters.categories][0] || "";
+      const hasAnySelection = selectedYear || selectedMonth || selectedCategory;
 
-  pruneInvalidArchiveSelections(options);
+      container.innerHTML = `
+        <div class="archive-mobile-filters">
+          <select id="archive-year-mobile">
+            <option value="">Anno</option>
+            ${options.years.map((year) => `
+              <option value="${escapeHTML(year)}" ${selectedYear === year ? "selected" : ""}>
+                ${escapeHTML(year)}
+              </option>
+            `).join("")}
+          </select>
 
-  const isMobile = window.innerWidth <= 768;
+          <select id="archive-month-mobile">
+            <option value="">Mese</option>
+            ${options.months.map((month) => `
+              <option value="${escapeHTML(month)}" ${selectedMonth === month ? "selected" : ""}>
+                ${escapeHTML(formatMonthNameIT(Number(month)))}
+              </option>
+            `).join("")}
+          </select>
 
-  if (isMobile) {
+          <select id="archive-category-mobile">
+            <option value="">Tipo</option>
+            ${options.categories.map((category) => `
+              <option value="${escapeHTML(category)}" ${selectedCategory === category ? "selected" : ""}>
+                ${escapeHTML(category)}
+              </option>
+            `).join("")}
+          </select>
 
-    const selectedYear =
-      [...state.archiveFilters.years][0] || "";
+          ${hasAnySelection ? `
+            <button type="button" class="archive-filter-reset" data-action="reset-archive-filters">
+              Azzera filtri
+            </button>
+          ` : ""}
+        </div>
+      `;
 
-    const selectedMonth =
-      [...state.archiveFilters.months][0] || "";
+      requestAnimationFrame(() => {
+        const yearSelect = document.getElementById("archive-year-mobile");
+        const monthSelect = document.getElementById("archive-month-mobile");
+        const categorySelect = document.getElementById("archive-category-mobile");
 
-    const selectedCategory =
-      [...state.archiveFilters.categories][0] || "";
+        yearSelect?.addEventListener("change", (e) => {
+          state.archiveFilters.years.clear();
+          if (e.target.value) state.archiveFilters.years.add(e.target.value);
+          const { past } = splitEvents(state.events);
+          renderArchive(past);
+        });
+
+        monthSelect?.addEventListener("change", (e) => {
+          state.archiveFilters.months.clear();
+          if (e.target.value) state.archiveFilters.months.add(e.target.value);
+          const { past } = splitEvents(state.events);
+          renderArchive(past);
+        });
+
+        categorySelect?.addEventListener("change", (e) => {
+          state.archiveFilters.categories.clear();
+          if (e.target.value) state.archiveFilters.categories.add(e.target.value);
+          const { past } = splitEvents(state.events);
+          renderArchive(past);
+        });
+      });
+
+      return;
+    }
 
     const hasAnySelection =
-      selectedYear ||
-      selectedMonth ||
-      selectedCategory;
+      state.archiveFilters.years.size > 0 ||
+      state.archiveFilters.months.size > 0 ||
+      state.archiveFilters.categories.size > 0;
+
+    const renderGroupButtons = (groupKey, items, selectedSet, formatLabel) => {
+      if (!items.length) {
+        return `<span class="archive-filter-empty">Nessuna opzione</span>`;
+      }
+
+      return items
+        .map((val) => {
+          const isSelected = selectedSet.has(val);
+          return `
+            <button
+              type="button"
+              class="archive-filter-btn ${isSelected ? "is-active active" : ""}"
+              data-archive-group="${escapeHTML(groupKey)}"
+              data-archive-value="${escapeHTML(val)}"
+              aria-pressed="${isSelected}"
+            >
+              ${escapeHTML(formatLabel(val))}
+            </button>
+          `;
+        })
+        .join("");
+    };
 
     container.innerHTML = `
+      <div class="archive-filter-groups">
+        <div class="archive-filter-group">
+          <span class="archive-filter-label">Anno</span>
+          <div class="archive-filter-options">
+            ${renderGroupButtons("years", options.years, state.archiveFilters.years, (y) => y)}
+          </div>
+        </div>
 
-      <div class="archive-mobile-filters">
+        <div class="archive-filter-group">
+          <span class="archive-filter-label">Mese</span>
+          <div class="archive-filter-options">
+            ${renderGroupButtons("months", options.months, state.archiveFilters.months, (m) => formatMonthNameIT(Number(m)))}
+          </div>
+        </div>
 
-        <select id="archive-year-mobile">
-
-          <option value="">
-            Anno
-          </option>
-
-          ${options.years.map(year => `
-            <option
-              value="${escapeHTML(year)}"
-              ${selectedYear === year ? "selected" : ""}
-            >
-              ${escapeHTML(year)}
-            </option>
-          `).join("")}
-
-        </select>
-
-        <select id="archive-month-mobile">
-
-          <option value="">
-            Mese
-          </option>
-
-          ${options.months.map(month => `
-            <option
-              value="${escapeHTML(month)}"
-              ${selectedMonth === month ? "selected" : ""}
-            >
-              ${escapeHTML(
-                formatMonthNameIT(Number(month))
-              )}
-            </option>
-          `).join("")}
-
-        </select>
-
-        <select id="archive-category-mobile">
-
-          <option value="">
-            Tipo
-          </option>
-
-          ${options.categories.map(category => `
-            <option
-              value="${escapeHTML(category)}"
-              ${selectedCategory === category ? "selected" : ""}
-            >
-              ${escapeHTML(category)}
-            </option>
-          `).join("")}
-
-        </select>
-
-        ${
-          hasAnySelection
-            ? `
-              <button
-                type="button"
-                class="archive-filter-reset"
-                data-action="reset-archive-filters">
-                Azzera filtri
-              </button>
-            `
-            : ""
-        }
-
+        <div class="archive-filter-group">
+          <span class="archive-filter-label">Tipologia</span>
+          <div class="archive-filter-options">
+            ${renderGroupButtons("categories", options.categories, state.archiveFilters.categories, (c) => c)}
+          </div>
+        </div>
       </div>
 
+      ${hasAnySelection ? `
+        <button type="button" class="archive-filter-reset" data-action="reset-archive-filters">
+          Azzera filtri
+        </button>
+      ` : ""}
     `;
-
-    requestAnimationFrame(() => {
-
-      const yearSelect =
-        document.getElementById(
-          "archive-year-mobile"
-        );
-
-      const monthSelect =
-        document.getElementById(
-          "archive-month-mobile"
-        );
-
-      const categorySelect =
-        document.getElementById(
-          "archive-category-mobile"
-        );
-
-      yearSelect?.addEventListener(
-        "change",
-        e => {
-
-          state.archiveFilters.years.clear();
-
-          if (e.target.value) {
-            state.archiveFilters.years.add(
-              e.target.value
-            );
-          }
-
-          const { past } =
-            splitEvents(state.events);
-
-          renderArchive(past);
-
-        }
-      );
-
-      monthSelect?.addEventListener(
-        "change",
-        e => {
-
-          state.archiveFilters.months.clear();
-
-          if (e.target.value) {
-            state.archiveFilters.months.add(
-              e.target.value
-            );
-          }
-
-          const { past } =
-            splitEvents(state.events);
-
-          renderArchive(past);
-
-        }
-      );
-
-      categorySelect?.addEventListener(
-        "change",
-        e => {
-
-          state.archiveFilters.categories.clear();
-
-          if (e.target.value) {
-            state.archiveFilters.categories.add(
-              e.target.value
-            );
-          }
-
-          const { past } =
-            splitEvents(state.events);
-
-          renderArchive(past);
-
-        }
-      );
-
-    });
-
-    return;
   }
 
-  const hasAnySelection =
-    state.archiveFilters.years.size > 0 ||
-    state.archiveFilters.months.size > 0 ||
-    state.archiveFilters.categories.size > 0;
-
-  const renderGroupButtons = (
-    groupKey,
-    items,
-    selectedSet,
-    formatLabel
-  ) => {
-
-    if (!items.length) {
-      return `
-        <span class="archive-filter-empty">
-          Nessuna opzione
-        </span>
-      `;
-    }
-
-    return items
-      .map(val => {
-
-        const isSelected =
-          selectedSet.has(val);
-
-        return `
-          <button
-            type="button"
-            class="archive-filter-btn ${isSelected ? "is-active active" : ""}"
-            data-archive-group="${escapeHTML(groupKey)}"
-            data-archive-value="${escapeHTML(val)}"
-            aria-pressed="${isSelected}"
-          >
-            ${escapeHTML(formatLabel(val))}
-          </button>
-        `;
-      })
-      .join("");
-
-  };
-
-  container.innerHTML = `
-
-    <div class="archive-filter-groups">
-
-      <div class="archive-filter-group">
-
-        <span class="archive-filter-label">
-          Anno
-        </span>
-
-        <div class="archive-filter-options">
-
-          ${renderGroupButtons(
-            "years",
-            options.years,
-            state.archiveFilters.years,
-            y => y
-          )}
-
-        </div>
-
-      </div>
-
-      <div class="archive-filter-group">
-
-        <span class="archive-filter-label">
-          Mese
-        </span>
-
-        <div class="archive-filter-options">
-
-          ${renderGroupButtons(
-            "months",
-            options.months,
-            state.archiveFilters.months,
-            m => formatMonthNameIT(Number(m))
-          )}
-
-        </div>
-
-      </div>
-
-      <div class="archive-filter-group">
-
-        <span class="archive-filter-label">
-          Tipologia
-        </span>
-
-        <div class="archive-filter-options">
-
-          ${renderGroupButtons(
-            "categories",
-            options.categories,
-            state.archiveFilters.categories,
-            c => c
-          )}
-
-        </div>
-
-      </div>
-
-    </div>
-
-    ${
-      hasAnySelection
-        ? `
-          <button
-            type="button"
-            class="archive-filter-reset"
-            data-action="reset-archive-filters">
-            Azzera filtri
-          </button>
-        `
-        : ""
-    }
-
-  `;
-}
   function renderArchive(pastEvents) {
     renderArchiveFilters(pastEvents);
     if (!dom.pastEvents) return;
@@ -1074,67 +911,109 @@ function renderArchiveFilters(pastEvents) {
     dom.pastEvents.innerHTML = filteredPast
       .map((evt) => {
         const dateLabel = formatDateRangeIT(evt.start, evt.end);
+        const hasPoster = Boolean(evt.image);
+        const posterStyle = hasPoster
+          ? ` style="--archive-poster-url: url('${escapeHTML(evt.image).replaceAll("'", "%27")}');"`
+          : "";
+
         return `
-          <article class="archive-event-card" data-event-id="${escapeHTML(evt.id)}">
-            <div class="archive-event-meta">
-              <time datetime="${escapeHTML(evt.start)}">${escapeHTML(dateLabel)}</time>
-              <div class="event-categories">${renderCategoriesHTML(evt.categories)}</div>
+          <article class="archive-event-card ${hasPoster ? "has-poster-bg" : ""}" data-event-id="${escapeHTML(evt.id)}"${posterStyle}>
+            <div class="archive-event-body">
+              <div class="archive-event-meta">
+                <time datetime="${escapeHTML(evt.start)}">${escapeHTML(dateLabel)}</time>
+                ${evt.time ? `<span class="event-time">${escapeHTML(evt.time)}</span>` : ""}
+                <div class="event-categories">${renderCategoriesHTML(evt.categories)}</div>
+              </div>
+              <h3 class="event-title">${escapeHTML(evt.title)}</h3>
+              ${renderLocationHTML(evt)}
+              ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
+              ${renderEntryAndTicketHTML(evt)}
             </div>
-            <h3 class="event-title">${escapeHTML(evt.title)}</h3>
-            ${renderLocationHTML(evt)}
-            ${evt.description ? `<p class="event-description">${escapeHTML(evt.description)}</p>` : ""}
           </article>
         `;
       })
       .join("");
   }
 
-  function getCurrentGroups() {
-    const { upcoming } = splitEvents(state.events);
-    return groupEventsByMonth(getFilteredUpcoming(upcoming));
-  }
-
-  function refreshCalendarViews(upcoming) {
-    renderFilters(upcoming);
-    const groups = groupEventsByMonth(getFilteredUpcoming(upcoming));
-    renderDesktopCalendar(groups);
-    renderMobileCarousel(groups);
-  }
-
-  function renderAll(eventsData) {
-    const { upcoming, past } = splitEvents(eventsData);
+  function renderAll() {
+    const { upcoming, past } = splitEvents(state.events);
     renderFeaturedEvent(upcoming);
-    refreshCalendarViews(upcoming);
+    renderFilters(upcoming);
+
+    const filteredUpcoming = getFilteredUpcoming(upcoming);
+    const monthGroups = groupEventsByMonth(filteredUpcoming);
+    renderDesktopCalendar(monthGroups);
+    renderMobileCarousel(monthGroups);
     renderArchive(past);
   }
 
-  function bindEventsOnce() {
+  function bindEvents() {
     if (state.listenersBound) return;
     state.listenersBound = true;
 
+    dom.filters?.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-category]");
+      if (!btn) return;
+      state.selectedCategory = btn.dataset.category || "Tutti";
+      state.activeMonthIndex = 0;
+      state.mobileSlideIndex = 0;
+
+      const { upcoming } = splitEvents(state.events);
+      renderFilters(upcoming);
+      const monthGroups = groupEventsByMonth(getFilteredUpcoming(upcoming));
+      renderDesktopCalendar(monthGroups);
+      renderMobileCarousel(monthGroups);
+    });
+
+    dom.prevMonthBtn?.addEventListener("click", () => {
+      if (state.activeMonthIndex > 0) {
+        state.activeMonthIndex -= 1;
+        const { upcoming } = splitEvents(state.events);
+        renderDesktopCalendar(groupEventsByMonth(getFilteredUpcoming(upcoming)));
+      }
+    });
+
+    dom.nextMonthBtn?.addEventListener("click", () => {
+      const { upcoming } = splitEvents(state.events);
+      const groups = groupEventsByMonth(getFilteredUpcoming(upcoming));
+      if (state.activeMonthIndex < groups.length - 1) {
+        state.activeMonthIndex += 1;
+        renderDesktopCalendar(groups);
+      }
+    });
+
+    dom.mobilePrevBtn?.addEventListener("click", () => {
+      if (state.mobileSlideIndex > 0) {
+        state.mobileSlideIndex -= 1;
+        const { upcoming } = splitEvents(state.events);
+        renderMobileCarousel(groupEventsByMonth(getFilteredUpcoming(upcoming)));
+      }
+    });
+
+    dom.mobileNextBtn?.addEventListener("click", () => {
+      const { upcoming } = splitEvents(state.events);
+      const groups = groupEventsByMonth(getFilteredUpcoming(upcoming));
+      if (state.mobileSlideIndex < groups.length - 1) {
+        state.mobileSlideIndex += 1;
+        renderMobileCarousel(groups);
+      }
+    });
+
+    dom.mobileDots?.addEventListener("click", (e) => {
+      const dot = e.target.closest("[data-slide-index]");
+      if (!dot) return;
+      state.mobileSlideIndex = Number(dot.dataset.slideIndex) || 0;
+      const { upcoming } = splitEvents(state.events);
+      renderMobileCarousel(groupEventsByMonth(getFilteredUpcoming(upcoming)));
+    });
+
     document.addEventListener("click", (e) => {
-      const retryBtn = e.target.closest('[data-action="retry-events"]');
-      if (retryBtn) {
-        loadAndRenderEvents();
-        return;
-      }
-
-      const resetArchiveBtn = e.target.closest('[data-action="reset-archive-filters"]');
-      if (resetArchiveBtn) {
-        state.archiveFilters.years.clear();
-        state.archiveFilters.months.clear();
-        state.archiveFilters.categories.clear();
-        const { past } = splitEvents(state.events);
-        renderArchive(past);
-        return;
-      }
-
-      const archiveFilterBtn = e.target.closest(".archive-filter-btn[data-archive-group][data-archive-value]");
-      if (archiveFilterBtn) {
-        const group = archiveFilterBtn.dataset.archiveGroup;
-        const value = archiveFilterBtn.dataset.archiveValue;
+      const archiveBtn = e.target.closest("[data-archive-group][data-archive-value]");
+      if (archiveBtn) {
+        const group = archiveBtn.dataset.archiveGroup;
+        const value = archiveBtn.dataset.archiveValue;
         const targetSet = state.archiveFilters[group];
-        if (targetSet) {
+        if (targetSet && value) {
           if (targetSet.has(value)) {
             targetSet.delete(value);
           } else {
@@ -1143,81 +1022,48 @@ function renderArchiveFilters(pastEvents) {
           const { past } = splitEvents(state.events);
           renderArchive(past);
         }
+        return;
+      }
+
+      const resetBtn = e.target.closest('[data-action="reset-archive-filters"]');
+      if (resetBtn) {
+        state.archiveFilters.years.clear();
+        state.archiveFilters.months.clear();
+        state.archiveFilters.categories.clear();
+        const { past } = splitEvents(state.events);
+        renderArchive(past);
+        return;
+      }
+
+      const retryBtn = e.target.closest('[data-action="retry-events"]');
+      if (retryBtn) {
+        loadEvents();
       }
     });
 
-    if (dom.filters) {
-      dom.filters.addEventListener("click", (e) => {
-        const btn = e.target.closest(".filter-btn[data-category]");
-        if (!btn) return;
-        state.selectedCategory = btn.dataset.category;
-        state.activeMonthIndex = 0;
-        state.mobileSlideIndex = 0;
-        const { upcoming } = splitEvents(state.events);
-        refreshCalendarViews(upcoming);
-      });
-    }
-
-    if (dom.prevMonthBtn) {
-      dom.prevMonthBtn.addEventListener("click", () => {
-        if (state.activeMonthIndex > 0) {
-          state.activeMonthIndex -= 1;
-          renderDesktopCalendar(getCurrentGroups());
-        }
-      });
-    }
-
-    if (dom.nextMonthBtn) {
-      dom.nextMonthBtn.addEventListener("click", () => {
-        const groups = getCurrentGroups();
-        if (state.activeMonthIndex < groups.length - 1) {
-          state.activeMonthIndex += 1;
-          renderDesktopCalendar(groups);
-        }
-      });
-    }
-
-    if (dom.mobilePrevBtn) {
-      dom.mobilePrevBtn.addEventListener("click", () => {
-        if (state.mobileSlideIndex > 0) {
-          state.mobileSlideIndex -= 1;
-          renderMobileCarousel(getCurrentGroups());
-        }
-      });
-    }
-
-    if (dom.mobileNextBtn) {
-      dom.mobileNextBtn.addEventListener("click", () => {
-        const groups = getCurrentGroups();
-        if (state.mobileSlideIndex < groups.length - 1) {
-          state.mobileSlideIndex += 1;
-          renderMobileCarousel(groups);
-        }
-      });
-    }
-
-    if (dom.mobileDots) {
-      dom.mobileDots.addEventListener("click", (e) => {
-        const dot = e.target.closest(".mobile-dot[data-slide-index]");
-        if (!dot) return;
-        state.mobileSlideIndex = Number(dot.dataset.slideIndex);
-        renderMobileCarousel(getCurrentGroups());
-      });
-    }
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        if (!state.events.length) return;
+        const { past } = splitEvents(state.events);
+        renderArchiveFilters(past);
+      }, 150);
+    });
   }
 
-  async function loadAndRenderEvents() {
+  async function loadEvents() {
     if (state.isLoading) return;
     state.isLoading = true;
     state.error = null;
     renderLoadingState();
 
     try {
-      const rawPayload = await fetchEventsFromCandidates();
-      state.events = normalizeEventsPayload(rawPayload);
-      renderAll(state.events);
+      const payload = await fetchEventsFromCandidates();
+      state.events = normalizeEventsPayload(payload);
+      renderAll();
     } catch (err) {
-      state.error = err.message || "Errore imprevisto durante il caricamento degli eventi.";
+      state.error = err?.message || "Errore imprevisto durante il caricamento degli eventi.";
       renderErrorState(state.error);
     } finally {
       state.isLoading = false;
@@ -1225,13 +1071,12 @@ function renderArchiveFilters(pastEvents) {
   }
 
   function init() {
-    ensureArchiveFilterContainer();
-    bindEventsOnce();
-    loadAndRenderEvents();
+    bindEvents();
+    loadEvents();
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
     init();
   }
