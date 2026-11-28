@@ -4347,39 +4347,14 @@ body::before{
 
 }
 /* =====================================================
-   GRAIN SOLO SUGLI SFONDI
+   GRAIN SOLO SU SFONDI
 ===================================================== */
 
 .scroll-section::before,
 .eventi-hero::before,
 .archive-hero::before,
 .manifesto-container::before,
-.qms-sostienici-section::before{
-    content:"";
-
-    position:absolute;
-    inset:0;
-
-    background:url("images/film-grain.png") repeat;
-    background-size:300px auto;
-
-    opacity:.18;
-
-    mix-blend-mode:screen;
-
-    pointer-events:none;
-
-    z-index:1;
-}
-
-.scroll-section > *,
-.eventi-hero > *,
-.archive-hero > *,
-.manifesto-container > *,
-.qms-sostienici-section > *{
-    position:relative;
-    z-index:2;
-}
+.qms-sostienici-section::before,
 .contact-section::before,
 .artists-page-main::before,
 .qms-archive-page::before{
@@ -4397,5 +4372,5 @@ body::before{
 
     pointer-events:none;
 
-    z-index:1;
+    z-index:-1;
 }
