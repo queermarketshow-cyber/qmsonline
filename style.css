@@ -4348,3 +4348,36 @@ body::before{
     }
 
 }
+/* =====================================================
+   QMS · FILM GRAIN BOOST
+===================================================== */
+
+body::before{
+    background:url("images/film-grain.png") repeat !important;
+
+    background-size:350px auto !important;
+
+    opacity:.18 !important;
+
+    mix-blend-mode:screen !important;
+}
+
+/* Secondo layer leggerissimo */
+body::after{
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+
+    z-index:9998;
+
+    background:url("images/film-grain.png") repeat;
+
+    background-size:700px auto;
+
+    opacity:.22;
+
+    mix-blend-mode:overlay;
+}
