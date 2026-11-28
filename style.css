@@ -4350,35 +4350,37 @@ body::before{
    GRAIN SOLO SU SFONDI
 ===================================================== */
 
-.scroll-section::before,
-.eventi-hero::before,
-.archive-hero::before,
-.manifesto-container::before,
-.qms-sostienici-section::before,
-.contact-section::before,
-.artists-page-main::before,
-.qms-archive-page::before{
+body::before{
     content:"";
 
-    position:absolute;
+    position:fixed;
     inset:0;
 
+    pointer-events:none;
+    z-index:9999;
+
     background:url("images/film-grain.png") repeat;
+
     background-size:300px auto;
 
-    opacity:.18;
+    opacity:.12;
 
     mix-blend-mode:screen;
-
-    pointer-events:none;
-
-    z-index:-1;
 }
-.artist-card,
-.collab-card,
-.event-card,
-.featured-event-card,
-.folder-preview,
-.gallery-folder{
-    background:#000;
+.artist-gallery,
+.collab-grid,
+#past-events,
+.gallery-folders,
+.qms-gallery-images,
+.featured-event-slot{
+    isolation:isolate;
+}
+.artist-card img,
+.collab-card img,
+.event-card img,
+.gallery-folder img,
+.folder-preview img,
+.qms-gallery-images img{
+    position:relative;
+    z-index:10;
 }
