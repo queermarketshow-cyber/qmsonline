@@ -4113,15 +4113,13 @@ body::before{
     pointer-events:none;
     z-index:9999;
 
-    background:url("images/film-grain.png")
-               center center
-               repeat;
+    background:url("images/film-grain.png") repeat;
 
-    background-size:600px auto;
+    background-size:250px auto;
 
-    opacity:1;
+    opacity:.18;
 
-    mix-blend-mode:soft-light;
+    mix-blend-mode:screen;
 }
 
 /* ---------------------------------
@@ -4349,35 +4347,25 @@ body::before{
 
 }
 /* =====================================================
-   QMS · FILM GRAIN BOOST
+   NO GRAIN SU IMMAGINI E MEDIA
+===================================================== */
+
+.artist-card img,
+.artist-image img,
+.artist-gallery img,
+.collab-card img,
+.qms-gallery-images img,
+.modal img,
+.carousel img,
+.event-card img,
+.featured-event-slot img{
+    position:relative;
+    z-index:10001;
+}
+/* =====================================================
+   GRAIN SOLO SUGLI SFONDI
 ===================================================== */
 
 body::before{
-    background:url("images/film-grain.png") repeat !important;
-
-    background-size:350px auto !important;
-
-    opacity:.18 !important;
-
-    mix-blend-mode:screen !important;
-}
-
-/* Secondo layer leggerissimo */
-body::after{
-    content:"";
-
-    position:fixed;
-    inset:0;
-
-    pointer-events:none;
-
-    z-index:9998;
-
-    background:url("images/film-grain.png") repeat;
-
-    background-size:700px auto;
-
-    opacity:.22;
-
-    mix-blend-mode:overlay;
+    clip-path:none;
 }
