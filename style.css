@@ -4347,57 +4347,6 @@ body::before{
 
 }
 /* =====================================================
-   NO GRAIN SU IMMAGINI E MEDIA
-===================================================== */
-
-/* =====================================================
-   NIENTE GRAIN SU IMMAGINI E CARD
-===================================================== */
-
-.artist-card,
-.collab-card,
-.event-card,
-.featured-event-card,
-.gallery-folder,
-.folder-preview,
-.modal-content,
-.carousel,
-.mosaic-gallery,
-.qms-gallery-images img,
-.artist-card img,
-.collab-card img,
-.event-card img,
-.gallery-folder img,
-.folder-preview img,
-.carousel img,
-.modal img{
-    position:relative;
-    isolation:isolate;
-}
-
-/* Maschera il grain sopra immagini e card */
-
-.artist-card::after,
-.collab-card::after,
-.event-card::after,
-.featured-event-card::after,
-.gallery-folder::after,
-.folder-preview::after,
-.modal-content::after,
-.carousel::after,
-.mosaic-gallery::after{
-    content:"";
-
-    position:absolute;
-    inset:0;
-
-    background:inherit;
-
-    pointer-events:none;
-
-    z-index:99999;
-}
-/* =====================================================
    GRAIN SOLO SUGLI SFONDI
 ===================================================== */
 
@@ -4430,4 +4379,23 @@ body::before{
 .qms-sostienici-section > *{
     position:relative;
     z-index:2;
+}
+.contact-section::before,
+.artists-page-main::before,
+.qms-archive-page::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:url("images/film-grain.png") repeat;
+    background-size:300px auto;
+
+    opacity:.18;
+
+    mix-blend-mode:screen;
+
+    pointer-events:none;
+
+    z-index:1;
 }
