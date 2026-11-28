@@ -4183,7 +4183,7 @@ body::before{
 
     background-repeat:no-repeat;
     background-position:center;
-    background-size:100% 100%;
+    background-size:contain;
 
     pointer-events:none;
 
@@ -4207,56 +4207,85 @@ body::before{
 }
 
 /* ---------------------------------
-   STRAPPI ORIZZONTALI
-   OCCUPANO TUTTA LA WIDTH
+   ORIZZONTALI
+   GRANDI MA NON STIRATI
 --------------------------------- */
 
 .tear-top{
     top:-20px;
-    left:-10vw;
+    left:-8%;
 
-    width:120vw;
+    width:95%;
     height:clamp(90px, 8vw, 180px);
 
-    transform:rotate(-2deg);
+    transform:rotate(-3deg);
 }
 
 .tear-bottom{
     bottom:-20px;
-    left:-10vw;
+    right:-8%;
 
-    width:120vw;
+    width:85%;
     height:clamp(90px, 8vw, 180px);
 
     transform:rotate(2deg);
 }
 
 /* ---------------------------------
-   STRAPPI VERTICALI
-   OCCUPANO TUTTA LA HEIGHT
+   VERTICALI
+   ALTEZZA IMPORTANTE
 --------------------------------- */
 
 .tear-left{
-    left:-70px;
-    top:-10vh;
+    left:-60px;
+    top:5%;
 
     width:clamp(90px, 8vw, 180px);
-    height:120vh;
+    height:75%;
 
     transform:rotate(90deg);
     transform-origin:center;
 }
 
 .tear-right{
-    right:-70px;
-    top:-10vh;
+    right:-60px;
+    top:15%;
 
     width:clamp(90px, 8vw, 180px);
-    height:120vh;
+    height:60%;
 
     transform:rotate(-90deg);
     transform-origin:center;
 }
+
+/* ---------------------------------
+   VARIANTI DIMENSIONE
+--------------------------------- */
+
+.tear-wide{
+    width:100%;
+}
+
+.tear-large{
+    width:80%;
+}
+
+.tear-small{
+    width:55%;
+}
+
+.tear-tall{
+    height:90%;
+}
+
+.tear-mid{
+    height:65%;
+}
+
+.tear-short{
+    height:40%;
+}
+
 
 /* ---------------------------------
    INTENSITÀ
