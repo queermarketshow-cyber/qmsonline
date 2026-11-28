@@ -679,6 +679,54 @@
     "recurringWeekdays": [],
     "specificDates": ["2026-06-26", "2026-06-27"],
     "categories": ["market", "swap", "show", "djset"]
+  },
+  {
+    "id": "event-2026-11-13-queer-market-show-zei",
+    "title": "Queer Market Show - Sweet Friday",
+    "start": "2026-11-13",
+    "end": "2026-11-13",
+    "time": "19:00",
+    "description": "Talk 'Non Siamo Sudditə - discussione aperta sul colonialismo culturale al Sud', drag show con Alister Victoria, Billie Kill, Lilly Von Vyper e dj set di Diskovenganza.",
+    "location": "Spazio Sociale Zei, Lecce",
+    "venueUrl": "https://maps.app.goo.gl/ucBKoPWr9m4zrjjU7",
+    "image": "images/eventi/20261113_qmszei.jpg",
+    "ticketUrl": "",
+    "freeEntry": true,
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "categories": ["talk", "show", "djset"]
+  },
+  {
+    "id": "event-2026-08-18-salem-e-pepem",
+    "title": "Salem e Pepem",
+    "start": "2026-08-18",
+    "end": "2026-08-18",
+    "time": "00:00",
+    "description": "Queer Market Show e Potpourri presentano Salem e Pepem al Metanoia Morgana Festival con Sara, Alister Victoria, Billie Kill, Dahlia Doll, Venganza, Vanillivia, Rebel Mouse e Lela Rox.",
+    "location": "Metanoia Morgana Festival, Novoli (LE)",
+    "venueUrl": "",
+    "image": "images/eventi/20260818_salemepepem.jpg",
+    "ticketUrl": "",
+    "freeEntry": false,
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "categories": ["show", "djset"]
+  },
+  {
+    "id": "event-2026-08-08-orda-pride-fest",
+    "title": "Orda Pride Fest - La Festa nella Protesta",
+    "start": "2026-08-08",
+    "end": "2026-08-08",
+    "time": "19:00",
+    "description": "Orda Pride Fest - La festa nella protesta a Villa Paciugo.",
+    "location": "Villa Paciugo, Lecce",
+    "venueUrl": "",
+    "image": "images/eventi/20260808_ordafest.jpg",
+    "ticketUrl": "",
+    "freeEntry": true,
+    "recurringWeekdays": [],
+    "specificDates": [],
+    "categories": ["festival", "show", "djset"]
   }
 
 ]
