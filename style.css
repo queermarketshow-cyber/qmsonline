@@ -4180,11 +4180,59 @@ body::before{
 
     background-repeat:no-repeat;
     background-position:center;
-    background-size:100% 100%;
+    background-size:contain;
 
     pointer-events:none;
+}
 
-    opacity:.55;
+/* ---------------------------------
+   STRAPPI ORIZZONTALI
+--------------------------------- */
+
+.tear-top,
+.tear-bottom{
+    width:105%;
+    left:-2.5%;
+
+    aspect-ratio:10 / 1;
+
+    height:auto;
+}
+
+/* ---------------------------------
+   STRAPPI VERTICALI
+--------------------------------- */
+
+.tear-left,
+.tear-right{
+    height:105%;
+    top:-2.5%;
+
+    aspect-ratio:1 / 10;
+
+    width:auto;
+}
+
+/* ---------------------------------
+   POSIZIONI
+--------------------------------- */
+
+.tear-top{
+    top:-1rem;
+    transform:rotate(-2deg);
+}
+
+.tear-bottom{
+    bottom:-1rem;
+    transform:rotate(2deg);
+}
+
+.tear-left{
+    left:-2rem;
+}
+
+.tear-right{
+    right:-2rem;
 }
 
 /* ---------------------------------
@@ -4226,103 +4274,39 @@ body::before{
 }
 
 /* ---------------------------------
-   POSIZIONI BASE
---------------------------------- */
-
-.tear-top{
-    top:-1rem;
-    left:-5%;
-
-    width:110%;
-    height:clamp(90px,8vw,180px);
-
-    transform:rotate(-2deg);
-}
-
-.tear-bottom{
-    bottom:-1rem;
-    left:-5%;
-
-    width:110%;
-    height:clamp(90px,8vw,180px);
-
-    transform:rotate(2deg);
-}
-
-.tear-left{
-    top:-5%;
-    left:-2rem;
-
-    width:clamp(80px,6vw,180px);
-    height:110%;
-
-    transform:rotate(0deg);
-}
-
-.tear-right{
-    top:-5%;
-    right:-2rem;
-
-    width:clamp(80px,6vw,180px);
-    height:110%;
-
-    transform:rotate(0deg);
-}
-
-/* ---------------------------------
-   VARIANTI WIDTH
+   VARIANTI DIMENSIONE
 --------------------------------- */
 
 .tear-wide{
-    width:110%;
+    width:115%;
 }
 
 .tear-large{
-    width:85%;
+    width:90%;
 }
 
 .tear-small{
-    width:60%;
+    width:65%;
 }
 
-/* ---------------------------------
-   VARIANTI HEIGHT
---------------------------------- */
-
 .tear-tall{
-    height:110%;
+    height:115%;
 }
 
 .tear-mid{
-    height:75%;
+    height:80%;
 }
 
 .tear-short{
-    height:45%;
+    height:55%;
 }
 
 /* ---------------------------------
    OPACITÀ
 --------------------------------- */
 
-.tear-soft{
-    opacity:.35;
-}
-
-.tear-medium{
-    opacity:.55;
-}
-
-.tear-strong{
-    opacity:.8;
-}
-
-/* ---------------------------------
-   PRESET QMS
---------------------------------- */
-
 .tear-foto{
-    opacity:.65;
+    opacity:.6;
 }
 
 .tear-sporco{
@@ -4345,10 +4329,6 @@ body::before{
     filter:contrast(115%);
 }
 
-.section-tears .tear:nth-child(3){
-    filter:contrast(110%);
-}
-
 /* ---------------------------------
    MOBILE
 --------------------------------- */
@@ -4357,12 +4337,8 @@ body::before{
 
     .tear-top,
     .tear-bottom{
-        height:clamp(60px,10vw,100px);
-    }
-
-    .tear-left,
-    .tear-right{
-        width:clamp(50px,10vw,80px);
+        width:115%;
+        left:-7.5%;
     }
 
 }
