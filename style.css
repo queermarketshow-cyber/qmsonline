@@ -4101,24 +4101,27 @@ a.sost-card.sost-cta:focus-visible {
 ===================================================== */
 
 /* ---------------------------------
-   FILM GRAIN OVERLAY
+   FILM GRAIN + SCRATCHES
 --------------------------------- */
 
 body::before{
     content:"";
+
     position:fixed;
     inset:0;
 
     pointer-events:none;
     z-index:9999;
 
-    background:url("images/film-grain.png") repeat;
+    background:url("images/film-grain.png")
+               center center
+               repeat;
 
-    background-size:700px auto;
+    background-size:600px auto;
 
-    opacity:.08;
+    opacity:.14;
 
-    mix-blend-mode:screen;
+    mix-blend-mode:soft-light;
 }
 
 /* ---------------------------------
