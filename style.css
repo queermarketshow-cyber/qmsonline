@@ -4097,10 +4097,6 @@ a.sost-card.sost-cta:focus-visible {
   outline: none;
 }
 /* =====================================================
-   QMS · GRAIN & TEARS SYSTEM
-===================================================== */
-
-/* =====================================================
    QMS · GRAIN + TEARS SYSTEM
 ===================================================== */
 
@@ -4167,7 +4163,8 @@ body::before{
 .section-tears{
     position:absolute;
     inset:0;
-    overflow:hidden;
+
+    overflow:visible;
 
     pointer-events:none;
     z-index:1;
@@ -4183,7 +4180,7 @@ body::before{
 
     background-repeat:no-repeat;
     background-position:center;
-    background-size:contain;
+    background-size:100% 100%;
 
     pointer-events:none;
 
@@ -4191,104 +4188,121 @@ body::before{
 }
 
 /* ---------------------------------
-   PNG
+   ASSET ORIZZONTALI
 --------------------------------- */
 
-.tear-foto{
-    background-image:url("images/strappo_foto.png");
+.tear-top.tear-foto,
+.tear-bottom.tear-foto{
+    background-image:url("images/strappo_foto_h.png");
 }
 
-.tear-sporco{
-    background-image:url("images/strappo_sporco.png");
+.tear-top.tear-sporco,
+.tear-bottom.tear-sporco{
+    background-image:url("images/strappo_sporco_h.png");
 }
 
-.tear-nero{
-    background-image:url("images/strappo_nero.png");
+.tear-top.tear-nero,
+.tear-bottom.tear-nero{
+    background-image:url("images/strappo_nero_h.png");
 }
 
 /* ---------------------------------
-   ORIZZONTALI
-   GRANDI MA NON STIRATI
+   ASSET VERTICALI
+--------------------------------- */
+
+.tear-left.tear-foto,
+.tear-right.tear-foto{
+    background-image:url("images/strappo_foto_v.png");
+}
+
+.tear-left.tear-sporco,
+.tear-right.tear-sporco{
+    background-image:url("images/strappo_sporco_v.png");
+}
+
+.tear-left.tear-nero,
+.tear-right.tear-nero{
+    background-image:url("images/strappo_nero_v.png");
+}
+
+/* ---------------------------------
+   POSIZIONI BASE
 --------------------------------- */
 
 .tear-top{
-    top:-20px;
-    left:-8%;
+    top:-1rem;
+    left:-5%;
 
-    width:95%;
-    height:clamp(90px, 8vw, 180px);
+    width:110%;
+    height:clamp(90px,8vw,180px);
 
-    transform:rotate(-3deg);
+    transform:rotate(-2deg);
 }
 
 .tear-bottom{
-    bottom:-20px;
-    right:-8%;
+    bottom:-1rem;
+    left:-5%;
 
-    width:85%;
-    height:clamp(90px, 8vw, 180px);
+    width:110%;
+    height:clamp(90px,8vw,180px);
 
     transform:rotate(2deg);
 }
 
-/* ---------------------------------
-   VERTICALI
-   ALTEZZA IMPORTANTE
---------------------------------- */
-
 .tear-left{
-    left:-60px;
-    top:5%;
+    top:-5%;
+    left:-2rem;
 
-    width:clamp(90px, 8vw, 180px);
-    height:75%;
+    width:clamp(80px,6vw,180px);
+    height:110%;
 
-    transform:rotate(90deg);
-    transform-origin:center;
+    transform:rotate(0deg);
 }
 
 .tear-right{
-    right:-60px;
-    top:15%;
+    top:-5%;
+    right:-2rem;
 
-    width:clamp(90px, 8vw, 180px);
-    height:60%;
+    width:clamp(80px,6vw,180px);
+    height:110%;
 
-    transform:rotate(-90deg);
-    transform-origin:center;
+    transform:rotate(0deg);
 }
 
 /* ---------------------------------
-   VARIANTI DIMENSIONE
+   VARIANTI WIDTH
 --------------------------------- */
 
 .tear-wide{
-    width:100%;
+    width:110%;
 }
 
 .tear-large{
-    width:80%;
+    width:85%;
 }
 
 .tear-small{
-    width:55%;
+    width:60%;
 }
 
+/* ---------------------------------
+   VARIANTI HEIGHT
+--------------------------------- */
+
 .tear-tall{
-    height:90%;
+    height:110%;
 }
 
 .tear-mid{
-    height:65%;
+    height:75%;
 }
 
 .tear-short{
-    height:40%;
+    height:45%;
 }
 
-
 /* ---------------------------------
-   INTENSITÀ
+   OPACITÀ
 --------------------------------- */
 
 .tear-soft{
@@ -4304,7 +4318,23 @@ body::before{
 }
 
 /* ---------------------------------
-   MICRO VARIAZIONI ORGANICHE
+   PRESET QMS
+--------------------------------- */
+
+.tear-foto{
+    opacity:.65;
+}
+
+.tear-sporco{
+    opacity:.45;
+}
+
+.tear-nero{
+    opacity:.75;
+}
+
+/* ---------------------------------
+   VARIAZIONI ORGANICHE
 --------------------------------- */
 
 .section-tears .tear:nth-child(1){
@@ -4327,28 +4357,12 @@ body::before{
 
     .tear-top,
     .tear-bottom{
-        height:clamp(60px, 10vw, 100px);
+        height:clamp(60px,10vw,100px);
     }
 
     .tear-left,
     .tear-right{
-        width:clamp(60px, 10vw, 100px);
+        width:clamp(50px,10vw,80px);
     }
 
-}
-
-/* ---------------------------------
-   PRESET CONSIGLIATI QMS
---------------------------------- */
-
-.tear-foto{
-    opacity:.65;
-}
-
-.tear-sporco{
-    opacity:.45;
-}
-
-.tear-nero{
-    opacity:.75;
 }
