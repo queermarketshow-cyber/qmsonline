@@ -4097,99 +4097,53 @@ a.sost-card.sost-cta:focus-visible {
   outline: none;
 }
 /* =====================================================
-   QMS · GRAIN + TEARS SYSTEM
+   QMS · FILM GRAIN DEFINITIVO
 ===================================================== */
 
-/* =====================================================
-   QMS · GRAIN SOLO SULLE SUPERFICI
-===================================================== */
+/* superfici che devono sembrare carta */
 
-/* sezioni che ricevono la texture */
-
-.scroll-section,
 .eventi-hero,
-.contact-section,
-.manifesto-container,
 .archive-hero,
+.manifesto-container,
 .qms-sostienici-section,
-.artists-page-main,
-.qms-archive-page{
-    position: relative;
-    isolation: isolate;
+.contact-section{
+    position:relative;
+    isolation:isolate;
 }
 
 /* grain */
 
-.scroll-section::before,
 .eventi-hero::before,
-.contact-section::before,
-.manifesto-container::before,
 .archive-hero::before,
+.manifesto-container::before,
 .qms-sostienici-section::before,
-.artists-page-main::before,
-.qms-archive-page::before{
-    content: "";
+.contact-section::before{
+    content:"";
 
-    position: absolute;
-    inset: 0;
+    position:absolute;
+    inset:0;
 
-    pointer-events: none;
+    pointer-events:none;
 
-    z-index: 0;
+    z-index:0;
 
-    background: url("images/film-grain.png") repeat;
-    background-size: 300px auto;
+    background:url("images/film-grain.png") repeat;
+    background-size:300px auto;
 
-    opacity: .18;
+    opacity:.18;
 
-    mix-blend-mode: screen;
+    mix-blend-mode:screen;
 }
 
-/* contenuto sopra la texture */
+/* contenuti sopra il grain */
 
-.scroll-section > *,
 .eventi-hero > *,
-.contact-section > *,
-.manifesto-container > *,
 .archive-hero > *,
+.manifesto-container > *,
 .qms-sostienici-section > *,
-.artists-page-main > *,
-.qms-archive-page > *{
-    position: relative;
-    z-index: 1;
-}
-
-/* =====================================================
-   FOTO E CARD SEMPRE SOPRA AL GRAIN
-===================================================== */
-
-.artist-card,
-.collab-card,
-.event-card,
-.featured-event-card,
-.gallery-folder,
-.folder-preview,
-.modal-content,
-.carousel,
-.mosaic-gallery{
-    position: relative;
-    z-index: 5;
-
-    background: #000;
-}
-
-.artist-card img,
-.collab-card img,
-.event-card img,
-.featured-event-card img,
-.gallery-folder img,
-.folder-preview img,
-.modal-content img,
-.carousel img,
-.mosaic-gallery img,
-.qms-gallery-images img{
-    position: relative;
-    z-index: 6;
+.contact-section > *{
+    position:relative;
+    z-index:1;
 }
 /* ---------------------------------
    STRUTTURA SEZIONI
