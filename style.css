@@ -4350,22 +4350,84 @@ body::before{
    NO GRAIN SU IMMAGINI E MEDIA
 ===================================================== */
 
-.artist-card img,
-.artist-image img,
-.artist-gallery img,
-.collab-card img,
+/* =====================================================
+   NIENTE GRAIN SU IMMAGINI E CARD
+===================================================== */
+
+.artist-card,
+.collab-card,
+.event-card,
+.featured-event-card,
+.gallery-folder,
+.folder-preview,
+.modal-content,
+.carousel,
+.mosaic-gallery,
 .qms-gallery-images img,
-.modal img,
-.carousel img,
+.artist-card img,
+.collab-card img,
 .event-card img,
-.featured-event-slot img{
+.gallery-folder img,
+.folder-preview img,
+.carousel img,
+.modal img{
     position:relative;
-    z-index:10001;
+    isolation:isolate;
+}
+
+/* Maschera il grain sopra immagini e card */
+
+.artist-card::after,
+.collab-card::after,
+.event-card::after,
+.featured-event-card::after,
+.gallery-folder::after,
+.folder-preview::after,
+.modal-content::after,
+.carousel::after,
+.mosaic-gallery::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:inherit;
+
+    pointer-events:none;
+
+    z-index:99999;
 }
 /* =====================================================
    GRAIN SOLO SUGLI SFONDI
 ===================================================== */
 
-body::before{
-    clip-path:none;
+.scroll-section::before,
+.eventi-hero::before,
+.archive-hero::before,
+.manifesto-container::before,
+.qms-sostienici-section::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:url("images/film-grain.png") repeat;
+    background-size:300px auto;
+
+    opacity:.18;
+
+    mix-blend-mode:screen;
+
+    pointer-events:none;
+
+    z-index:1;
+}
+
+.scroll-section > *,
+.eventi-hero > *,
+.archive-hero > *,
+.manifesto-container > *,
+.qms-sostienici-section > *{
+    position:relative;
+    z-index:2;
 }
